@@ -1,6 +1,5 @@
-/**
- * Created by mbraver on 23/11/2016.
- */
+// Game.creeps['Harvester1'].suicide()
+
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 
@@ -8,6 +7,11 @@ module.exports.loop = function () {
 
     var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
     console.log('Harvesters: ' + harvesters.length);
+
+    if(harvesters.length < 2) {
+        var newName = Game.spawns['Spawn1'].createCreep([WORK,CARRY,MOVE], undefined, {role: 'harvester'});
+        console.log('Spawning new harvester: ' + newName);
+    }
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
