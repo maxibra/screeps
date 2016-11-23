@@ -1,3 +1,5 @@
+// Game.spawns['Spawn1'].createCreep( [WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE], 'HarvesterBig', { role: 'harvester' } );
+
 var roleHarvester = {
 
     /** @param {Creep} creep **/

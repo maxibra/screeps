@@ -1,6 +1,8 @@
 /**
  * Created by mbraver on 23/11/2016.
  */
+// Game.spawns['Spawn1'].createCreep( [WORK, CARRY, MOVE], 'Builder1',     { role: 'builder' } );
+
 var roleBuilder = {
 
     /** @param {Creep} creep **/
