@@ -1,10 +1,11 @@
-/**
- * Created by mbraver on 23/11/2016.
- */
 var roleHarvester = require('role.harvester');
 var roleBuilder = require('role.builder');
 
 module.exports.loop = function () {
+
+    for(var name in Game.rooms) {
+        console.log('Room "'+name+'" has '+Game.rooms[name].energyAvailable+' energy');
+    }
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
