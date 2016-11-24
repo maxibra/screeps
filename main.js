@@ -1,13 +1,16 @@
-/**
- * Created by mbraver on 24/11/2016.
- */
-// Game.spawns['Spawn1'].room.controller.activateSafeMode();
-// Game.spawns['Spawn1'].room.createConstructionSite( 23, 22, STRUCTURE_TOWER );
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 
 module.exports.loop = function () {
+
+    var tower = Game.getObjectById('742ec8618eb3fa38f9da94a8');
+    if(tower) {
+        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if(closestHostile) {
+            tower.attack(closestHostile);
+        }
+    }
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
