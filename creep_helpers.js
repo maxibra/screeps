@@ -8,21 +8,11 @@ var creep_types = {
     'upgrader': {func: roleUpgrader, max_number: 2, next_index: 0, next_gen: 0},
     'builder': {func: roleBuilder, max_number: 2, next_index: 0, next_gen: 0}
 };
-var build_priority = ['harvester', 'upgrader', 'builder'];
 var max_creeps = 2;
 var base_body = [WORK,CARRY,MOVE];
 var base_creep = 'harvester';
 var spawn = global_vars.spawn;
 
-// Itiliaze spawn memory with creep's metadata
-for (i in build_priority) {
-    var creep_role = build_priority[i];
-    if (typeof spawn.memory.roads2 == "undefined") spawn.memory.roads2 = [];
-    if (typeof spawn.memory[creep_role] == "undefined") {
-        spawn.memory[creep_role] = {gen: 0, index: 0};
-        if (creep_role == 'harvester') spawn.memory[creep_role]['transformed2b'] = [];
-    }
-}
 // var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
 
 var creep_helpers = {
@@ -38,12 +28,12 @@ var creep_helpers = {
         var current_creeps = Game.creeps;
         var creeps_names = Object.keys(current_creeps);
         // console.log('Creeps: ' + creeps_names.length + '; names: ' + creeps_names.toString());
-        for (var creep_role_index in build_priority) {
+        for (var creep_role_index in global_vars.build_priority) {
             if (spawn.spawning) {
 //                console.log('Spawning');
                 break;
             }
-            var creep_role = build_priority[creep_role_index];
+            var creep_role = global_vars.build_priority[creep_role_index];
             if (creep_role == 'harvester' && spawn.memory['harvester']['transformed2b'].length > 0) continue;   // we have tranformed harvesters
             var creeps_of_role = _.filter(current_creeps, (creep) => creep.memory.role == creep_role);
             var role_length = creeps_of_role.length

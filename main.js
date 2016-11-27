@@ -1,11 +1,11 @@
-var creep_helpers = require('creep_helpers');
 var global_vars = require('global_vars');
+var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 
 module.exports.loop = function () {
     creep_helpers.clean_memory();
     creep_helpers.create_creep();
-    room_helpers.create_road();
+    room_helpers.create_road(global_vars.spawn.memory.create_roads.shift());
     // Check exist not full extensions
     var extensions = Game.rooms.sim.find(FIND_MY_STRUCTURES, {   filter: { structureType: STRUCTURE_EXTENSION } });
     var extensions_energy = 0;
