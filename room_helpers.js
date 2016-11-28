@@ -9,8 +9,23 @@ var room_helpers = {
             creep.moveTo(target);
         }
     },
-    create_extension: function() {
-
+    create_extensions: function() {
+        var available_extensions = extensions_rate[global_vars.my_room.controller.level];
+        var extensions = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
+        extensions = extensions.concat(global_vars.my_room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_EXTENSION}}));
+        var spawn_pos = global_vars.spawn.pos;
+        for (i=0;i<(available_extensions-extensions.length);i++) {
+            var x_pos = spawn_pos.x - i - 1;
+            global_vars.my_room.createConstructionSite(x_pos, spawn_pos.y - 1, STRUCTURE_EXTENSION);
+        }
+    },
+    missin_extension_energy: function() {
+        // Check exist not full extensions
+        var extensions = Game.rooms.sim.find(FIND_MY_STRUCTURES, {   filter: { structureType: STRUCTURE_EXTENSION } });
+        var missing_extensions_energy = 0;
+        for (i in extensions) {
+            missing_extensions_energy += (extensions[i].energyCapacity - extensions[i].energy)
+        }
     },
     create_road: function(FromPos, ToPos) {
         if (typeof FromPos == "undefined" || typeof ToPos == "undefined") return;
@@ -23,7 +38,7 @@ var room_helpers = {
         console.log('Create road From ' + FromPos.structureType + FromPos.id + ' To ' + ToPos.structureType + ToPos.id + ' Range: ' + path2target.length);
         for (i in path2target) {
             var p = path2target[i];
-            var res = global_vars.my_room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
+            global_vars.my_room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
         }
         var current_roads = global_vars.spawn.memory.roads;
         current_roads.push(road_descriptor);
