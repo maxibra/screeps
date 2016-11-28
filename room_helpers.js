@@ -4,9 +4,9 @@ var extensions_rate = {1:0, 2:5, 3:10, 4:20, 5:30, 6:40, 7:50, 8:60};
 
 var room_helpers = {
     go2best_source: function(creep) {
-        var target = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-        if(target && creep.harvest(target) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(target);
+        var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+        if(source && (creep.harvest(source) == ERR_NOT_IN_RANGE || creep.harvest(source) == OK)) {
+            creep.moveTo(source);
         }
     },
     create_extensions: function() {
@@ -14,9 +14,10 @@ var room_helpers = {
         var extensions = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
         extensions = extensions.concat(global_vars.my_room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_EXTENSION}}));
         var spawn_pos = global_vars.spawn.pos;
+        var y_pos = spawn_pos.y - 1
         for (i=0;i<(available_extensions-extensions.length);i++) {
             var x_pos = spawn_pos.x - i - 1;
-            global_vars.my_room.createConstructionSite(x_pos, spawn_pos.y - 1, STRUCTURE_EXTENSION);
+            while (global_vars.my_room.createConstructionSite(x_pos, y_pos, STRUCTURE_EXTENSION) == ERR_INVALID_TARGET) y_pos++;
         }
     },
     missin_extension_energy: function() {
