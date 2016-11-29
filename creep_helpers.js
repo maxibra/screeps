@@ -14,18 +14,19 @@ var creep_types = {
     'builder': {func: roleBuilder, max: 6, min: 2}
 };
 
-for (var creep_role in creep_types) max_creeps += spawn.memory[creep_role]['desired'];
-console.log('Max Creeps: ' + max_creeps);
-
 // Itiliaze spawn memory with creep's metadata
 for (i in global_vars.build_priority) {
     var creep_role = global_vars.build_priority[i];
     if (typeof spawn.memory.roads == "undefined") spawn.memory.roads = [];
     if (typeof spawn.memory[creep_role] == "undefined") {
+        console.log('ROle: ' + creep_role + 'Min: ' + creep_types[creep_role]['min'])
         spawn.memory[creep_role] = {gen: 0, index: 0, desired: creep_types[creep_role]['min']};
         if (creep_role == 'harvester') spawn.memory[creep_role]['transformed2b'] = [];
     }
 }
+
+for (var creep_role in creep_types) max_creeps += spawn.memory[creep_role]['desired'];
+console.log('Max Creeps: ' + max_creeps);
 
 function body_cost(body) {
     var bodyCost = {
@@ -79,7 +80,7 @@ var creep_helpers = {
             //console.log('I = ' + i + '; Current_body: ' + current_body + '; Possible Body: ' + possible_body + '; Possible cost:' + possible_body_cost + '; Energy: ' + Game.rooms.sim.energyAvailable)
         }
         var current_body_cost = body_cost(current_body);
-        console.log('Body: ' + current_body + 'Cost: ' + current_body_cost);
+        //console.log('Body: ' + current_body + 'Cost: ' + current_body_cost);
 
         for (var creep_role_index in global_vars.build_priority) {
             var creep_role = global_vars.build_priority[creep_role_index];
