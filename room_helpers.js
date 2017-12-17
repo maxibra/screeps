@@ -8,6 +8,8 @@ var room_helpers = {
         if(source && (creep.harvest(source) == ERR_NOT_IN_RANGE || creep.harvest(source) == OK)) {
             creep.moveTo(source);
         }
+        //console.log('Source:' + source);
+        //return [source.pos.x, source.pos.y];
     },
     create_extensions: function() {
         var available_extensions = extensions_rate[global_vars.my_room.controller.level];
@@ -37,13 +39,20 @@ var room_helpers = {
         if (typeof current_roads.find(x => x == road_descriptor) != "undefined") return; // Exit if road exists
         var path2target = global_vars.my_room.findPath(FromPos, ToPos, {ignoreCreeps: true});
         console.log('Create road From ' + FromPos.structureType + FromPos.id + ' To ' + ToPos.structureType + ToPos.id + ' Range: ' + path2target.length);
+        var xy_path = [];
         for (i in path2target) {
             var p = path2target[i];
-            global_vars.my_room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
+            var create_res = global_vars.my_room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
+            if (create_res < 0) console.log('Failed to create');
+            else console.log('STATUS: ' + JSON.stringify(global_vars.my_room.lookAt(p.x, p.y)));
+            xy_path.push([p.x, p.y]);
+            //get_struct_obj(p.x, p.y);
         }
+        //console.log('PATH: ' + JSON.stringify(xy_path));
         var current_roads = global_vars.spawn.memory.roads;
         current_roads.push(road_descriptor);
         global_vars.spawn.memory.roads = current_roads;
+        return xy_path;
     }
 };
 

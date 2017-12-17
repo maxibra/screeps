@@ -15,11 +15,26 @@ var roleBuilder = {
         }
 
         if(creep.memory.building) {
-            var targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
-            targets = targets.concat(creep.room.find(FIND_CONSTRUCTION_SITES));
+            // Extensions have a higher priority
+            var important_structure = global_vars.spawn.memory.important_structures || [];
+            var targets = (typeof important_structure == 'undefined' || important_structure.length == 0 ? [] : [important_structure]);
+            targets = targets.concat(global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}})[0] || []);
+            targets = targets.concat(creep.room.find(FIND_CONSTRUCTION_SITES)[0] || []);
+            //console.log('Targets: ' + JSON.stringify(targets) + 'Imporatnt: ' + JSON.stringify(important_structure));
             if(targets.length) {
-                if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
+                // following length 2 => it's [x,y] of important path from memory else target object
+                var build_res = (targets[0].length == 2 ? creep.build(targets[0][0], targets[0][1]) : creep.build(targets[0]));
+                //console.log('RES: ' + build_res + 'Target[0]: ' + JSON.stringify(targets[0]));
+
+                switch(build_res) {
+                    case ERR_NOT_IN_RANGE:
+                        targets[0].length == 2 ? creep.moveTo(targets[0][0], targest[0][1]) : creep.moveTo(targets[0]);
+                        break;
+                    case ERR_INVALID_TARGET:    // possible problem: if creep on the square remove structure from list
+                        important_structure.shift();
+                        //console.log('Imporatnt: ' + JSON.stringify(important_structure));
+                        global_vars.spawn.memory.important_structures = important_structure;
+                        break;
                 }
             } else creep.moveTo(global_vars.spawn.pos)  // move from source
         }
