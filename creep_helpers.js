@@ -8,7 +8,6 @@ var nominal_creeps = 9;
 var max_creeps = 12;
 
 // Itiliaze spawn memory with creep's metadata
-if (typeof spawn.memory.roads == "undefined") spawn.memory.roads = [];
 if (typeof spawn.memory.general == "undefined") spawn.memory.general = {gen: 0, index: 0, max: nominal_creeps};
 // console.log('Creeps general: ' + JSON.stringify(spawn.memory.general));
 
@@ -31,7 +30,7 @@ var creep_helpers = {
     create_creep: function() {
         var current_creeps = Game.creeps;
         var creeps_names = Object.keys(current_creeps);
-        var harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvester').length;
+        var harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'undefined').length;
         // Increase / Decrease desired creeps if exist not completed extensions
         if (global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}}).length > 0) {
             spawn.memory.general.max = max_creeps;

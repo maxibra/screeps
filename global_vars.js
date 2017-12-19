@@ -6,7 +6,7 @@ module.exports = {
     my_room: Game.rooms.sim,
     moveTo_ops: {
         reusePath: 50,           // default: 5
-        serializeMemory: false, // default: true
+        //serializeMemory: false, // default: true
         //noPathFinding: true, // default: false
         visualizePathStyle: {
             fill: 'transparent',

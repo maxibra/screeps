@@ -2,10 +2,17 @@ var global_vars = require('global_vars');
 // var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
 
 var room_helpers = {
-    get_transfer_target: function(creep) {
-        var targets = global_vars.my_room.find(FIND_MY_STRUCTURES, {filter: object => object.energy < object.energyCapacity });
+    get_transfer_target: function() {
+        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => object.energy < object.energyCapacity });
         targets.sort((a,b) => a.hits - b.hits);
-        global_vars.my_room.targets.transfer = targets[0];
+        global_vars.my_room.memory.target_transfer = targets[0] ? targets[0].id : false;
+    },
+    get_build_targets: function() {
+        //var important_structure = global_vars.spawn.memory.important_structures || [];
+        //var targets = (typeof important_structure == 'undefined' || important_structure.length == 0 ? [] : [important_structure]);
+        var targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});  // Extensions have highest priority
+        if (targets.length == 0) targets = (global_vars.my_room.find(FIND_CONSTRUCTION_SITES) || []);
+        global_vars.my_room.memory.targets_build = targets[0] ? targets[0].id : false;
     },
     create_extensions: function() {
         var available_extensions = CONTROLLER_STRUCTURES.extension[global_vars.my_room.controller.level];
@@ -29,7 +36,7 @@ var room_helpers = {
     create_road: function(FromPos, ToPos) {
         if (typeof FromPos == "undefined" || typeof ToPos == "undefined") return;
 
-        current_roads = global_vars.spawn.memory.roads;
+        current_roads = global_vars.my_room.memory.roads;
         var road_descriptor = FromPos.structureType + FromPos.id.substring(1,4) + '-' + ToPos.structureType + ToPos.id.substring(1,4);
 
         if (typeof current_roads.find(x => x == road_descriptor) != "undefined") return; // Exit if road exists
@@ -45,9 +52,9 @@ var room_helpers = {
             //get_struct_obj(p.x, p.y);
         }
         //console.log('PATH: ' + JSON.stringify(xy_path));
-        var current_roads = global_vars.spawn.memory.roads;
+        var current_roads = global_vars.my_room.memory.roads;
         current_roads.push(road_descriptor);
-        global_vars.spawn.memory.roads = current_roads;
+        global_vars.my_room.memory.roads = current_roads;
         return xy_path;
     }
 };
