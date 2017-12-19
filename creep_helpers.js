@@ -5,27 +5,17 @@ var base_body = [WORK,CARRY,MOVE];
 var add_body = [WORK,CARRY];
 var base_creep = 'harvester';
 var spawn = global_vars.spawn;
-var nominal_creeps = 6;
+var nominal_creeps = 9;
 var max_creeps = 12;
 
 // Itiliaze spawn memory with creep's metadata
 if (typeof spawn.memory.roads == "undefined") spawn.memory.roads = [];
 if (typeof spawn.memory.general == "undefined") spawn.memory.general = {gen: 0, index: 0, max: nominal_creeps};
-console.log('Creeps general' + JSON.stringify(spawn.memory.general));
+console.log('Creeps general: ' + JSON.stringify(spawn.memory.general));
 
 function body_cost(body) {
-    var bodyCost = {
-        "move": 50,
-        "work": 100,
-        "carry": 50,
-        "attack": 80,
-        "ranged_attack": 150,
-        "heal": 250,
-        "claim": 600,
-        "tough": 10
-    };
     var cost = 0;
-    _.forEach(body, function(part) { cost += bodyCost[part]; });
+    _.forEach(body, function(part) { cost += BODYPART_COST[part]; });
     return cost;
 }
 // var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');

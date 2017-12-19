@@ -9,7 +9,6 @@ var upgrader_i = 2;
 var units = [0, 0, 0];
 var cur_creeps = Game.creeps ? Game.creeps : {};
 var cur_creeps_names = Object.keys(cur_creeps)
-console.log('Creeps: ' + cur_creeps_names.length);
 var creep_i;
 for (creep_i in cur_creeps) {
     switch (cur_creeps[creep_i].memory.role) {
@@ -24,7 +23,6 @@ for (creep_i in cur_creeps) {
             break;
     }
 }
-console.log('Creeps: ' + cur_creeps_names.length + '; Transfers: ' + units[transfer_i] + '; Builders: '+ units[builder_i] + '; Upgraders: '+ units[upgrader_i])
 
 function get_struct_obj(x, y) {
     var stuctures = global_vars.my_room.lookAt(x,y);
@@ -33,9 +31,13 @@ function get_struct_obj(x, y) {
 }
 
 module.exports.loop = function () {
-    creep_helpers.clean_memory();
-    creep_helpers.create_creep();
-    room_helpers.create_extensions();
+    console.log('Creeps: ' + cur_creeps_names.length + '; Transfers: ' + units[transfer_i] + '; Builders: '+ units[builder_i] + '; Upgraders: '+ units[upgrader_i]);
+
+    (Game.time % 1000) && creep_helpers.clean_memory();
+    if ((cur_creeps_names.length < 5) || (Game.time % 1000)) creep_helpers.create_creep();
+    if (Game.time % 300) {  // run every 5 minutes
+        room_helpers.create_extensions();
+    }
     // Create first roads
     if (global_vars.spawn.memory.roads.length == 0) {
         var xy_path = room_helpers.create_road(_.extend(global_vars.spawn.pos, {id: global_vars.spawn.id, structureType: 'spawn'}), _.extend(global_vars.spawn.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'}));  // Spawn-Closest Source

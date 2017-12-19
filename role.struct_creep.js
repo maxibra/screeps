@@ -10,7 +10,7 @@ var transfer_i = 0;
 var builder_i = 1;
 var upgrader_i = 3;
 
-module.exports = {
+var structCreep = {
     run: function(creep, units) {
         if(creep.carry.energy == 0) {
             if (creep.memory.status != 'harvester') creep.say('harvesting');
@@ -18,11 +18,26 @@ module.exports = {
         } else if (creep.memory.status == 'harvester' && creep.carry.energy == creep.carryCapacity) {
             creep.memory.status = 'worker';
         }
-
+        var current_creeps = Game.creeps
+        var creeps_names = Object.keys(current_creeps);
+        var creeps_length = creeps_names.length;
 
         if(creep.memory.status != 'harvester') {
+
+            // possible targets of transfer
+            var targets = [];
+            //console.log('Creeps: ' + creeps_length + '; Transfers: ' + transferUnits + '; Percentage: ' + transferUnits/creeps_length + '; Definition: ' + creep_types.transfer);
+            targets = targets.concat(creep.room.find(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) && structure.energy < structure.energyCapacity;
+        }
+        })[0] || []);
+            if (creep.memory.role != 'transfer' && (units[transfer_i]/creeps_length) < creep_types.transfer && targets.length > 0) {
+                if (creep.memory.role != 'transfer') creep.say('transfering');
+                creep.memory.role = 'transfer';
+            }
             if (creep.memory.role == 'transfer' && creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(targets[0]);
+                creep.moveTo(targets[0], global_vars.moveTo_ops);
                 return;
             }
 
@@ -32,11 +47,15 @@ module.exports = {
             targets = targets.concat(global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}})[0] || []);
             targets = targets.concat(creep.room.find(FIND_CONSTRUCTION_SITES)[0] || []);
 
-            //console.log('UNITS: ' + (units[builder_i]/creeps_length) + '; LIMIT: ' + creep_types.builder);
-            if (creep.memory.role != 'builder' && (units[builder_i]/creeps_length) < creep_types.builder && targets.length > 0) {
-                if (creep.memory.role != 'builder') creep.say('building');
-                console.log('Create Builder');
-                creep.memory.role = 'builder';
+//            console.log('BUILDER_I: ' + builder_i + '; CREEPS_LENGTH: ' + define_roles.creeps_length);
+//            console.log('UNITS: ' + (units[builder_i]/define_roles.creeps_length) + '; LIMIT: ' + creep_types.builder);
+
+            if (creep.memory.role != 'builder' && (units[builder_i]/creeps_length) < creep_types.builder) {
+                if (targets.length > 0) {
+                    creep.say('building');
+                    console.log('Create Builder');
+                    creep.memory.role = 'builder';
+                }
             }
 
             if(creep.memory.role == 'builder' && targets.length > 0) {
@@ -46,7 +65,7 @@ module.exports = {
 
                 switch(build_res) {
                     case ERR_NOT_IN_RANGE:
-                        targets[0].length == 2 ? creep.moveTo(targets[0][0], targest[0][1]) : creep.moveTo(targets[0]);
+                        targets[0].length == 2 ? creep.moveTo(targets[0][0], targest[0][1], global_vars.moveTo_ops) : creep.moveTo(targets[0], global_vars.moveTo_ops);
                         break;
                     case ERR_INVALID_TARGET:    // possible problem: if creep on the square remove structure from list
                         important_structure.shift();
@@ -64,29 +83,11 @@ module.exports = {
                 creep.memory.role = 'upgrader';
             }
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller);
+                creep.moveTo(creep.room.controller, global_vars.moveTo_ops);
             }
 
         } else room_helpers.go2best_source(creep);
-    },
-    define_roles: function(units) {
-        var current_creeps = Game.creeps
-        var creeps_names = Object.keys(current_creeps);
-        var creeps_length = creeps_names.length;
-
-        // possible targets of transfer
-        var targets = [];
-        //console.log('Creeps: ' + creeps_length + '; Transfers: ' + transferUnits + '; Percentage: ' + transferUnits/creeps_length + '; Definition: ' + creep_types.transfer);
-        targets = targets.concat(creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) && structure.energy < structure.energyCapacity;
-    }
-    })[0] || []);
-        if (creep.memory.role != 'transfer' && (units[transfer_i]/creeps_length) < creep_types.transfer && targets.length > 0) {
-            if (creep.memory.role != 'transfer') creep.say('transfering');
-            creep.memory.role = 'transfer';
-        }
-
-
     }
 };
+
+module.exports = structCreep;
