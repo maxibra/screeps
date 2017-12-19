@@ -2,13 +2,10 @@ var global_vars = require('global_vars');
 // var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
 
 var room_helpers = {
-    go2best_source: function(creep) {
-        var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-        if(source && (creep.harvest(source) == ERR_NOT_IN_RANGE || creep.harvest(source) == OK)) {
-            creep.moveTo(source, global_vars.moveTo_ops);
-        }
-        //console.log('Source:' + source);
-        //return [source.pos.x, source.pos.y];
+    get_transfer_target: function(creep) {
+        var targets = global_vars.my_room.find(FIND_MY_STRUCTURES, {filter: object => object.energy < object.energyCapacity });
+        targets.sort((a,b) => a.hits - b.hits);
+        global_vars.my_room.targets.transfer = targets[0];
     },
     create_extensions: function() {
         var available_extensions = CONTROLLER_STRUCTURES.extension[global_vars.my_room.controller.level];

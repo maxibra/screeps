@@ -3,7 +3,6 @@ var roleStructCreep = require('role.struct_creep');
 
 var base_body = [WORK,CARRY,MOVE];
 var add_body = [WORK,CARRY];
-var base_creep = 'harvester';
 var spawn = global_vars.spawn;
 var nominal_creeps = 9;
 var max_creeps = 12;
@@ -11,7 +10,7 @@ var max_creeps = 12;
 // Itiliaze spawn memory with creep's metadata
 if (typeof spawn.memory.roads == "undefined") spawn.memory.roads = [];
 if (typeof spawn.memory.general == "undefined") spawn.memory.general = {gen: 0, index: 0, max: nominal_creeps};
-console.log('Creeps general: ' + JSON.stringify(spawn.memory.general));
+// console.log('Creeps general: ' + JSON.stringify(spawn.memory.general));
 
 function body_cost(body) {
     var cost = 0;

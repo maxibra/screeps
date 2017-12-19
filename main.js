@@ -3,25 +3,20 @@ var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 
 // JSON.stringify(obj)
-var transfer_i = 0;
-var builder_i = 1;
-var upgrader_i = 2;
-var units = [0, 0, 0];
+var units = {
+    'total': 0,
+    'transfer': 0,
+    'build': 0,
+    'upgrade': 0,
+    'rapair': 0,
+    'harvest': 0,
+};
+
 var cur_creeps = Game.creeps ? Game.creeps : {};
 var cur_creeps_names = Object.keys(cur_creeps)
-var creep_i;
-for (creep_i in cur_creeps) {
-    switch (cur_creeps[creep_i].memory.role) {
-        case 'transfer':
-            units[transfer_i]++;
-            break;
-        case 'builder':
-            units[builder_i]++;
-            break;
-        case 'upgrader':
-            units[upgrader_i]++;
-            break;
-    }
+for (var creep_name in cur_creeps) {
+    units[cur_creeps[creep_name].memory.role]++;
+    units['total']++;
 }
 
 function get_struct_obj(x, y) {
@@ -31,13 +26,20 @@ function get_struct_obj(x, y) {
 }
 
 module.exports.loop = function () {
-    console.log('Creeps: ' + cur_creeps_names.length + '; Transfers: ' + units[transfer_i] + '; Builders: '+ units[builder_i] + '; Upgraders: '+ units[upgrader_i]);
+    var s_types = '';
+//    for (var t in Object.keys(units) s_types = s_types + t + ': ' + units[t];
+    console.log(JSON.stringify(units));
 
-    (Game.time % 1000) && creep_helpers.clean_memory();
-    if ((cur_creeps_names.length < 5) || (Game.time % 1000)) creep_helpers.create_creep();
-    if (Game.time % 300) {  // run every 5 minutes
+    if (Game.time % 300) {
         room_helpers.create_extensions();
     }
+
+    if (Game.time % 1000) {
+        creep_helpers.clean_memory();
+    }
+
+    if ((cur_creeps_names.length < 5) || (Game.time % 1000)) creep_helpers.create_creep();
+
     // Create first roads
     if (global_vars.spawn.memory.roads.length == 0) {
         var xy_path = room_helpers.create_road(_.extend(global_vars.spawn.pos, {id: global_vars.spawn.id, structureType: 'spawn'}), _.extend(global_vars.spawn.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'}));  // Spawn-Closest Source
