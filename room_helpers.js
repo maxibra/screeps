@@ -7,6 +7,16 @@ var room_helpers = {
         targets.sort((a,b) => a.hits - b.hits);
         global_vars.my_room.memory.target_transfer = targets[0] ? targets[0].id : false;
     },
+    get_repair_defence_target: function() {
+        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && object.hits < object.hitsMax});
+        targets.sort((a,b) => a.hits - b.hits);
+        global_vars.my_room.memory.target_repair_defence = targets[0] ? targets[0].id : false;
+    },
+    get_repair_civilianl_target: function() {
+        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_WALL || object.structureType != STRUCTURE_RAMPART) && object.hits < object.hitsMax});
+        targets.sort((a,b) => a.hits - b.hits);
+        global_vars.my_room.memory.target_repair_civilian = targets[0] ? targets[0].id : false;
+    },
     get_build_targets: function() {
         //var important_structure = global_vars.spawn.memory.important_structures || [];
         //var targets = (typeof important_structure == 'undefined' || important_structure.length == 0 ? [] : [important_structure]);

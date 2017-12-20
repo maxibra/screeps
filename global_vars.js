@@ -5,7 +5,7 @@ module.exports = {
     spawn: Game.spawns[spawn_name],
     my_room: Game.rooms.sim,
     moveTo_ops: {
-        reusePath: 50,           // default: 5
+        reusePath: 10,           // default: 5
         //serializeMemory: false, // default: true
         //noPathFinding: true, // default: false
         visualizePathStyle: {

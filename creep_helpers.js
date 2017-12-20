@@ -1,5 +1,4 @@
 var global_vars = require('global_vars');
-var roleStructCreep = require('role.struct_creep');
 
 var base_body = [WORK,CARRY,MOVE];
 var add_body = [WORK,CARRY];
@@ -66,11 +65,16 @@ var creep_helpers = {
         spawn.memory.general = mem;
         console.log('Spawning new harvester: ' + newName);
     },
-    run: function(units) {
-        for(var name in Game.creeps) {
-            var creep = Game.creeps[name];
-            var creep_role = creep.memory.role
-            roleStructCreep.run(creep, units);
+    most_creep_action: function(creep, target, action_res, creep_role) {
+        switch(action_res) {
+            case OK:
+            case ERR_NOT_IN_RANGE:
+                creep.moveTo(target, global_vars.moveTo_ops);
+                break;
+            default:
+                console.log('[WARN] ' + creep_role + ': NO action for result ' + action_res)
+                global_vars.my_room.memory.target_transfer = false;
+                creep.memory.role = 'undefined';
         }
     }
 };
