@@ -11,7 +11,7 @@ var creep_types = {
     'peace': {
         'transfer': 0.20,      // max percentage of transfer from total creeps
         'build': 0.30,        // max percentage of builders from total creeps
-        'repair_defence': 0.2,          // max percentage of repair units from total creeps
+        'repair_defence': 0.1,          // max percentage of repair units from total creeps
         'repair_civilian': 0.1,          // max percentage of repair units from total creeps
     }
 };
@@ -31,6 +31,7 @@ var structCreep = {
                 creep.memory.role = 'transfer';
                 creep.memory.target_id = false;
             } else if (global_vars.my_room.memory.target_repair_defence && units['repair_defence']/current_workers < current_creep_types.repair_defence) {
+                console.log('[DEBUG] (structCreep.run): Changed ' + creep.memory.role + ' to repair_defence: ' + units['repair_defence'] + ' / ' + current_workers + '=' + units['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
                 creep.say('defence repair');
                 creep.memory.role = 'repair_defence';
                 creep.memory.target_id = false;
@@ -67,6 +68,10 @@ var structCreep = {
                         case OK:
                             creep.memory.role = 'undefined';
                             break;
+                        case ERR_FULL:
+                            if (global_vars.my_room.memory.target_transfer) { creep.memory.target_id = global_vars.my_room.memory.target_transfer;}
+                            else creep.memory.role = 'undefined';
+                            break;
                         default:
                             creep_helpers.most_creep_action(creep, target, action_res, creep_role);
                     }
@@ -80,7 +85,8 @@ var structCreep = {
                 } else creep.memory.role = 'undefined';
                 break;
             case 'repair_civilian':
-                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(global_vars.my_room.memory.target_repair_civilian));
+                //               var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(global_vars.my_room.memory.target_repair_civilian));
+                var target = Game.getObjectById(global_vars.my_room.memory.target_repair_civilian); // the most targets are roads => stuck on them
                 if (target) {
                     creep_helpers.most_creep_action(creep, target, creep.repair(target), creep_role);
                 } else creep.memory.role = 'undefined';

@@ -15,6 +15,7 @@
 * Change role of creep to 'undefine' if finish to work with a target but still has energy.
 * Create repair roles: repair_defence and repair_civilian
 * Builders prefer to build extensions and defence units
+* Rewriting create creep: change harvesters to transfer to feel energy
 
 ## TBD:
 * Create the better way to search source to harvest
