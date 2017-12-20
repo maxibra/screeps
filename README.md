@@ -8,8 +8,18 @@
   * Additional part of Body: [WORK,CARRY]
   * Add move after every 2 additional parts
 
+## 19-20/12 2017:
+* increase/decrease creeps amount by time ans status of build or repair defence
+* Creep continue to work with the same target until the target is full or creeps is empty.
+* Choose role of creep by finish of harvesting
+* Change role of creep to 'undefine' if finish to work with a target but still has energy.
+* Create repair roles: repair_defence and repair_civilian
+* Builders prefer to build extensions and defence units
+
 ## TBD:
-* Rewrite increase/decrease builders amount if need to complete extensions
-* Implement Harvester continue to next transfer if contains energy (currently is back to source with energy)
-* Change role of builders to upgraders (Be careful with transformed harvesters)
-* Add repearing of roads to role of builder
+* Create the better way to search source to harvest
+    * choose free source and don't change it
+    * if all sources are busy:
+        * find source with more points to harvest
+        * try to predict when the source will be free by how match energy a nearest harvesters are need
+* Create system based on memory to save path from each requested point.

@@ -38,6 +38,7 @@ module.exports.loop = function () {
         room_helpers.get_build_targets();
         room_helpers.get_repair_defence_target();
         room_helpers.get_repair_civilianl_target();
+        room_helpers.define_creeps_amount();
     }
 
     if (Game.time % 300 === 0) {
@@ -45,7 +46,7 @@ module.exports.loop = function () {
     }
 
     if (Game.time % 1000 === 0) {
-        creep_helpers.clean_memory();
+        room_helpers.clean_memory();
     }
 
     if (cur_creeps_names.length < global_vars.spawn.memory.general.max) creep_helpers.create_creep();

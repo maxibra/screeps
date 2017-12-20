@@ -13,25 +13,30 @@ var structCreep = {
         // role's definition
         if(creep.carry.energy == 0) {
             if (creep.memory.role != 'harvest') creep.say('harvesting');
+            creep.memory.target_id = false;
             creep.memory.role = 'harvest';
         } else if ((creep.memory.role == 'harvest' && creep.carry.energy == creep.carryCapacity) || (creep.memory.role == 'undefined')) {
-            if (global_vars.my_room.memory.target_transfer && (units['transfer']/units['total'] < creep_types.transfer || units['transfer'] < 1)) {
+            var current_workers = units['total'] - units['harvest'];
+            if (global_vars.my_room.memory.target_transfer && (units['transfer']/current_workers < creep_types.transfer || units['transfer'] < 1)) {
                 creep.say('transfering');
                 creep.memory.role = 'transfer';
-                creep.memory.target_id = global_vars.my_room.memory.target_transfer
-            } else if (global_vars.my_room.memory.target_repair_defence && units['repair_defence']/units['total'] < creep_types.repair_defence) {
+                creep.memory.target_id = false;
+            } else if (global_vars.my_room.memory.target_repair_defence && units['repair_defence']/current_workers < creep_types.repair_defence) {
                 creep.say('defence repair');
                 creep.memory.role = 'repair_defence';
-                creep.memory.target_id = global_vars.my_room.memory.target_repair_defence;
-            } else if (global_vars.my_room.memory.target_repair_civilian && units['repair_civilian']/units['total'] < creep_types.repair_civilian) {
+                creep.memory.target_id = false;
+            } else if (global_vars.my_room.memory.target_repair_civilian && units['repair_civilian']/current_workers < creep_types.repair_civilian) {
                 creep.say('civilian repair');
                 creep.memory.role = 'repair_civilian';
-            } else if (global_vars.my_room.memory.targets_build && units['build']/units['total'] < creep_types.build) {
+                creep.memory.target_id = false;
+            } else if (global_vars.my_room.memory.targets_build && units['build']/current_workers < creep_types.build) {
                 creep.say('building');
                 creep.memory.role = 'build';
+                creep.memory.target_id = false;
             } else {  // Here if no jobs instead upgrading
                 creep.say('upgrading');
                 creep.memory.role = 'upgrade';
+                creep.memory.target_id = false;
             }
         }
 

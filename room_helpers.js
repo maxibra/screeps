@@ -18,11 +18,30 @@ var room_helpers = {
         global_vars.my_room.memory.target_repair_civilian = targets[0] ? targets[0].id : false;
     },
     get_build_targets: function() {
-        //var important_structure = global_vars.spawn.memory.important_structures || [];
-        //var targets = (typeof important_structure == 'undefined' || important_structure.length == 0 ? [] : [important_structure]);
-        var targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});  // Extensions have highest priority
+        // Extensions have highest priority
+        var targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
+        // Defnce structures are secondary priority
+        if (targets.length == 0) targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: (STRUCTURE_WALL || STRUCTURE_RAMPART || STRUCTURE_TOWER)}});
         if (targets.length == 0) targets = (global_vars.my_room.find(FIND_CONSTRUCTION_SITES) || []);
         global_vars.my_room.memory.targets_build = targets[0] ? targets[0].id : false;
+    },
+    define_creeps_amount: function() {
+        if (Game.time < 5000) {
+            global_vars.spawn.memory.general.max = global_vars.creeps_nominal;
+        } else if (global_vars.my_room.memory.target_repair_defence) {
+            global_vars.spawn.memory.general.max = global_vars.screeps_repair_defance;
+        } else if (global_vars.my_room.memory.targets_build) {
+            global_vars.spawn.memory.general.max = global_vars.screeps_build;
+        } else global_vars.spawn.memory.general.max = global_vars.creeps_nominal;
+    },
+    clean_memory: function() {
+        // Clean died creeps
+        for(var name in Memory.creeps) {
+            if(!Game.creeps[name]) {
+                delete Memory.creeps[name];
+                console.log('[INFO] Clean memory: non-existing creep', name);
+            }
+        }
     },
     create_extensions: function() {
         var available_extensions = CONTROLLER_STRUCTURES.extension[global_vars.my_room.controller.level];
