@@ -8,12 +8,12 @@ var room_helpers = {
         global_vars.my_room.memory.target_transfer = targets[0] ? targets[0].id : false;
     },
     get_repair_defence_target: function() {
-        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && object.hits < object.hitsMax});
+        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
         global_vars.my_room.memory.target_repair_defence = targets[0] ? targets[0].id : false;
     },
     get_repair_civilianl_target: function() {
-        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_WALL || object.structureType != STRUCTURE_RAMPART) && object.hits < object.hitsMax});
+        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
         global_vars.my_room.memory.target_repair_civilian = targets[0] ? targets[0].id : false;
     },
@@ -21,7 +21,7 @@ var room_helpers = {
         // Extensions have highest priority
         var targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
         // Defnce structures are secondary priority
-        if (targets.length == 0) targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: (STRUCTURE_WALL || STRUCTURE_RAMPART || STRUCTURE_TOWER)}});
+        if (targets.length == 0) targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER)});
         if (targets.length == 0) targets = (global_vars.my_room.find(FIND_CONSTRUCTION_SITES) || []);
         global_vars.my_room.memory.targets_build = targets[0] ? targets[0].id : false;
     },
