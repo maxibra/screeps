@@ -68,6 +68,7 @@ var creep_helpers = {
         switch(action_res) {
             case OK:
                 creep.memory.target_id = target.id;
+                break;
             case ERR_NOT_IN_RANGE:
                 creep.moveTo(target, global_vars.moveTo_ops);
                 break;
