@@ -16,6 +16,7 @@
 * Create repair roles: repair_defence and repair_civilian
 * Builders prefer to build extensions and defence units
 * Rewriting create creep: change harvesters to transfer to feel energy
+* create_creeps was changed: in peace create new creep with max capacity only
 
 ## TBD:
 * Create the better way to search source to harvest
@@ -24,3 +25,6 @@
         * find source with more points to harvest
         * try to predict when the source will be free by how match energy a nearest harvesters are need
 * Create system based on memory to save path from each requested point.
+* Improve Transfers (choose a new target if remained energy. Currently choose spawn)
+* Transfers. possibility to change percent of transfers if not enought creeps for more then hour
+* Improve change role. currently if in the same ticket several creeps are needed to change role we have a wrong proportion

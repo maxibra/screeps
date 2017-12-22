@@ -3,24 +3,24 @@ var roleStructCreep = require('role.struct_creep');
 var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 
+// Itiliaze spawn memory with creep's metadata
+if (typeof global_vars.spawn.memory.general == "undefined") {
+    global_vars.spawn.memory.general = {
+        gen: 0,
+        index: 0,
+        max: global_vars.creeps_nominal,
+        status: 'peace',
+        extensions: 0
+    };
+}
+// console.log('Creeps general: ' + JSON.stringify(spawn.memory.general));
+
 // JSON.stringify(obj)
-var units = {
-    'total': 0,
-    'transfer': 0,
-    'build': 0,
-    'upgrade': 0,
-    'repair_defence': 0,
-    'repair_civilian': 0,
-    'harvest': 0,
-    'undefined': 0,
-};
+
 
 var cur_creeps = Game.creeps ? Game.creeps : {};
 var cur_creeps_names = Object.keys(cur_creeps)
-for (var creep_name in cur_creeps) {
-    units[cur_creeps[creep_name].memory.role]++;
-    units['total']++;
-}
+
 
 function get_struct_obj(x, y) {
     var stuctures = global_vars.my_room.lookAt(x,y);
@@ -29,18 +29,32 @@ function get_struct_obj(x, y) {
 }
 
 module.exports.loop = function () {
+    var units = {
+        'total': 0,
+        'transfer': 0,
+        'build': 0,
+        'upgrade': 0,
+        'repair_defence': 0,
+        'repair_civilian': 0,
+        'harvest': 0,
+        'undefined': 0
+    };
+    for (var creep_name in cur_creeps) {
+        units[cur_creeps[creep_name].memory.role]++;
+        units['total']++;
+    }
     var s_types = '';
 //    for (var t in Object.keys(units) s_types = s_types + t + ': ' + units[t];
-    console.log('UNITS: ' + JSON.stringify(units));
+    console.log('[INFO] (main): START  UNITS (nominal: ' + global_vars.spawn.memory.general.max + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
     if (Game.time % 10 == 0) {  // run every 10 ticks
-        console.log('RUN 10 tickets functions. Time: ' + Game.time);
+        console.log('[INFO] (main): RUN 10 tickets functions. Time: ' + Game.time);
         room_helpers.get_transfer_target();
         room_helpers.get_build_targets();
         room_helpers.get_repair_defence_target();
         room_helpers.get_repair_civilianl_target();
         room_helpers.define_creeps_amount();
-        creep_helpers.create_creep();
     }
+    creep_helpers.create_creep();
 
     if (Game.time % 300 === 0) {
         room_helpers.create_extensions();
@@ -65,4 +79,6 @@ module.exports.loop = function () {
         var creep_role = creep.memory.role
         roleStructCreep.run(creep, units);
     }
+//    console.log('[INFO] (main): FINISH UNITS (nominal: ' + global_vars.spawn.memory.general.max + '): ' + JSON.stringify(units));
+
 }

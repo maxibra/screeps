@@ -1,9 +1,10 @@
 var spawn_name = 'max';
+var room_name = Object.keys(Game.rooms)[0];
 
 module.exports = {
     spawn_name: spawn_name,
     spawn: Game.spawns[spawn_name],
-    my_room: Game.rooms.sim,
+    my_room: Game.rooms[room_name],
     creeps_nominal: 10,
     screeps_war: 30,
     screeps_repair_defance: 20,
