@@ -75,7 +75,7 @@ var room_helpers = {
         }
 //        targets.sort((a,b) => (Math.abs(global_vars.spawn.pos.x-a.pos.x) + Math.abs(global_vars.spawn.pos.y-a.pos.y)) - (Math.abs(global_vars.spawn.pos.x-b.pos.x) + Math.abs(global_vars.spawn.pos.y-b.pos.y)));
         if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
-        global_vars.my_room.memory.targets_build = targets[0] ? targets[0].id : false;
+        global_vars.my_room.memory.targets_build = closest_obj ? closest_obj.id : false;
     },
     define_creeps_amount: function() {
         if (Game.time < 5000) {
