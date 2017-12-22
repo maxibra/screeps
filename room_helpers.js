@@ -55,10 +55,14 @@ var room_helpers = {
     get_build_targets: function() {
         // Extensions have highest priority
         var targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
-        // Defnce structures are secondary priority
-        if (targets.length == 0) targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER)});
-        if (targets.length == 0) targets = (global_vars.my_room.find(FIND_CONSTRUCTION_SITES) || []);
-        global_vars.my_room.memory.targets_build = targets[0] ? targets[0].id : false;
+        // Defence structures are secondary priority
+        if (targets) targets = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER)});
+        // All other structures
+        if (targets) targets = (global_vars.my_room.find(FIND_CONSTRUCTION_SITES) || []);
+        // Sort targets by close to spawn
+        targets.sort((a,b) => (Math.abs(global_vars.spawn.x-a.x) + Math.abs(global_vars.spawn.y-a.y)) - (Math.abs(global_vars.spawn.x-a.x) + Math.abs(global_vars.spawn.y-b.y)));
+        if (targets[0]) console.log('[DEBUG] (get_build_targets): Closest target (' + targets[targets.length-1].id + '): ' + JSON.stringify(targets[targets.length-1]));// (' + targets[0].x + ',' + targets[0].y + ')');
+        global_vars.my_room.memory.targets_build = targets[targets.length-1] ? targets[targets.length-1].id : false;
     },
     define_creeps_amount: function() {
         if (Game.time < 5000) {
