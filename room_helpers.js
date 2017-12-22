@@ -39,8 +39,10 @@ var room_helpers = {
     get_transfer_target: function() {
         var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.energy < object.energyCapacity && object.structureType != STRUCTURE_SPAWN)});
         targets.sort((a,b) => a.hits - b.hits);
+        targets.push(global_vars.spawn);
         //if (targets[0]) console.log('[DEBUG] (room_helpers-get_transfer_target): Transfer target type: ' + targets[0].structureType);
         global_vars.my_room.memory.target_transfer = targets[0] ? targets[0].id : false;
+        return targets[0].id
     },
     get_repair_defence_target: function() {
         var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER) && object.hits < object.hitsMax});
@@ -60,9 +62,20 @@ var room_helpers = {
         // All other structures
         if (targets) targets = (global_vars.my_room.find(FIND_CONSTRUCTION_SITES) || []);
         // Sort targets by close to spawn
-        targets.sort((a,b) => (Math.abs(global_vars.spawn.x-a.x) + Math.abs(global_vars.spawn.y-a.y)) - (Math.abs(global_vars.spawn.x-a.x) + Math.abs(global_vars.spawn.y-b.y)));
-        if (targets[0]) console.log('[DEBUG] (get_build_targets): Closest target (' + targets[targets.length-1].id + '): ' + JSON.stringify(targets[targets.length-1]));// (' + targets[0].x + ',' + targets[0].y + ')');
-        global_vars.my_room.memory.targets_build = targets[targets.length-1] ? targets[targets.length-1].id : false;
+        var closest_obj = targets[0];
+        var closest_obj_range = Math.abs(global_vars.spawn.pos.x-closest_obj.pos.x) + Math.abs(global_vars.spawn.pos.y-closest_obj.pos.y);
+        for (var i=1;i<targets.length;i++) {
+            var sob_range = Math.abs(global_vars.spawn.pos.x-targets[i].pos.x) + Math.abs(global_vars.spawn.pos.y-targets[i].pos.y);
+//            console.log('[DEBUG] (get_build_targets): Current (' + closest_obj.id + '): ' + closest_obj_range + '; Next(' + targets[i].id + '): ' + sob_range);
+            if (sob_range < closest_obj_range) {
+                closest_obj = targets[i];
+                closest_obj_range = sob_range;
+            }
+//            console.log('[DEBUG] (get_build_targets): Choosen: ' + closest_obj.id);
+        }
+//        targets.sort((a,b) => (Math.abs(global_vars.spawn.pos.x-a.pos.x) + Math.abs(global_vars.spawn.pos.y-a.pos.y)) - (Math.abs(global_vars.spawn.pos.x-b.pos.x) + Math.abs(global_vars.spawn.pos.y-b.pos.y)));
+        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
+        global_vars.my_room.memory.targets_build = targets[0] ? targets[0].id : false;
     },
     define_creeps_amount: function() {
         if (Game.time < 5000) {

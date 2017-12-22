@@ -9,10 +9,10 @@ var creep_types = {
         'repair_civilian': 0.2,          // max percentage of repair units from total creeps
     },
     'peace': {
-        'transfer': 0.3,      // max percentage of transfer from total creeps
+        'transfer': 0.2,      // max percentage of transfer from total creeps
         'build': 0.30,        // max percentage of builders from total creeps
-        'repair_defence': 0.2,          // max percentage of repair units from total creeps
-        'repair_civilian': 0.2,          // max percentage of repair units from total creeps
+        'repair_defence': 0.1,          // max percentage of repair units from total creeps
+        'repair_civilian': 0.1,          // max percentage of repair units from total creeps
     }
 };
 
@@ -33,24 +33,29 @@ var structCreep = {
             }
             var current_workers = units['total'] - units['harvest'];
             var current_creep_types = creep_types[global_vars.spawn.memory.general.status];
-            //console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer_target: ' + global_vars.my_room.memory.target_transfer + '; Units: ' + units['transfer'] + '; Workers: ' + current_workers + '(' + (units['transfer']/current_workers) + ' [' + current_creep_types.transfer + ']');
-            if (global_vars.my_room.memory.target_transfer && (units['transfer']/current_workers < current_creep_types.transfer)) {
+//            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer_target: ' + global_vars.my_room.memory.target_transfer + '; Units: ' + units['transfer'] + '; Workers: ' + current_workers + '(' + (units['transfer']/current_workers) + ' [' + current_creep_types.transfer + ']');
+            if (global_vars.my_room.memory.target_transfer && (units['transfer']/current_workers < current_creep_types.transfer) || units['transfer'] < 1) {
                 creep.say('transfering');
                 creep.memory.role = 'transfer';
                 //console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: changed to TRANSFER');
+                //units.transfer++;
             } else if (global_vars.my_room.memory.target_repair_defence && units['repair_defence']/current_workers < current_creep_types.repair_defence) {
                 console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units['repair_defence'] + ' / ' + current_workers + '=' + units['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
                 creep.say('defence repair');
                 creep.memory.role = 'repair_defence';
+                //units.repair_defence++;
             } else if (global_vars.my_room.memory.target_repair_civilian && units['repair_civilian']/current_workers < current_creep_types.repair_civilian) {
                 creep.say('civilian repair');
                 creep.memory.role = 'repair_civilian';
+                //units.repair_civilian++;
             } else if (global_vars.my_room.memory.targets_build && units['build']/current_workers < current_creep_types.build) {
                 creep.say('building');
                 creep.memory.role = 'build';
+                units.build++;
             } else {  // Here if no jobs instead upgrading
                 creep.say('upgrading');
                 creep.memory.role = 'upgrade';
+                //units.upgrade++;
             }
             creep.memory.target_id = false;
         }
