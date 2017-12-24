@@ -92,6 +92,14 @@ var creep_helpers = {
     },
     drop_energy2container: function(creep) {
 
+        if (creep.memory.role == 'dropper') {
+
+        } else {
+            //closest_containers = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] < object.storeCapacity)});
+
+//            creep.memory.target_id = closest_containers.id;
+//            creep.memory.role = 'dropper';
+        }
     },
     most_creep_action_results: function(creep, target, action_res, creep_role) {
         switch(action_res) {

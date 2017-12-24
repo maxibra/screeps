@@ -37,7 +37,7 @@ function get_stright_path(FromPos, ToPos) {
 
 var room_helpers = {
     get_transfer_target: function() {
-        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.energy < object.energyCapacity && object.structureType != STRUCTURE_SPAWN)});
+        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.energy < object.energyCapacity)});
         targets.sort((a,b) => a.hits - b.hits);
         targets.push(global_vars.spawn);
         //if (targets[0]) console.log('[DEBUG] (room_helpers-get_transfer_target): Transfer target type: ' + targets[0].structureType);

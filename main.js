@@ -48,8 +48,6 @@ module.exports.loop = function () {
     }
     var s_types = '';
 
-    creep_helpers.create_creep(units);
-
 //    for (var t in Object.keys(units) s_types = s_types + t + ': ' + units[t];
     console.log('[INFO] (main): START  UNITS (nominal: ' + global_vars.spawn.memory.general.max + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
     let current_mod = 0;
@@ -82,6 +80,10 @@ module.exports.loop = function () {
     if (Game.time % 10 == current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
         room_helpers.define_creeps_amount();
+    }
+
+    if (Game.time % 30 == current_mod) {  // run every 30 ticks
+        creep_helpers.create_creep(units);
     }
 
     if (Game.time % 300 === 0) {

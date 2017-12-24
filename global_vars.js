@@ -2,6 +2,7 @@ var spawn_name = 'max';
 var room_name = Object.keys(Game.rooms)[0];
 
 module.exports = {
+    age_to_drop_and_die: 20,
     spawn_name: spawn_name,
     spawn: Game.spawns[spawn_name],
     my_room: Game.rooms[room_name],

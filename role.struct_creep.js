@@ -11,7 +11,14 @@ var structCreep = {
             if (creep.memory.role != 'harvest') creep.say('harvesting');
             creep.memory.target_id = false;
             if (iam_general) creep.memory.role = 'harvest';   // change role if the creep isn't from special role
-        } else if (condition2change_role) {
+        } else if (creep.ticksToLive < global_vars.age_to_drop_and_die) {    // Drop energy to container before death
+            let closest_containers = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] < object.storeCapacity)});
+            if (closest_containers) {
+                creep.memory.target_id = closest_containers.id;
+                creep.memory.role = 'dropper';
+            }
+            console.log('[DEBUG] (drop_energy2container): Name: ' + creep.name + '; Role: ' + creep.memory.role + '; ticksToLive: ' + creep.ticksToLive + '; Energy: ' + creep.carry[RESOURCE_ENERGY] + '; closest_container: ' + JSON.stringify(closest_containers));
+        }else if (condition2change_role) {
             if ((creep.carry.energy/creep.carryCapacity) < 0.2) {   // Too few energy to chnage role go to harvest
                 creep.say('transfering');
                 creep.memory.target_id = false;
@@ -47,19 +54,24 @@ var structCreep = {
         }
 
         // Action per role
-        var creep_role = creep.memory.role;
+        let creep_role = creep.memory.role;
         switch(creep_role) {
             case 'harvest':
                 //TODO: Don't search findClosestByPath each tick
-                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE));
-                if(target) {
-                    if (creep.harvest(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
-                } else creep.memory.role = 'undefined';
+                if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
+                    creep.say('Going2die');
+                    creep.moveTo(7, 2, global_vars.moveTo_ops);     // Go to die to Cemetery (a far place)
+                } else {
+                    var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE));
+                    if(target) {
+                        if (creep.harvest(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
+                    } else creep.memory.role = 'undefined';
+                }
                 break;
             case 'transfer':
                 var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(global_vars.my_room.memory.target_transfer));
                 if (target) {
-                    var act_response = creep.transfer(target, RESOURCE_ENERGY);
+                    let act_response = creep.transfer(target, RESOURCE_ENERGY);
                     if (act_response == ERR_FULL && global_vars.my_room.memory.target_transfer && creep.memory.target_id != global_vars.my_room.memory.target_transfer) {
                         creep.memory.target_id = global_vars.my_room.memory.target_transfer;
                     } else creep_helpers.most_creep_action_results(creep, target, creep.transfer(target, RESOURCE_ENERGY), creep_role);
@@ -100,6 +112,12 @@ var structCreep = {
                 if (target) {
                     creep_helpers.most_creep_action_results(creep, target, creep.upgradeController(target), creep_role);
                 } else creep.memory.role = 'undefined';
+                break;
+            case 'dropper':
+                let closest_containers = Game.getObjectById(creep.memory.target_id);
+                if (creep.pos.getRangeTo(closest_containers) == 0) {
+                    creep.drop(RESOURCE_ENERGY);
+                } else creep.moveTo(closest_containers, global_vars.moveTo_ops);
                 break;
             default:
                 console.log('[ERROR]: No role defined for ' + creep.name + '; ROLE: ' + creep_role);
