@@ -1,30 +1,16 @@
 var creep_helpers = require('creep_helpers');
 var global_vars = require('global_vars');
 
-var creep_types = {
-    'war': {
-        'transfer': 0.30,      // max percentage of transfer from total creeps
-        'build': 0.60,        // max percentage of builders from total creeps
-        'repair_defence': 0.4,          // max percentage of repair units from total creeps
-        'repair_civilian': 0.2,          // max percentage of repair units from total creeps
-    },
-    'peace': {
-        'transfer': 0.2,      // max percentage of transfer from total creeps
-        'build': 0.30,        // max percentage of builders from total creeps
-        'repair_defence': 0.1,          // max percentage of repair units from total creeps
-        'repair_civilian': 0.1,          // max percentage of repair units from total creeps
-    }
-};
-
 var structCreep = {
     run: function(creep, units) {
         // role's definition
-        var condition2change_role = (creep.memory.role == 'harvest' && creep.carry.energy == creep.carryCapacity) ||
-            (creep.memory.role == 'undefined');
+        let iam_general = (typeof creep.memory.special == "undefined");
+        var condition2change_role = (iam_general && ((creep.memory.role == 'harvest' && creep.carry.energy == creep.carryCapacity) ||
+        (creep.memory.role == 'undefined')));
         if(creep.carry.energy == 0) {
             if (creep.memory.role != 'harvest') creep.say('harvesting');
             creep.memory.target_id = false;
-            creep.memory.role = 'harvest';
+            if (iam_general) creep.memory.role = 'harvest';   // change role if the creep isn't from special role
         } else if (condition2change_role) {
             if ((creep.carry.energy/creep.carryCapacity) < 0.2) {   // Too few energy to chnage role go to harvest
                 creep.say('transfering');
@@ -32,7 +18,7 @@ var structCreep = {
                 creep.memory.role = 'harvest';
             }
             var current_workers = units['total'] - units['harvest'];
-            var current_creep_types = creep_types[global_vars.spawn.memory.general.status];
+            var current_creep_types = global_vars.creep_types[global_vars.spawn.memory.general.status];
 //            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer_target: ' + global_vars.my_room.memory.target_transfer + '; Units: ' + units['transfer'] + '; Workers: ' + current_workers + '(' + (units['transfer']/current_workers) + ' [' + current_creep_types.transfer + ']');
             if (global_vars.my_room.memory.target_transfer && (units['transfer']/current_workers < current_creep_types.transfer) || units['transfer'] < 1) {
                 creep.say('transfering');
@@ -40,7 +26,7 @@ var structCreep = {
                 //console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: changed to TRANSFER');
                 //units.transfer++;
             } else if (global_vars.my_room.memory.target_repair_defence && units['repair_defence']/current_workers < current_creep_types.repair_defence) {
-                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units['repair_defence'] + ' / ' + current_workers + '=' + units['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
+//                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units['repair_defence'] + ' / ' + current_workers + '=' + units['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
                 creep.say('defence repair');
                 creep.memory.role = 'repair_defence';
                 //units.repair_defence++;
@@ -101,7 +87,7 @@ var structCreep = {
                     var action_res = creep.build(target);
                     switch(action_res) {
                         case ERR_INVALID_TARGET:    // possible problem: if creep on the square remove structure from list
-                            global_vars.my_room.memory.targets_build.shift();
+                            global_vars.my_room.memory.targets_build = false;
                             creep.memory.role = 'undefined';
                             break;
                         default:

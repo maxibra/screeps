@@ -8,7 +8,7 @@ if (typeof global_vars.spawn.memory.general == "undefined") {
     global_vars.spawn.memory.general = {
         gen: 0,
         index: 0,
-        max: global_vars.creeps_nominal,
+        max: global_vars.screeps_general_nominal,
         status: 'peace',
         extensions: 0
     };
@@ -37,24 +37,52 @@ module.exports.loop = function () {
         'repair_defence': 0,
         'repair_civilian': 0,
         'harvest': 0,
-        'undefined': 0
+        'undefined': 0,
+        'special_carry': 0
     };
     for (var creep_name in cur_creeps) {
-        units[cur_creeps[creep_name].memory.role]++;
+        splited_name = creep_name.split('-');
+        if (typeof cur_creeps[creep_name].memory.special == "undefined") units[cur_creeps[creep_name].memory.role]++;
+        else units[cur_creeps[creep_name].memory.special]++;
         units['total']++;
     }
     var s_types = '';
+
+    creep_helpers.create_creep(units);
+
 //    for (var t in Object.keys(units) s_types = s_types + t + ': ' + units[t];
     console.log('[INFO] (main): START  UNITS (nominal: ' + global_vars.spawn.memory.general.max + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
-    if (Game.time % 10 == 0) {  // run every 10 ticks
-        console.log('[INFO] (main): RUN 10 tickets functions. Time: ' + Game.time);
+    let current_mod = 0;
+    let tick_between_hard_actions = 2;
+
+    if (Game.time % 10 == current_mod) {  // run every 10 ticks
+        console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
         room_helpers.get_transfer_target();
-        room_helpers.get_build_targets();
+    }
+
+    current_mod = current_mod + tick_between_hard_actions;
+    if (Game.time % 10 == current_mod) {  // run every 10 ticks
+        console.log('[INFO] (main): RUN 10 tickets functions +' + current_mod + '. Time: ' + Game.time);
         room_helpers.get_repair_defence_target();
+    }
+
+    current_mod = current_mod + tick_between_hard_actions;
+    if (Game.time % 10 == current_mod) {  // run every 10 ticks
+        console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
         room_helpers.get_repair_civilianl_target();
+    }
+
+    current_mod = current_mod + tick_between_hard_actions;
+    if (Game.time % 10 == current_mod) {  // run every 10 ticks
+        console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
+        room_helpers.get_build_targets();
+    }
+
+    current_mod = current_mod + tick_between_hard_actions;
+    if (Game.time % 10 == current_mod) {  // run every 10 ticks
+        console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
         room_helpers.define_creeps_amount();
     }
-    creep_helpers.create_creep();
 
     if (Game.time % 300 === 0) {
         room_helpers.create_extensions();

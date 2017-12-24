@@ -45,12 +45,13 @@ var room_helpers = {
         return targets[0].id
     },
     get_repair_defence_target: function() {
-        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER) && object.hits < object.hitsMax});
+        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
+//        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets));
         global_vars.my_room.memory.target_repair_defence = targets[0] ? targets[0].id : false;
     },
     get_repair_civilianl_target: function() {
-        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER) && object.hits < object.hitsMax});
+        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
         global_vars.my_room.memory.target_repair_civilian = targets[0] ? targets[0].id : false;
     },
@@ -62,29 +63,31 @@ var room_helpers = {
         // All other structures
         if (targets) targets = (global_vars.my_room.find(FIND_CONSTRUCTION_SITES) || []);
         // Sort targets by close to spawn
-        var closest_obj = targets[0];
-        var closest_obj_range = Math.abs(global_vars.spawn.pos.x-closest_obj.pos.x) + Math.abs(global_vars.spawn.pos.y-closest_obj.pos.y);
-        for (var i=1;i<targets.length;i++) {
-            var sob_range = Math.abs(global_vars.spawn.pos.x-targets[i].pos.x) + Math.abs(global_vars.spawn.pos.y-targets[i].pos.y);
-//            console.log('[DEBUG] (get_build_targets): Current (' + closest_obj.id + '): ' + closest_obj_range + '; Next(' + targets[i].id + '): ' + sob_range);
-            if (sob_range < closest_obj_range) {
-                closest_obj = targets[i];
-                closest_obj_range = sob_range;
+        let closest_obj = targets[0];
+        if (closest_obj) {
+            let closest_obj_range = Math.abs(global_vars.spawn.pos.x-closest_obj.pos.x) + Math.abs(global_vars.spawn.pos.y-closest_obj.pos.y);
+            for (let i=1;i<targets.length;i++) {
+                let sob_range = Math.abs(global_vars.spawn.pos.x-targets[i].pos.x) + Math.abs(global_vars.spawn.pos.y-targets[i].pos.y);
+                //            console.log('[DEBUG] (get_build_targets): Current (' + closest_obj.id + '): ' + closest_obj_range + '; Next(' + targets[i].id + '): ' + sob_range);
+                if (sob_range < closest_obj_range) {
+                    closest_obj = targets[i];
+                    closest_obj_range = sob_range;
+                }
+                //            console.log('[DEBUG] (get_build_targets): Choosen: ' + closest_obj.id);
             }
-//            console.log('[DEBUG] (get_build_targets): Choosen: ' + closest_obj.id);
-        }
 //        targets.sort((a,b) => (Math.abs(global_vars.spawn.pos.x-a.pos.x) + Math.abs(global_vars.spawn.pos.y-a.pos.y)) - (Math.abs(global_vars.spawn.pos.x-b.pos.x) + Math.abs(global_vars.spawn.pos.y-b.pos.y)));
-        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
+//        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
+        }
         global_vars.my_room.memory.targets_build = closest_obj ? closest_obj.id : false;
     },
     define_creeps_amount: function() {
         if (Game.time < 5000) {
-            global_vars.spawn.memory.general.max = global_vars.creeps_nominal;
+            global_vars.spawn.memory.general.max = global_vars.screeps_general_nominal;
         } else if (global_vars.my_room.memory.target_repair_defence) {
-            global_vars.spawn.memory.general.max = global_vars.screeps_repair_defance;
+            global_vars.spawn.memory.general.max = global_vars.screeps_general_repair_defance;
         } else if (global_vars.my_room.memory.targets_build) {
-            global_vars.spawn.memory.general.max = global_vars.screeps_build;
-        } else global_vars.spawn.memory.general.max = global_vars.creeps_nominal;
+            global_vars.spawn.memory.general.max = global_vars.screeps_general_build;
+        } else global_vars.spawn.memory.general.max = global_vars.screeps_general_nominal;
     },
     clean_memory: function() {
         // Clean died creeps
@@ -96,7 +99,9 @@ var room_helpers = {
         }
     },
     create_extensions: function() {
-        var extensions2add = CONTROLLER_STRUCTURES.extension[global_vars.my_room.controller.level] - global_vars.spawn.memory.general.extensions;
+        var extensions_available = CONTROLLER_STRUCTURES.extension[global_vars.my_room.controller.level];
+        var extensions2add = extensions_available - global_vars.spawn.memory.general.extensions;
+        // console.log('[DEBUG] (create_extensions): Extensions to add: ' + extensions2add);
         // var extensions = global_vars.my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});  // building extensions
         // extensions = extensions.concat(global_vars.my_room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_EXTENSION}})); // ready extensions
         var spawn_pos = global_vars.spawn.pos;
@@ -110,16 +115,27 @@ var room_helpers = {
         var add_road_above = false;
         var add_road_below = false;
         var added_extensions = 0;
-        if (global_vars.spawn.memory.general.max < 20) {
-            sx = spawn_pos.x-1;
-            sy = spawn_pos.y+1;
-            add_road_above = true;
+
+        switch (global_vars.my_room.controller.level) {
+            case 2:
+                sx = spawn_pos.x-1;
+                sy = spawn_pos.y+1;
+                add_road_above = true;
+                break;
+            case 3:
+                sx = spawn_pos.x-1;
+                sy = spawn_pos.y+2;
+                add_road_below = true;
+                break;
         }
+
+        console.log('{DEBUG] (create_extensions): X-top:' + sx + '; Y-right:' + sy + 'Road above: ' + add_road_above  + '; below: ' + add_road_below);
+
         // Create road above if needed
         if (add_road_above) {
             for (var x=sx;x>sx-6;x--) {
                 var exit_code = global_vars.my_room.createConstructionSite(x, sy-1, STRUCTURE_ROAD);
-                console.log('[DEBUG] (create_extensions): Create first road: ' + exit_code);
+                console.log('[DEBUG] (create_extensions): Create a road above: ' + exit_code);
             }
         }
         // Create extansions
@@ -130,7 +146,7 @@ var room_helpers = {
         if (add_road_below) {
             for (var x=sx;x>sx-6;x--) {
                 var exit_code = global_vars.my_room.createConstructionSite(x, sy+1, STRUCTURE_ROAD);
-                console.log('[DEBUG] (create_extensions): Create first road: ' + exit_code);
+                console.log('[DEBUG] (create_extensions): Create a road below: ' + exit_code);
             }
         }
         global_vars.spawn.memory.general.extensions = global_vars.spawn.memory.general.extensions + added_extensions;
