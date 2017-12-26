@@ -143,8 +143,8 @@ module.exports.loop = function () {
     }
 
     // Create first roads
-    if (typeof global_vars.my_room.memory.roads == "undefined") {
-        global_vars.my_room.memory.roads = [];
+    if (typeof my_room.memory.roads == "undefined") {
+        my_room.memory.roads = [];
         var xy_path = room_helpers.create_road(_.extend(my_spawn.pos, {id: my_spawn.id, structureType: 'spawn'}), _.extend(my_spawn.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'}));  // Spawn-Closest Source
         for (i in xy_path) get_struct_obj(xy_path[i][0], xy_path[i][1]);
         room_helpers.create_road(_.extend(global_vars.my_room.controller.pos, {id: my_room.controller.id, structureType: 'controller'}), _.extend(my_room.controller.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'})); // Controller-Closest Source
