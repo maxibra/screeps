@@ -38,7 +38,8 @@ var structCreep = {
                 creep.memory.role = 'transfer';
                 //console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: changed to TRANSFER');
                 //units.transfer++;
-            } else if (global_vars.le.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units['repair_defence'] + ' / ' + current_workers + '=' + units['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
+            } else if (my_room.memory.target_repair_defence && units['repair_defence']/current_workers < current_creep_types.repair_defence) {
+//                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units['repair_defence'] + ' / ' + current_workers + '=' + units['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
                 creep.say('defence repair');
                 creep.memory.role = 'repair_defence';
                 //units.repair_defence++;
