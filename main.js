@@ -65,9 +65,8 @@ Game.rooms[room_name].memory.global_vars = {
 
 
 var cur_creeps = Game.creeps ? Game.creeps : {};
-var cur_creeps_names = Object.keys(cur_creeps)
 var global_vars = Game.rooms[room_name].memory.global_vars;
-
+var my_spawn = Game.spawns[global_vars.spawn_name];
 
 function get_struct_obj(x, y) {
     var stuctures = global_vars.my_room.lookAt(x,y);
@@ -96,7 +95,7 @@ module.exports.loop = function () {
     var s_types = '';
 
 //    for (var t in Object.keys(units) s_types = s_types + t + ': ' + units[t];
-    console.log('[INFO] (main): START  UNITS (nominal: ' + global_vars.spawn.memory.general.max + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
+    console.log('[INFO] (main): START  UNITS (nominal: ' + my_spawn.memory.general.max + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
     let current_mod = 0;
     let tick_between_hard_actions = 2;
 
@@ -145,7 +144,7 @@ module.exports.loop = function () {
     // Create first roads
     if (typeof global_vars.my_room.memory.roads == "undefined") {
         global_vars.my_room.memory.roads = [];
-        var xy_path = room_helpers.create_road(_.extend(global_vars.spawn.pos, {id: global_vars.spawn.id, structureType: 'spawn'}), _.extend(global_vars.spawn.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'}));  // Spawn-Closest Source
+        var xy_path = room_helpers.create_road(_.extend(spawn.pos, {id: global_vars.spawn.id, structureType: 'spawn'}), _.extend(spawn.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'}));  // Spawn-Closest Source
         for (i in xy_path) get_struct_obj(xy_path[i][0], xy_path[i][1]);
         room_helpers.create_road(_.extend(global_vars.my_room.controller.pos, {id: global_vars.my_room.controller.id, structureType: 'controller'}), _.extend(global_vars.my_room.controller.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'})); // Controller-Closest Source
         // Save in memory important path to build first
@@ -157,6 +156,6 @@ module.exports.loop = function () {
         var creep_role = creep.memory.role
         roleStructCreep.run(creep, units);
     }
-//    console.log('[INFO] (main): FINISH UNITS (nominal: ' + global_vars.spawn.memory.general.max + '): ' + JSON.stringify(units));
+//    console.log('[INFO] (main): FINISH UNITS (nominal: ' + spawn.memory.general.max + '): ' + JSON.stringify(units));
 
 }
