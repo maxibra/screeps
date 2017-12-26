@@ -1,4 +1,4 @@
-var global_vars = require('global_vars');
+var global_vars = require('global_vars')();
 // var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
 
 function get_direction_name(dx, dy) {
@@ -36,8 +36,12 @@ function get_stright_path(FromPos, ToPos) {
 }
 
 var room_helpers = {
+    get_energy_source_target: function() {
+        let targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.storeCapacity) > 0.4)});
+        //targets.contact()
+    },
     get_transfer_target: function() {
-        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.energy < object.energyCapacity)});
+        let targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.energy < object.energyCapacity)});
         targets.sort((a,b) => a.hits - b.hits);
         targets.push(global_vars.spawn);
         //if (targets[0]) console.log('[DEBUG] (room_helpers-get_transfer_target): Transfer target type: ' + targets[0].structureType);
@@ -45,7 +49,7 @@ var room_helpers = {
         return targets[0].id
     },
     get_repair_defence_target: function() {
-        var targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
+        let targets = global_vars.my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
 //        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets));
         global_vars.my_room.memory.target_repair_defence = targets[0] ? targets[0].id : false;
@@ -110,11 +114,12 @@ var room_helpers = {
         if (extensions2add == 0) return;    // it's no extension to create
 
         console.log('[INFO] (create_extensions): Start to create a new ' + extensions2add + ' extensions')
-        var sx = 0;
-        var sy = 0;
-        var add_road_above = false;
-        var add_road_below = false;
-        var added_extensions = 0;
+        let sx = 0;
+        let sy = 0;
+        let extensions_rows = 1;
+        let add_road_above = false;
+        let add_road_below = false;
+        let added_extensions = 0;
 
         switch (global_vars.my_room.controller.level) {
             case 2:
@@ -127,9 +132,20 @@ var room_helpers = {
                 sy = spawn_pos.y+2;
                 add_road_below = true;
                 break;
-        }
+            case 4:
+                sx = spawn_pos.x-1;
+                sy = spawn_pos.y-2;
+                extensions_rows = 2;
+                add_road_above = true;
+                break;
+            case 5:
+                sx = spawn_pos.x-1;
+                sy = spawn_pos.y+5;
+                extensions_rows = 2;
+                add_road_below = true;
+                break;         }
 
-        console.log('{DEBUG] (create_extensions): X-top:' + sx + '; Y-right:' + sy + 'Road above: ' + add_road_above  + '; below: ' + add_road_below);
+        console.log('{DEBUG] (create_extensions): X-top:' + sx + '; Y-right:' + sy + '; Road above: ' + add_road_above  + '; below: ' + add_road_below);
 
         // Create road above if needed
         if (add_road_above) {
@@ -139,9 +155,12 @@ var room_helpers = {
             }
         }
         // Create extansions
-        for (var x=sx;x>sx-5;x--) {
-            if (global_vars.my_room.createConstructionSite(x, sy, STRUCTURE_EXTENSION) == OK) added_extensions++;
+        for (let y=sy;x>sy+extensions_rows-1;y++) {
+            for (let x=sx;x>sx-5;x--) {
+                if (global_vars.my_room.createConstructionSite(x, sy, STRUCTURE_EXTENSION) == OK) added_extensions++;
+            }
         }
+
         // Create road below if needed
         if (add_road_below) {
             for (var x=sx;x>sx-6;x--) {

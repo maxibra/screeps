@@ -1,5 +1,5 @@
 var creep_helpers = require('creep_helpers');
-var global_vars = require('global_vars');
+var global_vars = require('global_vars')();
 
 var structCreep = {
     run: function(creep, units) {
@@ -27,7 +27,7 @@ var structCreep = {
             var current_workers = units['total'] - units['harvest'];
             var current_creep_types = global_vars.creep_types[global_vars.spawn.memory.general.status];
 //            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer_target: ' + global_vars.my_room.memory.target_transfer + '; Units: ' + units['transfer'] + '; Workers: ' + current_workers + '(' + (units['transfer']/current_workers) + ' [' + current_creep_types.transfer + ']');
-            if (global_vars.my_room.memory.target_transfer && (units['transfer']/current_workers < current_creep_types.transfer) || units['transfer'] < 1) {
+            if (global_vars.my_room.memory.target_transfer && (units['transfer']/current_workers < current_creep_types.transfer[global_vars.my_room.controller.level]) || units['transfer'] < 2) {
                 creep.say('transfering');
                 creep.memory.role = 'transfer';
                 //console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: changed to TRANSFER');
@@ -60,7 +60,7 @@ var structCreep = {
                 //TODO: Don't search findClosestByPath each tick
                 if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
                     creep.say('Going2die');
-                    creep.moveTo(7, 2, global_vars.moveTo_ops);     // Go to die to Cemetery (a far place)
+                    creep.suicide();     // Go to die to Cemetery (a far place)
                 } else {
                     var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE));
                     if(target) {

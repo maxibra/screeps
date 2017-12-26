@@ -1,4 +1,4 @@
-var global_vars = require('global_vars');
+var global_vars = require('global_vars')();
 
 
 var creep_body = {
@@ -9,6 +9,10 @@ var creep_body = {
     special_carry: {
         base: [CARRY,CARRY,MOVE],
         add: [CARRY,CARRY]
+    },
+    special_upgrade: {
+        base: [WORK,WORK,MOVE],
+        add: [WORK,CARRY]
     }
 }
 
@@ -65,8 +69,9 @@ var creep_helpers = {
         }
 
         let current_body_cost = body_cost(current_body);
-        if (current_body_cost > global_vars.my_room.energyAvailable) {
-            console.log('[INFO] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + global_vars.my_room.energyAvailable)
+//        if (current_body_cost > global_vars.my_room.energyAvailable) {
+        if (current_body_cost > JSON.stringify(Game.rooms['E39N49'].energyAvailable)) {
+            console.log('[INFO] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + Game.rooms['E39N49'].energyAvailable + '(' + global_vars.my_room.energyAvailable +')[' + Game.time + ',' + global_vars.game.time + ']');
 
             // Convert all harvesters with acamulated energy near sources to transfer
             for (let i = 0; i < harvesters.length; i++) {
@@ -81,14 +86,14 @@ var creep_helpers = {
 
         creep_name = creep_name + '-' + (current_body_cost/10) + '-' + name_special;
 
-        let exit_code = spawn.spawnCreep(current_body, creep_name, creep_memory);
+        let exit_code = Game.spawns['max'].spawnCreep(current_body, creep_name, creep_memory);
         if ( exit_code == OK) {
             let new_index = (spawn.memory.general.index + 1) % spawn.memory.general.max;
             spawn.memory.general.index = new_index;
             let new_gen = ((new_index == 0) ? (spawn.memory.general.gen + 1) % 100 : spawn.memory.general.gen);
             spawn.memory.general.gen = new_gen;
             console.log('[INFO] (create_creep): Spawning new harvester: ' + creep_name + '; Body: ' + current_body + '(' + add_body + ')' + '; Mem: ' + JSON.stringify(creep_memory));
-        } else console.log('[ERROR] (create_creep): Failed to create creep ' + creep_name + ': ' + exit_code);
+        } else console.log('[ERROR] (create_creep): Failed to create creep ' + creep_name + ': ' + exit_code + '; Body cost: ' + current_body_cost + '; Avalable energy: ' + Game.rooms['E39N49'].energyAvailable + '(' + global_vars.my_room.energyAvailable);
     },
     drop_energy2container: function(creep) {
 
