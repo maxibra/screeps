@@ -4,16 +4,61 @@ var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 
 
-global_vars = global_vars()
+var spawn_name = 'max';
+var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
+
 // Itiliaze spawn memory with creep's metadata
-if (typeof global_vars.spawn.memory.general == "undefined") {
-    global_vars.spawn.memory.general = {
+if (typeof Game.spawns[spawn_name].memory.general === "undefined") {
+    Game.spawns[spawn_name].memory.general = {
         gen: 0,
         index: 0,
         max: global_vars.screeps_general_nominal,
         status: 'peace',
         extensions: 0
     };
+}
+
+// Initialie the room memory
+if (typeof Game.rooms[room_name].memory.general === "undefined") {
+    Game.rooms[room_name].memory.global_vars = {
+        age_to_drop_and_die: 20,
+        spawn_name: spawn_name,
+        spawn: Game.spawns[spawn_name],
+        my_room: Game.rooms[room_name],
+        game: Game,
+        screeps_general_nominal: 10,
+        screeps_general_war: 30,
+        screeps_general_repair_defance: 20,
+        screeps_general_build: 15,
+        moveTo_ops: {
+            reusePath: 10,           // default: 5
+            //serializeMemory: false, // default: true
+            //noPathFinding: true, // default: false
+            visualizePathStyle: {
+                fill: 'transparent',
+                stroke: '#fff',
+                lineStyle: 'dashed',
+                strokeWidth: .15,
+                opacity: .1
+            }
+        },
+        creep_types: {
+            war: {
+                transfer: [0, 0.30, 0.30, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5],     // max percentage of transfer from total creeps. indwx is romm's level
+                build: 0.60,        // max percentage of builders from total creeps
+                repair_defence: 0.4,          // max percentage of repair units from total creeps
+                repair_civilian: 0.2,          // max percentage of repair units from total creeps
+                special_carry: 0.3
+            },
+            peace: {
+                transfer: 0.2,      // max percentage of transfer from total creeps
+                build: 0.30,        // max percentage of builders from total creeps
+                repair_defence: 0.1,          // max percentage of repair units from total creeps
+                repair_civilian: 0.1,          // max percentage of repair units from total creeps
+                special_carry: 0.3
+            }
+        }
+    }
 }
 // console.log('Creeps general: ' + JSON.stringify(spawn.memory.general));
 

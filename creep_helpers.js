@@ -1,5 +1,8 @@
-var global_vars = require('global_vars')();
+//var global_vars = require('global_vars')();
 
+var spawn_name = 'max';
+var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
+var global_vars = Game.rooms[room_name].memory.global_vars;
 
 var creep_body = {
     general: {

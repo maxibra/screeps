@@ -1,5 +1,9 @@
 var creep_helpers = require('creep_helpers');
-var global_vars = require('global_vars')();
+//var global_vars = require('global_vars')();
+
+var spawn_name = 'max';
+var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
+var global_vars = Game.rooms[room_name].memory.global_vars;
 
 var structCreep = {
     run: function(creep, units) {
@@ -69,7 +73,11 @@ var structCreep = {
                 }
                 break;
             case 'transfer':
-                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(global_vars.my_room.memory.target_transfer));
+//                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(global_vars.my_room.memory.target_transfer));
+                let target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) :
+                    { let current target = creep.pos.findClosestByPath(global_vars.my_room.find(FIND_STRUCTURES,
+                            {filter: object => ((object.structureType == STRUCTURE_EXTENSION || object.structureType == STRUCTURE_SPAWN) && object.energy < object.energyCapacity}))};
+                      creep.memory.target_id = current_target.id;})};
                 if (target) {
                     let act_response = creep.transfer(target, RESOURCE_ENERGY);
                     if (act_response == ERR_FULL && global_vars.my_room.memory.target_transfer && creep.memory.target_id != global_vars.my_room.memory.target_transfer) {

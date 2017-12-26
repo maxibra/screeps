@@ -1,5 +1,9 @@
-var global_vars = require('global_vars')();
+// var global_vars = require('global_vars')();
 // var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+
+var spawn_name = 'max';
+var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
+var global_vars = Game.rooms[room_name].memory.global_vars;
 
 function get_direction_name(dx, dy) {
     if (dx == 0 && dy < 0) return TOP;
