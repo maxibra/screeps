@@ -77,7 +77,7 @@ var structCreep = {
                 break;
             case 'transfer':
                 // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.target_transfer));
-                let target;
+                var target;
                 if (creep.memory.target_id) Game.getObjectById(creep.memory.target_id)
                 else {
                     let current_target = creep.pos.findClosestByPath(my_room.find(FIND_STRUCTURES,
