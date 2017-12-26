@@ -49,7 +49,7 @@ var room_helpers = {
     get_transfer_target: function() {
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.energy < object.energyCapacity)});
         targets.sort((a,b) => a.hits - b.hits);
-        targets.push(global_vars.spawn);
+        targets.push(my_spawn);
         //if (targets[0]) console.log('[DEBUG] (room_helpers-get_transfer_target): Transfer target type: ' + targets[0].structureType);
         my_room.memory.target_transfer = targets[0] ? targets[0].id : false;
         return targets[0].id
@@ -75,9 +75,9 @@ var room_helpers = {
         // Sort targets by close to spawn
         let closest_obj = targets[0];
         if (closest_obj) {
-            let closest_obj_range = Math.abs(global_vars.spawn.pos.x-closest_obj.pos.x) + Math.abs(global_vars.spawn.pos.y-closest_obj.pos.y);
+            let closest_obj_range = Math.abs(my_spawn.pos.x-closest_obj.pos.x) + Math.abs(my_spawn.pos.y-closest_obj.pos.y);
             for (let i=1;i<targets.length;i++) {
-                let sob_range = Math.abs(global_vars.spawn.pos.x-targets[i].pos.x) + Math.abs(global_vars.spawn.pos.y-targets[i].pos.y);
+                let sob_range = Math.abs(my_spawn.pos.x-targets[i].pos.x) + Math.abs(my_spawn.pos.y-targets[i].pos.y);
                 //            console.log('[DEBUG] (get_build_targets): Current (' + closest_obj.id + '): ' + closest_obj_range + '; Next(' + targets[i].id + '): ' + sob_range);
                 if (sob_range < closest_obj_range) {
                     closest_obj = targets[i];
@@ -85,19 +85,19 @@ var room_helpers = {
                 }
                 //            console.log('[DEBUG] (get_build_targets): Choosen: ' + closest_obj.id);
             }
-//        targets.sort((a,b) => (Math.abs(global_vars.spawn.pos.x-a.pos.x) + Math.abs(global_vars.spawn.pos.y-a.pos.y)) - (Math.abs(global_vars.spawn.pos.x-b.pos.x) + Math.abs(global_vars.spawn.pos.y-b.pos.y)));
+//        targets.sort((a,b) => (Math.abs(my_spawn.pos.x-a.pos.x) + Math.abs(my_spawn.pos.y-a.pos.y)) - (Math.abs(my_spawn.pos.x-b.pos.x) + Math.abs(my_spawn.pos.y-b.pos.y)));
 //        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
         }
         my_room.memory.targets_build = closest_obj ? closest_obj.id : false;
     },
     define_creeps_amount: function() {
         if (Game.time < 5000) {
-            global_vars.spawn.memory.general.max = global_vars.screeps_general_nominal;
+            my_spawn.memory.general.max = global_vars.screeps_general_nominal;
         } else if (my_room.memory.target_repair_defence) {
-            global_vars.spawn.memory.general.max = global_vars.screeps_general_repair_defance;
+            my_spawn.memory.general.max = global_vars.screeps_general_repair_defance;
         } else if (my_room.memory.targets_build) {
-            global_vars.spawn.memory.general.max = global_vars.screeps_general_build;
-        } else global_vars.spawn.memory.general.max = global_vars.screeps_general_nominal;
+            my_spawn.memory.general.max = global_vars.screeps_general_build;
+        } else my_spawn.memory.general.max = global_vars.screeps_general_nominal;
     },
     clean_memory: function() {
         // Clean died creeps
@@ -110,11 +110,11 @@ var room_helpers = {
     },
     create_extensions: function() {
         var extensions_available = CONTROLLER_STRUCTURES.extension[my_room.controller.level];
-        var extensions2add = extensions_available - global_vars.spawn.memory.general.extensions;
+        var extensions2add = extensions_available - my_spawn.memory.general.extensions;
         // console.log('[DEBUG] (create_extensions): Extensions to add: ' + extensions2add);
         // var extensions = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});  // building extensions
         // extensions = extensions.concat(my_room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_EXTENSION}})); // ready extensions
-        var spawn_pos = global_vars.spawn.pos;
+        var spawn_pos = my_spawn.pos;
         var y_pos = spawn_pos.y;
 
         if (extensions2add == 0) return;    // it's no extension to create
@@ -174,7 +174,7 @@ var room_helpers = {
                 console.log('[DEBUG] (create_extensions): Create a road below: ' + exit_code);
             }
         }
-        global_vars.spawn.memory.general.extensions = global_vars.spawn.memory.general.extensions + added_extensions;
+        my_spawn.memory.general.extensions = my_spawn.memory.general.extensions + added_extensions;
     },
     create_road: function(FromPos, ToPos, p2pPath) {
         /* FromPos, ToPos - RoomPosition with additional keys of 'id' and 'structureType' (use  _.extend(pos, {id: 11111, structureType: xxxxx}))
