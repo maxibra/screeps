@@ -4,7 +4,9 @@ var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 
 
-global_vars = global_vars() 
+//// TEST git sync
+
+global_vars = global_vars()
 // Itiliaze spawn memory with creep's metadata
 if (typeof global_vars.spawn.memory.general == "undefined") {
     global_vars.spawn.memory.general = {
@@ -49,17 +51,17 @@ module.exports.loop = function () {
         units['total']++;
     }
     var s_types = '';
-    
+
 //    for (var t in Object.keys(units) s_types = s_types + t + ': ' + units[t];
     console.log('[INFO] (main): START  UNITS (nominal: ' + global_vars.spawn.memory.general.max + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
     let current_mod = 0;
     let tick_between_hard_actions = 2;
-    
+
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
         room_helpers.get_transfer_target();
     }
-    
+
     current_mod = current_mod + tick_between_hard_actions;
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions +' + current_mod + '. Time: ' + Game.time);
@@ -71,7 +73,7 @@ module.exports.loop = function () {
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
         room_helpers.get_repair_civilianl_target();
     }
-    
+
     current_mod = current_mod + tick_between_hard_actions;
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
@@ -82,13 +84,13 @@ module.exports.loop = function () {
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
         room_helpers.define_creeps_amount();
-    }    
+    }
 
-    if (Game.time % 2  === 0) {  // run every 30 ticks    
+    if (Game.time % 2  === 0) {  // run every 30 ticks
         console.log('[INFO] (main): RUN 15 tickets functions. Time: ' + Game.time);
         creep_helpers.create_creep(units);
     }
-    
+
     if (Game.time % 300 === 0) {
         room_helpers.create_extensions();
     }
