@@ -68,18 +68,19 @@ var structCreep = {
                     creep.say('Going2die');
                     creep.suicide();     // Go to die to Cemetery (a far place)
                 } else {
-                    var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE));
+//                    var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE));
+                    var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByRange(FIND_DROPPED_ENERGY));
                     if(target) {
-                        if (creep.harvest(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
+                        if (creep.pickup(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
                     } else creep.memory.role = 'undefined';
                 }
                 break;
             case 'transfer':
-               var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.target_transfer));
-//                 let target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) :
-//                     { let current target = creep.pos.findClosestByPath(my_room.find(FIND_STRUCTURES,
-//                             {filter: object => ((object.structureType == STRUCTURE_EXTENSION || object.structureType == STRUCTURE_SPAWN) && object.energy < object.energyCapacity}))};
-//                       creep.memory.target_id = current_target.id;})};
+                // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.target_transfer));
+                let target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) :
+                    { let current target = creep.pos.findClosestByPath(my_room.find(FIND_STRUCTURES,
+                            {filter: object => ((object.structureType == STRUCTURE_EXTENSION || object.structureType == STRUCTURE_SPAWN) && object.energy < object.energyCapacity}))};
+                      creep.memory.target_id = current_target.id;})};
                 if (target) {
                     let act_response = creep.transfer(target, RESOURCE_ENERGY);
                     if (act_response == ERR_FULL && my_room.memory.target_transfer && creep.memory.target_id != my_room.memory.target_transfer) {
