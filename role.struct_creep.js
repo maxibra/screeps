@@ -77,10 +77,13 @@ var structCreep = {
                 break;
             case 'transfer':
                 // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.target_transfer));
-                let target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) :
-                    { let current_target = creep.pos.findClosestByPath(my_room.find(FIND_STRUCTURES,
+                let target;
+                if (creep.memory.target_id) Game.getObjectById(creep.memory.target_id)
+                else {
+                    let current_target = creep.pos.findClosestByPath(my_room.find(FIND_STRUCTURES,
                             {filter: object => ((object.structureType == STRUCTURE_EXTENSION || object.structureType == STRUCTURE_SPAWN) && (object.energy < object.energyCapacity))}));
-                      creep.memory.target_id = current_target.id;};
+                    creep.memory.target_id = current_target.id;
+                }
                 if (target) {
                     let act_response = creep.transfer(target, RESOURCE_ENERGY);
                     if (act_response == ERR_FULL && my_room.memory.target_transfer && creep.memory.target_id != my_room.memory.target_transfer) {
