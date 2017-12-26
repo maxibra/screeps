@@ -1,10 +1,8 @@
-var global_vars = require('global_vars');
+// var global_vars = require('global_vars');
 var roleStructCreep = require('role.struct_creep');
 var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 
-
-//// TEST git sync
 
 global_vars = global_vars()
 // Itiliaze spawn memory with creep's metadata
