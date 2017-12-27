@@ -58,7 +58,7 @@ var creep_helpers = {
         let harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvest');
         // console.log('[DEBUG] (creep_helpers): Harvesters: ' + JSON.stringify(harvesters));
 
-        if (harvesters.length == 0 && my_spawn.memory.general.status != 'peace' || creeps_names.length < 3) { // It's no harversters create a minimum body
+        if (harvesters.length == 0 || creeps_names.length < 3) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
             // Do nothing
         } else {                      // Create most possible strong body
             let possible_body = current_body.concat(add_body);
@@ -70,6 +70,7 @@ var creep_helpers = {
                 possible_body_cost = body_cost(possible_body);
             }
         }
+        console.log('[DEBUG] (create_creep): HARVESTERS: ' +  harvesters.length + '; CREEPS: ' + creeps_names.length + '; BODY: ' + current_body);
 
         let current_body_cost = body_cost(current_body);
 //        if (current_body_cost > my_room.energyAvailable) {

@@ -48,7 +48,7 @@ var room_helpers = {
     },
     get_transfer_target: function() {
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.energy < object.energyCapacity)});
-        targets.sort((a,b) => a.hits - b.hits);
+        //targets.sort((a,b) => a.hits - b.hits);
         targets.push(my_spawn);
         //if (targets[0]) console.log('[DEBUG] (room_helpers-get_transfer_target): Transfer target type: ' + targets[0].structureType);
         my_room.memory.target_transfer = targets[0] ? targets[0].id : false;
