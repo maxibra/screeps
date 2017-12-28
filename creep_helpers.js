@@ -74,8 +74,8 @@ var creep_helpers = {
 
         let current_body_cost = body_cost(current_body);
 //        if (current_body_cost > my_room.energyAvailable) {
-        if (current_body_cost > JSON.stringify(my_room.energyAvailable)) {
-            console.log('[INFO] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + my_room.energyAvailable);
+        if (current_body_cost > Game.rooms[global_vars.room_name].energyAvailable) {
+            console.log('[INFO] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + Game.rooms[global_vars.room_name].energyAvailable);
 
             // Convert all harvesters with acamulated energy near sources to transfer
             for (let i = 0; i < harvesters.length; i++) {

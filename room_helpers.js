@@ -47,6 +47,7 @@ var room_helpers = {
         //targets.contact()
     },
     get_transfer_target: function() {
+//        let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (structureType: STRUCTURE_TOWER && object.energy < object.energyCapacity)});
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.energy < object.energyCapacity)});
         //targets.sort((a,b) => a.hits - b.hits);
         targets.push(my_spawn);

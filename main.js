@@ -2,6 +2,7 @@
 var roleStructCreep = require('role.struct_creep');
 var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
+var roleTower = require('role.tower');
 
 
 var spawn_name = 'max';
@@ -22,7 +23,6 @@ if (typeof Game.spawns[spawn_name].memory.general === "undefined") {
 if (typeof Game.rooms[room_name].memory.general === "undefined") {
     Game.rooms[room_name].memory.global_vars = {
         age_to_drop_and_die: 20,
-        spawn_name: spawn_name,
         spawn_name: spawn_name,
         room_name: room_name,
         screeps_general_nominal: 10,
@@ -56,6 +56,14 @@ if (typeof Game.rooms[room_name].memory.general === "undefined") {
                 repair_civilian: 0.1,          // max percentage of repair units from total creeps
                 special_carry: 0.3
             }
+        },
+        towers: {
+            list: [],
+            next_update: '',
+            all_full: false
+        },
+        update_period: {
+            towers: 1000
         }
     }
 }
@@ -93,12 +101,26 @@ module.exports.loop = function () {
         else units[cur_creeps[creep_name].memory.special]++;
         units['total']++;
     }
-    var s_types = '';
 
-//    for (var t in Object.keys(units) s_types = s_types + t + ': ' + units[t];
     console.log('[INFO] (main): START  UNITS (nominal: ' + my_spawn.memory.general.max + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
     let current_mod = 0;
     let tick_between_hard_actions = 2;
+
+    // Every tick loops
+    // Towers
+    if (!my_room.memory.global_vars.towers.list || (Game.time > my_room.memory.global_vars.towers.next_update)) {   // update list of towers
+        my_room.memory.global_vars.towers.list = Game.rooms[myRoomName].find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+    }
+    for (let twr in my_room.memory.global_vars.towers.list) {
+        roleTower.run();
+    }
+
+    // Creeps
+    for(var name in Game.creeps) {
+        var creep = Game.creeps[name];
+        var creep_role = creep.memory.role
+        roleStructCreep.run(creep, units);
+    }
 
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
@@ -152,11 +174,6 @@ module.exports.loop = function () {
         //global_vars.my_room.memory.important_structures = xy_path;
     }
 
-    for(var name in Game.creeps) {
-        var creep = Game.creeps[name];
-        var creep_role = creep.memory.role
-        roleStructCreep.run(creep, units);
-    }
 //    console.log('[INFO] (main): FINISH UNITS (nominal: ' + my_spawn.memory.general.max + '): ' + JSON.stringify(units));
 
 }
