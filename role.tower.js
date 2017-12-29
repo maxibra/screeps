@@ -11,13 +11,19 @@ RoleTower = {
          current_tower    -   Object of current tower
          Return:    amount of missing energy
          */
+        let target2repair;
         let current_tower = Game.getObjectById(current_tower_id);
-        let targets2repair = (Game.rooms[global_vars.room_name].memory.towers.road2repair_id) ? Game.getObjectById(Game.rooms[global_vars.room_name].memory.towers.road2repair_id) :
-            Game.rooms[global_vars.room_name].find(FIND_STRUCTURES,
-                {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits < object.hitsMax))});
-        //console.log('[DEBUG] (RoleTower.run): Road X: ' + road2repair.pos.x + '; Road y: ' + road2repair.pos.y);
-        let target2repair = (targets2repair) ? targets2repair[0] : Game.rooms[global_vars.room_name].memory.target_repair_defence;
-        console.log('[DEBUG] (RoleTower.run) Roads to repear: ' + targets2repair.length);
+        if (Game.spawns[spawn_name].memory.general.status == 'war') {
+            target2repair = Game.getObjectById(Game.rooms[global_vars.room_name].memory.target_repair_defence);
+            console.log('[INFO] (RoleTower.run) it"s WAR: Repair WALL');
+        } else {
+            let targets2repair = (Game.rooms[global_vars.room_name].memory.towers.road2repair_id) ? Game.getObjectById(Game.rooms[global_vars.room_name].memory.towers.road2repair_id) :
+                Game.rooms[global_vars.room_name].find(FIND_STRUCTURES,
+                    {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits < object.hitsMax))});
+            //console.log('[DEBUG] (RoleTower.run): Road X: ' + road2repair.pos.x + '; Road y: ' + road2repair.pos.y);
+            target2repair = (targets2repair) ? targets2repair[0] : Game.rooms[global_vars.room_name].memory.target_repair_defence;
+            console.log('[DEBUG] (RoleTower.run) Roads to repear: ' + targets2repair.length);
+        }
         let exit_code = current_tower.repair(target2repair);
         //console.log('[DEBUG] (RoleTower.run): Tower ID: ' + current_tower.id + '; EXIT code: ' + exit_code);
 

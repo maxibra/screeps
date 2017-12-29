@@ -38,7 +38,7 @@ var structCreep = {
             //TODO: Improve pleace of tower. don't search per creep
             let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && object.energy < object.energyCapacity)});
 //            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: CREEP_TYPES: ' + JSON.stringify(current_creep_types));
-            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: ROOM MEMORY: ' + JSON.stringify(my_room.memory));
+//            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: ROOM MEMORY: ' + JSON.stringify(my_room.memory));
             if (towers && !my_room.memory.towers.all_full) transfer_targets = towers;
             else {
                 transfer_targets = my_room.find(FIND_STRUCTURES,
@@ -46,7 +46,7 @@ var structCreep = {
                     && (object.energy < object.energyCapacity))});
 //            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS targets: ' + transfer_targets.length + '; current TRANSFER %: ' + units['transfer']/current_workers + ';limit: '+ current_creep_types.transfer[my_room.controller.level]);
             }
-            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFER targets: ' + JSON.stringify(transfer_targets));
+//            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFER targets: ' + JSON.stringify(transfer_targets));
             if ((transfer_targets.length != 0 && (units['transfer']/current_workers < current_creep_types.transfer[my_room.controller.level]))) {
                 creep.say('transfering');
                 creep.memory.role = 'transfer';

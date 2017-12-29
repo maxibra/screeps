@@ -127,10 +127,10 @@ module.exports.loop = function () {
     let towers_energy_full = true;
 //    console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
     for (let i=0;i<towers_list.length;i++) {
-        roleTower.run(towers_list[i]);
+//        roleTower.run(towers_list[i]);
         let current_tower = Game.getObjectById(towers_list[i]);
 //        console.log('[DEBUG] (main): TOWER[' + i + ']' + '; ENR: ' + (current_tower.energy < current_tower.energyCapacity));
-        if (current_tower.energy < current_tower.energyCapacity) towers_energy_full = false;
+        if (current_tower.energy/current_tower.energyCapacity < 0.5) towers_energy_full = false;
     }
     Game.rooms[global_vars.room_name].memory.towers.all_full = towers_energy_full;
 
