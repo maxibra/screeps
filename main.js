@@ -154,6 +154,11 @@ module.exports.loop = function () {
         roleStructCreep.run(creep, units);
     }
 
+    if (Game.time % 5  === 0) {  // run every 3 ticks
+        console.log('[INFO] (main): RUN 2 tickets functions. Time: ' + Game.time);
+        creep_helpers.create_creep(units);
+    }
+
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
 //        room_helpers.get_transfer_target();
@@ -181,11 +186,6 @@ module.exports.loop = function () {
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
         room_helpers.define_creeps_amount();
-    }
-
-    if (Game.time % 2  === 0) {  // run every 30 ticks
-        console.log('[INFO] (main): RUN 15 tickets functions. Time: ' + Game.time);
-        creep_helpers.create_creep(units);
     }
 
     if (Game.time % 300 === 0) {
