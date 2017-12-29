@@ -96,7 +96,7 @@ var structCreep = {
                             if (creep.harvest(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
 //                            let action_exit = creep.withdraw(target);
 //                        console.log('[DEBUG](structCreep.run)[' + creep.name + ']: Exit code: ' + JSON.stringify(action_exit));
-                            if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
+//                            if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
                         } else creep.memory.role = 'undefined';
                     }
                 }

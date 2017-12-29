@@ -45,16 +45,15 @@ var creep_helpers = {
 
         //console.log('[DEBUG] (create_creep): CREEPS: ' + creeps_names.length);
        if (my_spawn.spawning) return;
-       else if (creeps_names.length >= my_spawn.memory.general.max) {
-           console.log('[INFO] (create_creep): SPECIAL_Units: ' + units['special_carry'] + ' [' + current_creep_types.special_carry + ']');
-           if (units['special_carry']/units['total'] < current_creep_types.special_carry) { // Check creation of special creeps
-               creep_memory.special = 'special_carry';
-               creep_memory.role = 'transfer';
-               name_special = 'sc';
-               current_body = creep_body.special_carry.base;
-               add_body = creep_body.special_carry.add;
-           } else return;
-       }
+
+       // if (units['special_carry']/units['total'] < current_creep_types.special_carry) { // Check creation of special creeps
+       //         console.log('[INFO] (create_creep): SPECIAL_Units: ' + units['special_carry'] + ' [' + current_creep_types.special_carry + ']');
+       //         creep_memory.special = 'special_carry';
+       //         creep_memory.role = 'transfer';
+       //         name_special = 'sc';
+       //         current_body = creep_body.special_carry.base;
+       //         add_body = creep_body.special_carry.add;
+       // }
 
         let harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvest');
         // console.log('[DEBUG] (creep_helpers): Harvesters: ' + JSON.stringify(harvesters));

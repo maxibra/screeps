@@ -27,6 +27,17 @@ if (typeof Game.rooms[room_name].memory.towers === "undefined") {
         all_full: false
     }
 }
+
+if (typeof Game.rooms[room_name].memory.minning === "undefined") {
+    Game.rooms[room_name].memory.mining = {
+        containers: {
+            mining: {},     // Applicant containers: {<container_id>: {miner_id: <false|true|string>}}
+            upgrading: []   // <container_id>
+        },
+        miming_all_staffed: false
+    }
+}
+
 if (typeof Game.rooms[room_name].memory.general === "undefined") {
     Game.rooms[room_name].memory.global_vars = {
         age_to_drop_and_die: 20,
@@ -127,10 +138,10 @@ module.exports.loop = function () {
     let towers_energy_full = true;
 //    console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
     for (let i=0;i<towers_list.length;i++) {
-//        roleTower.run(towers_list[i]);
+        roleTower.run(towers_list[i], units.total);
         let current_tower = Game.getObjectById(towers_list[i]);
 //        console.log('[DEBUG] (main): TOWER[' + i + ']' + '; ENR: ' + (current_tower.energy < current_tower.energyCapacity));
-        if (current_tower.energy/current_tower.energyCapacity < 0.5) towers_energy_full = false;
+        if (current_tower.energy/current_tower.energyCapacity < 0.65) towers_energy_full = false;
     }
     Game.rooms[global_vars.room_name].memory.towers.all_full = towers_energy_full;
 
