@@ -39,8 +39,9 @@ var creep_helpers = {
         let current_body = creep_body.general.base;
         let add_body = creep_body.general.add;
 
+        console.log('[DEBUG] (create_creep): Creeps: ' +  (creeps_names.length >= my_spawn.memory.general.max) + '; SPAWING: ' + JSON.stringify(Game.spawns[global_vars.spawn_name].spawning));
 
-        if (creeps_names.length >= my_spawn.memory.general.max || my_spawn.spawning) return;
+        if (creeps_names.length >= my_spawn.memory.general.max || Game.spawns['max'].spawning) return;
 
         //console.log('[DEBUG] (create_creep): CREEPS: ' + creeps_names.length);
 //        if (my_spawn.spawning) return;
@@ -63,16 +64,16 @@ var creep_helpers = {
         } else {                      // Create most possible strong body
             let possible_body = current_body.concat(add_body);
             let possible_body_cost = body_cost(possible_body);
-            for (i=2;possible_body_cost <= my_room.energyCapacityAvailable;i++) {
+            for (i=2;possible_body_cost <= Game.rooms[global_vars.room_name].energyCapacityAvailable;i++) {
                 current_body = possible_body;
                 possible_body = possible_body.concat(add_body);
                 if (i%2 == 0) possible_body.push(MOVE);
                 possible_body_cost = body_cost(possible_body);
             }
         }
-        console.log('[DEBUG] (create_creep): HARVESTERS: ' +  harvesters.length + '; CREEPS: ' + creeps_names.length + '; BODY: ' + current_body);
 
         let current_body_cost = body_cost(current_body);
+        console.log('[DEBUG] (create_creep): HARVESTERS: ' +  harvesters.length + '; CREEPS: ' + creeps_names.length + '; BODY COST: ' + current_body_cost + '; BODY: ' + current_body);
 //        if (current_body_cost > my_room.energyAvailable) {
         if (current_body_cost > Game.rooms[global_vars.room_name].energyAvailable) {
             console.log('[INFO] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + Game.rooms[global_vars.room_name].energyAvailable);

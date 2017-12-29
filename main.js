@@ -20,6 +20,13 @@ if (typeof Game.spawns[spawn_name].memory.general === "undefined") {
 }
 
 // Initialie the room memory
+if (typeof Game.rooms[room_name].memory.towers === "undefined") {
+    Game.rooms[room_name].memory.towers = {
+        list: [],
+        next_update: Game.time,
+        all_full: false
+    }
+}
 if (typeof Game.rooms[room_name].memory.general === "undefined") {
     Game.rooms[room_name].memory.global_vars = {
         age_to_drop_and_die: 20,
@@ -56,11 +63,6 @@ if (typeof Game.rooms[room_name].memory.general === "undefined") {
                 repair_civilian: 0.1,          // max percentage of repair units from total creeps
                 special_carry: 0.3
             }
-        },
-        towers: {
-            list: [],
-            next_update: '',
-            all_full: false
         },
         update_period: {
             towers: 1000
@@ -108,12 +110,29 @@ module.exports.loop = function () {
 
     // Every tick loops
     // Towers
-    if (!my_room.memory.global_vars.towers.list || (Game.time > my_room.memory.global_vars.towers.next_update)) {   // update list of towers
-        my_room.memory.global_vars.towers.list = Game.rooms[myRoomName].find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+    let towers_list = [];
+//    console.log('[DEBUG] (main): LIST: ' + !(my_room.memory.towers.list) + '; Tick: ' + (Game.time > my_room.memory.towers.next_update));
+    if (!my_room.memory.towers.list.length === 0 || (Game.time > Game.rooms[room_name].memory.towers.next_update)) {   // update list of towers
+        Game.rooms[room_name].memory.towers.next_update = Game.rooms[room_name].memory.towers.next_update + Game.rooms[room_name].memory.global_vars.update_period.towers;
+        let all_towers = Game.rooms[room_name].find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+        for (let i=0;i<all_towers.length;i++) {
+//            console.log('[DEBUG] (main): TOWER' + JSON.stringify(all_towers[i]));
+            towers_list.push(all_towers[i].id);
+        }
+        Game.rooms[global_vars.room_name].memory.towers.list = towers_list;
+//        console.log('[INFO] (main): GLOBAL vars: ' + JSON.stringify(Game.rooms[room_name].memory.global_vars));
+        if (towers_list.length > 0) Game.rooms[room_name].memory.global_vars.creep_types[Game.spawns[spawn_name].memory.general.status].repair_civilian = 0;
+    } else towers_list = Game.rooms[room_name].memory.towers.list
+
+    let towers_energy_full = true;
+//    console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
+    for (let i=0;i<towers_list.length;i++) {
+        roleTower.run(towers_list[i]);
+        let current_tower = Game.getObjectById(towers_list[i]);
+//        console.log('[DEBUG] (main): TOWER[' + i + ']' + '; ENR: ' + (current_tower.energy < current_tower.energyCapacity));
+        if (current_tower.energy < current_tower.energyCapacity) towers_energy_full = false;
     }
-    for (let twr in my_room.memory.global_vars.towers.list) {
-        roleTower.run();
-    }
+    Game.rooms[global_vars.room_name].memory.towers.all_full = towers_energy_full;
 
     // Creeps
     for(var name in Game.creeps) {

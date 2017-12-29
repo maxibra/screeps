@@ -35,15 +35,18 @@ var structCreep = {
             var current_workers = units['total'] - units['harvest'];
             var current_creep_types = global_vars.creep_types[my_spawn.memory.general.status];
 //            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: CREEP_TYPES: ' + JSON.stringify(current_creep_types));
-
-            let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (structureType: STRUCTURE_TOWER && object.energy < object.energyCapacity)});
-            if (towers) transfer_targets = towers;
+            //TODO: Improve pleace of tower. don't search per creep
+            let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && object.energy < object.energyCapacity)});
+//            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: CREEP_TYPES: ' + JSON.stringify(current_creep_types));
+            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: ROOM MEMORY: ' + JSON.stringify(my_room.memory));
+            if (towers && !my_room.memory.towers.all_full) transfer_targets = towers;
             else {
                 transfer_targets = my_room.find(FIND_STRUCTURES,
-                    {filter: object = > ((object.structureType == STRUCTURE_EXTENSION || object.structureType == STRUCTURE_SPAWN)
+                    {filter: object => ((object.structureType == STRUCTURE_EXTENSION || object.structureType == STRUCTURE_SPAWN)
                     && (object.energy < object.energyCapacity))});
 //            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS targets: ' + transfer_targets.length + '; current TRANSFER %: ' + units['transfer']/current_workers + ';limit: '+ current_creep_types.transfer[my_room.controller.level]);
             }
+            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFER targets: ' + JSON.stringify(transfer_targets));
             if ((transfer_targets.length != 0 && (units['transfer']/current_workers < current_creep_types.transfer[my_room.controller.level]))) {
                 creep.say('transfering');
                 creep.memory.role = 'transfer';
@@ -84,10 +87,16 @@ var structCreep = {
                         creep.memory.target_id = 'false';
                     } else {
                         var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByPath(FIND_SOURCES));
-                        //                    var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES));
+//                        var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) :
+//                                        creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)}));
+//                    var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES));
+//                        console.log('[DEBUG](structCreep.run)[' + creep.name + ']: HARVESTER target: ' + JSON.stringify(target));
                         if(target) {
-                            //                        if (creep.pickup(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
+//                        if (creep.pickup(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
                             if (creep.harvest(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
+//                            let action_exit = creep.withdraw(target);
+//                        console.log('[DEBUG](structCreep.run)[' + creep.name + ']: Exit code: ' + JSON.stringify(action_exit));
+                            if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
                         } else creep.memory.role = 'undefined';
                     }
                 }
