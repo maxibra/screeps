@@ -61,7 +61,7 @@ if (typeof Game.rooms[room_name].memory.general === "undefined") {
                 build: 0.30,        // max percentage of builders from total creeps
                 repair_defence: 0.1,          // max percentage of repair units from total creeps
                 repair_civilian: 0.1,          // max percentage of repair units from total creeps
-                special_carry: 0.3
+                special_carry: 0.4
             }
         },
         update_period: {

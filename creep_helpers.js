@@ -44,22 +44,22 @@ var creep_helpers = {
         if (creeps_names.length >= my_spawn.memory.general.max || Game.spawns['max'].spawning) return;
 
         //console.log('[DEBUG] (create_creep): CREEPS: ' + creeps_names.length);
-//        if (my_spawn.spawning) return;
-//        else if (creeps_names.length >= my_spawn.memory.general.max) {
-//            console.log('[INFO] (create_creep): SPECIAL_Units: ' + units['special_carry'] + ' [' + current_creep_types.special_carry + ']');
-//            if (units['special_carry']/units['total'] < current_creep_types.special_carry) { // Check creation of special creeps
-//                creep_memory.special = 'special_carry';
-//                creep_memory.role = 'transfer';
-//                name_special = 'sc';
-//                current_body = creep_body.special_carry.base;
-//                add_body = creep_body.special_carry.add;
-//            } else return;
-//        }
+       if (my_spawn.spawning) return;
+       else if (creeps_names.length >= my_spawn.memory.general.max) {
+           console.log('[INFO] (create_creep): SPECIAL_Units: ' + units['special_carry'] + ' [' + current_creep_types.special_carry + ']');
+           if (units['special_carry']/units['total'] < current_creep_types.special_carry) { // Check creation of special creeps
+               creep_memory.special = 'special_carry';
+               creep_memory.role = 'transfer';
+               name_special = 'sc';
+               current_body = creep_body.special_carry.base;
+               add_body = creep_body.special_carry.add;
+           } else return;
+       }
 
         let harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvest');
         // console.log('[DEBUG] (creep_helpers): Harvesters: ' + JSON.stringify(harvesters));
 
-        if (harvesters.length == 0 || creeps_names.length < 4) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
+        if (harvesters.length === 0 || creeps_names.length < 4) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
             // Do nothing
         } else {                      // Create most possible strong body
             let possible_body = current_body.concat(add_body);
@@ -92,11 +92,10 @@ var creep_helpers = {
         creep_name = creep_name + '-' + (current_body_cost/10) + '-' + name_special;
 
         let exit_code = my_spawn.spawnCreep(current_body, creep_name, creep_memory);
-        if ( exit_code == OK) {
+        if ( exit_code === OK) {
             let new_index = (my_spawn.memory.general.index + 1) % my_spawn.memory.general.max;
             my_spawn.memory.general.index = new_index;
-            let new_gen = ((new_index == 0) ? (my_spawn.memory.general.gen + 1) % 100 : my_spawn.memory.general.gen);
-            my_spawn.memory.general.gen = new_gen;
+            my_spawn.memory.general.gen = ((new_index === 0) ? (my_spawn.memory.general.gen + 1) % 100 : my_spawn.memory.general.gen);;
             console.log('[INFO] (create_creep): Spawning new harvester: ' + creep_name + '; Body: ' + current_body + '(' + add_body + ')' + '; Mem: ' + JSON.stringify(creep_memory));
         } else console.log('[ERROR] (create_creep): Failed to create creep ' + creep_name + ': ' + exit_code + '; Body cost: ' + current_body_cost + '; Avalable energy: ' + my_room.energyAvailable + '(' + my_room.energyAvailable);
     },
