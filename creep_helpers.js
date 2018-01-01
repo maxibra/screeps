@@ -2,9 +2,6 @@
 
 var spawn_name = 'max';
 var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
-var global_vars = Game.rooms[room_name].memory.global_vars;
-var my_spawn = Game.spawns[global_vars.spawn_name];
-var my_room = Game.rooms[global_vars.room_name];
 
 var creep_body = {
     general: {
@@ -30,6 +27,10 @@ function body_cost(body) {
 
 var creep_helpers = {
     create_creep: function(units) {
+        let global_vars = Game.rooms[room_name].memory.global_vars;
+        let my_spawn = Game.spawns[global_vars.spawn_name];
+        let my_room = Game.rooms[global_vars.room_name];
+
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
         let creep_memory = {role: 'harvester', target_id: false};
