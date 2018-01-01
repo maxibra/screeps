@@ -14,7 +14,6 @@ if (typeof Game.spawns[spawn_name].memory.general === "undefined") {
     Game.spawns[spawn_name].memory.general = {
         gen: 0,
         index: 0,
-        max: global_vars.screeps_general_nominal,
         status: 'peace',
         extensions: 0
     };
@@ -153,7 +152,7 @@ module.exports.loop = function () {
 
     let towers_energy_full = true;
 //    console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
-    if (units.total > 10)
+    if (units.total > 10 || Game.spawns[spawn_name].memory.general.status === 'war')
         for (let i=0;i<towers_list.length;i++) {
             roleTower.run(towers_list[i], units.total);
             let current_tower = Game.getObjectById(towers_list[i]);
