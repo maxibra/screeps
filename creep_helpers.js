@@ -111,6 +111,9 @@ var creep_helpers = {
         }
     },
     most_creep_action_results: function(creep, target, action_res, creep_role) {
+        let global_vars = Game.rooms[room_name].memory.global_vars;
+        let my_spawn = Game.spawns[global_vars.spawn_name];
+
         switch(action_res) {
             case OK:
                 creep.memory.target_id = target.id;
