@@ -53,7 +53,7 @@ var structCreep = {
 //                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: changed to TRANSFER');
                 //units.transfer++;
             } else if (my_room.memory.target_repair_defence && units['repair_defence']/current_workers < current_creep_types.repair_defence) {
-//                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units['repair_defence'] + ' / ' + current_workers + '=' + units['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
+                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units['repair_defence'] + ' / ' + current_workers + '=' + units['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
                 creep.say('defence repair');
                 creep.memory.role = 'repair_defence';
                 //units.repair_defence++;
@@ -82,21 +82,27 @@ var structCreep = {
                     creep.say('Going2die');
                     creep.suicide();     // Go to die to Cemetery (a far place)
                 } else {
-                    if ((Game.creeps.length < my_spawn.memory.general.max) && creep.energy > 0.9) {     // If it's not enought creeps change to transfer
+                    if ((Game.creeps.length < Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.creeps_max_amount]) && creep.energy > 0.9) {     // If it's not enought creeps change to transfer
                         creep.memory.role = 'transfer';
                         creep.memory.target_id = 'false';
                     } else {
-                        var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByPath(FIND_SOURCES));
-//                        var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) :
-//                                        creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)}));
-//                    var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES));
+                        var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByPath(FIND_SOURCES,{filter: object => (object.energy > 0)}));
+                        // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) :
+                        // creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)}));
+                        // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES));
 //                        console.log('[DEBUG](structCreep.run)[' + creep.name + ']: HARVESTER target: ' + JSON.stringify(target));
                         if(target) {
-//                        if (creep.pickup(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
-                            if (creep.harvest(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
-//                            let action_exit = creep.withdraw(target);
-//                        console.log('[DEBUG](structCreep.run)[' + creep.name + ']: Exit code: ' + JSON.stringify(action_exit));
-//                            if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
+                            if (creep.pickup(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
+                            let action_exit = creep.harvest(target);
+                            if (action_exit == ERR_NOT_IN_RANGE) {
+                                creep.moveTo(target, global_vars.moveTo_ops);
+                                creep.memory.target_id = target;
+                            } else if (action_exit == ERR_NOT_ENOUGH_RESOURCES) {
+
+                            }
+                            // let action_exit = creep.withdraw(target, RESOURCE_ENERGY);
+                            // console.log('[DEBUG](structCreep.run)[' + creep.name + ']: Exit code: ' + JSON.stringify(action_exit) + '; (' + target.pos.x + ',' + target.pos.y + ')');
+                            if (action_exit == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
                         } else creep.memory.role = 'undefined';
                     }
                 }

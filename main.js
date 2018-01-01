@@ -4,6 +4,7 @@ var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 var roleTower = require('role.tower');
 
+// dummy 6
 
 var spawn_name = 'max';
 var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
@@ -34,11 +35,16 @@ if (typeof Game.rooms[room_name].memory.minning === "undefined") {
             mining: {},     // Applicant containers: {<container_id>: {miner_id: <false|true|string>}}
             upgrading: []   // <container_id>
         },
+        sources: [],
         miming_all_staffed: false
     }
 }
 
-if (typeof Game.rooms[room_name].memory.general === "undefined") {
+if (typeof Game.rooms[room_name].memory.sources === "undefined") {
+    Game.rooms[room_name].memory.sources = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: {structureType: FIND_SOURCES_ACTIVE}})
+}
+
+if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
     Game.rooms[room_name].memory.global_vars = {
         age_to_drop_and_die: 20,
         spawn_name: spawn_name,
@@ -58,6 +64,12 @@ if (typeof Game.rooms[room_name].memory.general === "undefined") {
                 strokeWidth: .15,
                 opacity: .1
             }
+        },
+        screeps_max_amount: {
+            peace: 10,
+            war:30,
+            repair_defence:30,
+            build:15
         },
         creep_types: {
             war: {
@@ -108,6 +120,10 @@ module.exports.loop = function () {
         'undefined': 0,
         'special_carry': 0
     };
+
+
+    //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
+
     for (var creep_name in cur_creeps) {
         splited_name = creep_name.split('-');
         if (typeof cur_creeps[creep_name].memory.special == "undefined") units[cur_creeps[creep_name].memory.role]++;
@@ -115,7 +131,7 @@ module.exports.loop = function () {
         units['total']++;
     }
 
-    console.log('[INFO] (main): START  UNITS (nominal: ' + my_spawn.memory.general.max + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
+    console.log('[INFO] (main): START  UNITS (nominal: ' + Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.creeps_max_amount] + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
     let current_mod = 0;
     let tick_between_hard_actions = 2;
 
@@ -139,10 +155,9 @@ module.exports.loop = function () {
 //    console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
     if (units.total > 10)
         for (let i=0;i<towers_list.length;i++) {
-
             roleTower.run(towers_list[i], units.total);
             let current_tower = Game.getObjectById(towers_list[i]);
-    //        console.log('[DEBUG] (main): TOWER[' + i + ']' + '; ENR: ' + (current_tower.energy < current_tower.energyCapacity));
+            //        console.log('[DEBUG] (main): TOWER[' + i + ']' + '; ENR: ' + (current_tower.energy < current_tower.energyCapacity));
             if (current_tower.energy/current_tower.energyCapacity < 0.65) towers_energy_full = false;
         }
     Game.rooms[global_vars.room_name].memory.towers.all_full = towers_energy_full;
@@ -172,8 +187,8 @@ module.exports.loop = function () {
 
     current_mod = current_mod + tick_between_hard_actions;
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
-        console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-        room_helpers.get_repair_civilianl_target();
+//        console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
+//        room_helpers.get_repair_civilianl_target();
     }
 
     current_mod = current_mod + tick_between_hard_actions;
@@ -189,7 +204,6 @@ module.exports.loop = function () {
     }
 
     if (Game.time % 300 === 0) {
-        room_helpers.create_extensions();
     }
 
     if (Game.time % 1000 === 0) {
@@ -206,6 +220,6 @@ module.exports.loop = function () {
         //global_vars.my_room.memory.important_structures = xy_path;
     }
 
-//    console.log('[INFO] (main): FINISH UNITS (nominal: ' + my_spawn.memory.general.max + '): ' + JSON.stringify(units));
+//    console.log('[INFO] (main): FINISH UNITS (nominal: ' + Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.creeps_max_amount] + '): ' + JSON.stringify(units));
 
 }

@@ -43,7 +43,8 @@ function get_stright_path(FromPos, ToPos) {
 
 var room_helpers = {
     get_energy_source_target: function() {
-        let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.storeCapacity) > 0.4)});
+        let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.storeCapacity) > 0.3)});
+
         //targets.contact()
     },
     get_transfer_target: function() {
@@ -93,12 +94,12 @@ var room_helpers = {
     },
     define_creeps_amount: function() {
         if (Game.time < 5000) {
-            my_spawn.memory.general.max = global_vars.screeps_general_nominal;
+            my_spawn.memory.general.creeps_max_amount = 'nominal';
         } else if (my_room.memory.target_repair_defence) {
-            my_spawn.memory.general.max = global_vars.screeps_general_repair_defance;
+            my_spawn.memory.general.creeps_max_amount = 'repair_defance';
         } else if (my_room.memory.targets_build) {
-            my_spawn.memory.general.max = global_vars.screeps_general_build;
-        } else my_spawn.memory.general.max = global_vars.screeps_general_nominal;
+            my_spawn.memory.general.creeps_max_amount = 'build';
+        } else my_spawn.memory.general.creeps_max_amount = 'nominal';
     },
     clean_memory: function() {
         // Clean died creeps
@@ -157,25 +158,28 @@ var room_helpers = {
         // Create road above if needed
         if (add_road_above) {
             for (var x=sx;x>sx-6;x--) {
-                var exit_code = my_room.createConstructionSite(x, sy-1, STRUCTURE_ROAD);
+                var exit_code = Game.rooms[global_vars.room_name].createConstructionSite(x, sy-1, STRUCTURE_ROAD);
                 console.log('[DEBUG] (create_extensions): Create a road above: ' + exit_code);
             }
         }
         // Create extansions
-        for (let y=sy;x>sy+extensions_rows-1;y++) {
-            for (let x=sx;x>sx-5;x--) {
-                if (my_room.createConstructionSite(x, sy, STRUCTURE_EXTENSION) == OK) added_extensions++;
+        console.log('[DEBUG](create_extensions): y= ' + (sy+extensions_rows-1));
+        for (var y=sy;y<(sy+extensions_rows);y++) {
+            for (var x=sx;x>sx-5;x--) {
+                var exit_code = Game.rooms[global_vars.room_name].createConstructionSite(x, y, STRUCTURE_EXTENSION);
+                console.log('[DEBUG](create_extensions): Creation of extension (' + x + ',' + y + '): ' + exit_code);
+                if (exit_code == OK) added_extensions++;
             }
         }
+        my_spawn.memory.general.extensions = Game.spawns[global_vars.spawn_name].memory.general.extensions + added_extensions;
 
         // Create road below if needed
         if (add_road_below) {
             for (var x=sx;x>sx-6;x--) {
-                var exit_code = my_room.createConstructionSite(x, sy+1, STRUCTURE_ROAD);
+                var exit_code = Game.rooms[global_vars.room_name].createConstructionSite(x, sy+extensions_rows, STRUCTURE_ROAD);
                 console.log('[DEBUG] (create_extensions): Create a road below: ' + exit_code);
             }
         }
-        my_spawn.memory.general.extensions = my_spawn.memory.general.extensions + added_extensions;
     },
     create_road: function(FromPos, ToPos, p2pPath) {
         /* FromPos, ToPos - RoomPosition with additional keys of 'id' and 'structureType' (use  _.extend(pos, {id: 11111, structureType: xxxxx}))
