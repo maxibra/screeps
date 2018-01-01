@@ -96,7 +96,7 @@ var room_helpers = {
         if (Game.time < 5000) {
             my_spawn.memory.general.creeps_max_amount = 'nominal';
         } else if (my_room.memory.target_repair_defence) {
-            my_spawn.memory.general.creeps_max_amount = 'repair_defance';
+            my_spawn.memory.general.creeps_max_amount = 'repair_defence';
         } else if (my_room.memory.targets_build) {
             my_spawn.memory.general.creeps_max_amount = 'build';
         } else my_spawn.memory.general.creeps_max_amount = 'nominal';

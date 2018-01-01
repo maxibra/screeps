@@ -42,7 +42,7 @@ var structCreep = {
             if (towers && !my_room.memory.towers.all_full) transfer_targets = towers;
             else {
                 transfer_targets = my_room.find(FIND_STRUCTURES,
-                    {filter: object => ((object.structureType == STRUCTURE_EXTENSION || object.structureType == STRUCTURE_SPAWN)
+                    {filter: object => ((object.structureType === STRUCTURE_EXTENSION || object.structureType === STRUCTURE_SPAWN || object.structureType === STRUCTURE_LINK)
                     && (object.energy < object.energyCapacity))});
 //            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS targets: ' + transfer_targets.length + '; current TRANSFER %: ' + units['transfer']/current_workers + ';limit: '+ current_creep_types.transfer[my_room.controller.level]);
             }
