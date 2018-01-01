@@ -93,7 +93,7 @@ var creep_helpers = {
 
         let exit_code = Game.spawns[global_vars.spawn_name].spawnCreep(current_body, creep_name, creep_memory);
         if ( exit_code === OK) {
-            let new_index = (my_spawn.memory.general.index + 1) % Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.creeps_max_amount];
+            let new_index = (my_spawn.memory.general.index + 1) % global_vars.screeps_max_amount[my_spawn.memory.creeps_max_amount];
             my_spawn.memory.general.index = new_index;
             my_spawn.memory.general.gen = ((new_index === 0) ? (my_spawn.memory.general.gen + 1) % 100 : my_spawn.memory.general.gen);;
             console.log('[INFO] (create_creep): Spawning new harvester: ' + creep_name + '; Body: ' + current_body + '(' + add_body + ')' + '; Mem: ' + JSON.stringify(creep_memory));
