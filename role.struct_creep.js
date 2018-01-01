@@ -82,7 +82,7 @@ var structCreep = {
                     creep.say('Going2die');
                     creep.suicide();     // Go to die to Cemetery (a far place)
                 } else {
-                    if ((Game.creeps.length < Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.creeps_max_amount]) && creep.energy > 0.9) {     // If it's not enought creeps change to transfer
+                    if ((Game.creeps.length < Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount]) && creep.energy > 0.9) {     // If it's not enought creeps change to transfer
                         creep.memory.role = 'transfer';
                         creep.memory.target_id = 'false';
                     } else {

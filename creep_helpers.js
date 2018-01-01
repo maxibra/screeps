@@ -40,9 +40,9 @@ var creep_helpers = {
         let current_body = creep_body.general.base;
         let add_body = creep_body.general.add;
 
-        console.log('[DEBUG] (create_creep): Creeps: ' +  (creeps_names.length >= Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.creeps_max_amount]) + '; SPAWING: ' + JSON.stringify(Game.spawns[global_vars.spawn_name].spawning));
+        console.log('[DEBUG] (create_creep): Creeps: ' +  (creeps_names.length >= Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount]) + '; SPAWING: ' + JSON.stringify(Game.spawns[global_vars.spawn_name].spawning));
 
-        if (creeps_names.length >= Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.creeps_max_amount] || Game.spawns['max'].spawning) return;
+        if (creeps_names.length >= Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] || Game.spawns['max'].spawning) return;
 
         //console.log('[DEBUG] (create_creep): CREEPS: ' + creeps_names.length);
         if (my_spawn.spawning) return;
@@ -93,7 +93,7 @@ var creep_helpers = {
 
         let exit_code = Game.spawns[global_vars.spawn_name].spawnCreep(current_body, creep_name, creep_memory);
         if ( exit_code === OK) {
-            let new_index = (my_spawn.memory.general.index + 1) % global_vars.screeps_max_amount[my_spawn.memory.creeps_max_amount];
+            let new_index = (my_spawn.memory.general.index + 1) % global_vars.screeps_max_amount[my_spawn.memory.general.creeps_max_amount];
             my_spawn.memory.general.index = new_index;
             my_spawn.memory.general.gen = ((new_index === 0) ? (my_spawn.memory.general.gen + 1) % 100 : my_spawn.memory.general.gen);;
             console.log('[INFO] (create_creep): Spawning new harvester: ' + creep_name + '; Body: ' + current_body + '(' + add_body + ')' + '; Mem: ' + JSON.stringify(creep_memory));
