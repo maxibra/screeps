@@ -87,7 +87,11 @@ if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
             }
         },
         update_period: {
+            after_war: 150,
             towers: 1000
+        },
+        energy_flow: {
+            sources: []
         }
     }
 }
@@ -155,11 +159,11 @@ module.exports.loop = function () {
     if (units.total > 10 || Game.spawns[spawn_name].memory.general.status === 'war')
         for (let i=0;i<towers_list.length;i++) {
             roleTower.run(towers_list[i], units.total);
-            let current_tower = Game.getObjectById(towers_list[i]);
-            //        console.log('[DEBUG] (main): TOWER[' + i + ']' + '; ENR: ' + (current_tower.energy < current_tower.energyCapacity));
-            if (current_tower.energy/current_tower.energyCapacity < 0.65) towers_energy_full = false;
+            // let current_tower = Game.getObjectById(towers_list[i]);
+            // //        console.log('[DEBUG] (main): TOWER[' + i + ']' + '; ENR: ' + (current_tower.energy < current_tower.energyCapacity));
+            // if (current_tower.energy/current_tower.energyCapacity < 0.65) towers_energy_full = false;
         }
-    Game.rooms[global_vars.room_name].memory.towers.all_full = towers_energy_full;
+    // Game.rooms[global_vars.room_name].memory.towers.all_full = towers_energy_full;
 
     // Creeps
     for(var name in Game.creeps) {
@@ -176,6 +180,18 @@ module.exports.loop = function () {
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
 //        room_helpers.get_transfer_target();
+        let hostile_creeps = Game.rooms[global_vars.room_name].find(FIND_HOSTILE_CREEPS);
+        if (hostile_creeps && hostile_creeps.length > 0 && Game.spawns[spawn_name].memory.general.status === 'peace') {
+            Game.spawns[spawn_name].memory.general.status = 'war';
+            Game.notify('WE are attacked from (' + hostile_creeps[0].x + ',' + hostile_creeps[0].y + '); Body: ' + JSON.stringify(hostile_creeps[0].body));
+        } else if (Game.spawns[spawn_name].memory.general.status === 'war' && !Game.spawns[spawn_name].memory.general.finish_war) {
+            Game.spawns[spawn_name].memory.general.finish_war = Game.time + Game.rooms[room_name].memory.global_vars.update_period.after_war;
+            console.log('[DEBUG] (main) Define finish war to ' +  (Game.time + Game.rooms[room_name].memory.global_vars.update_period.after_war))
+        } else if (Game.spawns[spawn_name].memory.general.finish_war < Game.time && Game.spawns[spawn_name].memory.general.status === 'war') {
+            Game.spawns[spawn_name].memory.general.status = 'peace';
+            Game.spawns[spawn_name].memory.general.finish_war = false;
+            Game.notify('It"s time for PEACE');
+        }
     }
 
     current_mod = current_mod + tick_between_hard_actions;
