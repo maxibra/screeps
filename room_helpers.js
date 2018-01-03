@@ -42,6 +42,46 @@ function get_stright_path(FromPos, ToPos) {
 }
 
 var room_helpers = {
+    upgrade_energy_flow: function() {
+        // Containers
+        let all_containers = Game.rooms[global_vars.room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER )});
+        let all_links = Game.rooms[global_vars.room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
+        let all_sources = Game.rooms[global_vars.room_name].memory.energy_flow.sources;
+        let enrergy_flow_obj = {
+            containers: {},
+            links: {},
+            sources: all_sources
+        };
+        // Sort containers
+        for(let i=0;i<all_containers.length;i++) {
+            container_defined = false;
+            if (all_containers[i].pos.getRangeTo(Game.rooms[global_vars.room_name].controller) < 5) {
+                enrergy_flow_obj.containers.controller = all_containers[i].id;
+                container_defined = true
+            } else {
+                for (let j=0;j<all_sources.length;j++) {
+                    if (all_containers[i].pos.getRangeTo(Game.getObjectById(all_sources[j])) === 1) {
+                        enrergy_flow_obj.containers.source = {all_containers[i].id: all_sources[j]};
+                        container_defined = true;
+                        break;
+                    }
+                }
+            }
+            if (!container_defined) enrergy_flow_obj.containers.other = {all_containers[i].id: all_sources[j]};
+        }
+
+        // Links
+        for (let i=0;i<all_links.length;i++) {
+            if (all_links[i].pos.getRangeTo(Game.rooms[global_vars.room_name].controller) < 5) {
+                enrergy_flow_obj.links.controller = {all_links[i].id: [all_links[i].pos.x,all_links[i].pos.y]};
+            } else {
+                enrergy_flow_obj.links.source = {all_links[i].id: [all_links[i].pos.x,all_links[i].pos.y]};
+            }
+        }
+
+        console.log('[DEBUG] (room_helpers.upgrade_energy_flow): ENERGY Flow: ' + JSON.stringify(enrergy_flow_obj));
+        Game.rooms[global_vars.room_name].memory.energy_flow = enrergy_flow_obj;
+    },
     define_room_status: function() {
         let hostile_creeps = Game.rooms[global_vars.room_name].find(FIND_HOSTILE_CREEPS);
         if (hostile_creeps && hostile_creeps.length > 0 && Game.spawns[spawn_name].memory.general.status === 'peace') {

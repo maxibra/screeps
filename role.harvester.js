@@ -14,7 +14,7 @@ var RoleHarvester = {
             creep.suicide();     // Go to die to Cemetery (a far place)
         }
 
-        if (creep.memory.role != 'harvest') creep.say('harvesting');
+        if (creep.memory.role !== 'harvest') creep.say('harvesting');
         if (creep.memory.target_id) target = creep.memory.target_id;
         else {
             // Containers
@@ -52,17 +52,17 @@ var RoleHarvester = {
                 creep.memory.harvester_type = false;
         }
 
-        if (action_out == ERR_NOT_IN_RANGE) {
+        if (action_out === ERR_NOT_IN_RANGE) {
             creep.moveTo(target, global_vars.moveTo_ops);
             creep.memory.target_id = target;
-        } else if (action_out == ERR_NOT_ENOUGH_RESOURCES && creep.carry > 0) {
+        } else if (action_out === ERR_NOT_ENOUGH_RESOURCES && creep.carry > 0) {
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;
             creep.memory.role = 'transfer';
         }
 
 
-        if (harvester_type != 'source') {
+        if (harvester_type !== 'source') {
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;
         }
