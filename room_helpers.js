@@ -48,34 +48,41 @@ var room_helpers = {
         let all_links = Game.rooms[global_vars.room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
         let all_sources = Game.rooms[global_vars.room_name].memory.energy_flow.sources;
         let enrergy_flow_obj = {
-            containers: {},
-            links: {},
+            containers: {
+                source: {},
+                controller: {},
+                other: {}
+            },
+            links: {
+                source: {},
+                controller: {}
+            },
             sources: all_sources
         };
         // Sort containers
         for(let i=0;i<all_containers.length;i++) {
             container_defined = false;
             if (all_containers[i].pos.getRangeTo(Game.rooms[global_vars.room_name].controller) < 5) {
-                enrergy_flow_obj.containers.controller = all_containers[i].id;
+                enrergy_flow_obj.containers.controller[all_containers[i].id] = [all_containers[i].pos.x,all_containers[i].pos.y];
                 container_defined = true
             } else {
                 for (let j=0;j<all_sources.length;j++) {
                     if (all_containers[i].pos.getRangeTo(Game.getObjectById(all_sources[j])) === 1) {
-                        enrergy_flow_obj.containers.source = {all_containers[i].id: all_sources[j]};
+                        enrergy_flow_obj.containers.source[all_containers[i].id] = all_sources[j];
                         container_defined = true;
                         break;
                     }
                 }
             }
-            if (!container_defined) enrergy_flow_obj.containers.other = {all_containers[i].id: all_sources[j]};
+            if (!container_defined) enrergy_flow_obj.containers.other[all_containers[i].id] = all_sources[j];
         }
 
         // Links
         for (let i=0;i<all_links.length;i++) {
             if (all_links[i].pos.getRangeTo(Game.rooms[global_vars.room_name].controller) < 5) {
-                enrergy_flow_obj.links.controller = {all_links[i].id: [all_links[i].pos.x,all_links[i].pos.y]};
+                enrergy_flow_obj.links.controller[all_links[i].id] = [all_links[i].pos.x,all_links[i].pos.y];
             } else {
-                enrergy_flow_obj.links.source = {all_links[i].id: [all_links[i].pos.x,all_links[i].pos.y]};
+                enrergy_flow_obj.links.source[all_links[i].id] =  [all_links[i].pos.x,all_links[i].pos.y];
             }
         }
 
