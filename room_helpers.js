@@ -44,8 +44,8 @@ function get_stright_path(FromPos, ToPos) {
 var room_helpers = {
     upgrade_energy_flow: function() {
         // Containers
-        let all_containers = Game.rooms[global_vars.room_name].find(FIND_STRUCTURES, {filter: object = > (object.structureType === STRUCTURE_CONTAINER)});
-        let all_links = Game.rooms[global_vars.room_name].find(FIND_STRUCTURES, {filter: object = > (object.structureType === STRUCTURE_LINK)});
+        let all_containers = Game.rooms[global_vars.room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
+        let all_links = Game.rooms[global_vars.room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
         let all_sources = Game.rooms[global_vars.room_name].memory.energy_flow.sources;
         let energy_flow_obj = Game.rooms[global_vars.room_name].memory.energy_flow;
         // Sort containers
@@ -69,10 +69,15 @@ var room_helpers = {
         // Delete missing containers IDs
         let containers_types = Object.keys(energy_flow_obj.containers);
         for (let ct = 0; ct < containers_types.length; ct++) {
-            let current_containers_ids = Object.keys(energy_flow_obj.containers[ct]);
+            console.log('[DEBUG](room_helpers.upgrade_energy_flow): Types: ' + JSON.stringify(containers_types) + '; Idx: ' + ct + '; Energy_Flow_Containers' + JSON.stringify(energy_flow_obj.containers[containers_types[ct]]));
+            let current_containers_ids = Object.keys(energy_flow_obj.containers[containers_types[ct]]);
             for (let i = 0; current_containers_ids.length; i++) {
                 let pretendet2remove = current_containers_ids[i];
-                if (!all_containers.includes(pretendet2remove)) delete energy_flow_obj.containers[ct][pretendet2remove];
+                if (!all_containers.includes(pretendet2remove)) {
+                    console.log('[DEBUG](room_helpers.upgrade_energy_flow): REMOVING missing container: ' + pretendet2remove);
+                    delete energy_flow_obj.containers[containers_types[ct]][pretendet2remove];
+                }
+            }
         }
 
         // Links

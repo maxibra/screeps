@@ -51,6 +51,8 @@ if (typeof Game.rooms[room_name].memory.energy_flow === "undefined") {
             controller: false
         },
         sources: Game.rooms[room_name].find(FIND_SOURCES)
+
+    }
 };
 
 if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
@@ -184,7 +186,7 @@ module.exports.loop = function () {
     if (Game.time % 5  === 0) {  // run every 3 ticks
         console.log('[INFO] (main): RUN 2 tickets functions. Time: ' + Game.time);
         creep_helpers.create_creep(units);
-        room_helpers.upgrade_energy_flow();
+//        room_helpers.upgrade_energy_flow();
     }
 
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
