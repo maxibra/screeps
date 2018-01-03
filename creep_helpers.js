@@ -100,7 +100,6 @@ var creep_helpers = {
         } else console.log('[ERROR] (create_creep): Failed to create creep ' + creep_name + ': ' + exit_code + '; Body cost: ' + current_body_cost + '; Avalable energy: ' + my_room.energyAvailable + '(' + my_room.energyAvailable);
     },
     drop_energy2container: function(creep) {
-
         if (creep.memory.role == 'dropper') {
 
         } else {
@@ -113,6 +112,7 @@ var creep_helpers = {
     most_creep_action_results: function(creep, target, action_res, creep_role) {
         let global_vars = Game.rooms[room_name].memory.global_vars;
         let my_spawn = Game.spawns[global_vars.spawn_name];
+        let my_room = Game.rooms[global_vars.room_name];
 
         switch(action_res) {
             case OK:

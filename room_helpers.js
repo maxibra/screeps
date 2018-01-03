@@ -42,6 +42,20 @@ function get_stright_path(FromPos, ToPos) {
 }
 
 var room_helpers = {
+    define_room_status: function() {
+        let hostile_creeps = Game.rooms[global_vars.room_name].find(FIND_HOSTILE_CREEPS);
+        if (hostile_creeps && hostile_creeps.length > 0 && Game.spawns[spawn_name].memory.general.status === 'peace') {
+            Game.spawns[spawn_name].memory.general.status = 'war';
+            Game.notify('WE are attacked from (' + hostile_creeps[0].x + ',' + hostile_creeps[0].y + '); Body: ' + JSON.stringify(hostile_creeps[0].body));
+        } else if (Game.spawns[spawn_name].memory.general.status === 'war' && !Game.spawns[spawn_name].memory.general.finish_war) {
+            Game.spawns[spawn_name].memory.general.finish_war = Game.time + Game.rooms[room_name].memory.global_vars.update_period.after_war;
+            console.log('[DEBUG] (main) Define finish war to ' +  (Game.time + Game.rooms[room_name].memory.global_vars.update_period.after_war))
+        } else if (Game.spawns[spawn_name].memory.general.finish_war < Game.time && Game.spawns[spawn_name].memory.general.status === 'war') {
+            Game.spawns[spawn_name].memory.general.status = 'peace';
+            Game.spawns[spawn_name].memory.general.finish_war = false;
+            Game.notify('It"s time for PEACE');
+        }
+    },
     get_energy_source_target: function() {
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.storeCapacity) > 0.3)});
 

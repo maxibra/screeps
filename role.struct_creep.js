@@ -1,4 +1,5 @@
 var creep_helpers = require('creep_helpers');
+var role_harvester = require('role.harvester');
 //var global_vars = require('global_vars')();
 
 var spawn_name = 'max';
@@ -12,14 +13,11 @@ var structCreep = {
         // role's definition
         let iam_general = (typeof creep.memory.special === "undefined");
         var condition2change_role = (iam_general && ((creep.memory.role === 'harvest' && creep.carry.energy == creep.carryCapacity) ||
-        (creep.memory.role === 'undefined')));
+        creep.memory.role === 'undefined'));
 //        console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
-        var transfer_targets;
-        if(creep.carry.energy === 0) {
-            if (creep.memory.role != 'harvest') creep.say('harvesting');
-            creep.memory.target_id = false;
-            if (iam_general) creep.memory.role = 'harvest';   // change role if the creep isn't from special role
-        } else if (creep.ticksToLive < global_vars.age_to_drop_and_die) {    // Drop energy to container before death
+        var targets;
+        if(creep.carry.energy === 0 || creep.memory.role === 'harvest') role_harvester.run(creep, iam_general);
+        else if (creep.ticksToLive < global_vars.age_to_drop_and_die) {    // Drop energy to container before death
             let closest_containers = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] < object.storeCapacity)});
             if (closest_containers) {
                 creep.memory.target_id = closest_containers.id;
@@ -38,16 +36,15 @@ var structCreep = {
             //TODO: Improve pleace of tower. don't search per creep
             let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: ROOM MEMORY: ' + JSON.stringify(my_room.memory));
-            // if (towers && !my_room.memory.towers.all_full) transfer_targets = towers;
-            if (towers && towers.length > 0) transfer_targets = towers;
+            // if (towers && !my_room.memory.towers.all_full) targets = towers;
+            if (towers && towers.length > 0) targets = towers;
             else {
-                transfer_targets = my_room.find(FIND_STRUCTURES,
+                targets = my_room.find(FIND_STRUCTURES,
                     {filter: object => ((object.structureType === STRUCTURE_EXTENSION || object.structureType === STRUCTURE_SPAWN || object.structureType === STRUCTURE_LINK)
                     && (object.energy < object.energyCapacity))});
-//            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS targets: ' + transfer_targets.length + '; current TRANSFER %: ' + units['transfer']/current_workers + ';limit: '+ current_creep_types.transfer[my_room.controller.level]);
+//            console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS targets: ' + targets.length + '; current TRANSFER %: ' + units['transfer']/current_workers + ';limit: '+ current_creep_types.transfer[my_room.controller.level]);
             }
-            // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFER targets: ' + JSON.stringify(transfer_targets));
-            if ((transfer_targets.length != 0 && (units['transfer']/current_workers < current_creep_types.transfer[my_room.controller.level]))) {
+            if ((targets.length != 0 && (units['transfer']/current_workers < current_creep_types.transfer[my_room.controller.level]))) {
                 creep.say('transfering');
                 creep.memory.role = 'transfer';
 //                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: changed to TRANSFER');
@@ -77,42 +74,13 @@ var structCreep = {
         let creep_role = creep.memory.role;
         switch(creep_role) {
             case 'harvest':
-                //TODO: Don't search findClosestByPath each tick
-                if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
-                    creep.say('Going2die');
-                    creep.suicide();     // Go to die to Cemetery (a far place)
-                } else {
-                    if ((Game.creeps.length < Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount]) && creep.energy > 0.9) {     // If it's not enought creeps change to transfer
-                        creep.memory.role = 'transfer';
-                        creep.memory.target_id = 'false';
-                    } else {
-                        var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByPath(FIND_SOURCES,{filter: object => (object.energy > 0)}));
-                        // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) :
-                        // creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)}));
-                        // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES));
-                        // console.log('[DEBUG](structCreep.run)[' + creep.name + ']: HARVESTER target: ' + JSON.stringify(target));
-                        if(target) {
-                            if (creep.pickup(target) == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
-                            let action_exit = creep.harvest(target);
-                            if (action_exit == ERR_NOT_IN_RANGE) {
-                                creep.moveTo(target, global_vars.moveTo_ops);
-                                creep.memory.target_id = target;
-                            } else if (action_exit == ERR_NOT_ENOUGH_RESOURCES) {
-
-                            }
-                            // let action_exit = creep.withdraw(target, RESOURCE_ENERGY);
-                            // console.log('[DEBUG](structCreep.run)[' + creep.name + ']: Exit code: ' + JSON.stringify(action_exit) + '; (' + target.pos.x + ',' + target.pos.y + ')');
-                            if (action_exit == ERR_NOT_IN_RANGE) creep.moveTo(target, global_vars.moveTo_ops);
-                        } else creep.memory.role = 'undefined';
-                    }
-                }
                 break;
             case 'transfer':
                 // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.target_transfer));
                 var target;
                 if (creep.memory.target_id) target = Game.getObjectById(creep.memory.target_id);
                 else {
-                    target = creep.pos.findClosestByPath(transfer_targets);
+                    target = creep.pos.findClosestByPath(targets);
                     creep.memory.target_id = (target ? target.id: false);
                 }
                 if (target) {

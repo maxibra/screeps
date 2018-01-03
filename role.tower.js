@@ -25,7 +25,7 @@ RoleTower = {
         } else if (current_tower.energy/current_tower.energyCapacity > 0.4) {
             targets2repair = (Game.rooms[room_name].memory.towers.road2repair_id) ? Game.getObjectById(Game.rooms[global_vars.room_name].memory.towers.road2repair_id) :
                 Game.rooms[room_name].find(FIND_STRUCTURES,
-                    {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.9))});
+                    {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.8))});
             //console.log('[DEBUG] (RoleTower.run): Road X: ' + road2repair.pos.x + '; Road y: ' + road2repair.pos.y);
             target2repair = targets2repair.length > 0 ? targets2repair[0] : Game.getObjectById(Game.rooms[room_name].memory.target_repair_defence);
             console.log('[DEBUG] (RoleTower.run)[' + current_tower_id + ']: Roads to repear: ' + targets2repair.length + '; Defence: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
