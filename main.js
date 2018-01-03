@@ -39,9 +39,19 @@ if (typeof Game.rooms[room_name].memory.minning === "undefined") {
     }
 }
 
-if (typeof Game.rooms[room_name].memory.sources === "undefined") {
-    Game.rooms[room_name].memory.sources = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: {structureType: FIND_SOURCES_ACTIVE}})
-}
+if (typeof Game.rooms[room_name].memory.energy_flow === "undefined") {
+    Game.rooms[room_name].memory.energy_flow = {
+        containers: {
+            source: {},
+            controller: {},
+            other: {}
+        },
+        links: {
+            source: false,
+            controller: false
+        },
+        sources: Game.rooms[room_name].find(FIND_SOURCES)
+};
 
 if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
     Game.rooms[room_name].memory.global_vars = {
