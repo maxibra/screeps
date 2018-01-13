@@ -1,5 +1,6 @@
 var creep_helpers = require('creep_helpers');
 var role_harvester = require('role.harvester');
+var role_miner = require('role.miner');
 //var global_vars = require('global_vars')();
 
 var spawn_name = 'max';
@@ -74,6 +75,9 @@ var structCreep = {
         let creep_role = creep.memory.role;
         switch(creep_role) {
             case 'harvest':
+                break;
+            case 'miner':
+                role_miner.run(creep);
                 break;
             case 'transfer':
                 // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.transfer));

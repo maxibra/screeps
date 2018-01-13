@@ -51,13 +51,25 @@ var creep_helpers = {
         if (my_spawn.spawning) return;
 
         if (my_room.controller.level > 1) {     // You can create special creeps
-            if (units['special_carry']/units['total'] < current_creep_types.special_carry) { // Check creation of special creeps
-                    console.log('[INFO] (create_creep): SPECIAL_Units: ' + units['special_carry'] + ' [' + current_creep_types.special_carry + ']');
-                    creep_memory.special = 'special_carry';
-                    creep_memory.role = 'transfer';
-                    name_special = 'sc';
-                    current_body = creep_body.special_carry.base;
-                    add_body = creep_body.special_carry.add;
+            // if (units['special_carry']/units['total'] < current_creep_types.special_carry) { // Check creation of special carry
+            //         console.log('[INFO] (create_creep): SPECIAL_Units: ' + units['special_carry'] + ' [' + current_creep_types.special_carry + ']');
+            //         creep_memory.special = 'special_carry';
+            //         creep_memory.role = 'transfer';
+            //         name_special = 'sc';
+            //         current_body = creep_body.special_carry.base;
+            //         add_body = creep_body.special_carry.add;
+            // }
+
+            if (my_spawn.memory.general.create_miner) {
+                console.log('[INFO] (create_creep): Miner for: ' + my_spawn.memory.general.create_miner);
+                creep_memory = {
+                    special: 'special_miner',
+                    role: 'miner',
+                    target_id: my_spawn.memory.general.create_miner
+                };
+                name_special = 'sc';
+                current_body = creep_body.special_miner.base;
+                add_body = false;
             }
         }
 
@@ -65,7 +77,7 @@ var creep_helpers = {
         let harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvest');
         // console.log('[DEBUG] (creep_helpers): Harvesters: ' + JSON.stringify(harvesters));
 
-        if (creeps_names.length < 4) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
+        if (creeps_names.length < 4 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
             // Do nothing
         } else {                      // Create most possible strong body
             let possible_body = current_body.concat(add_body);
