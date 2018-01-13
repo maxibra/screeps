@@ -44,25 +44,30 @@ function get_stright_path(FromPos, ToPos) {
 var room_helpers = {
     check_create_miner: function(room_name, spawn_name, units) {
         let my_room = Game.rooms[room_name];
-        let my_spawn = Game.rooms[spawn_name];
+        let my_spawn = Game.spawns[spawn_name];
         let cur_creeps = Game.creeps ? Game.creeps : {};
         let exist_miners = {};
         let create_miner = false;   // ID of container that need a new creep
         for (let creep_name in cur_creeps) {
             if (units[cur_creeps[creep_name].memory.role] == 'miner')
-                if (typeof exist_miners[units[cur_creeps[creep_name].memory.container] === 'undefined'))
+                if (typeof exist_miners[cur_creeps[creep_name].memory.container] === 'undefined')
                     if (cur_creeps[creep_name].ticksToLive < my_room.memory.global_vars.age_to_recreate_miner) {
                         create_miner = cur_creeps[creep_name].memory.container_id;
                         break;
-                    } else exist_miners[units[cur_creeps[creep_name].memory.container]] = true;
+                    } else exist_miners[cur_creeps[creep_name].memory.container] = true;
         }
+
+        console.log('[DEBUG] (room_helpers.check_create_miner): create_miner: ' + create_miner);
 
         if (create_miner) {
             // Do nothing
         } else {// Check if no miners exist
-            for (let c in Object.keys(my_room.memory.energy_flow.containers.source)) {
-                if (!exist_miners.includes(c)) {
-                    create_miner = c;
+            let containers_w_miners = Object.keys(exist_miners);
+            let source_containers = Object.keys(my_room.memory.energy_flow.containers.source);
+            for (let ci=0;ci<source_containers.length;ci++) {
+                console.log('[DEBUG] (room_helpers.check_create_miner): Container: ' + source_containers[ci] + '; Total: ' + Object.keys(my_room.memory.energy_flow.containers.source));
+                if (!containers_w_miners.includes(source_containers[ci])) {
+                    create_miner = source_containers[ci];
                     break;
                 }
             }
