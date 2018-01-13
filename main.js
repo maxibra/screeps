@@ -168,7 +168,7 @@ module.exports.loop = function () {
 
     if (Game.time % 5 === 0) {
         console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
-        creep_helpers.create_creep(units);
+        creep_helpers.create_creep(global_vars.room_name, global_vars.spawn_name, units);
     }
 
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
