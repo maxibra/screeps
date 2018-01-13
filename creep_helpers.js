@@ -67,7 +67,7 @@ var creep_helpers = {
                     role: 'miner',
                     target_id: my_spawn.memory.general.create_miner
                 };
-                name_special = 'sc';
+                name_special = 'sm';
                 current_body = creep_body.special_miner.base;
                 add_body = false;
             }
