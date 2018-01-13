@@ -49,6 +49,7 @@ if (typeof Game.rooms[room_name].memory.energy_flow === "undefined") {
 if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
     Game.rooms[room_name].memory.global_vars = {
         age_to_drop_and_die: 20,
+        age_to_recreate_miner: 70,
         spawn_name: spawn_name,
         room_name: room_name,
         moveTo_ops: {
@@ -169,6 +170,7 @@ module.exports.loop = function () {
     if (Game.time % 5 === 0) {
         console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
         creep_helpers.create_creep(global_vars.room_name, global_vars.spawn_name, units);
+        room_helpers.check_create_miner(global_vars.room_name, global_vars.spawn_name, units);
     }
 
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
