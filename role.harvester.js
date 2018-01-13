@@ -18,14 +18,14 @@ var RoleHarvester = {
         if (creep.memory.target_id) target = creep.memory.target_id;
         else {
             // Containers
-            target = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)});
-            if (target) harvester_type = 'container';
-            else {// Sources
-                target = creep.pos.findClosestByPath(FIND_SOURCES,{filter: object => (object.energy > 0)});
-                if (target) harvester_type = 'source';
+            target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+            if (target && creep.pos.getRangeTo(target) < 6) harvester_type = 'dropped';
+            else {
+                target = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)});
+                if (target) harvester_type = 'container';
                 else {
-                    target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
-                    if (target) harvester_type = 'dropped';
+                    target = creep.pos.findClosestByPath(FIND_SOURCES,{filter: object => (object.energy > 0)});
+                    if (target) harvester_type = 'source';
                 }
             }
 

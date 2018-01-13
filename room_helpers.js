@@ -42,66 +42,80 @@ function get_stright_path(FromPos, ToPos) {
 }
 
 var room_helpers = {
-    upgrade_energy_flow: function() {
+    upgrade_energy_flow: function(room_name) {
         // Containers
-        let all_containers = Game.rooms[global_vars.room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
-        let all_links = Game.rooms[global_vars.room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
-        let all_sources = Game.rooms[global_vars.room_name].memory.energy_flow.sources;
-        let energy_flow_obj = Game.rooms[global_vars.room_name].memory.energy_flow;
+        let all_containers = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
+        let all_continers_ids = all_containers.map(x => x.id);
+        let all_links = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
+        let all_links_ids = all_links.map(x => x.id);
+        let all_sources = Game.rooms[room_name].memory.energy_flow.sources;
+        let energy_flow_obj = Game.rooms[room_name].memory.energy_flow;
+        let local_energy_flow_obj = {containers: {source :{}}};
         // Sort containers
+        // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
+
         for (let i = 0; i < all_containers.length; i++) {
-            container_defined = false;
-            if ((typeof energy_flow_obj.containers.controller[all_containers[i].id] === 'undefined') && all_containers[i].pos.getRangeTo(Game.rooms[global_vars.room_name].controller) < 5) {
-                energy_flow_obj.containers.controller[all_containers[i].id] = false;
-                container_defined = true
-            } else {
-                for (let j = 0; j < all_sources.length; j++) {
-                    if ((typeof energy_flow_obj.containers.source[all_containers[i].id] === 'undefined') && all_containers[i].pos.getRangeTo(Game.getObjectById(all_sources[j])) === 1) {
-                        energy_flow_obj.containers.source[all_containers[i].id].source_id = all_sources[j].id;
-                        energy_flow_obj.containers.source[all_containers[i].id].creep_id = false;
-                        container_defined = true;
-                        break;
+            let container_defined = !((typeof energy_flow_obj.containers.controller[all_containers[i].id] === 'undefined') || (typeof energy_flow_obj.containers.source[all_containers[i].id] === 'undefined'));
+            if (!container_defined)
+                if (all_containers[i].pos.getRangeTo(Game.rooms[room_name].controller) < 5) {
+                    energy_flow_obj.containers.controller[all_containers[i].id] = Game.rooms[room_name].controller;
+                    container_defined = true
+                } else {
+                    for (let j = 0; j < all_sources.length; j++) {
+                        if (all_containers[i].pos.getRangeTo(Game.getObjectById(all_sources[j])) === 1) {
+                            energy_flow_obj.containers.source[all_containers[i].id] = all_sources[j];
+                            container_defined = true;
+                            // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Added Container: ' + all_containers[i].id + '; Source: ' + JSON.stringify(energy_flow_obj));
+                            break;
+                        }
                     }
                 }
-            }
+            // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Container: ' + all_containers[i].id + ' is Defined: ' + container_defined);
             if (!container_defined && (typeof energy_flow_obj.containers.other[all_containers[i].id] === 'undefined')) energy_flow_obj.containers.other[all_containers[i].id] = false;
         }
+
         // Delete missing containers IDs
         let containers_types = Object.keys(energy_flow_obj.containers);
         for (let ct = 0; ct < containers_types.length; ct++) {
-            console.log('[DEBUG](room_helpers.upgrade_energy_flow): Types: ' + JSON.stringify(containers_types) + '; Idx: ' + ct + '; Energy_Flow_Containers' + JSON.stringify(energy_flow_obj.containers[containers_types[ct]]));
             let current_containers_ids = Object.keys(energy_flow_obj.containers[containers_types[ct]]);
-            for (let i = 0; current_containers_ids.length; i++) {
+            // console.log('[DEBUG](room_helpers.upgrade_energy_flow): Types: ' + JSON.stringify(containers_types) + '; Idx: ' + ct + '; Containers: ' + JSON.stringify(energy_flow_obj.containers[containers_types[ct]]) + '; IDs: ' + current_containers_ids.length);
+            for (let i = 0; i < current_containers_ids.length; i++) {
                 let pretendet2remove = current_containers_ids[i];
-                if (!all_containers.includes(pretendet2remove)) {
-                    console.log('[DEBUG](room_helpers.upgrade_energy_flow): REMOVING missing container: ' + pretendet2remove);
+                if (!all_continers_ids.includes(pretendet2remove)) {
+                    console.log('[INFO] (room_helpers.upgrade_energy_flow): REMOVING missing container: ' + pretendet2remove);
                     delete energy_flow_obj.containers[containers_types[ct]][pretendet2remove];
                 }
             }
         }
 
         // Links
+        // console.log('[DEBUG](room_helpers.upgrade_energy_flow): All links: ' + all_links.length);
         for (let i=0;i<all_links.length;i++) {
-            if ((typeof energy_flow_obj.links.controller[all_links[i].id] === 'undefined') && all_links[i].pos.getRangeTo(Game.rooms[global_vars.room_name].controller) < 5) {
-                energy_flow_obj.links.controller[all_links[i].id] = [all_links[i].pos.x,all_links[i].pos.y];
-            } else if ((typeof energy_flow_obj.links.source[all_links[i].id] === 'undefined')){
-                energy_flow_obj.links.source[all_links[i].id] =  [all_links[i].pos.x,all_links[i].pos.y];
+            let link_defined = !((typeof energy_flow_obj.links.controller[all_links[i].id] === 'undefined') || (typeof energy_flow_obj.links.source[all_links[i].id] === 'undefined'));
+            if (!link_defined) {
+                // console.log('[DEBUG](room_helpers.upgrade_energy_flow): ID: ' + all_links[i].id + '; To Controller: ' + all_links[i].pos.getRangeTo(Game.rooms[room_name].controller));
+                if (all_links[i].pos.getRangeTo(Game.rooms[room_name].controller) < 5) {
+                    energy_flow_obj.links.controller = all_links[i].id;
+                } else energy_flow_obj.links.source = all_links[i].id;
             }
         }
 
         // Delete missing Links IDs
         let links_types = Object.keys(energy_flow_obj.links);
-        for (let lt = 0; lt < links_types.length; ct++) {
-            if (!all_containers.includes(energy_flow_obj.links[lt])) energy_flow_obj.links[lt] = false;
+        for (let lt = 0; lt < links_types.length; lt++) {
+            if (!all_links_ids.includes(energy_flow_obj.links[links_types[lt]])) {
+                energy_flow_obj.links[links_types[lt]] = false;
+                console.log('[INFO] (room_helpers.upgrade_energy_flow): REMOVING missing LINK near ' + links_types[lt]);
+            }
         }
-        console.log('[DEBUG] (room_helpers.upgrade_energy_flow): ENERGY Flow: ' + JSON.stringify(energy_flow_obj));
-        Game.rooms[global_vars.room_name].memory.energy_flow = energy_flow_obj;
+        // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): ENERGY Flow: ' + JSON.stringify(energy_flow_obj));
+        Game.rooms[room_name].memory.energy_flow = energy_flow_obj;
     },
     define_room_status: function() {
         let hostile_creeps = Game.rooms[global_vars.room_name].find(FIND_HOSTILE_CREEPS);
         if (hostile_creeps && hostile_creeps.length > 0 && Game.spawns[spawn_name].memory.general.status === 'peace') {
             Game.spawns[spawn_name].memory.general.status = 'war';
-            Game.notify('WE are attacked from (' + hostile_creeps[0].x + ',' + hostile_creeps[0].y + '); Body: ' + JSON.stringify(hostile_creeps[0].body));
+            Game.notify('WE are attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); Body: ' + JSON.stringify(hostile_creeps[0].body));
         } else if (Game.spawns[spawn_name].memory.general.status === 'war' && !Game.spawns[spawn_name].memory.general.finish_war) {
             Game.spawns[spawn_name].memory.general.finish_war = Game.time + Game.rooms[room_name].memory.global_vars.update_period.after_war;
             console.log('[DEBUG] (main) Define finish war to ' +  (Game.time + Game.rooms[room_name].memory.global_vars.update_period.after_war))
@@ -122,19 +136,19 @@ var room_helpers = {
         //targets.sort((a,b) => a.hits - b.hits);
         targets.push(my_spawn);
         //if (targets[0]) console.log('[DEBUG] (room_helpers-get_transfer_target): Transfer target type: ' + targets[0].structureType);
-        my_room.memory.target_transfer = targets[0] ? targets[0].id : false;
+        my_room.memory.targets.transfer = targets[0] ? targets[0].id : false;
         return targets[0].id
     },
     get_repair_defence_target: function() {
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
 //        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets));
-        my_room.memory.target_repair_defence = targets[0] ? targets[0].id : false;
+        my_room.memory.targets.repair_defence = targets[0] ? targets[0].id : false;
     },
     get_repair_civilianl_target: function() {
         var targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
-        my_room.memory.target_repair_civilian = targets[0] ? targets[0].id : false;
+        my_room.memory.targets.repair_civilian = targets[0] ? targets[0].id : false;
     },
     get_build_targets: function() {
         // Extensions have highest priority
@@ -159,7 +173,7 @@ var room_helpers = {
 //        targets.sort((a,b) => (Math.abs(my_spawn.pos.x-a.pos.x) + Math.abs(my_spawn.pos.y-a.pos.y)) - (Math.abs(my_spawn.pos.x-b.pos.x) + Math.abs(my_spawn.pos.y-b.pos.y)));
 //        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
         }
-        my_room.memory.targets_build = closest_obj ? closest_obj.id : false;
+        my_room.memory.targets.build = closest_obj ? closest_obj.id : false;
     },
     define_creeps_amount: function() {
         if (Game.time < 5000) {

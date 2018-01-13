@@ -15,6 +15,9 @@ var creep_body = {
     special_upgrade: {
         base: [WORK,WORK,MOVE],
         add: [WORK,CARRY]
+    },
+    special_miner: {
+        base: [WORK,WORK,WORK,WORK,WORK,MOVE]
     }
 }
 
@@ -40,7 +43,7 @@ var creep_helpers = {
         let current_body = creep_body.general.base;
         let add_body = creep_body.general.add;
 
-        console.log('[DEBUG] (create_creep): Creeps: ' +  (creeps_names.length >= Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount]) + '; SPAWING: ' + JSON.stringify(Game.spawns[global_vars.spawn_name].spawning));
+        // console.log('[DEBUG] (create_creep): Creeps: ' +  (creeps_names.length >= Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount]) + '; SPAWING: ' + JSON.stringify(Game.spawns[global_vars.spawn_name].spawning));
 
         if (creeps_names.length >= Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] || Game.spawns['max'].spawning) return;
 
@@ -73,17 +76,17 @@ var creep_helpers = {
         }
 
         let current_body_cost = body_cost(current_body);
-        console.log('[DEBUG] (create_creep): HARVESTERS: ' +  harvesters.length + '; CREEPS: ' + creeps_names.length + '; BODY COST: ' + current_body_cost + '; BODY: ' + current_body);
+        // console.log('[DEBUG] (create_creep): HARVESTERS: ' +  harvesters.length + '; CREEPS: ' + creeps_names.length + '; BODY COST: ' + current_body_cost + '; BODY: ' + current_body);
 //        if (current_body_cost > my_room.energyAvailable) {
         if (current_body_cost > Game.rooms[global_vars.room_name].energyAvailable) {
-            console.log('[INFO] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + Game.rooms[global_vars.room_name].energyAvailable + "(" + my_room.energyAvailable + ")");
+            // console.log('[DEBUG] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + Game.rooms[global_vars.room_name].energyAvailable + "(" + my_room.energyAvailable + ")");
 
             // Convert all harvesters with acamulated energy near sources to transfer
             for (let i = 0; i < harvesters.length; i++) {
                 //console.log('[DEBUG] (create_creep): H: ' + JSON.stringify(harvesters[i]));
                 if (harvesters[i].carry.energy/harvesters[i].carryCapacity > 0.85) {      // convert harvester with 85% energy to transfer
                     Memory.creeps[harvesters[i].name].role = 'transfer';
-//                    console.log('[DEBUG] (create_creep): Role of ' + harvesters[i].name + ' (Energy: ' + harvesters[i].carry.energy + ') changed to transfer');
+                    // console.log('[DEBUG] (create_creep): Role of ' + harvesters[i].name + ' (Energy: ' + harvesters[i].carry.energy + ') changed to transfer');
                 }
             }
             return;
@@ -92,6 +95,7 @@ var creep_helpers = {
         creep_name = creep_name + '-' + (current_body_cost/10) + '-' + name_special;
 
         let exit_code = Game.spawns[global_vars.spawn_name].spawnCreep(current_body, creep_name, creep_memory);
+        // console.log('[DEBUG] (create_creep): Type: ' + my_spawn.memory.general.creeps_max_amount + '; Max amount: ' + JSON.stringify(global_vars.screeps_max_amount)); //global_vars.screeps_max_amount[my_spawn.memory.general.creeps_max_amount]);
         if ( exit_code === OK) {
             let new_index = (my_spawn.memory.general.index + 1) % global_vars.screeps_max_amount[my_spawn.memory.general.creeps_max_amount];
             my_spawn.memory.general.index = new_index;

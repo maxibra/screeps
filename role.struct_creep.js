@@ -13,7 +13,7 @@ var structCreep = {
         // role's definition
         let iam_general = (typeof creep.memory.special === "undefined");
         var condition2change_role = (iam_general && ((creep.memory.role === 'harvest' && creep.carry.energy == creep.carryCapacity) ||
-        creep.memory.role === 'undefined'));
+            creep.memory.role === 'undefined'));
 //        console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
         var targets;
         if(creep.carry.energy === 0 || creep.memory.role === 'harvest') role_harvester.run(creep, iam_general);
@@ -49,16 +49,16 @@ var structCreep = {
                 creep.memory.role = 'transfer';
 //                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: changed to TRANSFER');
                 //units.transfer++;
-            } else if (my_room.memory.target_repair_defence && units['repair_defence']/current_workers < current_creep_types.repair_defence) {
+            } else if (my_room.memory.targets.repair_defence && units['repair_defence']/current_workers < current_creep_types.repair_defence) {
                 console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units['repair_defence'] + ' / ' + current_workers + '=' + units['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
                 creep.say('defence repair');
                 creep.memory.role = 'repair_defence';
                 //units.repair_defence++;
-            } else if (my_room.memory.target_repair_civilian && units['repair_civilian']/current_workers < current_creep_types.repair_civilian) {
+            } else if (my_room.memory.targets.repair_civilian && units['repair_civilian']/current_workers < current_creep_types.repair_civilian) {
                 creep.say('civilian repair');
                 creep.memory.role = 'repair_civilian';
                 //units.repair_civilian++;
-            } else if (my_room.memory.targets_build && units['build']/current_workers < current_creep_types.build) {
+            } else if (my_room.memory.targets.build && units['build']/current_workers < current_creep_types.build) {
                 creep.say('building');
                 creep.memory.role = 'build';
                 units.build++;
@@ -76,7 +76,7 @@ var structCreep = {
             case 'harvest':
                 break;
             case 'transfer':
-                // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.target_transfer));
+                // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.transfer));
                 var target;
                 if (creep.memory.target_id) target = Game.getObjectById(creep.memory.target_id);
                 else {
@@ -92,28 +92,28 @@ var structCreep = {
                 } else creep.memory.role = 'undefined';     // All stuctures are full
                 break;
             case 'repair_defence':
-                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.target_repair_defence));
+                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.repair_defence));
                 if (target && target.hits < target.hitsMax) {
                     creep_helpers.most_creep_action_results(creep, target, creep.repair(target), creep_role);
                 } else creep.memory.role = 'undefined';
                 break;
             case 'repair_civilian':
-                //               var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.target_repair_civilian));
-                var target = Game.getObjectById(my_room.memory.target_repair_civilian); // the most targets are roads => stuck on them
+                //               var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.repair_civilian));
+                var target = Game.getObjectById(my_room.memory.targets.repair_civilian); // the most targets are roads => stuck on them
                 if (target && target.hits < target.hitsMax) {
                     creep_helpers.most_creep_action_results(creep, target, creep.repair(target), creep_role);
                 } else creep.memory.role = 'undefined';
                 break;
             case 'build':
-                //console.log(creep.name + '-MemBuild: ' + JSON.stringify(my_room.memory.targets_build[0].id));
-                //var target = creep.pos.findClosestByRange(my_room.memory.targets_build);
-                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets_build));
+                //console.log(creep.name + '-MemBuild: ' + JSON.stringify(my_room.memory.targets.build[0].id));
+                //var target = creep.pos.findClosestByRange(my_room.memory.targets.build);
+                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.build));
                 //console.log(creep.name + '-Build: ' + target.id);
                 if (target) {
                     var action_res = creep.build(target);
                     switch(action_res) {
                         case ERR_INVALID_TARGET:    // possible problem: if creep on the square remove structure from list
-                            my_room.memory.targets_build = false;
+                            my_room.memory.targets.build = false;
                             creep.memory.role = 'undefined';
                             break;
                         default:

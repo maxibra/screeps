@@ -2,7 +2,7 @@
 var roleStructCreep = require('role.struct_creep');
 var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
-var roleTower = require('role.tower');
+var roleTower = require('struct.tower');
 
 // dummy 6
 
@@ -24,19 +24,11 @@ if (typeof Game.rooms[room_name].memory.towers === "undefined") {
     Game.rooms[room_name].memory.towers = {
         list: [],
         next_update: Game.time,
-        all_full: false
     }
 }
 
-if (typeof Game.rooms[room_name].memory.minning === "undefined") {
-    Game.rooms[room_name].memory.mining = {
-        containers: {
-            mining: {},     // Applicant containers: {<container_id>: {miner_id: <false|true|string>}}
-            upgrading: []   // <container_id>
-        },
-        sources: [],
-        miming_all_staffed: false
-    }
+if (typeof Game.rooms[room_name].memory.targets === "undefined") {
+    Game.rooms[room_name].memory.targets = {};
 }
 
 if (typeof Game.rooms[room_name].memory.energy_flow === "undefined") {
@@ -50,9 +42,8 @@ if (typeof Game.rooms[room_name].memory.energy_flow === "undefined") {
             source: false,
             controller: false
         },
-        sources: Game.rooms[room_name].find(FIND_SOURCES)
-
-    }
+        sources: Game.rooms[room_name].find(FIND_SOURCES).map(x => x.id)
+}
 };
 
 if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
@@ -60,10 +51,6 @@ if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
         age_to_drop_and_die: 20,
         spawn_name: spawn_name,
         room_name: room_name,
-        screeps_general_nominal: 10,
-        screeps_general_war: 30,
-        screeps_general_repair_defance: 20,
-        screeps_general_build: 15,
         moveTo_ops: {
             reusePath: 10,           // default: 5
             //serializeMemory: false, // default: true
@@ -78,9 +65,10 @@ if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
         },
         screeps_max_amount: {
             peace: 10,
-            war:30,
-            repair_defence:30,
-            build:15
+            war: 30,
+            repair_defence: 30,
+            build: 15,
+            nominal: 15
         },
         creep_types: {
             war: {
@@ -101,9 +89,6 @@ if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
         update_period: {
             after_war: 150,
             towers: 1000
-        },
-        energy_flow: {
-            sources: []
         }
     }
 }
@@ -111,8 +96,6 @@ if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
 
 // JSON.stringify(obj)
 
-
-var cur_creeps = Game.creeps ? Game.creeps : {};
 var global_vars = Game.rooms[room_name].memory.global_vars;
 var my_spawn = Game.spawns[global_vars.spawn_name];
 var my_room = Game.rooms[global_vars.room_name];
@@ -137,7 +120,7 @@ module.exports.loop = function () {
     };
 
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
-
+    var cur_creeps = Game.creeps ? Game.creeps : {};
     for (var creep_name in cur_creeps) {
         splited_name = creep_name.split('-');
         if (typeof cur_creeps[creep_name].memory.special == "undefined") units[cur_creeps[creep_name].memory.role]++;
@@ -146,7 +129,6 @@ module.exports.loop = function () {
     }
 
     console.log('[INFO] (main): START  UNITS (nominal: ' + Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
-    let current_mod = 0;
     let tick_between_hard_actions = 2;
 
     // Every tick loops
@@ -166,7 +148,7 @@ module.exports.loop = function () {
     } else towers_list = Game.rooms[room_name].memory.towers.list
 
     let towers_energy_full = true;
-//    console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
+    // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
     if (units.total > 9 || Game.spawns[spawn_name].memory.general.status === 'war')
         for (let i=0;i<towers_list.length;i++) {
             roleTower.run(towers_list[i], units.total);
@@ -177,16 +159,16 @@ module.exports.loop = function () {
     // Game.rooms[global_vars.room_name].memory.towers.all_full = towers_energy_full;
 
     // Creeps
+    let current_mod = 0;
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         var creep_role = creep.memory.role
         roleStructCreep.run(creep, units);
     }
 
-    if (Game.time % 5  === 0) {  // run every 3 ticks
-        console.log('[INFO] (main): RUN 2 tickets functions. Time: ' + Game.time);
+    if (Game.time % 5 === 0) {
+        console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
         creep_helpers.create_creep(units);
-//        room_helpers.upgrade_energy_flow();
     }
 
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
@@ -220,6 +202,7 @@ module.exports.loop = function () {
     }
 
     if (Game.time % 300 === 0) {
+        room_helpers.upgrade_energy_flow(room_name);
     }
 
     if (Game.time % 1000 === 0) {
