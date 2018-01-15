@@ -10,7 +10,7 @@ var RoleHarvester = {
         let creep_name4log ='max-8-71-175-gn';
 
 
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): ' + JSON.stringify(creep.memory));
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): START MEM' + JSON.stringify(creep.memory));
 
         // Here with zero energy. If no enough time to work then die
         if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
@@ -41,7 +41,7 @@ var RoleHarvester = {
             }
         }
 
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): AFTER TARGET: ' + JSON.stringify(creep.memory));
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): AFTER MEM: ' + JSON.stringify(creep.memory));
 
         // ACTION
         switch(harvester_type) {
@@ -61,7 +61,7 @@ var RoleHarvester = {
 
         if (action_out === ERR_NOT_IN_RANGE) {
             creep.moveTo(target, global_vars.moveTo_ops);
-            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): ERR_NOT_IN_RANGE TARGET: ' + JSON.stringify(creep.memory));
+            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): ERR_NOT_IN_RANGE MEM: ' + JSON.stringify(creep.memory));
             creep.memory.target_id = target.id;
         } else if (action_out === ERR_NOT_ENOUGH_RESOURCES && creep.carry > 0) {
             creep.memory.target_id = false;
@@ -81,7 +81,7 @@ var RoleHarvester = {
             creep.memory.harvester_type = false;
         }
 
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): LAST TARGET: ' + JSON.stringify(creep.memory));
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): LAST MEM: ' + JSON.stringify(creep.memory));
     }
 }
 
