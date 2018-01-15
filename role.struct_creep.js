@@ -82,10 +82,11 @@ var structCreep = {
             case 'transfer':
                 // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.transfer));
                 var target;
-                if (creep.memory.target_id) target = Game.getObjectById(creep.memory.target_id);
+                if (creep.memory.target_id && (Game.time < global_vars.update_period.target)) target = Game.getObjectById(creep.memory.target_id);
                 else {
                     target = creep.pos.findClosestByPath(targets);
                     creep.memory.target_id = (target ? target.id: false);
+                    creep.memory.next_taget_update = Game.time + global_vars.update_period.target;
                 }
                 if (target) {
                     //                   console.log('[DEBUG] (structCreep-transfer)[' + creep.name + ']: Target: ' + JSON.stringify(target.pos));

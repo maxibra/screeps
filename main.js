@@ -90,7 +90,8 @@ if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
         },
         update_period: {
             after_war: 150,
-            towers: 1000
+            towers: 1000,
+            target: 4
         }
     }
 }
