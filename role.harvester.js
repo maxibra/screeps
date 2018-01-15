@@ -7,6 +7,10 @@ var RoleHarvester = {
         let target;
         let action_out;
         let harvester_type = false;     // needed to use saved id
+        let creep_name4log ='max-9-70-175-gn';
+
+
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): ' + JSON.stringify(creep.memory));
 
         // Here with zero energy. If no enough time to work then die
         if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
@@ -17,7 +21,6 @@ var RoleHarvester = {
         if (creep.memory.role !== 'harvest') creep.say('harvesting');
         if (creep.memory.target_id) target = creep.memory.target_id;
         else {
-            // Containers
             target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
             if (target && creep.pos.getRangeTo(target) < 6) harvester_type = 'dropped';
             else {
@@ -35,6 +38,8 @@ var RoleHarvester = {
                 if (iam_general) creep.memory.role = 'harvest';   // change role if the creep isn't from special role
             }
         }
+
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): AFTER TARGET: ' + JSON.stringify(creep.memory));
 
         // ACTION
         switch(harvester_type) {
