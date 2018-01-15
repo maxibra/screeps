@@ -1,4 +1,6 @@
 
+//Game.spawns['max'].spawnCreep([WORK,WORK,WORK,WORK,WORK,MOVE], 'test', {special: 'special_miner', role: 'miner', target_id: '5a5a97ed9af56273766ddebd'})
+
 function RoleMiner(creep) {
     this.creep = creep;
 }

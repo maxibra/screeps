@@ -60,17 +60,17 @@ var creep_helpers = {
             //         add_body = creep_body.special_carry.add;
             // }
 
-            if (my_spawn.memory.general.create_miner) {
-                console.log('[INFO] (create_creep): Miner for: ' + my_spawn.memory.general.create_miner);
-                creep_memory = {
-                    special: 'special_miner',
-                    role: 'miner',
-                    target_id: my_spawn.memory.general.create_miner
-                };
-                name_special = 'sm';
-                current_body = creep_body.special_miner.base;
-                add_body = false;
-            }
+            // if (my_spawn.memory.general.create_miner) {
+            //     console.log('[INFO] (create_creep): Miner for: ' + my_spawn.memory.general.create_miner);
+            //     creep_memory = {
+            //         special: 'special_miner',
+            //         role: 'miner',
+            //         target_id: my_spawn.memory.general.create_miner
+            //     };
+            //     name_special = 'sm';
+            //     current_body = creep_body.special_miner.base;
+            //     add_body = false;
+            // }
         }
 
 
