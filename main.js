@@ -50,6 +50,7 @@ if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
     Game.rooms[room_name].memory.global_vars = {
         age_to_drop_and_die: 20,
         age_to_recreate_miner: 70,
+        max_body_cost: 1800,
         spawn_name: spawn_name,
         room_name: room_name,
         moveTo_ops: {

@@ -82,7 +82,7 @@ var creep_helpers = {
         } else {                      // Create most possible strong body
             let possible_body = current_body.concat(add_body);
             let possible_body_cost = body_cost(possible_body);
-            for (i=2;possible_body_cost <= Game.rooms[global_vars.room_name].energyCapacityAvailable;i++) {
+            for (i=2;possible_body_cost > global_vars.max_body_cost || possible_body_cost <= Game.rooms[global_vars.room_name].energyCapacityAvailable;i++) {
                 current_body = possible_body;
                 possible_body = possible_body.concat(add_body);
                 if (i%2 == 0) possible_body.push(MOVE);
