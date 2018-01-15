@@ -130,7 +130,7 @@ module.exports.loop = function () {
         units['total']++;
     }
 
-    console.log('[INFO] (main): BACKET: ' + Game.cpu.backet + '; UNITS (nominal: ' + Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
+    console.log('[INFO] (main): BUCKET: ' + Game.cpu.bucket + '; UNITS (nominal: ' + Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] + '; workers: ' + (units.total - units.harvest) + '): ' + JSON.stringify(units));
     let tick_between_hard_actions = 2;
 
     // Every tick loops
