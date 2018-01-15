@@ -26,6 +26,7 @@ var RoleHarvester = {
             if (target && creep.pos.getRangeTo(target) < 6) harvester_type = 'dropped';
             else {
                 target = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)});
+                if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): GET CONTAINER: ' + JSON.stringify(target));
                 if (target) harvester_type = 'container';
                 else {
                     target = creep.pos.findClosestByPath(FIND_SOURCES,{filter: object => (object.energy > 0)});
