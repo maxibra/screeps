@@ -7,7 +7,7 @@ var RoleHarvester = {
         let target;
         let action_out;
         let harvester_type = false;     // needed to use saved id
-        let creep_name4log ='max-9-70-175-gn';
+        let creep_name4log ='max-3-71-175-gn';
 
 
         if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): ' + JSON.stringify(creep.memory));
@@ -77,6 +77,8 @@ var RoleHarvester = {
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;
         }
+
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): LAST TARGET: ' + JSON.stringify(creep.memory));
     }
 }
 
