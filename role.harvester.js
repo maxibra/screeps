@@ -22,6 +22,7 @@ var RoleHarvester = {
         if (creep.memory.target_id) target = creep.memory.target_id;
         else {
             target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): DROPPED TARGET: ' + JSON.stringify(target));
             if (target && creep.pos.getRangeTo(target) < 6) harvester_type = 'dropped';
             else {
                 target = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)});
@@ -60,7 +61,7 @@ var RoleHarvester = {
         if (action_out === ERR_NOT_IN_RANGE) {
             creep.moveTo(target, global_vars.moveTo_ops);
             if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): ERR_NOT_IN_RANGE TARGET: ' + JSON.stringify(creep.memory));
-            creep.memory.target_id = target;
+            creep.memory.target_id = target.id;
         } else if (action_out === ERR_NOT_ENOUGH_RESOURCES && creep.carry > 0) {
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;
