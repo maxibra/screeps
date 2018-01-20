@@ -86,7 +86,7 @@ var structCreep = {
                 else {
                     target = creep.pos.findClosestByPath(targets);
                     creep.memory.target_id = (target ? target.id: false);
-                    creep.memory.next_taget_update = Game.time + global_vars.update_period.target;
+                    creep.memory.next_target_update = Game.time + global_vars.update_period.target;
                 }
                 if (target) {
                     //                   console.log('[DEBUG] (structCreep-transfer)[' + creep.name + ']: Target: ' + JSON.stringify(target.pos));
