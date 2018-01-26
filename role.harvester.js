@@ -1,9 +1,7 @@
-var spawn_name = 'max';
-var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
-var global_vars = Game.rooms[room_name].memory.global_vars;
-
 var RoleHarvester = {
-    run: function (creep, iam_general) {
+    run: function (room_name, spawn_name, creep, iam_general) {
+        let global_vars = Game.rooms[room_name].memory.global_vars;
+
         let target;
         let action_out;
         let harvester_type = false;     // needed to use saved id
@@ -25,7 +23,7 @@ var RoleHarvester = {
             if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): DROPPED TARGET: ' + JSON.stringify(target));
             if (target && creep.pos.getRangeTo(target) < 6) harvester_type = 'dropped';
             else {
-                target = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > creep.carryCapacity)});
+                target = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)});
                 if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): GET CONTAINER: ' + JSON.stringify(target));
                 if (target) harvester_type = 'container';
                 else {

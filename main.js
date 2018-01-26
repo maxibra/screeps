@@ -9,7 +9,6 @@ var roleTower = require('struct.tower');
 var spawn_name = 'max';
 var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
 
-// Itiliaze spawn memory with creep's metadata
 if (typeof Game.spawns[spawn_name].memory.general === "undefined") {
     Game.spawns[spawn_name].memory.general = {
         gen: 0,
@@ -100,8 +99,8 @@ if (typeof Game.rooms[room_name].memory.global_vars === "undefined") {
 // JSON.stringify(obj)
 
 var global_vars = Game.rooms[room_name].memory.global_vars;
-var my_spawn = Game.spawns[global_vars.spawn_name];
-var my_room = Game.rooms[global_vars.room_name];
+var my_spawn = Game.spawns[spawn_name];
+var my_room = Game.rooms[room_name];
 
 function get_struct_obj(x, y) {
     var stuctures = global_vars.my_room.lookAt(x,y);
@@ -125,7 +124,6 @@ module.exports.loop = function () {
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
     var cur_creeps = Game.creeps ? Game.creeps : {};
     for (var creep_name in cur_creeps) {
-        splited_name = creep_name.split('-');
         if (typeof cur_creeps[creep_name].memory.special == "undefined") units[cur_creeps[creep_name].memory.role]++;
         else units[cur_creeps[creep_name].memory.special]++;
         units['total']++;
@@ -154,7 +152,7 @@ module.exports.loop = function () {
     // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
     if (units.total > 9 || Game.spawns[spawn_name].memory.general.status === 'war')
         for (let i=0;i<towers_list.length;i++) {
-            roleTower.run(towers_list[i], units.total);
+            roleTower.run(room_name, towers_list[i], units.total);
             // let current_tower = Game.getObjectById(towers_list[i]);
             // //        console.log('[DEBUG] (main): TOWER[' + i + ']' + '; ENR: ' + (current_tower.energy < current_tower.energyCapacity));
             // if (current_tower.energy/current_tower.energyCapacity < 0.65) towers_energy_full = false;
@@ -166,47 +164,47 @@ module.exports.loop = function () {
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         var creep_role = creep.memory.role
-        roleStructCreep.run(creep, units);
+        roleStructCreep.run(room_name, spawn_name, creep, units);
     }
 
     if (Game.time % 5 === 0) {
         console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
         creep_helpers.create_creep(global_vars.room_name, global_vars.spawn_name, units);
-        room_helpers.check_create_miner(global_vars.room_name, global_vars.spawn_name, units);
+        room_helpers.check_create_miner(room_name, spawn_name, units);
     }
 
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-//        room_helpers.get_transfer_target();
-        room_helpers.define_room_status();
+//        room_helpers.get_transfer_target(room_name, spawn_name);
+        room_helpers.define_room_status(room_name, spawn_name);
     }
 
     current_mod = current_mod + tick_between_hard_actions;
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions +' + current_mod + '. Time: ' + Game.time);
-        room_helpers.get_repair_defence_target();
+        room_helpers.get_repair_defence_target(room_name, spawn_name);
     }
 
     current_mod = current_mod + tick_between_hard_actions;
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
 //        console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-//        room_helpers.get_repair_civilianl_target();
+//        room_helpers.get_repair_civilianl_target(room_name, spawn_name);
     }
 
     current_mod = current_mod + tick_between_hard_actions;
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-        room_helpers.get_build_targets();
+        room_helpers.get_build_targets(room_name, spawn_name);
     }
 
     current_mod = current_mod + tick_between_hard_actions;
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
         console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-        room_helpers.define_creeps_amount();
+        room_helpers.define_creeps_amount(room_name, spawn_name);
     }
 
     if (Game.time % 300 === 0) {
-        room_helpers.upgrade_energy_flow(room_name);
+        room_helpers.upgrade_energy_flow(room_name, spawn_name);
     }
 
     if (Game.time % 1000 === 0) {
@@ -216,9 +214,9 @@ module.exports.loop = function () {
     // Create first roads
     if (typeof my_room.memory.roads == "undefined") {
         my_room.memory.roads = [];
-        var xy_path = room_helpers.create_road(_.extend(my_spawn.pos, {id: my_spawn.id, structureType: 'spawn'}), _.extend(my_spawn.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'}));  // Spawn-Closest Source
+        var xy_path = room_helpers.create_road(room_name, spawn_name, _.extend(my_spawn.pos, {id: my_spawn.id, structureType: 'spawn'}), _.extend(my_spawn.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'}));  // Spawn-Closest Source
         for (i in xy_path) get_struct_obj(xy_path[i][0], xy_path[i][1]);
-        room_helpers.create_road(_.extend(global_vars.my_room.controller.pos, {id: my_room.controller.id, structureType: 'controller'}), _.extend(my_room.controller.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'})); // Controller-Closest Source
+        room_helpers.create_road(room_name, spawn_name, _.extend(global_vars.my_room.controller.pos, {id: my_room.controller.id, structureType: 'controller'}), _.extend(my_room.controller.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'})); // Controller-Closest Source
         // Save in memory important path to build first
         //global_vars.my_room.memory.important_structures = xy_path;
     }

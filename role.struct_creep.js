@@ -3,21 +3,20 @@ var role_harvester = require('role.harvester');
 var role_miner = require('role.miner');
 //var global_vars = require('global_vars')();
 
-var spawn_name = 'max';
-var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
-var global_vars = Game.rooms[room_name].memory.global_vars;
-var my_spawn = Game.spawns[global_vars.spawn_name];
-var my_room = Game.rooms[global_vars.room_name];
-
 var structCreep = {
-    run: function(creep, units) {
+    run: function(room_name, spawn_name, creep, units) {
+
+        var my_spawn = Game.spawns[spawn_name];
+        var my_room = Game.rooms[room_name];
+        var global_vars = Game.rooms[room_name].memory.global_vars;
+
         // role's definition
         let iam_general = (typeof creep.memory.special === "undefined");
         var condition2change_role = (iam_general && ((creep.memory.role === 'harvest' && creep.carry.energy == creep.carryCapacity) ||
             creep.memory.role === 'undefined'));
 //        console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
         var targets;
-        if(creep.carry.energy === 0 || creep.memory.role === 'harvest') role_harvester.run(creep, iam_general);
+        if(creep.carry.energy === 0 || creep.memory.role === 'harvest') role_harvester.run(room_name, spawn_name, creep, iam_general);
         else if (creep.ticksToLive < global_vars.age_to_drop_and_die) {    // Drop energy to container before death
             let closest_containers = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] < object.storeCapacity)});
             if (closest_containers) {
@@ -93,20 +92,20 @@ var structCreep = {
                     let act_response = creep.transfer(target, RESOURCE_ENERGY);
                     if (act_response === ERR_FULL) {
                         creep.memory.target_id = false;
-                    } else creep_helpers.most_creep_action_results(creep, target, act_response, creep_role);
+                    } else creep_helpers.most_creep_action_results(room_name, spawn_name, creep, target, act_response, creep_role);
                 } else creep.memory.role = 'undefined';     // All stuctures are full
                 break;
             case 'repair_defence':
                 var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.repair_defence));
                 if (target && target.hits < target.hitsMax) {
-                    creep_helpers.most_creep_action_results(creep, target, creep.repair(target), creep_role);
+                    creep_helpers.most_creep_action_results(room_name, spawn_name, creep, target, creep.repair(target), creep_role);
                 } else creep.memory.role = 'undefined';
                 break;
             case 'repair_civilian':
                 //               var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.repair_civilian));
                 var target = Game.getObjectById(my_room.memory.targets.repair_civilian); // the most targets are roads => stuck on them
                 if (target && target.hits < target.hitsMax) {
-                    creep_helpers.most_creep_action_results(creep, target, creep.repair(target), creep_role);
+                    creep_helpers.most_creep_action_results(room_name, spawn_name, creep, target, creep.repair(target), creep_role);
                 } else creep.memory.role = 'undefined';
                 break;
             case 'build':
@@ -122,14 +121,14 @@ var structCreep = {
                             creep.memory.role = 'undefined';
                             break;
                         default:
-                            creep_helpers.most_creep_action_results(creep, target, action_res, creep_role);
+                            creep_helpers.most_creep_action_results(room_name, spawn_name, creep, target, action_res, creep_role);
                     }
                 } else creep.memory.role = 'undefined';
                 break;
             case 'upgrade':
                 var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.room.controller);
                 if (target) {
-                    creep_helpers.most_creep_action_results(creep, target, creep.upgradeController(target), creep_role);
+                    creep_helpers.most_creep_action_results(room_name, spawn_name, creep, target, creep.upgradeController(target), creep_role);
                 } else creep.memory.role = 'undefined';
                 break;
             case 'dropper':

@@ -1,12 +1,3 @@
-// var global_vars = require('global_vars')();
-// var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-
-var spawn_name = 'max';
-var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
-var global_vars = Game.rooms[room_name].memory.global_vars;
-var my_spawn = Game.spawns[global_vars.spawn_name];
-var my_room = Game.rooms[global_vars.room_name];
-
 function get_direction_name(dx, dy) {
     if (dx == 0 && dy < 0) return TOP;
     else if (dx > 0 && dy < 0) return TOP_RIGHT;
@@ -74,7 +65,7 @@ var room_helpers = {
         }
         my_spawn.memory.general['create_miner'] = create_miner;
     },
-    upgrade_energy_flow: function(room_name) {
+    upgrade_energy_flow: function(room_name, spawn_name) {
         // Containers
         let all_containers = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
         let all_continers_ids = all_containers.map(x => x.id);
@@ -143,8 +134,8 @@ var room_helpers = {
         // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): ENERGY Flow: ' + JSON.stringify(energy_flow_obj));
         Game.rooms[room_name].memory.energy_flow = energy_flow_obj;
     },
-    define_room_status: function() {
-        let hostile_creeps = Game.rooms[global_vars.room_name].find(FIND_HOSTILE_CREEPS);
+    define_room_status: function(room_name, spawn_name) {
+        let hostile_creeps = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
         if (hostile_creeps && hostile_creeps.length > 0 && Game.spawns[spawn_name].memory.general.status === 'peace') {
             Game.spawns[spawn_name].memory.general.status = 'war';
             Game.notify('WE are attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); Body: ' + JSON.stringify(hostile_creeps[0].body));
@@ -157,12 +148,14 @@ var room_helpers = {
             Game.notify('It"s time for PEACE');
         }
     },
-    get_energy_source_target: function() {
-        let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.storeCapacity) > 0.3)});
+    get_energy_source_target: function(room_name, spawn_name) {
+        let targets = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.storeCapacity) > 0.3)});
 
         //targets.contact()
     },
-    get_transfer_target: function() {
+    get_transfer_target: function(room_name, spawn_name) {
+        let my_room = Game.rooms[room_name];
+        let my_spawn = Game.spawns[spawn_name];
 //        let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (structureType: STRUCTURE_TOWER && object.energy < object.energyCapacity)});
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.energy < object.energyCapacity)});
         //targets.sort((a,b) => a.hits - b.hits);
@@ -171,18 +164,22 @@ var room_helpers = {
         my_room.memory.targets.transfer = targets[0] ? targets[0].id : false;
         return targets[0].id
     },
-    get_repair_defence_target: function() {
+    get_repair_defence_target: function(room_name, spawn_name) {
+        let my_room = Game.rooms[room_name];
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
 //        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets));
         my_room.memory.targets.repair_defence = targets[0] ? targets[0].id : false;
     },
-    get_repair_civilianl_target: function() {
-        var targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
+    get_repair_civilianl_target: function(room_name, spawn_name) {
+        let my_room = Game.rooms[room_name];
+        let targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
         my_room.memory.targets.repair_civilian = targets[0] ? targets[0].id : false;
     },
-    get_build_targets: function() {
+    get_build_targets: function(room_name, spawn_name) {
+        let my_room = Game.rooms[room_name];
+        let my_spawn = Game.spawns[spawn_name];
         // Extensions have highest priority
         var targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
         // Defence structures are secondary priority
@@ -207,7 +204,8 @@ var room_helpers = {
         }
         my_room.memory.targets.build = closest_obj ? closest_obj.id : false;
     },
-    define_creeps_amount: function() {
+    define_creeps_amount: function(room_name, spawn_name) {
+        let my_spawn = Game.spawns[spawn_name];
         if (Game.time < 5000) {
             my_spawn.memory.general.creeps_max_amount = 'nominal';
         } else if (my_room.memory.target_repair_defence) {
@@ -225,14 +223,16 @@ var room_helpers = {
             }
         }
     },
-    create_extensions: function() {
-        var extensions_available = CONTROLLER_STRUCTURES.extension[my_room.controller.level];
-        var extensions2add = extensions_available - my_spawn.memory.general.extensions;
+    create_extensions: function(room_name, spawn_name) {
+        let my_room = Game.rooms[room_name];
+        let my_spawn = Game.spawns[spawn_name];
+        let extensions_available = CONTROLLER_STRUCTURES.extension[my_room.controller.level];
+        let extensions2add = extensions_available - my_spawn.memory.general.extensions;
         // console.log('[DEBUG] (create_extensions): Extensions to add: ' + extensions2add);
         // var extensions = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});  // building extensions
         // extensions = extensions.concat(my_room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_EXTENSION}})); // ready extensions
-        var spawn_pos = my_spawn.pos;
-        var y_pos = spawn_pos.y;
+        let spawn_pos = my_spawn.pos;
+        let y_pos = spawn_pos.y;
 
         if (extensions2add == 0) return;    // it's no extension to create
 
@@ -296,13 +296,16 @@ var room_helpers = {
             }
         }
     },
-    create_road: function(FromPos, ToPos, p2pPath) {
+    create_road: function(room_name, spawn_name, FromPos, ToPos, p2pPath) {
         /* FromPos, ToPos - RoomPosition with additional keys of 'id' and 'structureType' (use  _.extend(pos, {id: 11111, structureType: xxxxx}))
          p2pPath        - Optional. if given use it instead search a new one
          Return values:
          -1 : FromPos or ToPos is "undefined"
          -2 : the requested road is exist
          */
+        let my_room = Game.rooms[room_name];
+        let my_spawn = Game.spawns[spawn_name];
+
         if (typeof FromPos == "undefined" || typeof ToPos == "undefined") return -1;
 
         current_roads = my_room.memory.roads;
