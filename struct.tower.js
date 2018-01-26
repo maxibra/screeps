@@ -1,6 +1,6 @@
 var StructTower;
 StructTower = {
-    run: function (room_name, current_tower_id, creeps_amount) {
+    run: function (room_name, spawn_name, current_tower_id, creeps_amount) {
         /*
          current_tower    -   Object of current tower
          Return:    amount of missing energy

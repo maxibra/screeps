@@ -152,7 +152,7 @@ module.exports.loop = function () {
     // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
     if (units.total > 9 || Game.spawns[spawn_name].memory.general.status === 'war')
         for (let i=0;i<towers_list.length;i++) {
-            roleTower.run(room_name, towers_list[i], units.total);
+            roleTower.run(room_name, spawn_name, towers_list[i], units.total);
             // let current_tower = Game.getObjectById(towers_list[i]);
             // //        console.log('[DEBUG] (main): TOWER[' + i + ']' + '; ENR: ' + (current_tower.energy < current_tower.energyCapacity));
             // if (current_tower.energy/current_tower.energyCapacity < 0.65) towers_energy_full = false;
