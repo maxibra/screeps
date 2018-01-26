@@ -205,6 +205,7 @@ var room_helpers = {
         my_room.memory.targets.build = closest_obj ? closest_obj.id : false;
     },
     define_creeps_amount: function(room_name, spawn_name) {
+        let my_room = Game.rooms[room_name];
         let my_spawn = Game.spawns[spawn_name];
         if (Game.time < 5000) {
             my_spawn.memory.general.creeps_max_amount = 'nominal';
