@@ -26,7 +26,7 @@ var structCreep = {
             // }
             // console.log('[DEBUG] (build new): Name: ' + creep.name + '; target: ' + creep.memory.target_id)
             creep.memory.role = 'repair_civilian';
-            if ( creep.memory.target_id === false || creep.memory.target_id === '59f1a59182100e1594f3eb85') {
+            if ( creep.memory.target_id === false || creep.memory.target_id === '59f1a59182100e1594f3eb85' || creep.memory.target_id === '5a3c2abd58995a60a7cbb724') {
                 // let targets = Game.rooms['E38N49'].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax && object.id !== '5a8fbd6625e0a771c366de93'});
                 // console.log('[DEBUG] (repair): Name: ' + creep.name + '; Targets: '+ targets.length);
                 // let target = creep.pos.findClosestByRange(targets);
@@ -38,8 +38,8 @@ var structCreep = {
                 if (targets) creep.memory.target_id = targets[0].id
             }
         }
-        else if (creep.name === 'max_new1' || creep.name === 'max_new2' || creep.name === 'max_new3' || creep.name === 'max_new4') {
-            if (creep.memory.target_id == false) {
+        else if (creep.name === 'max_new1' || creep.name === 'max_new2' || creep.name === 'max_new3' || creep.name === 'max_new4'|| creep.name === 'max_new5'|| creep.name === 'max_new6') {
+            if (creep.memory.target_id == false || creep.memory.target_id === '5a3c2abd58995a60a7cbb724') {
                 let towers = Game.rooms['E38N49'].find(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
                 if (towers && towers.length > 0) {
                     creep.memory.target_id = towers[0].id;

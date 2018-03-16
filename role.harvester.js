@@ -7,9 +7,11 @@ var RoleHarvester = {
         let target;
         let action_out;
         let harvester_type = false;     // needed to use saved id
-        let creep_name4log ='max_new4';
+        let creep_name4log ='max_new3';
 
-        if (creep.carry === creep.carryCapacity) {
+
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +']: ' + ' Carry: ' + creep.carry[RESOURCE_ENERGY] + '; Capacity: ' + creep.carryCapacity);
+        if (creep.carry[RESOURCE_ENERGY] === creep.carryCapacity) {
             creep.memory.role = 'undefined';
             creep.memory.harvester_type = false;
             creep.memory.target_id = false;
@@ -31,8 +33,10 @@ var RoleHarvester = {
         }
 
         if (creep.memory.role !== 'harvest') creep.say('harvesting');
-        if (creep.memory.target_id) target = creep.memory.target_id;
-        else {
+        if (creep.memory.target_id) {
+            target = Game.getObjectById(creep.memory.target_id);
+            harvester_type = creep.memory.harvester_type;
+        } else {
             // target = Game.getObjectById('5a4a2fa40dadc7549dc8d475');
             // if (creep.pos.inRangeTo(target, 5) && target.energy > 0) harvester_type = 'link';
             // else {
@@ -64,7 +68,7 @@ var RoleHarvester = {
             }
         }
 
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: AFTER TARGET: ' + JSON.stringify(creep.memory));
+        // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' Target: ' + JSON.stringify(target) + '; AFTER TARGET: ' + JSON.stringify(creep.memory));
 
         // ACTION
         switch(harvester_type) {
@@ -83,7 +87,7 @@ var RoleHarvester = {
                 creep.memory.target_id = false;
                 creep.memory.harvester_type = false;
         }
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: ACTION OUT: ' + action_out);
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' ACTION OUT: ' + action_out);
 
         if (action_out === ERR_NOT_IN_RANGE) {
             creep.moveTo(target, global_vars.moveTo_ops);

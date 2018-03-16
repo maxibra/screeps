@@ -109,7 +109,7 @@ var creep_helpers = {
 
         creep_name = '';
         let new_memory = {role: 'upgrade', target_id: '59f1a59182100e1594f3eb85'};
-        for (let i=1; i<5; i++) {
+        for (let i=1; i<7; i++) {
             current_new_name = 'max_new' + i;
             console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
             if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
