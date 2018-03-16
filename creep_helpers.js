@@ -33,7 +33,6 @@ var creep_helpers = {
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
         let creep_memory = {role: 'harvester', target_id: false};
-        let creep_name = global_vars.spawn_name + '-' + my_spawn.memory.general.index + '-' + my_spawn.memory.general.gen;
         let current_creep_types = global_vars.creep_types[my_spawn.memory.general.status];
         let name_special = 'gn';
         let current_body = creep_body.general.base;
@@ -104,7 +103,19 @@ var creep_helpers = {
             return;
         }
 
-        creep_name = creep_name + '-' + (current_body_cost/10) + '-' + name_special;
+        creep_name = '';
+        let new_memory = {role: 'upgrade', target_id: '59f1a59182100e1594f3eb85'};
+        for (let i=1; i<5; i++) {
+            current_new_name = 'max_new' + i;
+            console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
+            if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
+                creep_name = current_new_name;
+                creep_memory = new_memory;
+                break;
+            }
+        }
+
+        if (creep_name === '' ) creep_name = global_vars.spawn_name + '-' + my_spawn.memory.general.index + '-' + my_spawn.memory.general.gen + '-' + (current_body_cost/10) + '-' + name_special;
 
         let exit_code = Game.spawns[global_vars.spawn_name].spawnCreep(current_body, creep_name, creep_memory);
         // console.log('[DEBUG] (create_creep): Type: ' + my_spawn.memory.general.creeps_max_amount + '; Max amount: ' + JSON.stringify(global_vars.screeps_max_amount)); //global_vars.screeps_max_amount[my_spawn.memory.general.creeps_max_amount]);
