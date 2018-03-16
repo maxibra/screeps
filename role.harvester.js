@@ -7,7 +7,7 @@ var RoleHarvester = {
         let target;
         let action_out;
         let harvester_type = false;     // needed to use saved id
-        let creep_name4log ='max_new3';
+        let creep_name4log ='max_new4';
 
 
         if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +']: ' + ' Carry: ' + creep.carry[RESOURCE_ENERGY] + '; Capacity: ' + creep.carryCapacity);
@@ -53,7 +53,7 @@ var RoleHarvester = {
                 // else {
                 target = creep.pos.findClosestByPath(FIND_TOMBSTONES,{filter: object => (object.store[RESOURCE_ENERGY] > 60)});
                 if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: GET TOMBSTONE: ' + JSON.stringify(target));
-                if (target) harvester_type = 'tombstone';
+                if (target && creep.pos.getRangeTo(target) < 10) harvester_type = 'tombstone';
                 else {
                     target = creep.pos.findClosestByPath(FIND_SOURCES,{filter: object => (object.energy > 40)});
                     if (target) harvester_type = 'source';
@@ -93,15 +93,17 @@ var RoleHarvester = {
             creep.moveTo(target, global_vars.moveTo_ops);
             if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: ERR_NOT_IN_RANGE TARGET: ' + JSON.stringify(creep.memory));
             creep.memory.target_id = target.id;
-        } else if (action_out === ERR_NOT_ENOUGH_RESOURCES && creep.carry > 0) {
+        } else if (action_out === ERR_NOT_ENOUGH_RESOURCES && creep.carry[RESOURCE_ENERGY] > 0) {
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;
-            creep.memory.role = 'transfer';
+            creep.memory.role = 'undefined';
+            // creep.memory.role = 'transfer';
         } else if (action_out === ERR_FULL) {
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;
             creep.memory.role = 'undefined';
         }
+        // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']:' );
 
 
         if (harvester_type !== 'source') {

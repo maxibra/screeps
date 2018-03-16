@@ -18,7 +18,7 @@ var structCreep = {
 //        console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
         var targets;
         if(creep.carry.energy === 0 || creep.memory.role === 'harvest') role_harvester.run(creep, iam_general);
-        else if ((creep.name === 'max_new4' && creep.room.name === 'E38N49')) { // || (creep.name === 'max_new3' && creep.room.name === 'E38N49')) {
+        else if (creep.room.name === 'E38N49' && (creep.name === 'max_new1')) { // || creep.name === 'max_new2')) {
             // creep.memory.role = 'build';
             // if ( creep.memory.target_id === false || creep.memory.target_id === '59f1a59182100e1594f3eb85') {
             //     let target = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER)});
@@ -27,18 +27,15 @@ var structCreep = {
             // console.log('[DEBUG] (build new): Name: ' + creep.name + '; target: ' + creep.memory.target_id)
             creep.memory.role = 'repair_civilian';
             if ( creep.memory.target_id === false || creep.memory.target_id === '59f1a59182100e1594f3eb85' || creep.memory.target_id === '5a3c2abd58995a60a7cbb724') {
-                // let targets = Game.rooms['E38N49'].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax && object.id !== '5a8fbd6625e0a771c366de93'});
-                // console.log('[DEBUG] (repair): Name: ' + creep.name + '; Targets: '+ targets.length);
-                // let target = creep.pos.findClosestByRange(targets);
-                // // let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits/object.hitsMax <= 0.8 && object.id !== '5a8fbd6625e0a771c366de93'});
-                // if (target) creep.memory.target_id = target.id
+                let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < 200000&& object.hits/object.hitsMax <= 0.8 && object.id !== '5a8fbd6625e0a771c366de93'});
+                if (target) creep.memory.target_id = target.id
 
-                let targets = Game.rooms['E38N49'].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax && object.id !== '5a8fbd6625e0a771c366de93'});
-                targets.sort((a,b) => a.hits - b.hits);
-                if (targets) creep.memory.target_id = targets[0].id
+                // let targets = Game.rooms['E38N49'].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax && object.id !== '5a8fbd6625e0a771c366de93'});
+                // targets.sort((a,b) => a.hits - b.hits);
+                // if (targets) creep.memory.target_id = targets[0].id
             }
         }
-        else if (creep.name === 'max_new1' || creep.name === 'max_new2' || creep.name === 'max_new3' || creep.name === 'max_new4'|| creep.name === 'max_new5'|| creep.name === 'max_new6') {
+        else if (creep.name === 'max_new1' || creep.name === 'max_new2' || creep.name === 'max_new3' || creep.name === 'max_new4'|| creep.name === 'max_new5'|| creep.name === 'max_new6' || creep.name === 'max_new7') {
             if (creep.memory.target_id == false || creep.memory.target_id === '5a3c2abd58995a60a7cbb724') {
                 let towers = Game.rooms['E38N49'].find(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
                 if (towers && towers.length > 0) {
