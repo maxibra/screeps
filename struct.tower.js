@@ -1,13 +1,16 @@
+var spawn_name = 'max';
+var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
+var global_vars = Game.rooms[room_name].memory.global_vars;
+var my_spawn = Game.spawns[global_vars.spawn_name];
+var my_room = Game.rooms[global_vars.room_name];
+
 var StructTower;
 StructTower = {
-    run: function (room_name, spawn_name, current_tower_id, creeps_amount) {
+    run: function (current_tower_id, creeps_amount) {
         /*
          current_tower    -   Object of current tower
          Return:    amount of missing energy
          */
-
-        var global_vars = Game.rooms[room_name].memory.global_vars;
-
         let target2repair;
         let target2attack;
         let current_tower = Game.getObjectById(current_tower_id);

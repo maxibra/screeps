@@ -1,4 +1,8 @@
 //var global_vars = require('global_vars')();
+
+var spawn_name = 'max';
+var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
+
 var creep_body = {
     general: {
         base: [WORK,CARRY,MOVE],
@@ -136,10 +140,10 @@ var creep_helpers = {
 //            creep.memory.role = 'dropper';
         }
     },
-    most_creep_action_results: function(room_name, spawn_name, creep, target, action_res, creep_role) {
+    most_creep_action_results: function(creep, target, action_res, creep_role) {
         let global_vars = Game.rooms[room_name].memory.global_vars;
-        let my_spawn = Game.spawns[spawn_name];
-        let my_room = Game.rooms[room_name];
+        let my_spawn = Game.spawns[global_vars.spawn_name];
+        let my_room = Game.rooms[global_vars.room_name];
 
         switch(action_res) {
             case OK:

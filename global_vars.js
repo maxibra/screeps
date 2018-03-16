@@ -45,4 +45,3 @@ console.log('loaded and run at '+ Game.time)
 //     };
 // }
 //
-// module.exports = refresh_vars;
