@@ -33,6 +33,7 @@ var creep_helpers = {
         let global_vars = Game.rooms[room_name].memory.global_vars;
         let my_spawn = Game.spawns[spawn_name];
         let my_room = Game.rooms[room_name];
+        let new_room_creeps = 5;
 
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
@@ -76,7 +77,7 @@ var creep_helpers = {
         let harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvest');
         // console.log('[DEBUG] (creep_helpers): Harvesters: ' + JSON.stringify(harvesters));
 
-        if (creeps_names.length < 4 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
+        if (creeps_names.length < new_room_creeps + 3 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
             // Do nothing
         } else {                      // Create most possible strong body
             let possible_body = current_body.concat(add_body);
@@ -109,7 +110,7 @@ var creep_helpers = {
 
         creep_name = '';
         let new_memory = {role: 'upgrade', target_id: '59f1a59182100e1594f3eb85'};
-        for (let i=1; i<8; i++) {
+        for (let i=1; i<=new_room_creeps; i++) {
             current_new_name = 'max_new' + i;
             console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
             if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {

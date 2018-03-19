@@ -156,7 +156,7 @@ module.exports.loop = function () {
 
     let towers_energy_full = true;
     // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
-    if (units.total > 10 || Game.spawns[spawn_name].memory.general.status === 'war')
+    if (units.total > 9 || Game.spawns[spawn_name].memory.general.status === 'war')
         for (let i=0;i<towers_list.length;i++) {
             roleTower.run(towers_list[i], units.total);
             // let current_tower = Game.getObjectById(towers_list[i]);
@@ -185,7 +185,7 @@ module.exports.loop = function () {
 //        room_helpers.get_transfer_target();
         room_helpers.define_room_status();
         dropped_resources = Game.rooms[room_name].find(FIND_DROPPED_RESOURCES)
-        if (dropped_resources.length > 0) Game.notify('We Have Dropped Resources in our area: ' + dropped_resources.length);
+        // if (dropped_resources.length > 0) Game.notify('We Have Dropped Resources in our area: ' + dropped_resources.length);
 
     }
 

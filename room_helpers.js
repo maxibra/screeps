@@ -75,7 +75,7 @@ var room_helpers = {
         my_spawn.memory.general['create_miner'] = create_miner;
     },
     transfer_link2link: function() {
-        source_link = Game.getObjectById('5a49d873aee66d376622f262')
+        source_link = Game.getObjectById('5aaf5707666a677252588707')
         destination_link = Game.getObjectById('5a4a2fa40dadc7549dc8d475')
         if ( (source_link.energy > 100) && (destination_link.energy/destination_link.energyCapacity < 0.9)) {
             source_link.transferEnergy(destination_link, (destination_link.energyCapacity - destination_link.energy))
