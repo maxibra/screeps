@@ -190,7 +190,7 @@ module.exports.loop = function () {
 
         }
 
-        if (Game.time % 10 === 0) {
+        if (Game.time % 300 === 0) {
             room_helpers.upgrade_energy_flow(current_room_name);
             roleTower.create_towers_list(current_room_name);
         }
