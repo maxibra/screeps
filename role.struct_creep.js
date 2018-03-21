@@ -63,8 +63,8 @@ var structCreep = {
             var current_creep_types = global_vars.creep_types[my_spawn.memory.general.status];
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: CREEP_TYPES: ' + JSON.stringify(current_creep_types));
             //TODO: Improve pleace of tower. don't search per creep
-            // let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
-            towers = false;
+            let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
+            // towers = false;
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: ROOM MEMORY: ' + JSON.stringify(my_room.memory));
             // if (towers && !my_room.memory.towers.all_full) targets = towers;
             if (towers && towers.length > 0) targets = towers;
