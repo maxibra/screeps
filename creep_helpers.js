@@ -98,13 +98,13 @@ var creep_helpers = {
             console.log('[DEBUG] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + Game.rooms[room_name].energyAvailable + "(" + my_room.energyAvailable + ")");
 
             // Convert all harvesters with acamulated energy near sources to transfer
-            for (let i = 0; i < harvesters.length; i++) {
-                //console.log('[DEBUG] (create_creep): H: ' + JSON.stringify(harvesters[i]));
-                if (harvesters[i].carry.energy/harvesters[i].carryCapacity > 0.85) {      // convert harvester with 85% energy to transfer
-                    Memory.creeps[harvesters[i].name].role = 'transfer';
-                    // console.log('[DEBUG] (create_creep): Role of ' + harvesters[i].name + ' (Energy: ' + harvesters[i].carry.energy + ') changed to transfer');
-                }
-            }
+            // for (let i = 0; i < harvesters.length; i++) {
+            //     //console.log('[DEBUG] (create_creep): H: ' + JSON.stringify(harvesters[i]));
+            //     if (harvesters[i].carry.energy/harvesters[i].carryCapacity > 0.85) {      // convert harvester with 85% energy to transfer
+            //         Memory.creeps[harvesters[i].name].role = 'transfer';
+            //         // console.log('[DEBUG] (create_creep): Role of ' + harvesters[i].name + ' (Energy: ' + harvesters[i].carry.energy + ') changed to transfer');
+            //     }
+            // }
             return;
         }
 
@@ -160,14 +160,14 @@ var creep_helpers = {
                 creep.memory.role = 'undefined';
             default:
 //                console.log('[WARN] (most_creep_action_results)[' + creep.name + ']: ' + creep_role + ': NO action for result ' + action_res)
-                if (creep.memory.role == 'transfer' && creep.memory.target_id != my_spawn.id && my_spawn.energy < my_spawn.energyCapacity) {
-                    targets = my_room.find(FIND_STRUCTURES, {filter: object => object.energy < object.energyCapacity});
-//                    console.log('[DEBUG] (most_creep_action_results)[' + creep.name + ']: ' + 'Target is changed');
-                    if (targets[0]) creep.memory.target_id = targets[0].id;
-                } else {
+//                 if (creep.memory.role == 'transfer' && creep.memory.target_id != my_spawn.id && my_spawn.energy < my_spawn.energyCapacity) {
+//                     targets = my_room.find(FIND_STRUCTURES, {filter: object => object.energy < object.energyCapacity});
+// //                    console.log('[DEBUG] (most_creep_action_results)[' + creep.name + ']: ' + 'Target is changed');
+//                     if (targets[0]) creep.memory.target_id = targets[0].id;
+//                 } else {
                     creep.memory.target_id = false;
                     creep.memory.role = 'undefined';
-                }
+                // }
         }
     }
 };

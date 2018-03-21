@@ -124,11 +124,11 @@ var RoleHarvester = {
             creep.memory.harvester_type = false;
         }
 
-        if (creep.carry/creep.carryCapacity > 0.9 && (Game.creeps.length < Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount])) {     // If it's not enought creeps change to transfer
-            creep.memory.role = 'transfer';
-            creep.memory.target_id = false;
-            creep.memory.harvester_type = false;
-        }
+        // if (creep.carry/creep.carryCapacity > 0.9 && (Game.creeps.length < Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount])) {     // If it's not enought creeps change to transfer
+        //     creep.memory.role = 'transfer';
+        //     creep.memory.target_id = false;
+        //     creep.memory.harvester_type = false;
+        // }
 
         if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: LAST TARGET: ' + JSON.stringify(creep.memory));
     }
