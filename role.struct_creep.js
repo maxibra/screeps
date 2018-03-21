@@ -21,7 +21,7 @@ var structCreep = {
         var transfer_target;
         // Game.spawns['max'].spawnCreep([MOVE,MOVE,MOVE,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH], 'claimer1', {'role': 'claimer'})
         // if (creep.id === '5ab2077e96dbc27d8bfadc5e') creep.memory.role = 'repair_defence';
-        if (creep.name === 'claimer1' || creep.name === 'claimer2' || creep.name === 'claimer3') creep.memory.role = 'claimer';
+        if (creep.name === 'claimer' || creep.name === 'claimer1' || creep.name === 'claimer2' || creep.name === 'claimer3') creep.memory.role = 'claimer';
         else if(creep.carry.energy === 0 || creep.memory.role === 'harvest') {
             if (creep.memory.role !== 'harvest') creep.say('harvesting');
             creep.memory.role = 'harvest';
@@ -59,18 +59,18 @@ var structCreep = {
                     creep.memory.role = 'upgrade';
                 }
             }
-        } else if ((creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) || ((units['E39N49']['upgrade'] < 2) && (units['E39N49']['total'] > 3) && (creep.ticksToLive > 1400))) {
+        } else if ((creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) || ((units['E39N49']['upgrade'] < 2) && (units['E39N49']['total'] > 3) && (creep.ticksToLive > 1300))) {
             if (creep.memory.role !== 'upgrade') creep.say('upgrading');
             creep.memory.role = 'upgrade';
         } else if (condition2change_role) {
-            var current_workers = units[room_name]['total'] - units[room_name]['harvest'];
+            var current_workers = units[room_name]['total']; // - units[room_name]['harvest'];
             var current_creep_types = global_vars.creep_types[global_vars.status];
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: CREEP_TYPES: ' + JSON.stringify(current_creep_types));
             //TODO: Improve pleace of tower. don't search per creep
             transfer_target = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
             if (!transfer_target) {
                 transfer_target = Game.getObjectById(Game.rooms[room_name].memory.energy_flow.links.source);
-                if (!(transfer_target && (transfer_target.energy/transfer_target.energyCapacity < 0.4))) {
+                if (!(transfer_target && (transfer_target.energy/transfer_target.energyCapacity < 0.9))) {
                     transfer_target = creep.pos.findClosestByRange(FIND_STRUCTURES,
                         {filter: object => ((object.structureType === STRUCTURE_EXTENSION || object.structureType === STRUCTURE_SPAWN)
                         && (object.energy < object.energyCapacity))});
@@ -104,7 +104,7 @@ var structCreep = {
                 //     creep.say('harvesting');
                 //     creep.memory.role = 'harvest';
             }
-//            }
+            // }
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: CHANGED ROLE: ' + JSON.stringify(creep.memory));
             creep.memory.target_id = false;
         }
@@ -177,8 +177,9 @@ var structCreep = {
                 break;
             case 'claimer':
                 // let action_out = creep.moveTo(Game.getObjectById('59f1a59182100e1594f3eb87'), global_vars.moveTo_ops);
-                let action_out = creep.moveTo(new RoomPosition(26, 38, 'E38N48'), global_vars.moveTo_ops);
-                console.log('[ERROR]: Clamer ' + creep.name + '; out: ' + action_out);
+                // let action_out = creep.moveTo(new RoomPosition(37, 21, 'E38N48'), global_vars.moveTo_ops);
+                // let action_out = creep.reserveController(creep.room.controller); //Game.getObjectById('5ab2b2a5c9848656de6fedac'))
+                // console.log('[ERROR]: Clamer ' + creep.name + '; out: ' + action_out);
                 break;
             default:
                 console.log('[ERROR]: No role defined for ' + creep.name + '; ROLE: ' + creep_role);

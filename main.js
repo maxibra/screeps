@@ -52,8 +52,6 @@ for(var current_room_name in Game.rooms) {
             age_to_drop_and_die: 20,
             age_to_recreate_miner: 70,
             max_body_cost: 1800,
-            spawn_name: spawn_name,
-            room_name: room_name,
             moveTo_ops: {
                 reusePath: 10,           // default: 5
                 //serializeMemory: false, // default: true
@@ -199,6 +197,12 @@ module.exports.loop = function () {
 
         }
 
+        current_mod = current_mod + tick_between_hard_actions;
+        if (Game.time % 10 === current_mod) {  // run every 10 ticks
+            // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
+            room_helpers.get_build_targets(current_room_name);
+        }
+
         if (Game.time % 300 === 0) {
             room_helpers.upgrade_energy_flow(current_room_name);
             roleTower.create_towers_list(current_room_name);
@@ -216,12 +220,6 @@ module.exports.loop = function () {
     if (Game.time % 10 === current_mod) {  // run every 10 ticks
 //        console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
 //        room_helpers.get_repair_civilianl_target();
-    }
-
-    current_mod = current_mod + tick_between_hard_actions;
-    if (Game.time % 10 === current_mod) {  // run every 10 ticks
-        // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-        room_helpers.get_build_targets();
     }
 
     current_mod = current_mod + tick_between_hard_actions;

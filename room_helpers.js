@@ -195,30 +195,33 @@ var room_helpers = {
         targets.sort((a,b) => a.hits - b.hits);
         my_room.memory.targets.repair_civilian = targets[0] ? targets[0].id : false;
     },
-    get_build_targets: function() {
+    get_build_targets: function(room_name) {
         // Extensions have highest priority
-        var targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
+        let my_room = Game.rooms[room_name];
+        let targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
         // Defence structures are secondary priority
-        if (targets) targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER)});
+        if (targets.length === 0) targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER)});
         // All other structures
-        if (targets) targets = (my_room.find(FIND_CONSTRUCTION_SITES) || []);
+        if (targets.length === 0) targets = my_room.find(FIND_CONSTRUCTION_SITES);
+
         // Sort targets by close to spawn
-        let closest_obj = targets[0];
-        if (closest_obj) {
-            let closest_obj_range = Math.abs(my_spawn.pos.x-closest_obj.pos.x) + Math.abs(my_spawn.pos.y-closest_obj.pos.y);
-            for (let i=1;i<targets.length;i++) {
-                let sob_range = Math.abs(my_spawn.pos.x-targets[i].pos.x) + Math.abs(my_spawn.pos.y-targets[i].pos.y);
-                //            console.log('[DEBUG] (get_build_targets): Current (' + closest_obj.id + '): ' + closest_obj_range + '; Next(' + targets[i].id + '): ' + sob_range);
-                if (sob_range < closest_obj_range) {
-                    closest_obj = targets[i];
-                    closest_obj_range = sob_range;
-                }
-                //            console.log('[DEBUG] (get_build_targets): Choosen: ' + closest_obj.id);
-            }
-//        targets.sort((a,b) => (Math.abs(my_spawn.pos.x-a.pos.x) + Math.abs(my_spawn.pos.y-a.pos.y)) - (Math.abs(my_spawn.pos.x-b.pos.x) + Math.abs(my_spawn.pos.y-b.pos.y)));
-//        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
-        }
-        my_room.memory.targets.build = closest_obj ? closest_obj.id : false;
+        // let closest_obj = targets[0];
+        // console.log('[DEBUG] (get_build_targets): targets: ' + JSON.stringify(targets[0].ops));
+//         if (closest_obj) {
+//             let closest_obj_range = Math.abs(my_spawn.pos.x-closest_obj.pos.x) + Math.abs(my_spawn.pos.y-closest_obj.pos.y);
+//             for (let i=1;i<targets.length;i++) {
+//                 let sob_range = Math.abs(my_spawn.pos.x-targets[i].pos.x) + Math.abs(my_spawn.pos.y-targets[i].pos.y);
+//                 //            console.log('[DEBUG] (get_build_targets): Current (' + closest_obj.id + '): ' + closest_obj_range + '; Next(' + targets[i].id + '): ' + sob_range);
+//                 if (sob_range < closest_obj_range) {
+//                     closest_obj = targets[i];
+//                     closest_obj_range = sob_range;
+//                 }
+//                 //            console.log('[DEBUG] (get_build_targets): Choosen: ' + closest_obj.id);
+//             }
+// //        targets.sort((a,b) => (Math.abs(my_spawn.pos.x-a.pos.x) + Math.abs(my_spawn.pos.y-a.pos.y)) - (Math.abs(my_spawn.pos.x-b.pos.x) + Math.abs(my_spawn.pos.y-b.pos.y)));
+// //        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
+//         }
+        my_room.memory.targets.build = (targets.length > 0) ? targets[0].id : false;
     },
     define_creeps_amount: function() {
         if (Game.time < 5000) {

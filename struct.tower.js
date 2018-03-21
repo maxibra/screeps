@@ -22,10 +22,10 @@ StructTower = {
         let room_name = current_tower.room.name;
         // TODO: Optimize road target (save it)
 
-        if (Game.spawns[spawn_name].memory.general.status == 'war') {
+        if (Game.rooms[room_name].memory.global_vars.status == 'war') {
             target2attack = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
             target2repair = Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
-            console.log('[INFO] (StructTower.run) it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
+            console.log('[INFO] (StructTower.run) [' + room_name + ' it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
         } else if (current_tower.energy/current_tower.energyCapacity > 0.4 && !(Game.time % 10)) {
             targets2repair = (Game.rooms[room_name].memory.towers.road2repair_id) ? Game.getObjectById(Game.rooms[room_name].memory.towers.road2repair_id) :
                 Game.rooms[room_name].find(FIND_STRUCTURES,
