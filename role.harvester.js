@@ -7,7 +7,7 @@ var RoleHarvester = {
         let target;
         let action_out;
         let harvester_type = false;     // needed to use saved id
-        let creep_name4log ='max_new5';
+        let creep_name4log ='max_new';
 
 
         if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +']: ' + ' Carry: ' + creep.carry[RESOURCE_ENERGY] + '; Capacity: ' + creep.carryCapacity);
@@ -52,11 +52,11 @@ var RoleHarvester = {
                 // if (target) harvester_type = 'container';
                 // else {
                 target = Game.getObjectById(Game.rooms[room_name].memory.energy_flow.links.controller);
-                if (target && creep.pos.getRangeTo(target) < 3 && target.energy > 300) {
+                if (target && creep.pos.getRangeTo(target) < 3 && target.energy > 0) {
                     harvester_type = 'link';
                     if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: GET LINK: ' + JSON.stringify(target));
                 } else {
-                    target = creep.pos.findClosestByPath(FIND_TOMBSTONES,{filter: object => (object.store[RESOURCE_ENERGY] > 60)});
+                    target = creep.pos.findClosestByPath(FIND_TOMBSTONES,{filter: object => (object.store[RESOURCE_ENERGY] > 60) }); //|| creep.pos.getRangeTo(object, 2)});
                     if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: GET TOMBSTONE: ' + JSON.stringify(target));
                     if (target && creep.pos.getRangeTo(target) < 10) harvester_type = 'tombstone';
                     else {
@@ -103,7 +103,10 @@ var RoleHarvester = {
             creep.moveTo(target, global_vars.moveTo_ops);
             if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: ERR_NOT_IN_RANGE TARGET: ' + JSON.stringify(creep.memory));
             creep.memory.target_id = target.id;
-        } else if (action_out === ERR_NOT_ENOUGH_RESOURCES && creep.carry[RESOURCE_ENERGY] > 0) {
+        } else if (action_out === ERR_INVALID_TARGET) {
+            creep.memory.target_id = false;
+            creep.memory.harvester_type = false;
+        } else if (action_out === ERR_NOT_ENOUGH_RESOURCES) { // && creep.carry[RESOURCE_ENERGY] > 0) {
             creep.memory.role = 'undefined';
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;

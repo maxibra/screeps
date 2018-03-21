@@ -77,7 +77,7 @@ var creep_helpers = {
         let harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvest');
         // console.log('[DEBUG] (creep_helpers): Harvesters: ' + JSON.stringify(harvesters));
 
-        if (creeps_names.length < new_room_creeps + 3 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
+        if (units['E39N49'] < 2 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
             // Do nothing
         } else {                      // Create most possible strong body
             let possible_body = current_body.concat(add_body);
@@ -153,6 +153,10 @@ var creep_helpers = {
             case ERR_NOT_IN_RANGE:
                 creep.moveTo(target, global_vars.moveTo_ops);
                 break;
+            case ERR_FULL:
+                creep.memory.target_id = false;
+                creep.memory.harvester_type = false;
+                creep.memory.role = 'undefined';
             default:
 //                console.log('[WARN] (most_creep_action_results)[' + creep.name + ']: ' + creep_role + ': NO action for result ' + action_res)
                 if (creep.memory.role == 'transfer' && creep.memory.target_id != my_spawn.id && my_spawn.energy < my_spawn.energyCapacity) {

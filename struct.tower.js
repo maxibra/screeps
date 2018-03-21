@@ -27,8 +27,8 @@ StructTower = {
                 Game.rooms[room_name].find(FIND_STRUCTURES,
                     {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.8))});
             //console.log('[DEBUG] (StructTower.run): Road X: ' + road2repair.pos.x + '; Road y: ' + road2repair.pos.y);
-            target2repair = targets2repair.length > 0 ? targets2repair[0] : Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
-            console.log('[DEBUG] (StructTower.run)[' + current_tower_id + ']: Roads to repear: ' + targets2repair.length + '; Defence: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
+            target2repair = targets2repair.length > 0 ? targets2repair[0] : []; //Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
+            console.log('[DEBUG] (StructTower.run)[' + current_tower_id + ']: Roads to repear: ' + targets2repair.length); // + '; Defence: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
         }
 //        console.log('[DEBUG] (StructTower.run)[ ' + current_tower.id + ']: To Attack: ' + (target2attack?target2attack.length:0) + '; To repair: ' + (target2repair?target2repair.length:0));
         let current_life_status = Game.spawns[spawn_name].memory.general.status;

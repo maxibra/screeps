@@ -49,7 +49,7 @@ var room_helpers = {
         let exist_miners = {};
         let create_miner = false;   // ID of container that need a new creep
         for (let creep_name in cur_creeps) {
-            if (units[cur_creeps[creep_name].memory.role] == 'miner')
+            if (units[room_name][cur_creeps[creep_name].memory.role] == 'miner')
                 if (typeof exist_miners[cur_creeps[creep_name].memory.container] === 'undefined')
                     if (cur_creeps[creep_name].ticksToLive < my_room.memory.global_vars.age_to_recreate_miner) {
                         create_miner = cur_creeps[creep_name].memory.container_id;
@@ -74,11 +74,13 @@ var room_helpers = {
         }
         my_spawn.memory.general['create_miner'] = create_miner;
     },
-    transfer_link2link: function() {
-        source_link = Game.getObjectById('5aaf5707666a677252588707')
-        destination_link = Game.getObjectById('5a4a2fa40dadc7549dc8d475')
-        if ( (source_link.energy > 100) && (destination_link.energy/destination_link.energyCapacity < 0.9)) {
-            source_link.transferEnergy(destination_link, (destination_link.energyCapacity - destination_link.energy))
+    transfer_link2link: function(room_name) {
+        source_link = Game.getObjectById(Game.rooms[room_name].memory.energy_flow.links.source)
+        destination_link = Game.getObjectById(Game.rooms[room_name].memory.energy_flow.links.controller)
+        if ( source_link && (source_link.energy > 100) && destination_link && (destination_link.energy/destination_link.energyCapacity < 0.9)) {
+            let dst_missing = destination_link.energyCapacity - destination_link.energy;
+            let energy2transfer = ((dst_missing < source_link.energy) ? dst_missing : source_link.energy);
+            source_link.transferEnergy(destination_link, energy2transfer);
         }
 
     },
@@ -151,8 +153,8 @@ var room_helpers = {
         // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): ENERGY Flow: ' + JSON.stringify(energy_flow_obj));
         Game.rooms[room_name].memory.energy_flow = energy_flow_obj;
     },
-    define_room_status: function() {
-        let hostile_creeps = Game.rooms[global_vars.room_name].find(FIND_HOSTILE_CREEPS);
+    define_room_status: function(room_name) {
+        let hostile_creeps = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
         if (hostile_creeps && hostile_creeps.length > 0 && Game.spawns[spawn_name].memory.general.status === 'peace') {
             Game.spawns[spawn_name].memory.general.status = 'war';
             Game.notify('WE are attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); Body: ' + JSON.stringify(hostile_creeps[0].body));
