@@ -51,11 +51,6 @@ StructTower = {
     },
     create_towers_list: function (room_name) {
         let towers_list = [];
-        //    console.log('[DEBUG] (main): LIST: ' + !(my_room.memory.towers.list) + '; Tick: ' + (Game.time > my_room.memory.towers.next_update));
-        // if (!my_room.memory.towers.list.length === 0 || (Game.time > Game.rooms[room_name].memory.towers.next_update)) {   // update list of towers
-        // Game.rooms[room_name].memory.towers.next_update = Game.rooms[room_name].memory.towers.next_update + Game.rooms[room_name].memory.global_vars.update_period.towers;
-        // for(var current_room_name in Game.rooms[room_name]) {
-        // var creep = Game.creeps[name];
         let all_towers = Game.rooms[room_name].find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         for (let i=0;i<all_towers.length;i++) {
             //            console.log('[DEBUG] (main): TOWER' + JSON.stringify(all_towers[i]));
@@ -63,11 +58,8 @@ StructTower = {
         }
         // }
         Game.rooms[room_name].memory.towers.list = towers_list;
-//        console.log('[INFO] (main): GLOBAL vars: ' + JSON.stringify(Game.rooms[room_name].memory.global_vars));
         if (towers_list.length > 0) Game.rooms[room_name].memory.global_vars.creep_types[Game.spawns[spawn_name].memory.general.status].repair_civilian = 0;
-        // } else towers_list = Game.rooms[room_name].memory.towers.list
 
-        // return towers_list;
     }
 };
 
