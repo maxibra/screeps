@@ -29,11 +29,12 @@ function body_cost(body) {
 // var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
 
 var creep_helpers = {
-    create_creep: function(room_name, spawn_name, units) {
-        let global_vars = Game.rooms[room_name].memory.global_vars;
+    create_creep: function(spawn_name, units) {
         let my_spawn = Game.spawns[spawn_name];
+        let room_name = Game.spawns[spawn_name].room.name
+        let global_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
-        let new_room_creeps = 5;
+        let new_room_creeps = 2;
 
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
@@ -43,9 +44,8 @@ var creep_helpers = {
         let current_body = creep_body.general.base;
         let add_body = creep_body.general.add;
 
-        // console.log('[DEBUG] (create_creep): Creeps: ' +  (creeps_names.length >= Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount]) + '; SPAWING: ' + JSON.stringify(Game.spawns[global_vars.spawn_name].spawning));
-
-        if (creeps_names.length >= Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] || Game.spawns['max'].spawning) return;
+        // console.log('[DEBUG] (create_creep): Creeps: ' +  units[room_name].total + '; Must Be: ' + global_vars.screeps_max_amount[global_vars.status] + '; SPAWING: ' + JSON.stringify(Game.spawns[global_vars.spawn_name].spawning));
+        if (units[room_name].total >= global_vars.screeps_max_amount[global_vars.status] || my_spawn.spawning) return;
 
         //console.log('[DEBUG] (create_creep): CREEPS: ' + creeps_names.length);
         if (my_spawn.spawning) return;
@@ -77,12 +77,12 @@ var creep_helpers = {
         let harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvest');
         // console.log('[DEBUG] (creep_helpers): Harvesters: ' + JSON.stringify(harvesters));
 
-        if (units['E39N49'].total < 2 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
+        if (units[room_name].total < 2 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
             // Do nothing
         } else {                      // Create most possible strong body
             let possible_body = current_body.concat(add_body);
             let possible_body_cost = body_cost(possible_body);
-            for (i=2;possible_body_cost <= Game.rooms[global_vars.room_name].energyCapacityAvailable;i++) {
+            for (i=2;possible_body_cost <= Game.rooms[room_name].energyCapacityAvailable;i++) {
                 current_body = possible_body;
                 possible_body = possible_body.concat(add_body);
                 if (i%2 == 0) possible_body.push(MOVE);
@@ -94,8 +94,8 @@ var creep_helpers = {
         let current_body_cost = body_cost(current_body);
         // console.log('[DEBUG] (create_creep): HARVESTERS: ' +  harvesters.length + '; CREEPS: ' + creeps_names.length + '; BODY COST: ' + current_body_cost + '; BODY: ' + current_body);
 //        if (current_body_cost > my_room.energyAvailable) {
-        if (current_body_cost > Game.rooms[global_vars.room_name].energyAvailable) {
-            console.log('[DEBUG] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + Game.rooms[global_vars.room_name].energyAvailable + "(" + my_room.energyAvailable + ")");
+        if (current_body_cost > Game.rooms[room_name].energyAvailable) {
+            console.log('[DEBUG] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + Game.rooms[room_name].energyAvailable + "(" + my_room.energyAvailable + ")");
 
             // Convert all harvesters with acamulated energy near sources to transfer
             for (let i = 0; i < harvesters.length; i++) {
@@ -109,20 +109,21 @@ var creep_helpers = {
         }
 
         creep_name = '';
-        let new_memory = {role: 'upgrade', target_id: '59f1a59182100e1594f3eb85'};
-        for (let i=1; i<=new_room_creeps; i++) {
-            current_new_name = 'max_new' + i;
-            console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
-            if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
-                creep_name = current_new_name;
-                creep_memory = new_memory;
-                break;
-            }
-        }
+        // let new_memory = {role: 'harvest', harvester_type: 'source', target_id: ''};
+        // for (let i=1; i<=new_room_creeps; i++) {
+        //     current_new_name = 'max_new' + i;
+        //     console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
+        //     if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
+        //         creep_name = current_new_name;
+        //         creep_memory = new_memory;
+        //         break;
+        //     }
+        // }
 
-        if (creep_name === '' ) creep_name = global_vars.spawn_name + '-' + my_spawn.memory.general.index + '-' + my_spawn.memory.general.gen + '-' + (current_body_cost/10) + '-' + name_special;
+        // if (creep_name === '' ) creep_name = room_name + '-' + my_spawn.memory.general.index + '-' + my_spawn.memory.general.gen + '-' + (current_body_cost/10) + '-' + name_special;
+        creep_name = room_name + '-' + my_spawn.memory.general.index + '-' + my_spawn.memory.general.gen + '-' + (current_body_cost/10) + '-' + name_special;
 
-        let exit_code = Game.spawns[global_vars.spawn_name].spawnCreep(current_body, creep_name, creep_memory);
+        let exit_code = Game.spawns[spawn_name].spawnCreep(current_body, creep_name, creep_memory);
         // console.log('[DEBUG] (create_creep): Type: ' + my_spawn.memory.general.creeps_max_amount + '; Max amount: ' + JSON.stringify(global_vars.screeps_max_amount)); //global_vars.screeps_max_amount[my_spawn.memory.general.creeps_max_amount]);
         if ( exit_code === OK) {
             let new_index = (my_spawn.memory.general.index + 1) % global_vars.screeps_max_amount[my_spawn.memory.general.creeps_max_amount];
