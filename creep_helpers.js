@@ -95,7 +95,7 @@ var creep_helpers = {
         // console.log('[DEBUG] (create_creep): HARVESTERS: ' +  harvesters.length + '; CREEPS: ' + creeps_names.length + '; BODY COST: ' + current_body_cost + '; BODY: ' + current_body);
 //        if (current_body_cost > my_room.energyAvailable) {
         if (current_body_cost > Game.rooms[room_name].energyAvailable) {
-            console.log('[DEBUG] (create_creep): WAITing to create creep: ' + current_body_cost + '/' + Game.rooms[room_name].energyAvailable + "(" + my_room.energyAvailable + ")");
+            console.log('[DEBUG] (create_creep): ' + spawn_name + ' WAITing to create creep: ' + current_body_cost + '/' + Game.rooms[room_name].energyAvailable + "(" + my_room.energyAvailable + ")");
 
             // Convert all harvesters with acamulated energy near sources to transfer
             // for (let i = 0; i < harvesters.length; i++) {
@@ -165,9 +165,9 @@ var creep_helpers = {
 // //                    console.log('[DEBUG] (most_creep_action_results)[' + creep.name + ']: ' + 'Target is changed');
 //                     if (targets[0]) creep.memory.target_id = targets[0].id;
 //                 } else {
-                    creep.memory.target_id = false;
-                    creep.memory.role = 'undefined';
-                // }
+                creep.memory.target_id = false;
+                creep.memory.role = 'undefined';
+            // }
         }
     }
 };

@@ -6,19 +6,19 @@ var roleTower = require('struct.tower');
 
 // dummy 6
 
-var spawn_name = 'max';
-var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
+// var spawn_name = 'max';
+// var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
 
 for(var current_room_name in Game.rooms) {
     // Itiliaze spawn memory with creep's metadata
-    if (typeof Game.spawns[spawn_name].memory.general === "undefined") {
-        Game.spawns[spawn_name].memory.general = {
-            gen: 0,
-            index: 0,
-            status: 'peace',
-            extensions: 0
-        };
-    }
+    // if (typeof Game.spawns[spawn_name].memory.general === "undefined") {
+    //     Game.spawns[spawn_name].memory.general = {
+    //         gen: 0,
+    //         index: 0,
+    //         status: 'peace',
+    //         extensions: 0
+    //     };
+    // }
 
     // Initialie the room memory
     if (typeof Game.rooms[current_room_name].memory.towers === "undefined") {
@@ -100,9 +100,9 @@ for(var current_room_name in Game.rooms) {
 
 // JSON.stringify(obj)
 
-var global_vars = Game.rooms[room_name].memory.global_vars;
-var my_spawn = Game.spawns[global_vars.spawn_name];
-var my_room = Game.rooms[global_vars.room_name];
+// var global_vars = Game.rooms[room_name].memory.global_vars;
+// var my_spawn = Game.spawns[global_vars.spawn_name];
+// var my_room = Game.rooms[global_vars.room_name];
 
 function get_struct_obj(x, y) {
     var stuctures = global_vars.my_room.lookAt(x,y);
@@ -143,10 +143,11 @@ module.exports.loop = function () {
     // // Game.creeps['max_new2'].build(Game.getObjectById('5aaae56ab04a4a5191281b4b'))
 
     if (Game.time % 5 === 0) {
-        console.log('[INFO] (main) Room status: ' + Game.spawns[spawn_name].memory.general.status);
         console.log('[INFO] (main): TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket)
         for (let cur_room in Game.rooms) {
-            if (units[cur_room]) console.log('[INFO] (main): [' + cur_room + '] UNITS workers: ' + (units[cur_room].total - units[cur_room].harvest) + '; ' + JSON.stringify(units[cur_room]));
+            let room_status = Memory.rooms[cur_room].global_vars.status;
+            console.log('[INFO] (main) Status of room: ' + cur_room + ' is ' + room_status);
+            if (units[cur_room]) console.log('[INFO] (main): [' + cur_room + '] UNITS expected: ' + Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + '; ' + JSON.stringify(units[cur_room]));
         }
     }
     let tick_between_hard_actions = 2;
@@ -173,7 +174,7 @@ module.exports.loop = function () {
         let towers_list = Game.rooms[current_room_name].memory.towers.list;
         let towers_energy_full = true;
         // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
-        if (units[current_room_name].total > 3 || Game.spawns[spawn_name].memory.general.status === 'war')
+        if (units[current_room_name].total > 3 || Memory.rooms[current_room_name].global_vars.status === 'war')
             for (let i=0;i<towers_list.length;i++) {
                 // console.log('[DEBUG] (main): TOWER[' + i + ']' + ' ID: ' + towers_list[i]);
                 roleTower.run(towers_list[i], units[current_room_name].total);
@@ -234,14 +235,14 @@ module.exports.loop = function () {
     }
 
     // Create first roads
-    if (typeof my_room.memory.roads == "undefined") {
-        my_room.memory.roads = [];
-        var xy_path = room_helpers.create_road(_.extend(my_spawn.pos, {id: my_spawn.id, structureType: 'spawn'}), _.extend(my_spawn.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'}));  // Spawn-Closest Source
-        for (i in xy_path) get_struct_obj(xy_path[i][0], xy_path[i][1]);
-        room_helpers.create_road(_.extend(global_vars.my_room.controller.pos, {id: my_room.controller.id, structureType: 'controller'}), _.extend(my_room.controller.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'})); // Controller-Closest Source
-        // Save in memory important path to build first
-        //global_vars.my_room.memory.important_structures = xy_path;
-    }
+    // if (typeof my_room.memory.roads == "undefined") {
+    //     my_room.memory.roads = [];
+    //     var xy_path = room_helpers.create_road(_.extend(my_spawn.pos, {id: my_spawn.id, structureType: 'spawn'}), _.extend(my_spawn.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'}));  // Spawn-Closest Source
+    //     for (i in xy_path) get_struct_obj(xy_path[i][0], xy_path[i][1]);
+    //     room_helpers.create_road(_.extend(global_vars.my_room.controller.pos, {id: my_room.controller.id, structureType: 'controller'}), _.extend(my_room.controller.pos.findClosestByPath(FIND_SOURCES_ACTIVE), {structureType: 'source'})); // Controller-Closest Source
+    //     // Save in memory important path to build first
+    //     //global_vars.my_room.memory.important_structures = xy_path;
+    // }
 
 //    console.log('[INFO] (main): FINISH UNITS (nominal: ' + Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] + '): ' + JSON.stringify(units));
 
