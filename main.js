@@ -9,6 +9,28 @@ var roleTower = require('struct.tower');
 // var spawn_name = 'max';
 // var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
 
+if (typeof Memory.rooms.global_vars === "undefined") {
+    Memory.rooms.global_vars = {
+        moveTo_ops: {
+            reusePath: 10,           // default: 5
+            //serializeMemory: false, // default: true
+            //noPathFinding: true, // default: false
+            visualizePathStyle: {
+                fill: 'transparent',
+                stroke: '#fff',
+                lineStyle: 'dashed',
+                strokeWidth: .15,
+                opacity: .1
+            }
+        },
+        update_period: {
+            after_war: 150,
+            towers: 1000
+        },
+        age_to_drop_and_die: 10
+    }
+}
+
 for(var current_room_name in Game.rooms) {
     // Itiliaze spawn memory with creep's metadata
     // if (typeof Game.spawns[spawn_name].memory.general === "undefined") {
@@ -49,21 +71,11 @@ for(var current_room_name in Game.rooms) {
 
     if (typeof Game.rooms[current_room_name].memory.global_vars === "undefined") {
         Game.rooms[current_room_name].memory.global_vars = {
+            status: peace,
+            finish_war: false,
             age_to_drop_and_die: 20,
             age_to_recreate_miner: 70,
             max_body_cost: 1800,
-            moveTo_ops: {
-                reusePath: 10,           // default: 5
-                //serializeMemory: false, // default: true
-                //noPathFinding: true, // default: false
-                visualizePathStyle: {
-                    fill: 'transparent',
-                    stroke: '#fff',
-                    lineStyle: 'dashed',
-                    strokeWidth: .15,
-                    opacity: .1
-                }
-            },
             screeps_max_amount: {
                 peace: 10,
                 war: 30,
@@ -86,10 +98,6 @@ for(var current_room_name in Game.rooms) {
                     repair_civilian: 0.1,          // max percentage of repair units from total creeps
                     special_carry: 0.4
                 }
-            },
-            update_period: {
-                after_war: 150,
-                towers: 1000
             }
         }
     }
@@ -115,24 +123,24 @@ module.exports.loop = function () {
     var cur_creeps = Game.creeps ? Game.creeps : {};
     for (var creep_name in cur_creeps) {
         splited_name = creep_name.split('-');
+        let room_name = cur_creeps[creep_name].room.name;
         // console.log('[INFO] (main): UNITS: ' + JSON.stringify(units));
-        if (!units[cur_creeps[creep_name].room.name]) {
-            units[cur_creeps[creep_name].room.name] = {
-                'total': 0,
-                'transfer': 0,
-                'build': 0,
-                'upgrade': 0,
-                'repair_defence': 0,
-                'repair_civilian': 0,
-                'harvest': 0,
-                'undefined': 0,
-                'special_carry': 0,
-                'claimer': 0
-            }
+        if (!units[room_name]) units[room_name] = {
+            'total': 0,
+            'transfer': 0,
+            'build': 0,
+            'upgrade': 0,
+            'repair_defence': 0,
+            'repair_civilian': 0,
+            'harvest': 0,
+            'undefined': 0,
+            'special_carry': 0,
+            'claimer': 0
         }
-        if (typeof cur_creeps[creep_name].memory.special == "undefined") units[cur_creeps[creep_name].room.name][cur_creeps[creep_name].memory.role]++;
-        else units[cur_creeps[creep_name].room.name][cur_creeps[creep_name].memory.special]++;
-        units[cur_creeps[creep_name].room.name]['total']++;
+
+        if (typeof cur_creeps[creep_name].memory.special == "undefined") units[room_name][cur_creeps[creep_name].memory.role]++;
+        else units[room_name][cur_creeps[creep_name].memory.special]++;
+        units[room_name]['total']++;
         units['total']++;
     }
 
@@ -168,7 +176,6 @@ module.exports.loop = function () {
 
     for(var current_room_name in Game.rooms) {
         // Towers
-        // Game.getObjectById('5aab1ead960d1c715d5e7383').attack(Game.rooms['E38N49'].find(FIND_HOSTILE_STRUCTURES)[0]);
         let towers_list = Game.rooms[current_room_name].memory.towers.list;
         let towers_energy_full = true;
         // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
@@ -176,10 +183,7 @@ module.exports.loop = function () {
             for (let i=0;i<towers_list.length;i++) {
                 // console.log('[DEBUG] (main): TOWER[' + i + ']' + ' ID: ' + towers_list[i]);
                 roleTower.run(towers_list[i], units[current_room_name].total);
-                // let current_tower = Game.getObjectById(towers_list[i]);
-                // if (current_tower.energy/current_tower.energyCapacity < 0.65) towers_energy_full = false;
             }
-        // Game.rooms[global_vars.room_name].memory.towers.all_full = towers_energy_full;
 
         if (Game.time % 5 === 0) {
             // console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
@@ -190,7 +194,7 @@ module.exports.loop = function () {
         let current_mod = 0;
         if (Game.time % 10 === current_mod) {  // run every 10 ticks
             // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-            //        room_helpers.get_transfer_target();
+            //        room_helpers.get_transfer_target(current_room_name);
             room_helpers.define_room_status(current_room_name);
             // dropped_resources = Game.rooms[current_room_name].find(FIND_DROPPED_RESOURCES)
             // if (dropped_resources.length > 0) Game.notify('We Have Dropped Resources in our area: ' + dropped_resources.length);
@@ -201,31 +205,14 @@ module.exports.loop = function () {
         if (Game.time % 10 === current_mod) {  // run every 10 ticks
             // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             room_helpers.get_build_targets(current_room_name);
+            room_helpers.get_repair_defence_target(current_room_name);
+            // room_helpers.get_repair_civilianl_target(current_room_name);
         }
 
         if (Game.time % 300 === 0) {
             room_helpers.upgrade_energy_flow(current_room_name);
             roleTower.create_towers_list(current_room_name);
         }
-    }
-
-    let current_mod = 0;
-    current_mod = current_mod + tick_between_hard_actions;
-    if (Game.time % 10 === current_mod) {  // run every 10 ticks
-        // console.log('[INFO] (main): RUN 10 tickets functions +' + current_mod + '. Time: ' + Game.time);
-        room_helpers.get_repair_defence_target();
-    }
-
-    current_mod = current_mod + tick_between_hard_actions;
-    if (Game.time % 10 === current_mod) {  // run every 10 ticks
-//        console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-//        room_helpers.get_repair_civilianl_target();
-    }
-
-    current_mod = current_mod + tick_between_hard_actions;
-    if (Game.time % 10 === current_mod) {  // run every 10 ticks
-        // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-        room_helpers.define_creeps_amount();
     }
 
     if (Game.time % 1000 === 0) {

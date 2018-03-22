@@ -143,16 +143,16 @@ var creep_helpers = {
         }
     },
     most_creep_action_results: function(creep, target, action_res, creep_role) {
-        let global_vars = Game.rooms[room_name].memory.global_vars;
-        let my_spawn = Game.spawns[global_vars.spawn_name];
-        let my_room = Game.rooms[global_vars.room_name];
+        // let global_vars = Game.rooms[room_name].memory.global_vars;
+        // let my_spawn = Game.spawns[global_vars.spawn_name];
+        let my_room = Game.rooms[creep.room.name];
 
         switch(action_res) {
             case OK:
                 creep.memory.target_id = target.id;
                 break;
             case ERR_NOT_IN_RANGE:
-                creep.moveTo(target, global_vars.moveTo_ops);
+                creep.moveTo(target, Memory.rooms.global_vars.moveTo_ops);
                 break;
             case ERR_FULL:
                 creep.memory.target_id = false;

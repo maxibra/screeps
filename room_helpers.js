@@ -154,34 +154,38 @@ var room_helpers = {
         Game.rooms[room_name].memory.energy_flow = energy_flow_obj;
     },
     define_room_status: function(room_name) {
+        let room_vars = Game.rooms[room_name].memory.global_vars;
+        let global_vars = Memory.rooms.global_vars;
         let hostile_creeps = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
-        if (hostile_creeps && hostile_creeps.length > 0 && Game.spawns[spawn_name].memory.general.status === 'peace') {
-            Game.spawns[spawn_name].memory.general.status = 'war';
-            Game.notify('WE are attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); Body: ' + JSON.stringify(hostile_creeps[0].body));
-        } else if (Game.spawns[spawn_name].memory.general.status === 'war' && !Game.spawns[spawn_name].memory.general.finish_war) {
-            Game.spawns[spawn_name].memory.general.finish_war = Game.time + Game.rooms[room_name].memory.global_vars.update_period.after_war;
-            console.log('[DEBUG] (main) Define finish war to ' +  (Game.time + Game.rooms[room_name].memory.global_vars.update_period.after_war))
-        } else if (Game.spawns[spawn_name].memory.general.finish_war < Game.time && Game.spawns[spawn_name].memory.general.status === 'war') {
-            Game.spawns[spawn_name].memory.general.status = 'peace';
-            Game.spawns[spawn_name].memory.general.finish_war = false;
+        if (hostile_creeps && hostile_creeps.length > 0 && room_vars.status === 'peace') {
+            room_vars.status = 'war';
+            Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); by ' + hostile_crreps[0].owner + '; Body: ' + JSON.stringify(hostile_creeps[0].body));
+        } else if (room_vars.status === 'war' && !room_vars.finish_war) {
+            room_vars.finish_war = Game.time + global_vars.update_period.after_war;
+            console.log('[DEBUG] (main) Define finish war to ' +  (Game.time + global_vars.update_period.after_war))
+        } else if (room_vars.finish_war < Game.time && room_vars.status === 'war') {
+            room_vars.status = 'peace';
+            room_vars.finish_war = false;
             Game.notify('It"s time for PEACE');
         }
     },
-    get_energy_source_target: function() {
-        let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.storeCapacity) > 0.3)});
+    get_energy_source_target: function(room_name) {
+        let targets = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.storeCapacity) > 0.3)});
 
         //targets.contact()
     },
-    get_transfer_target: function() {
+    get_transfer_target: function(room_name) {
 //        let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (structureType: STRUCTURE_TOWER && object.energy < object.energyCapacity)});
+        let my_room = Game.rooms[room_name];
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.energy < object.energyCapacity)});
         //targets.sort((a,b) => a.hits - b.hits);
-        targets.push(my_spawn);
+        // targets.push(my_spawn);
         //if (targets[0]) console.log('[DEBUG] (room_helpers-get_transfer_target): Transfer target type: ' + targets[0].structureType);
         my_room.memory.targets.transfer = targets[0] ? targets[0].id : false;
         return targets[0].id
     },
-    get_repair_defence_target: function() {
+    get_repair_defence_target: function(room_name) {
+        let my_room = Game.rooms[room_name];
         avoid_stricts = ['5a3c93c377eddf3fcd2289e4', '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7',
             '5a434aad352f7c7e6c4b88d1', '5a437edae9ad370d6f80c979', '5a436eb786a4a36e5af6c89e', '5a436c93b5b012359cb81bd2', '5a436bb28ee5032e65a12834', '5a4365fd262eb037220fc9b4',
             '5a4364e3eba40146402df274', '5a4364e3eba40146402df274', '5a4361ecb458c9595ccdf3b7', '5a435fd9176c8f376528dbb8'];
@@ -190,7 +194,8 @@ var room_helpers = {
 //        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets));
         my_room.memory.targets.repair_defence = targets[0] ? targets[0].id : false;
     },
-    get_repair_civilianl_target: function() {
+    get_repair_civilianl_target: function(room_name) {
+        let my_room = Game.rooms[room_name];
         var targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
         my_room.memory.targets.repair_civilian = targets[0] ? targets[0].id : false;
@@ -222,15 +227,6 @@ var room_helpers = {
 // //        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
 //         }
         my_room.memory.targets.build = (targets.length > 0) ? targets[0].id : false;
-    },
-    define_creeps_amount: function() {
-        if (Game.time < 5000) {
-            my_spawn.memory.general.creeps_max_amount = 'nominal';
-        } else if (my_room.memory.target_repair_defence) {
-            my_spawn.memory.general.creeps_max_amount = 'repair_defence';
-        } else if (my_room.memory.targets_build) {
-            my_spawn.memory.general.creeps_max_amount = 'build';
-        } else my_spawn.memory.general.creeps_max_amount = 'nominal';
     },
     clean_memory: function() {
         // Clean died creeps

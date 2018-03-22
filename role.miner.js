@@ -10,7 +10,7 @@ RoleMiner.prototype.run = function() {
     let harvest_target = Game.getObjectById(this.creep.room.memory.energy_flow.containers.source[container.id]);
     let action_out = this.creep.harvest(harvest_target);
     if (action_out === ERR_NOT_IN_RANGE) {
-        this.creep.moveTo(container_target, global_vars.moveTo_ops);
+        this.creep.moveTo(container_target, Memory.rooms.global_vars.moveTo_ops);
     }
 };
 
