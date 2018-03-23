@@ -47,7 +47,7 @@ StructTower = {
         } else if (target2repair ) {
             current_tower.repair(target2repair);
             current_creep_types.repair_civilian = 0;
-            current_creep_types.repair_defence = 0;
+            // current_creep_types.repair_defence = 0;
             current_creep_types.transfer[current_life_status] = 0.5;
         }
 
