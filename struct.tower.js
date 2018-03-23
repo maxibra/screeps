@@ -22,14 +22,17 @@ StructTower = {
         if (room_vars.status == 'war') {
             target2attack = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
             target2repair = Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
-            console.log('[INFO] (StructTower.run) [' + room_name + ' it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
+            console.log('[INFO] (StructTower.run) [' + room_name + '] it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
         } else if (current_tower.energy/current_tower.energyCapacity > 0.4 && !(Game.time % 10)) {
             targets2repair = (Game.rooms[room_name].memory.towers.road2repair_id) ? Game.getObjectById(Game.rooms[room_name].memory.towers.road2repair_id) :
                 Game.rooms[room_name].find(FIND_STRUCTURES,
                     {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.8))});
             //console.log('[DEBUG] (StructTower.run): Road X: ' + road2repair.pos.x + '; Road y: ' + road2repair.pos.y);
             target2repair = targets2repair.length > 0 ? targets2repair[0] : []; //Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
+
+            // ***** LOG
             console.log('[DEBUG] (StructTower.run){' + Game.time + '} [' + current_tower.room.name + ' : ' + current_tower_id + ']: Roads to repear: ' + targets2repair.length); // + '; Defence: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
+            // *********
             // target2repair = false;
         }
 //        console.log('[DEBUG] (StructTower.run)[ ' + current_tower.id + ']: To Attack: ' + (target2attack?target2attack.length:0) + '; To repair: ' + (target2repair?target2repair.length:0));

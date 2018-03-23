@@ -117,43 +117,42 @@ function get_struct_obj(x, y) {
 }
 
 module.exports.loop = function () {
-    var units = {'total': 0, 'E38N48': {}};
-
+    var units = {'total': 0};
+// 59f1a59182100e1594f3eb84
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
     var cur_creeps = Game.creeps ? Game.creeps : {};
     for (var creep_name in cur_creeps) {
+        // cur_creeps[creep_name].memory.stuck = 0;
         splited_name = creep_name.split('-');
         let room_name = cur_creeps[creep_name].room.name;
+        // if ( room_name === 'E38N48') continue;
         // console.log('[INFO] (main): UNITS: ' + JSON.stringify(units));
-        if (!units[room_name]) units[room_name] = {
-            'total': 0,
-            'transfer': 0,
-            'build': 0,
-            'upgrade': 0,
-            'repair_defence': 0,
-            'repair_civilian': 0,
-            'harvest': 0,
-            'undefined': 0,
-            'special_carry': 0,
-            'claimer': 0
+        if (!units[room_name]) {
+            units[room_name] = {
+                'total': 0,
+                'transfer': 0,
+                'build': 0,
+                'upgrade': 0,
+                // 'repair_defence': 0,
+                // 'repair_civilian': 0,
+                'harvest': 0,
+                'undefined': 0,
+                // 'special_carry': 0,
+                'claimer': 0
+            };
         }
-
         if (typeof cur_creeps[creep_name].memory.special == "undefined") units[room_name][cur_creeps[creep_name].memory.role]++;
         else units[room_name][cur_creeps[creep_name].memory.special]++;
         units[room_name]['total']++;
         units['total']++;
     }
 
-
-    // Game.creeps['max_claimer'].moveTo(Game.getObjectById('59f1a59182100e1594f3eb87'));
-    // // Game.creeps['max_new2'].build(Game.getObjectById('5aaae56ab04a4a5191281b4b'))
-
     if (Game.time % 5 === 0) {
         console.log('[INFO] (main): TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket)
         for (let cur_room in Game.rooms) {
             let room_status = Memory.rooms[cur_room].global_vars.status;
             console.log('[INFO] (main) Status of room: ' + cur_room + ' is ' + room_status);
-            if (units[cur_room]) console.log('[INFO] (main): [' + cur_room + '] UNITS expected: ' + Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + '; ' + JSON.stringify(units[cur_room]));
+            if (units[cur_room]) console.log('[INFO] (main): [' + cur_room + '] UNITS expected: ' + Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + '; Workers: ' +(units[cur_room].total-units[cur_room].harvest) + '; ' + JSON.stringify(units[cur_room]));
         }
     }
     let tick_between_hard_actions = 2;

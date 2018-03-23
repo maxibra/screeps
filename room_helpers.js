@@ -159,14 +159,14 @@ var room_helpers = {
         let hostile_creeps = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
         if (hostile_creeps && hostile_creeps.length > 0 && room_vars.status === 'peace') {
             room_vars.status = 'war';
-            Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); by ' + hostile_crreps[0].owner + '; Body: ' + JSON.stringify(hostile_creeps[0].body));
+            Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); by ' + hostile_creeps[0].owner + '; Body: ' + JSON.stringify(hostile_creeps[0].body));
         } else if (room_vars.status === 'war' && !room_vars.finish_war) {
             room_vars.finish_war = Game.time + global_vars.update_period.after_war;
-            console.log('[DEBUG] (main) Define finish war to ' +  (Game.time + global_vars.update_period.after_war))
+            console.log('[DEBUG] (main)[' + room_name + '] Define finish war to ' +  (Game.time + global_vars.update_period.after_war))
         } else if (room_vars.finish_war < Game.time && room_vars.status === 'war') {
             room_vars.status = 'peace';
             room_vars.finish_war = false;
-            Game.notify('It"s time for PEACE');
+            Game.notify('[' + room_name + '] It"s time for PEACE');
         }
     },
     get_energy_source_target: function(room_name) {
@@ -203,7 +203,8 @@ var room_helpers = {
     get_build_targets: function(room_name) {
         // Extensions have highest priority
         let my_room = Game.rooms[room_name];
-        let targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
+        // let targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
+        targets = [];
         // Defence structures are secondary priority
         if (targets.length === 0) targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER)});
         // All other structures
@@ -226,7 +227,10 @@ var room_helpers = {
 // //        targets.sort((a,b) => (Math.abs(my_spawn.pos.x-a.pos.x) + Math.abs(my_spawn.pos.y-a.pos.y)) - (Math.abs(my_spawn.pos.x-b.pos.x) + Math.abs(my_spawn.pos.y-b.pos.y)));
 // //        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
 //         }
-        my_room.memory.targets.build = (targets.length > 0) ? targets[0].id : false;
+        targets_id = [];
+        for (let i in targets) targets_id.push(targets[i].id);
+        // my_room.memory.targets.build = (targets.length > 0) ? targets[0].id : false;
+        my_room.memory.targets.build = (targets.length > 0) ? targets_id : false;
     },
     clean_memory: function() {
         // Clean died creeps

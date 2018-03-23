@@ -8,9 +8,7 @@ var RoleHarvester = {
         let room_name = creep.room.name;
         let action_out;
         let harvester_type = false;     // needed to use saved id
-        let creep_name4log ='max_new';
-
-
+        let creep_name4log ='E39N49-4-60-195-gn';
 
         if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +']: ' + ' Carry: ' + creep.carry[RESOURCE_ENERGY] + '; Capacity: ' + creep.carryCapacity);
         if (creep.carry[RESOURCE_ENERGY] === creep.carryCapacity) {
@@ -62,7 +60,7 @@ var RoleHarvester = {
                     if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: GET TOMBSTONE: ' + JSON.stringify(target));
                     if (target && creep.pos.getRangeTo(target) < 10) harvester_type = 'tombstone';
                     else {
-                        target = creep.pos.findClosestByRange(FIND_SOURCES,{filter: object => (object.energy > 60)});
+                        target = (creep.memory.target_id) ? creep.memory.target_id : creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE,{filter: object => (object.energy > 60)});
                         if (target) harvester_type = 'source';
                         else if (creep.room.name == 'E39N49') harvester_type = 'go_close';
                     }
@@ -101,10 +99,21 @@ var RoleHarvester = {
         }
         if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' ACTION OUT: ' + action_out);
 
-        if (action_out === ERR_NOT_IN_RANGE) {
+        if (action_out === OK) creep.memory.stuck = 0;
+        else if (action_out === ERR_NOT_IN_RANGE) {
+            if (creep.pos.inRangeTo(target, 2)) creep.memory.stuck++;
             creep.moveTo(target, global_vars.moveTo_ops);
-            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: ERR_NOT_IN_RANGE TARGET: ' + JSON.stringify(creep.memory));
-            creep.memory.target_id = target.id;
+            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: ERR_NOT_IN_RANGE TARGET; STUCk: ' +  creep.memory.stuck + '; Memory: ' + JSON.stringify(creep.memory));
+            if (creep.memory.stuck > 3) {
+                let room_sources = Game.rooms[room_name].memory.energy_flow.sources;
+                let next_source = false;
+                for (let i in room_sources) {
+                    if (target.id === room_sources[i]) continue;
+                    next_source = room_sources[i];
+                }
+                creep.memory.target_id = (next_source) ? next_source : false;
+                creep.memory.stuck = 0;
+            } else creep.memory.target_id = target.id;
         } else if (action_out === ERR_INVALID_TARGET) {
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;

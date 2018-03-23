@@ -15,83 +15,65 @@ var structCreep = {
         let my_room = Game.rooms[room_name];
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let iam_general = (typeof creep.memory.special === "undefined");
+        let log_name = 'max_new7';
+
         var condition2change_role = (iam_general && ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
             creep.memory.role === 'undefined'));
-        // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
+
+        // *** LOG
+        // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
+        // ********
+
         var transfer_target;
         // Game.spawns['max'].spawnCreep([MOVE,MOVE,MOVE,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH], 'claimer1', {'role': 'claimer'})
-        // if (creep.id === '5ab2077e96dbc27d8bfadc5e') creep.memory.role = 'repair_defence';
-        if (creep.name === 'claimer' || creep.name === 'claimer1' || creep.name === 'claimer2' || creep.name === 'claimer3') creep.memory.role = 'claimer';
+        if ((creep.name.substring(0,7) === 'max_new') && (room_name === 'E38N49' || room_name === 'E39N49')) creep.memory.role = 'claimer';
         else if(creep.carry.energy === 0 || creep.memory.role === 'harvest') {
             if (creep.memory.role !== 'harvest') creep.say('harvesting');
             creep.memory.role = 'harvest';
             creep.memory.target_id == false;
-            // } else if (creep.room.name === 'E38N49' && (creep.name.substring(0, 6) === 'E38N49')) {
-            // creep.moveTo(Game.getObjectById('59f1c0e27d0b3d79de5f1f13'));
-            // } else if (creep.room.name === 'E39N49' && (units['E39N49'] > 4)) {
-            // creep.moveTo(Game.getObjectById('59f1a59182100e1594f3eb83'));
-            // }
-
-            // } else if (creep.room.name === 'E38N49' && (creep.name === 'max_new1' || creep.name === 'max_new2' )) { //|| creep.name === 'max_new3' || creep.name === 'max_new4' || creep.name === 'max_new5')) { // || creep.name === 'max_new6')) {
-            // creep.memory.role = 'transfer';
-            // if ( creep.memory.target_id === false || creep.memory.target_id === '59f1a59182100e1594f3eb85') {
-            //     let target = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_EXTENSION || object.structureType == STRUCTURE_SPAWN || object.structureType == STRUCTURE_TOWER)});
-            //     if (target) {
-            //         creep.memory.target_id = target.id;
-            //         creep.memory.role = 'build';
-            //         // console.log('[DEBUG] (build new): Name: ' + creep.name + '; target: ' + creep.memory.target_id)
-            //     } else if ( creep.memory.target_id === false || creep.memory.target_id === '59f1a59182100e1594f3eb85' || creep.memory.target_id === '5a3c2abd58995a60a7cbb724') {
-            //         let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < 400000&& object.hits/object.hitsMax <= 0.8 && object.id !== '5a8fbd6625e0a771c366de93'});
-            //         if (target) {
-            //             creep.memory.target_id = target.id
-            //             creep.memory.role = 'repair_civilian';
-            //         } else {
-            //             creep.memory.target_id = '59f1a59182100e1594f3eb85'
-            //             creep.memory.role = 'upgrade';
-            //         }
-            //         // let targets = Game.rooms['E38N49'].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax && object.id !== '5a8fbd6625e0a771c366de93'});
-            //         // targets.sort((a,b) => a.hits - b.hits);
-            //         // if (targets) creep.memory.target_id = targets[0].id
-            //     }
-            // }
-        } else if (creep.name === 'max_new1' || creep.name === 'max_new2' || creep.name === 'max_new3' || creep.name === 'max_new4'|| creep.name === 'max_new5'|| creep.name === 'max_new6' || creep.name === 'max_new7') {
-            if (creep.memory.target_id == false || creep.memory.target_id === '5a3c2abd58995a60a7cbb724') {
-                let towers = Game.rooms['E38N49'].find(FIND_MY_STRUCTURES, {filter: object => (((object.structureType === STRUCTURE_EXTENSION || object.structureType === STRUCTURE_SPAWN) && (object.energy < object.energyCapacity)) || (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8)))});
-                if (towers && towers.length > 0) {
-                    creep.memory.target_id = towers[0].id;
-                    creep.memory.role = 'transfer';
-                } else {
-                    creep.memory.target_id = '59f1a59182100e1594f3eb85'
-                    creep.memory.role = 'upgrade';
-                }
-            }
-        } else if ((creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) || ((units['E39N49']['upgrade'] < 2) && (units['E39N49']['total'] > 4) && (creep.ticksToLive > 1300))) {
+        } else if ((creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) || ((units['E39N49']['upgrade'] < 1) && (units['E39N49']['total'] > 3) && (creep.ticksToLive > 1300))) {
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: FIRST to upgrade');
             if (creep.memory.role !== 'upgrade') creep.say('upgrading');
             creep.memory.role = 'upgrade';
         } else if (condition2change_role) {
-            var current_workers = units[room_name]['total']; // - units[room_name]['harvest'];
+            var current_workers = units[room_name]['total'] - units[room_name]['harvest'];
             var current_creep_types = room_vars.creep_types[room_vars.status];
-            // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: CREEP_TYPES: ' + JSON.stringify(current_creep_types));
             //TODO: Improve pleace of tower. don't search per creep
+            let transfer_procent = units[room_name]['transfer']/current_workers;
+
+            // *** UNIT LOG
+            // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfers: ' + transfer_procent +' / ' + current_creep_types.transfer[my_room.controller.level]);
+            // ********
+
             transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
             if (!transfer_target) {
-                transfer_target = Game.getObjectById(Game.rooms[room_name].memory.energy_flow.links.source);
+                transfer_target = Game.getObjectById(my_room.memory.energy_flow.links.source);
                 if (!(transfer_target && (transfer_target.energy/transfer_target.energyCapacity < 0.9) && (creep.pos.getRangeTo(transfer_target) < 7))) {
                     transfer_target = creep.pos.findClosestByPath(FIND_STRUCTURES,
                         {filter: object => ((object.structureType === STRUCTURE_EXTENSION || object.structureType === STRUCTURE_SPAWN)
                         && (object.energy < object.energyCapacity))});
-                    // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS targets: ' + targets.length + '; current TRANSFER %: ' + units[room_name]['transfer']/current_workers + '; limit: '+ current_creep_types.transfer[my_room.controller.level]);
+
+                    // *** UNIT LOG
+                    // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS targets: ' + targets.length + '; current TRANSFER %: ' + units[room_name]['transfer']/current_workers + '; limit: '+ current_creep_types.transfer[my_room.controller.level]);
+                    // ********
                 }
             }
 
-            if (transfer_target && (units[room_name]['transfer']/current_workers < current_creep_types.transfer[my_room.controller.level])) {
+            if(transfer_target && (transfer_procent < current_creep_types.transfer[my_room.controller.level])) {
                 creep.say('transfering');
                 creep.memory.role = 'transfer';
-//                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: changed to TRANSFER');
+
+                // *** UNIT LOG
+                // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: changed to TRANSFER');
+                // ********
+
                 //units[room_name].transfer++;
             } else if (my_room.memory.targets.repair_defence && units[room_name]['repair_defence']/current_workers < current_creep_types.repair_defence) {
-                console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units[room_name]['repair_defence'] + ' / ' + current_workers + '=' + units[room_name]['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
+
+                // *** GLOBAL LOG
+                // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units[room_name]['repair_defence'] + ' / ' + current_workers + '=' + units[room_name]['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
+                // ********
+
                 creep.say('defence repair');
                 creep.memory.role = 'repair_defence';
                 //units[room_name].repair_defence++;
@@ -153,10 +135,17 @@ var structCreep = {
             case 'build':
                 //console.log(creep.name + '-MemBuild: ' + JSON.stringify(my_room.memory.targets.build[0].id));
                 //var target = creep.pos.findClosestByRange(my_room.memory.targets.build);
-                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.build));
+                // var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.build));
+                let build_target;
+                if (creep.memory.target_id)  build_target = Game.getObjectById(creep.memory.target_id);
+                else {
+                    let targets_obj = [];
+                    for (let i in my_room.memory.targets.build) targets_obj.push(Game.getObjectById(my_room.memory.targets.build[i]));
+                    build_target = creep.pos.findClosestByRange(targets_obj);
+                }
                 //console.log(creep.name + '-Build: ' + target.id);
-                if (target) {
-                    var action_res = creep.build(target);
+                if (build_target) {
+                    var action_res = creep.build(build_target);
                     // console.log('[DEBUG] (structCreep-build)[' + creep.name + ']: Target: ' + JSON.stringify(target.id) + '; ACTION_RES: ' + action_res);
                     switch(action_res) {
                         case ERR_INVALID_TARGET:    // possible problem: if creep on the square remove structure from list
@@ -165,7 +154,7 @@ var structCreep = {
                             creep.memory.target_id = false;
                             break;
                         default:
-                            creep_helpers.most_creep_action_results(creep, target, action_res, creep_role);
+                            creep_helpers.most_creep_action_results(creep, build_target, action_res, creep_role);
                             creep.memory.target_id = false;
                     }
                 } else creep.memory.role = 'undefined';
@@ -183,13 +172,18 @@ var structCreep = {
                 } else creep.moveTo(closest_containers, global_vars.moveTo_ops);
                 break;
             case 'claimer':
+                creep.moveTo(Game.getObjectById('59f1a59182100e1594f3eb89', global_vars.moveTo_ops));   // go to source in new room
+                if (creep.room.name === 'E38N48') creep.memory.role = 'undefined';
+                // if (creep.room.name === 'E38N49' && (creep.name.substring(0, 6) === 'E38N49')) creep.moveTo(Game.getObjectById('5aa0beee3c525457e6f84f7f'));
+                // else if (creep.room.name === 'E39N49') creep.moveTo(Game.getObjectById('59f1a59182100e1594f3eb85'));
                 // let action_out = creep.moveTo(Game.getObjectById('59f1a59182100e1594f3eb87'), global_vars.moveTo_ops);
                 // let action_out = creep.moveTo(new RoomPosition(37, 21, 'E38N48'), global_vars.moveTo_ops);
+                // let action_out = creep.claimController(Game.getObjectById('59f1a59182100e1594f3eb87'));
                 // let action_out = creep.reserveController(creep.room.controller); //Game.getObjectById('5ab2b2a5c9848656de6fedac'))
                 // console.log('[ERROR]: Clamer ' + creep.name + '; out: ' + action_out);
                 break;
             default:
-                console.log('[ERROR]: No role defined for ' + creep.name + '; ROLE: ' + creep_role);
+                console.log('[ERROR] (structCreep): No role defined for ' + creep.name + '; ROLE: ' + creep_role);
         }
 
         {    // HARVEST
