@@ -172,15 +172,8 @@ var structCreep = {
                 } else creep.moveTo(closest_containers, global_vars.moveTo_ops);
                 break;
             case 'claimer':
-                creep.moveTo(Game.getObjectById('59f1a59182100e1594f3eb89', global_vars.moveTo_ops));   // go to source in new room
+                creep.moveTo(Game.getObjectById('59f1a59182100e1594f3eb89'), global_vars.moveTo_ops);   // go to source in new room
                 if (creep.room.name === 'E38N48') creep.memory.role = 'undefined';
-                // if (creep.room.name === 'E38N49' && (creep.name.substring(0, 6) === 'E38N49')) creep.moveTo(Game.getObjectById('5aa0beee3c525457e6f84f7f'));
-                // else if (creep.room.name === 'E39N49') creep.moveTo(Game.getObjectById('59f1a59182100e1594f3eb85'));
-                // let action_out = creep.moveTo(Game.getObjectById('59f1a59182100e1594f3eb87'), global_vars.moveTo_ops);
-                // let action_out = creep.moveTo(new RoomPosition(37, 21, 'E38N48'), global_vars.moveTo_ops);
-                // let action_out = creep.claimController(Game.getObjectById('59f1a59182100e1594f3eb87'));
-                // let action_out = creep.reserveController(creep.room.controller); //Game.getObjectById('5ab2b2a5c9848656de6fedac'))
-                // console.log('[ERROR]: Clamer ' + creep.name + '; out: ' + action_out);
                 break;
             default:
                 console.log('[ERROR] (structCreep): No role defined for ' + creep.name + '; ROLE: ' + creep_role);
