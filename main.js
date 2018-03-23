@@ -133,7 +133,7 @@ module.exports.loop = function () {
                 'transfer': 0,
                 'build': 0,
                 'upgrade': 0,
-                // 'repair_defence': 0,
+                'repair_defence': 0,
                 // 'repair_civilian': 0,
                 'harvest': 0,
                 'undefined': 0,
