@@ -45,7 +45,7 @@ var creep_helpers = {
         creep_name = '';
         let new_memory = {role: 'harvest', harvester_type: 'source', target_id: '59f1a59182100e1594f3eb89', stuck: 0};
         for (let i=1; i<=new_room_creeps; i++) {
-            current_new_name = 'max_new' + i;
+            current_new_name = 'max_new-' + i + 'room_name';
             // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
             if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
                 creep_name = current_new_name;
