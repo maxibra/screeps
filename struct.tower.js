@@ -12,7 +12,6 @@ StructTower = {
         let target2repair = false;
         let target2attack;
 
-
         if (!current_tower) {
             console.log('[ERROR] (StructTower.run) Tower: ' + current_tower_id + ' doesnt exist');
             return;

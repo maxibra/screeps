@@ -178,7 +178,7 @@ module.exports.loop = function () {
         let towers_list = Game.rooms[current_room_name].memory.towers.list;
         let towers_energy_full = true;
         // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
-        if (units[current_room_name].total > 3 || Memory.rooms[current_room_name].global_vars.status === 'war')
+        if ((units[current_room_name] && units[current_room_name].total > 3) || Memory.rooms[current_room_name].global_vars.status === 'war')
             for (let i=0;i<towers_list.length;i++) {
                 // console.log('[DEBUG] (main): TOWER[' + i + ']' + ' ID: ' + towers_list[i]);
                 roleTower.run(towers_list[i], units[current_room_name].total);

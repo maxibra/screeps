@@ -41,52 +41,53 @@ var creep_helpers = {
         let current_body = creep_body.general.base;
         let add_body = creep_body.general.add;
 
-        // console.log('[DEBUG] (create_creep)[' + spawn_name + ']: Creeps: ' +  units[room_name].total + '; Must Be: ' + room_vars.screeps_max_amount[global_vars.status] + '; SPAWING: ' + JSON.stringify(Game.spawns[spawn_name].spawning));
         creep_name = '';
-        let new_memory = {role: 'harvest', harvester_type: 'source', target_id: '59f1a59182100e1594f3eb89', stuck: 0};
-        for (let i=1; i<=new_room_creeps; i++) {
-            current_new_name = 'max_new-' + i + '-' + room_name;
-            // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
-            if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
-                creep_name = current_new_name;
-                creep_memory = new_memory;
-                break;
+        if (room_name !== 'E38N38') {
+            let new_memory = {role: 'harvest', harvester_type: 'source', target_id: '59f1a59182100e1594f3eb89', stuck: 0};
+            for (let i=1; i<=new_room_creeps; i++) {
+                current_new_name = 'max_new-' + i;
+                // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
+                if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
+                    creep_name = current_new_name;
+                    creep_memory = new_memory;
+                    break;
+                }
             }
         }
 
-        if ((creep_name === '' && units[room_name].total >= room_vars.screeps_max_amount[global_vars.status]) || my_spawn.spawning) return;
+        // **** LOG
+        // console.log('[DEBUG] (create_creep)[' + spawn_name + ']: Creeps: ' +  units[room_name].total + '; Must Be: ' + room_vars.screeps_max_amount[global_vars.status] + '; SPAWING: ' + my_spawn.spawning + 'New: ' + (creep_name === ''));
+        // ********
 
-        //console.log('[DEBUG] (create_creep)[' + spawn_name + ']: CREEPS: ' + creeps_names.length);
-        if (my_spawn.spawning) return;
+        if ((creep_name === '' && units[room_name] && (units[room_name].total >= room_vars.screeps_max_amount[global_vars.status])) || my_spawn.spawning) return;
 
-        if (my_room.controller.level > 1) {     // You can create special creeps
-            // if (units['special_carry']/units['total'] < current_creep_types.special_carry) { // Check creation of special carry
-            //         console.log('[INFO] (create_creep): SPECIAL_Units: ' + units['special_carry'] + ' [' + current_creep_types.special_carry + ']');
-            //         creep_memory.special = 'special_carry';
-            //         creep_memory.role = 'transfer';
-            //         name_special = 'sc';
-            //         current_body = creep_body.special_carry.base;
-            //         add_body = creep_body.special_carry.add;
-            // }
+        // if (my_room.controller.level > 1) {     // You can create special creeps
+        // if (units['special_carry']/units['total'] < current_creep_types.special_carry) { // Check creation of special carry
+        //         console.log('[INFO] (create_creep): SPECIAL_Units: ' + units['special_carry'] + ' [' + current_creep_types.special_carry + ']');
+        //         creep_memory.special = 'special_carry';
+        //         creep_memory.role = 'transfer';
+        //         name_special = 'sc';
+        //         current_body = creep_body.special_carry.base;
+        //         add_body = creep_body.special_carry.add;
+        // }
 
-            // if (my_spawn.memory.general.create_miner) {
-            //     console.log('[INFO] (create_creep): Miner for: ' + my_spawn.memory.general.create_miner);
-            //     creep_memory = {
-            //         special: 'special_miner',
-            //         role: 'miner',
-            //         target_id: my_spawn.memory.general.create_miner
-            //     };
-            //     name_special = 'sm';
-            //     current_body = creep_body.special_miner.base;
-            //     add_body = false;
-            // }
-        }
-
+        // if (my_spawn.memory.general.create_miner) {
+        //     console.log('[INFO] (create_creep): Miner for: ' + my_spawn.memory.general.create_miner);
+        //     creep_memory = {
+        //         special: 'special_miner',
+        //         role: 'miner',
+        //         target_id: my_spawn.memory.general.create_miner
+        //     };
+        //     name_special = 'sm';
+        //     current_body = creep_body.special_miner.base;
+        //     add_body = false;
+        // }
+        // }
 
         let harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvest');
         // console.log('[DEBUG] (creep_helpers)[:' + spawn_name + '] Harvesters: ' + JSON.stringify(harvesters));
 
-        if (units[room_name].total < 2 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
+        if (!units[room_name] || units[room_name].total < 2 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
             // Do nothing
         } else {                      // Create most possible strong body
             let possible_body = current_body.concat(add_body);
