@@ -27,14 +27,16 @@ var structCreep = {
         var transfer_target;
         // Game.spawns['max'].spawnCreep([MOVE,MOVE,MOVE,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH], 'claimer1', {'role': 'claimer'})
         if ((creep.name.substring(0,7) === 'max_new') && (room_name === 'E38N49' || room_name === 'E39N49')) creep.memory.role = 'claimer';
-        else if(creep.carry.energy === 0 || creep.memory.role === 'harvest') {
-            if (creep.memory.role !== 'harvest') creep.say('harvesting');
-            creep.memory.role = 'harvest';
-            creep.memory.target_id == false;
-        } else if ((room_name == 'E39N49') && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) || ((units[room_name]['upgrade'] < 1) && (units[room_name]['total'] > 3) && (creep.ticksToLive > 1300))) {
+        else if ((room_name == 'E39N49') && (creep.carry > 0) && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) ||
+                 ((units[room_name]['upgrade'] < 2) && (units[room_name]['total'] > 4) && (creep.ticksToLive > 1300))) {
+
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: FIRST to upgrade');
             if (creep.memory.role !== 'upgrade') creep.say('upgrading');
             creep.memory.role = 'upgrade';
+        } else if(creep.carry.energy === 0 || creep.memory.role === 'harvest') {
+            if (creep.memory.role !== 'harvest') creep.say('harvesting');
+            creep.memory.role = 'harvest';
+            creep.memory.target_id == false;
         } else if (condition2change_role) {
             var current_workers = units[room_name]['total'] - units[room_name]['harvest'];
             var current_creep_types = room_vars.creep_types[room_vars.status];
