@@ -1,6 +1,5 @@
 var StructTower;
 
-// TEST GIT
 StructTower = {
     run: function (current_tower_id, creeps_amount) {
         /*
