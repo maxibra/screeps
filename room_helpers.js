@@ -159,7 +159,7 @@ var room_helpers = {
         let hostile_creeps = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
         if (hostile_creeps && hostile_creeps.length > 0 && room_vars.status === 'peace') {
             room_vars.status = 'war';
-            Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); by ' + hostile_creeps[0].owner + '; Body: ' + JSON.stringify(hostile_creeps[0].body));
+            Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(hostile_creeps[0].body));
         } else if (room_vars.status === 'war' && !room_vars.finish_war) {
             room_vars.finish_war = Game.time + global_vars.update_period.after_war;
             console.log('[DEBUG] (main)[' + room_name + '] Define finish war to ' +  (Game.time + global_vars.update_period.after_war))
