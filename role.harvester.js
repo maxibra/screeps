@@ -83,6 +83,9 @@ var RoleHarvester = {
             case 'tombstone':
             case 'link':
                 action_out = creep.withdraw(target, RESOURCE_ENERGY);
+                creep.memory.role = 'undefined';
+                creep.memory.target_id = false;
+                creep.memory.harvester_type = false;
                 break;
             case 'source':
                 action_out = creep.harvest(target);

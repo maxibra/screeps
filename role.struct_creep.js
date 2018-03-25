@@ -31,7 +31,7 @@ var structCreep = {
             if (creep.memory.role !== 'harvest') creep.say('harvesting');
             creep.memory.role = 'harvest';
             creep.memory.target_id == false;
-        } else if ((room_name == 'E39N49') && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) || ((units[room_name]['upgrade'] < 2) && (units[room_name]['total'] > 4) && (creep.ticksToLive > 1300))) {
+        } else if ((room_name == 'E39N49') && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) || ((units[room_name]['upgrade'] < 1) && (units[room_name]['total'] > 3) && (creep.ticksToLive > 1300))) {
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: FIRST to upgrade');
             if (creep.memory.role !== 'upgrade') creep.say('upgrading');
             creep.memory.role = 'upgrade';
