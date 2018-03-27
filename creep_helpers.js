@@ -147,6 +147,7 @@ var creep_helpers = {
         switch(action_res) {
             case OK:
                 creep.memory.target_id = target.id;
+                if (my_room.memory.towers.current[target.id] === creep.id) my_room.memory.towers.current[target.id] = false;
                 break;
             case ERR_NOT_IN_RANGE:
                 creep.moveTo(target, global_vars.moveTo_ops);

@@ -27,10 +27,10 @@ var RoleHarvester = {
         if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +']: ' + JSON.stringify(creep.memory));
 
         // Here with zero energy. If no enough time to work then die
-        if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
-            creep.say('Going2die');
-            creep.suicide();     // Go to die to Cemetery (a far place)
-        }
+        // if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
+        //     creep.say('Going2die');
+        //     creep.suicide();     // Go to die to Cemetery (a far place)
+        // }
 
         if (creep.memory.role !== 'harvest') creep.say('harvesting');
         if (creep.memory.target_id) {
