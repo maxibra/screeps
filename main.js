@@ -174,7 +174,7 @@ module.exports.loop = function () {
     for(var current_room_name in Game.rooms) {
         // Towers
         let towers_list = Object.keys(Game.rooms[current_room_name].memory.towers.current);
-˚        let towers_energy_full = true;
+        let towers_energy_full = true;
         // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
         if ((units[current_room_name] && units[current_room_name].total > 3) || Memory.rooms[current_room_name].global_vars.status === 'war')
             for (let i=0;i<towers_list.length;i++) {
