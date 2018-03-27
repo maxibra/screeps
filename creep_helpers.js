@@ -156,6 +156,7 @@ var creep_helpers = {
                 creep.memory.target_id = false;
                 creep.memory.harvester_type = false;
                 creep.memory.role = 'undefined';
+                if (my_room.memory.towers.current[target.id] === creep.id) my_room.memory.towers.current[target.id] = false;
             default:
 //                console.log('[WARN] (most_creep_action_results)[' + creep.name + ']: ' + creep_role + ': NO action for result ' + action_res)
 //                 if (creep.memory.role == 'transfer' && creep.memory.target_id != my_spawn.id && my_spawn.energy < my_spawn.energyCapacity) {

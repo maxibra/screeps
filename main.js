@@ -56,17 +56,8 @@ for(var current_room_name in Game.rooms) {
 
     if (typeof Game.rooms[current_room_name].memory.energy_flow === "undefined") {
         Game.rooms[current_room_name].memory.energy_flow = {
-            containers: {
-                source: {},
-                controller: {},
-                other: {}
-            },
-            links: {
-                source: false,
-                controller: false
-            },
             sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id)
-    }
+        }
     };
 
     if (typeof Game.rooms[current_room_name].memory.global_vars === "undefined") {

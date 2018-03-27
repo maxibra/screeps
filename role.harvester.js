@@ -130,6 +130,7 @@ var RoleHarvester = {
 
 
         if (harvester_type !== 'source') {
+            creep.memory.role = 'undefined';
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;
             if (creep.energy/creep.energyCapacity > 0.2) creep.memory.role = undefined;

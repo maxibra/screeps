@@ -20,13 +20,14 @@ var structCreep = {
         var condition2change_role = (iam_general && ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
             creep.memory.role === 'undefined'));
 
-        // if (creep.ticksToLive < 2)
-        //     room_towers = Object.keys(my_room.memory.towers.current);
-        //     for (let i in room_towers)
-        //         if (my_room.memory.towers.current[room_towers[i]] === creep.id) {
-        //             my_room.memory.towers.current[room_towers[i]] = false;
-        //             creep.suicide
-        //         }
+        if (creep.ticksToLive < 2)
+            // room_towers = Object.keys(my_room.memory.towers.current);
+            for (let current_tower in my_room.memory.towers.current)
+                if (my_room.memory.towers.current[current_tower] === creep.id) {
+                    my_room.memory.towers.current[current_tower] = false;
+                    creep.suicide;
+                    break;
+                }
         // *** LOG
         // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
         // ********
@@ -38,7 +39,7 @@ var structCreep = {
             if (creep.memory.role !== 'harvest') creep.say('harvesting');
             creep.memory.role = 'harvest';
             creep.memory.target_id == false;
-        } else if ((room_name !== 'E38N49') && (units[room_name]['upgrade'] < 3) && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) || ((units[room_name]['total'] > 3) && (creep.ticksToLive > 1300))) {
+        } else if ((room_name !== 'E38N49') && (units[room_name]['upgrade'] < 2) && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) || ((units[room_name]['total'] > 3) && (creep.ticksToLive > 1300))) {
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: FIRST to upgrade');
             if (creep.memory.role !== 'upgrade') creep.say('upgrading');
             creep.memory.role = 'upgrade';
