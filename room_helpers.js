@@ -100,23 +100,23 @@ var room_helpers = {
         }
         // Sort containers
         // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
-        for (let i = 0; i < all_containers.length; i++) {
-            if (all_containers[i].pos.getRangeTo(my_room.controller) < 5) {
-                local_energy_flow_obj.containers.controller[all_containers[i].id] = my_room.controller;
-                container_defined = true
-            } else {
-                for (let j = 0; j < all_sources.length; j++) {
-                    if (all_containers[i].pos.getRangeTo(Game.getObjectById(all_sources[j])) === 1) {
-                        local_energy_flow_obj.containers.source[all_containers[i].id] = all_sources[j];
-                        container_defined = true;
-                        // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Added Container: ' + all_containers[i].id + '; Source: ' + JSON.stringify(energy_flow_obj));
-                        break;
-                    }
-                }
-            }
-            // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Container: ' + all_containers[i].id + ' is Defined: ' + container_defined);
-            if (!container_defined && (local_energy_flow_obj.containers.other !== all_containers[i].id)) local_energy_flow_obj.containers.other[all_containers[i].id] = false;
-        }
+        // for (let i = 0; i < all_containers.length; i++) {
+        //     if (all_containers[i].pos.getRangeTo(my_room.controller) < 5) {
+        //         local_energy_flow_obj.containers.controller[all_containers[i].id] = my_room.controller;
+        //         container_defined = true
+        //     } else {
+        //         for (let j = 0; j < all_sources.length; j++) {
+        //             if (all_containers[i].pos.getRangeTo(Game.getObjectById(all_sources[j])) === 1) {
+        //                 local_energy_flow_obj.containers.source[all_containers[i].id] = all_sources[j];
+        //                 container_defined = true;
+        //                 // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Added Container: ' + all_containers[i].id + '; Source: ' + JSON.stringify(energy_flow_obj));
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Container: ' + all_containers[i].id + ' is Defined: ' + container_defined);
+        //     if (!container_defined && (local_energy_flow_obj.containers.other !== all_containers[i].id)) local_energy_flow_obj.containers.other[all_containers[i].id] = false;
+        // }
 
         // Links
         // *** LOG
@@ -193,7 +193,7 @@ var room_helpers = {
     },
     get_repair_civilianl_target: function(room_name) {
         let my_room = Game.rooms[room_name];
-        var targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
+        let targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
         my_room.memory.targets.repair_civilian = targets[0] ? targets[0].id : false;
     },
