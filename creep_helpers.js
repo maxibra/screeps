@@ -31,7 +31,7 @@ var creep_helpers = {
         let room_name = Game.spawns[spawn_name].room.name
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
-        let new_room_creeps = 7;
+        let new_room_creeps = 3;
 
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
@@ -43,18 +43,18 @@ var creep_helpers = {
 
         creep_name = '';
         // creation of additional creeps for expansion
-        // if (room_name !== 'E38N48') {
-        //     let new_memory = {role: 'harvest', harvester_type: 'source', target_id: '59f1a59182100e1594f3eb89', stuck: 0};
-        //     for (let i=1; i<=new_room_creeps; i++) {
-        //         current_new_name = 'max_new-' + i;
-        //         // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
-        //         if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
-        //             creep_name = current_new_name;
-        //             creep_memory = new_memory;
-        //             break;
-        //         }
-        //     }
-        // }
+        if (room_name !== 'E38N48') {
+            let new_memory = {role: 'harvest', harvester_type: 'source', target_id: '59f1a59182100e1594f3eb89', stuck: 0};
+            for (let i=1; i<=new_room_creeps; i++) {
+                current_new_name = 'max_new-' + i;
+                // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
+                if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
+                    creep_name = current_new_name;
+                    creep_memory = new_memory;
+                    break;
+                }
+            }
+        }
 
         // **** LOG
         // console.log('[DEBUG] (create_creep)[' + spawn_name + ']: Creeps: ' +  units[room_name].total + '; Must Be: ' + room_vars.screeps_max_amount[room_vars.status] + '; SPAWING: ' + my_spawn.spawning + '; no needed a New: ' + (creep_name === ''));

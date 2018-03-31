@@ -41,8 +41,7 @@ var RoleHarvester = {
             // if (creep.pos.inRangeTo(target, 5) && target.energy > 0) harvester_type = 'link';
             // else {
             //           target = creep.pos.findClosestByRange(FIND_TOMBSTONES);
-            target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
-
+            target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {filter: object => (object.energy > 200)});
             if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: DROPPED TARGET: ' + JSON.stringify(target));
             if (target && creep.pos.getRangeTo(target) < 10) harvester_type = 'dropped';
 
@@ -52,13 +51,13 @@ var RoleHarvester = {
                 // if (target) harvester_type = 'container';
                 // else {
                 target = Game.getObjectById(Game.rooms[room_name].memory.energy_flow.links.controller);
-                if (target && creep.pos.getRangeTo(target) < 3 && target.energy > 0) {
+                if (target && creep.pos.getRangeTo(target) < 5 && target.energy > 0) {
                     harvester_type = 'link';
                     if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: GET LINK: ' + JSON.stringify(target));
                 } else {
-                    target = creep.pos.findClosestByRange(FIND_TOMBSTONES,{filter: object => (object.store[RESOURCE_ENERGY] > 60) }); //|| creep.pos.getRangeTo(object, 2)});
+                    target = creep.pos.findClosestByRange(FIND_TOMBSTONES,{filter: object => (object.store[RESOURCE_ENERGY] > 200 && object.creep.owner === 'maxibra')}); //|| creep.pos.getRangeTo(object, 2)});
                     if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: GET TOMBSTONE: ' + JSON.stringify(target));
-                    if (target && creep.pos.getRangeTo(target) < 10) harvester_type = 'tombstone';
+                    if (target && creep.pos.getRangeTo(target) < 5) harvester_type = 'tombstone';
                     else {
                         target = (creep.memory.target_id) ? creep.memory.target_id : creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE,{filter: object => (object.energy > 60)});
                         if (target) harvester_type = 'source';
@@ -133,7 +132,6 @@ var RoleHarvester = {
             creep.memory.role = 'undefined';
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;
-            if (creep.energy/creep.energyCapacity > 0.2) creep.memory.role = undefined;
         }
 
         // if (creep.carry/creep.carryCapacity > 0.9 && (Game.creeps.length < Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount])) {     // If it's not enought creeps change to transfer
