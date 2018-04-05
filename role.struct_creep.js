@@ -34,12 +34,12 @@ var structCreep = {
 
         var transfer_target;
         // Game.spawns['max'].spawnCreep([MOVE,MOVE,MOVE,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH], 'claimer1', {'role': 'claimer'})
-        if ((creep.name.substring(0,7) === 'max_new') && (room_name !== 'E37N48')) creep.memory.role = 'claimer';
+        if ((creep.name.substring(0,7) === 'max_new') && (room_name !== 'E38N48')) creep.memory.role = 'claimer';
         else if(creep.carry.energy === 0 || creep.memory.role === 'harvest') {
             if (creep.memory.role !== 'harvest') creep.say('harvesting');
             creep.memory.role = 'harvest';
             creep.memory.target_id == false;
-        } else if ((room_name !== 'E38N49') && (units[room_name]['upgrade'] < 2) && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 6) || ((units[room_name]['total'] > 3) && (creep.ticksToLive > 1300))) {
+        } else if ((units[room_name]['upgrade'] < 2) && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 6) || ((units[room_name]['total'] > 3) && (creep.ticksToLive > 1300))) {
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: FIRST to upgrade');
             if (creep.memory.role !== 'upgrade') creep.say('upgrading');
             creep.memory.role = 'upgrade';
@@ -179,9 +179,13 @@ var structCreep = {
                 } else creep.moveTo(closest_containers, global_vars.moveTo_ops);
                 break;
             case 'claimer':
-                creep.moveTo(Game.getObjectById('59f1a58082100e1594f3e9fd'), global_vars.moveTo_ops);   // go to source in new room
-                if (creep.room.name === 'E37N48') creep.memory.role = 'undefined';
+                creep.moveTo(Game.getObjectById('5ab39ab7e7f5aa102de370ac'), global_vars.moveTo_ops);   // go to source in new room
+                if (creep.room.name === 'E38N48') creep.memory.role = 'undefined';
                 break;
+            case 'attack':
+                creep.moveTo(Game.getObjectById('5ab049466c3a8506b17046b2'), global_vars.moveTo_ops);   // go to source in new room
+                // if (creep.room.name === 'E38N49') creep.memory.role = 'undefined';
+                break;                
             case 'go_close':
                 if (creep.pos.isNearTo('5a99c2e49340d4525da5a48f')) creep.memory.role = 'undefined';
                 else creep.moveTo(Game.getObjectById('5a99c2e49340d4525da5a48f'), global_vars.moveTo_ops);

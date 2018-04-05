@@ -22,7 +22,7 @@ StructTower = {
 
         if (room_vars.status == 'war') {
             target2attack = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
-            target2repair = Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
+            // target2repair = Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
             console.log('[INFO] (StructTower.run) [' + room_name + '] it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
         } else if (current_tower.energy/current_tower.energyCapacity > 0.4 && !(Game.time % 10)) {
             targets2repair = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7))});

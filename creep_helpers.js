@@ -23,7 +23,6 @@ function body_cost(body) {
     _.forEach(body, function(part) { cost += BODYPART_COST[part]; });
     return cost;
 }
-// var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
 
 var creep_helpers = {
     create_creep: function(spawn_name, units) {
@@ -31,7 +30,7 @@ var creep_helpers = {
         let room_name = Game.spawns[spawn_name].room.name
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
-        let new_room_creeps = 3;
+        let new_room_creeps = 10;
 
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
@@ -43,7 +42,7 @@ var creep_helpers = {
 
         creep_name = '';
         // creation of additional creeps for expansion
-        if (room_name !== 'E38N48') {
+        if (room_name !== 'E37N48') {
             let new_memory = {role: 'harvest', harvester_type: 'source', target_id: '59f1a59182100e1594f3eb89', stuck: 0};
             for (let i=1; i<=new_room_creeps; i++) {
                 current_new_name = 'max_new-' + i;
@@ -84,10 +83,6 @@ var creep_helpers = {
         //     add_body = false;
         // }
         // }
-
-        let harvesters = _.filter(current_creeps, (creep) => creep.memory.role == 'harvest');
-        // console.log('[DEBUG] (creep_helpers)[:' + spawn_name + '] Harvesters: ' + JSON.stringify(harvesters));
-
         if (units[room_name].total < 2 || !add_body) {// == 0 && my_spawn.memory.general.status != 'peace'){// || creeps_names.length < 3) { // It's no harversters create a minimum body
             // Do nothing
         } else {                      // Create most possible strong body
@@ -103,22 +98,11 @@ var creep_helpers = {
         }
 
         let current_body_cost = body_cost(current_body);
-        // console.log('[DEBUG] (create_creep): HARVESTERS: ' +  harvesters.length + '; CREEPS: ' + creeps_names.length + '; BODY COST: ' + current_body_cost + '; BODY: ' + current_body);
-//        if (current_body_cost > my_room.energyAvailable) {
 
         if (creep_name === '' ) creep_name = room_name + '-' + my_spawn.memory.general.index + '-' + my_spawn.memory.general.gen + '-' + (current_body_cost/10) + '-' + name_special;
 
         if (current_body_cost > Game.rooms[room_name].energyAvailable) {
-            console.log('[DEBUG] (create_creep): [' + spawn_name + '] WAITing to create creep ' + creep_name + ': ' + current_body_cost + '/' + Game.rooms[room_name].energyAvailable + "(" + my_room.energyAvailable + ")");
-
-            // Convert all harvesters with acamulated energy near sources to transfer
-            // for (let i = 0; i < harvesters.length; i++) {
-            //     //console.log('[DEBUG] (create_creep): H: ' + JSON.stringify(harvesters[i]));
-            //     if (harvesters[i].carry.energy/harvesters[i].carryCapacity > 0.85) {      // convert harvester with 85% energy to transfer
-            //         Memory.creeps[harvesters[i].name].role = 'transfer';
-            //         // console.log('[DEBUG] (create_creep): Role of ' + harvesters[i].name + ' (Energy: ' + harvesters[i].carry.energy + ') changed to transfer');
-            //     }
-            // }
+            console.log('[DEBUG] (create_creep): [' + spawn_name + '] WAITing to create creep ' + creep_name + ': ' +  Game.rooms[room_name].energyAvailable + '/' + current_body_cost);
             return;
         }
 

@@ -176,16 +176,24 @@ var room_helpers = {
     },
     get_repair_defence_target: function(room_name) {
         let my_room = Game.rooms[room_name];
-        E39N49 = ['5a3c93c377eddf3fcd2289e4', '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7',
-            '5a434aad352f7c7e6c4b88d1', '5a437edae9ad370d6f80c979', '5a436eb786a4a36e5af6c89e', '5a436c93b5b012359cb81bd2', '5a436bb28ee5032e65a12834', '5a4365fd262eb037220fc9b4',
-            '5a4364e3eba40146402df274', '5a4364e3eba40146402df274', '5a4361ecb458c9595ccdf3b7', '5a435fd9176c8f376528dbb8'];
-        E38N48 = ['5aba595ad360fc7cd874e352', '5aba594f74b96f64ff232dc9', '5aa0beee3c525457e6f84f7f', '5ab39a9c8a0c83586e5bfb1e',
+        E38N48_avoid = ['5aba595ad360fc7cd874e352', '5aba594f74b96f64ff232dc9', '5aa0beee3c525457e6f84f7f', '5ab39a9c8a0c83586e5bfb1e',
             '5a962bd55044c20a227e09b9', '5a962bcb77d91872df3159b4', '5a962bc5dca94812fc07024f', '5a962bbed183f34ad9a0d823', '5a962bb74e67460a13b276e7', '5a962bb004d2337105e8d4d4',
             '5a962babcdf030710646711f', '5a962ba4b29c3312dfd01a8b', '5a962b9d53266d146db74952', '5a962b9aefb803145385e4ba', '5a962b974d6ed3145e8181e5', '5a962b94eb14d24ac01c90dc',
             '5a962b8fc459521302a045fe', '5a962b8b1de6ab12eac16be3', '5a96062c5723bd4269c0d824', '5a9606294b5e6a425420fd92', '5a9606267629a93737b6502c', '5aa0c3cc89b39e64781ba746',
             '5aa0c3c8af76d4649b2254b9', '5aa0c3c563159c4aede223f1', '5aa0c3c27ad634646aa08c1a', '5a960632aa03f0374692af1c', '5a96062f69de9865d796c8b3', '5a96063e69de9865d796c8be',
             '5a90ee1696f41740d4d4b4c9', '5a90ee1e96b6b440aad8c3d3', '5a960213a2a07606dea594f7', '5a960210896b0b06baf0e580', '5a90ee1c1ac6c205f425ab7e', '5a90ee1949f9d34c1b394475']
-        avoid_stricts = E39N49.concat(E38N48);
+        E39N49_avoid = ['5a3c93c377eddf3fcd2289e4', '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7',
+            '5a434aad352f7c7e6c4b88d1', '5a437edae9ad370d6f80c979', '5a436eb786a4a36e5af6c89e', '5a436c93b5b012359cb81bd2', '5a436bb28ee5032e65a12834', '5a4365fd262eb037220fc9b4',
+            '5a4364e3eba40146402df274', '5a4364e3eba40146402df274', '5a4361ecb458c9595ccdf3b7', '5a435fd9176c8f376528dbb8', '5a3ff7de9fceac2ef90ce320', '5a3ff7d8b8d7566bedfb37e9', 
+            '5a3ff7b6f5244f2f04d4a54f', '5a3ff51722e6562eb8171f7b', '5a3ff1135f1df3160a8dbdf3', '5a3fe041f6b67970b93a092a',
+            '5a3ff5a84172f32ee0f2a126', '5a3ff3498bf01e096223d330', '5a3fef638bd11d24563999c5', '5a3fee6787ab8c2441b9587a', '5a3fed02265a181611e3f081', '5a3fe9f63cc43f5f102d6a7c',
+            '5a3fe9300796205f06f8956d', '5a3feac9824fe1202d5ceb63', '5a437edae9ad370d6f80c979', '5a436eb786a4a36e5af6c89e', '5a436c93b5b012359cb81bd2', '5a436bb28ee5032e65a12834',
+            '5a4365fd262eb037220fc9b4', '5a4364e3eba40146402df274', '5a43637fb8cafb5972604b24', '5a4361ecb458c9595ccdf3b7', '5a435fd9176c8f376528dbb8', '5a3c93c377eddf3fcd2289e4',
+            '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7', '5a434aad352f7c7e6c4b88d1']
+        E37N48_avoid = ['5abc9c2488988449d6f1d066', '5abc9261ce03634b9a5884de']
+        
+        let avoid_stricts = E39N49_avoid.concat(E38N48_avoid);
+        avoid_stricts = avoid_stricts.concat(E37N48_avoid);
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax && avoid_stricts.indexOf(object.id) === -1});
         targets.sort((a,b) => a.hits - b.hits);
 //        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets));
