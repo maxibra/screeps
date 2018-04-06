@@ -56,13 +56,14 @@ for(var current_room_name in Game.rooms) {
 
     if (typeof Game.rooms[current_room_name].memory.energy_flow === "undefined") {
         Game.rooms[current_room_name].memory.energy_flow = {
-            sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id)
+            sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
+            links: {destinations: []}
         }
     };
 
     if (typeof Game.rooms[current_room_name].memory.global_vars === "undefined") {
         Game.rooms[current_room_name].memory.global_vars = {
-            status: peace,
+            status: 'peace',
             finish_war: false,
             age_to_drop_and_die: 20,
             age_to_recreate_miner: 70,
