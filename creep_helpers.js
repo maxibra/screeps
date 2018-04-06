@@ -30,7 +30,7 @@ var creep_helpers = {
         let room_name = Game.spawns[spawn_name].room.name
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
-        let new_room_creeps = 10;
+        let new_room_creeps = 0;
 
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
@@ -42,7 +42,7 @@ var creep_helpers = {
 
         creep_name = '';
         // creation of additional creeps for expansion
-        if (room_name !== 'E37N48') {
+        if (room_name !== 'E37N48' && units[room_name]['total'] > 3) {
             let new_memory = {role: 'harvest', harvester_type: 'source', target_id: '59f1a59182100e1594f3eb89', stuck: 0};
             for (let i=1; i<=new_room_creeps; i++) {
                 current_new_name = 'max_new-' + i;

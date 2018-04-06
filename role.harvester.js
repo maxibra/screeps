@@ -41,17 +41,18 @@ var RoleHarvester = {
             // if (creep.pos.inRangeTo(target, 5) && target.energy > 0) harvester_type = 'link';
             // else {
             //           target = creep.pos.findClosestByRange(FIND_TOMBSTONES);
-            target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {filter: object => (creep.pos.getRangeTo(object) < 3 || object.energy > 200)});
-            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: DROPPED TARGET: ' + JSON.stringify(target));
-            if (target && creep.pos.getRangeTo(target) < 10) harvester_type = 'dropped';
-
-            else {
+            target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {filter: object => (creep.pos.getRangeTo(object) < 5 || object.energy > 200)});
+            if (target) {
+                if ((room_name === 'E38N48' || room_name === 'E37N48') && target.pos.x < 12) target = false;
+                else harvester_type = 'dropped';
+                // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: DROPPED TARGET: ' + JSON.stringify(target));
+            } else {
                 // target = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] > 0)});
                 // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester): GET CONTAINER: ' + JSON.stringify(target));
                 // if (target) harvester_type = 'container';
                 // else {
                 target = Game.getObjectById(Game.rooms[room_name].memory.energy_flow.links.controller);
-                if (target && creep.pos.getRangeTo(target) < 5 && target.energy > 0) {
+                if (target && creep.pos.getRangeTo(target) < 3 && target.energy > 0) {
                     harvester_type = 'link';
                     if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: GET LINK: ' + JSON.stringify(target));
                 } else {
@@ -61,7 +62,7 @@ var RoleHarvester = {
                     else {
                         target = (creep.memory.target_id) ? creep.memory.target_id : creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE,{filter: object => (object.energy > 60)});
                         if (target) harvester_type = 'source';
-                        else if (creep.room.name == 'E39N49') harvester_type = 'go_close';
+                        else if (creep.room.name == 'E39N49' || creep.room.name == 'E38N48') harvester_type = 'go_close';
                     }
                 }
             }
@@ -93,7 +94,8 @@ var RoleHarvester = {
                 action_out = creep.pickup(target);
                 break;
             case 'go_close':
-                creep.moveTo(Game.getObjectById('5a99c2e49340d4525da5a48f'), global_vars.moveTo_ops);
+                let c_id = (creep.room.name == 'E39N49') ? '5a99c2e49340d4525da5a48f' : '5ac622cbbf6cfa17b08c2299';
+                creep.moveTo(Game.getObjectById(c_id), global_vars.moveTo_ops);
                 break;
             default:
                 creep.memory.target_id = false;

@@ -76,15 +76,15 @@ for(var current_room_name in Game.rooms) {
             },
             creep_types: {
                 war: {
-                    transfer: [0, 0.30, 0.30, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5],     // max percentage of transfer from total creeps. index is romm's level
-                    build: 0.60,        // max percentage of builders from total creeps
+                    transfer: 0.3,     // max percentage of transfer from total creeps. index is romm's level
+                    build: 0.6,        // max percentage of builders from total creeps
                     repair_defence: 0.4,          // max percentage of repair units from total creeps
                     repair_civilian: 0.2,          // max percentage of repair units from total creeps
                     special_carry: 0.3
                 },
                 peace: {
-                    transfer: [0, 0.30, 0.30, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5],     // max percentage of transfer from total creeps. index is romm's level
-                    build: 0.30,        // max percentage of builders from total creeps
+                    transfer: 0.4,     // max percentage of transfer from total creeps. index is romm's level
+                    build: 0.3,        // max percentage of builders from total creeps
                     repair_defence: 0.1,          // max percentage of repair units from total creeps
                     repair_civilian: 0.1,          // max percentage of repair units from total creeps
                     special_carry: 0.4
@@ -140,8 +140,7 @@ module.exports.loop = function () {
         console.log('[INFO] (main): TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket)
         for (let cur_room in Game.rooms) {
             let room_status = Memory.rooms[cur_room].global_vars.status;
-            console.log('[INFO] (main) Status of room: ' + cur_room + ' is ' + room_status);
-            if (units[cur_room]) console.log('[INFO] (main): [' + cur_room + '] UNITS expected: ' + Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + '; Workers: ' +(units[cur_room].total-units[cur_room].harvest) + '; ' + JSON.stringify(units[cur_room]));
+            if (units[cur_room]) console.log('[INFO] (main): [' + cur_room + '][' + room_status + '] expected: ' + Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + '; Workers: ' +(units[cur_room].total-units[cur_room].harvest) + '; ' + JSON.stringify(units[cur_room]));
         }
     }
     let tick_between_hard_actions = 2;

@@ -19,15 +19,7 @@ var structCreep = {
 
         var condition2change_role = (iam_general && ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
             creep.memory.role === 'undefined'));
-
-        if (creep.ticksToLive < 2)
-            // room_towers = Object.keys(my_room.memory.towers.current);
-            for (let current_tower in my_room.memory.towers.current)
-                if (my_room.memory.towers.current[current_tower] === creep.id) {
-                    my_room.memory.towers.current[current_tower] = false;
-                    creep.suicide;
-                    break;
-                }
+                
         // *** LOG
         // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
         // ********
@@ -39,7 +31,7 @@ var structCreep = {
             if (creep.memory.role !== 'harvest') creep.say('harvesting');
             creep.memory.role = 'harvest';
             creep.memory.target_id == false;
-        } else if ((units[room_name]['upgrade'] < 2) && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 6) || ((units[room_name]['total'] > 3) && (creep.ticksToLive > 1300))) {
+        } else if (units[room_name]['upgrade'] < 2 && units[room_name]['total'] > 3 && (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 5 || creep.ticksToLive > 1200)) {
             // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: FIRST to upgrade');
             if (creep.memory.role !== 'upgrade') creep.say('upgrading');
             creep.memory.role = 'upgrade';
@@ -50,11 +42,11 @@ var structCreep = {
             let transfer_procent = units[room_name]['transfer']/current_workers;
 
             // *** UNIT LOG
-            // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfers: ' + transfer_procent +' / ' + current_creep_types.transfer[my_room.controller.level]);
+            // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfers: ' + transfer_procent +' / ' + current_creep_types.transfer);
             // ********
 
             transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
-            if (transfer_target && !my_room.memory.towers.current[transfer_target.id]) my_room.memory.towers.current[transfer_target.id] = creep.id;
+            if (transfer_target && !my_room.memory.towers.current[transfer_target.id]) my_room.memory.towers.current[transfer_target.id] = creep.name;
             else {
                 transfer_target = Game.getObjectById(my_room.memory.energy_flow.links.source);
                 if (!(transfer_target && (transfer_target.energy/transfer_target.energyCapacity < 0.9) && (creep.pos.getRangeTo(transfer_target) < 7))) {
@@ -66,7 +58,7 @@ var structCreep = {
             // *** UNIT LOG
             // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS target: ' + transfer_target);
             // ********
-            if(transfer_target && (transfer_procent < current_creep_types.transfer[my_room.controller.level])) {
+            if(transfer_target && (transfer_procent < current_creep_types.transfer)) {
                 creep.say('transfering');
                 creep.memory.role = 'transfer';
 
@@ -105,6 +97,15 @@ var structCreep = {
             creep.memory.target_id = false;
         }
 
+        if (creep.ticksToLive < 2)
+            // room_towers = Object.keys(my_room.memory.towers.current);
+            for (let current_tower in my_room.memory.towers.current)
+                if (my_room.memory.towers.current[current_tower] === creep.id) {
+                    my_room.memory.towers.current[current_tower] = false;
+                    creep.suicide;
+                    return;
+                }
+                
         // Action per role
         let creep_role = creep.memory.role;
         switch(creep_role) {
@@ -179,7 +180,8 @@ var structCreep = {
                 } else creep.moveTo(closest_containers, global_vars.moveTo_ops);
                 break;
             case 'claimer':
-                creep.moveTo(Game.getObjectById('5ab39ab7e7f5aa102de370ac'), global_vars.moveTo_ops);   // go to source in new room
+                // creep.moveTo(Game.getObjectById('59f1c0062b28ff65f7f212d9'), global_vars.moveTo_ops);   // go to source in new room
+                creep.moveTo(new RoomPosition(43,20,'E40N50'), global_vars.moveTo_ops);   // go to source in new room
                 if (creep.room.name === 'E38N48') creep.memory.role = 'undefined';
                 break;
             case 'attack':
