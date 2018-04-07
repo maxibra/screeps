@@ -57,7 +57,7 @@ for(var current_room_name in Game.rooms) {
     if (typeof Game.rooms[current_room_name].memory.energy_flow === "undefined") {
         Game.rooms[current_room_name].memory.energy_flow = {
             sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
-            links: {destinations: []}
+            links: {sources: [], destinations: []}
         }
     };
 

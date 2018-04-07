@@ -69,20 +69,26 @@ var room_helpers = {
         my_spawn.memory.general['create_miner'] = create_miner;
     },
     transfer_link2link: function(room_name) {
-        source_link = Game.getObjectById(Game.rooms[room_name].memory.energy_flow.links.source)
-        destination_link = Game.getObjectById(Game.rooms[room_name].memory.energy_flow.links.controller)
-        if ( source_link && (source_link.energy > 100) && destination_link && (destination_link.energy/destination_link.energyCapacity < 0.9)) {
-            let dst_missing = destination_link.energyCapacity - destination_link.energy;
-            let energy2transfer = ((dst_missing < source_link.energy) ? dst_missing : source_link.energy);
-            source_link.transferEnergy(destination_link, energy2transfer);
+        let my_room = Game.rooms[room_name];
+        for (let l_src in my_room.memory.energy_flow.links.sources) {
+            source_link = Game.getObjectById(my_room.memory.energy_flow.links.sources[l_src]);
+            if (!(source_link && (source_link.energy > 100))) continue;
+            for (let l_dst in my_room.memory.energy_flow.links.destinations) {
+                destination_link = Game.getObjectById(my_room.memory.energy_flow.links.destinations[l_dst])
+                if (destination_link && (destination_link.energy/destination_link.energyCapacity < 0.9)) {
+                    let dst_missing = destination_link.energyCapacity - destination_link.energy;
+                    let energy2transfer = ((dst_missing < source_link.energy) ? dst_missing : source_link.energy);
+                    source_link.transferEnergy(destination_link, energy2transfer);
+                }
+                if (source_link.energy < 100) break;
+            }
         }
-
     },
     upgrade_energy_flow: function(room_name) {
         // Containers
         let my_room = Game.rooms[room_name];
-        let all_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
-        let all_continers_ids = all_containers.map(x => x.id);
+        // let all_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
+        // let all_continers_ids = all_containers.map(x => x.id);
         let all_links = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
         let all_links_ids = all_links.map(x => x.id);
         let all_sources = my_room.memory.energy_flow.sources;
@@ -90,7 +96,7 @@ var room_helpers = {
         let local_energy_flow_obj = {
             sources: my_room.memory.energy_flow.sources, 
             containers: {source :{}}, 
-            links: {source: false, controller: false, destinations: []}
+            links: {source: false, controller: false, destinations: [], sources: []}
         }
         // Sort containers
         // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
@@ -116,25 +122,23 @@ var room_helpers = {
         // *** LOG
         // console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: All links: ' + all_links.length + 'Local obj:' + JSON.stringify(local_energy_flow_obj));
 
-        for (let i=0;i<all_links.length;i++) {
-            // console.log('[DEBUG](room_helpers.upgrade_energy_flow): ID: ' + all_links[i].id + '; To Controller: ' + all_links[i].pos.getRangeTo(Game.rooms[room_name].controller));
-            // **** LOG 
-            // console.log('[DEBUG] (room_helpers.upgrade_energy_flow)[' + room_name + '][' + all_links[i].id + ']' + ' Range to controller ' + Game.rooms[room_name].controller.id + ' is ' + (all_links[i].pos.getRangeTo(Game.rooms[room_name].controller)));;
+        let all_flags = my_room.find(FIND_FLAGS, {filter: object => (object.name.substring(0,4) === 'link')});
+        let link_src_positions = [];
+        let link_dst_positions = [];
+        for (let f in all_flags)
+            if (all_flags[f].name.substring(0,8) === 'link_src') link_src_positions.push(all_flags[f].pos.x +'-' + all_flags[f].pos.y);
+            else link_dst_positions.push(all_flags[f].pos.x +'-' + all_flags[f].pos.y);
 
-            if (all_links[i].pos.getRangeTo(Game.rooms[room_name].controller) < 5) local_energy_flow_obj.links.controller = all_links[i].id;
-            else {
-                for (var current_source in my_room.memory.energy_flow.sources) {
-                    // **** LOG 
-                    // console.log('[DEBUG] (room_helpers.upgrade_energy_flow)[' + room_name + '][' + all_links[i].id + ']' + ' Range to source ' + my_room.memory.energy_flow.sources[current_source] + ' is ' + (all_links[i].pos.getRangeTo(Game.getObjectById(my_room.memory.energy_flow.sources[current_source]))));
-                    if (all_links[i].pos.getRangeTo(Game.getObjectById(my_room.memory.energy_flow.sources[current_source])) < 6) {
-                        local_energy_flow_obj.links.source = all_links[i].id;
-                        break;
-                    }
-                }
-                if (local_energy_flow_obj.links.source !== all_links[i].id) local_energy_flow_obj.links.destinations = all_links[i].id;
-            }
+        for (let l in all_links) {
+            let link_pos_str = all_links[l].pos.x + '-' + all_links[l].pos.y;
+            if (link_src_positions.indexOf(link_pos_str) >= 0 ) local_energy_flow_obj.links.sources.push(all_links[l].id);
+            else local_energy_flow_obj.links.destinations.push(all_links[l].id);
         }
-
+            
+        // check STORAGE in the room
+        storage_target = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_STORAGE)});
+        local_energy_flow_obj.storage = (storage_target.length > 0) ? storage_target[0].id : false;
+        
         Game.rooms[room_name].memory.energy_flow = local_energy_flow_obj;
     },
     define_room_status: function(room_name) {
@@ -178,7 +182,7 @@ var room_helpers = {
         let my_room = Game.rooms[room_name];
         let targets = [];
         repair_only = {
-            'E38N48': ['5aa0bee77ad634646aa08a49', '5ab39a6b04e7f14b97aa3056', '5ab39a586e59881daa1eb094', '5ab39a827ad7de1dd176d6db', '5ac5e2dfd8e3f24bd9ba24c8',
+            'E38N48': ['5aa0bee77ad634646aa08a49', '5ab39a6b04e7f14b97aa3056', '5ab39a586e59881daa1eb094', '5ab39a827ad7de1dd176d6db',
                        '5aa0befa7d8eb10a43e101d3', '5aa0bef30f678357d2601767', '5ab39ab7e7f5aa102de370ac', '5ab39ad233287758623d625e', '5ab39aed8e83a870b36a81e5',
                        '5ac72c64c769531bae38da9b', '5ac7589eb96a887ad73984a6']
         }
@@ -204,7 +208,7 @@ var room_helpers = {
             E37N48_avoid = ['5abc9c2488988449d6f1d066', '5abc9261ce03634b9a5884de']
             let avoid_stricts = E39N49_avoid.concat(E38N48_avoid);
             avoid_stricts = avoid_stricts.concat(E37N48_avoid);
-            targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && object.hits < 1800000 && avoid_stricts.indexOf(object.id) === -1});
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && object.hits < 1000000 && avoid_stricts.indexOf(object.id) === -1});
         }
         // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
