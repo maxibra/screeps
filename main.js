@@ -43,26 +43,26 @@ for(var current_room_name in Game.rooms) {
     // }
 
     // Initialie the room memory
-    if (typeof Game.rooms[current_room_name].memory.towers === "undefined") {
-        Game.rooms[current_room_name].memory.towers = {
+    if (typeof Memory.rooms[current_room_name].towers === "undefined") {
+        Memory.rooms[current_room_name].towers = {
             current: {},
             next_update: Game.time,
         }
     }
 
-    if (typeof Game.rooms[current_room_name].memory.targets === "undefined") {
-        Game.rooms[current_room_name].memory.targets = {};
+    if (typeof Memory.rooms[current_room_name].targets === "undefined") {
+        Memory.rooms[current_room_name].targets = {};
     }
 
-    if (typeof Game.rooms[current_room_name].memory.energy_flow === "undefined") {
-        Game.rooms[current_room_name].memory.energy_flow = {
+    if (typeof Memory.rooms[current_room_name].energy_flow === "undefined") {
+        Memory.rooms[current_room_name].energy_flow = {
             sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
             links: {sources: [], destinations: []}
         }
     };
 
-    if (typeof Game.rooms[current_room_name].memory.global_vars === "undefined") {
-        Game.rooms[current_room_name].memory.global_vars = {
+    if (typeof Memory.rooms[current_room_name].global_vars === "undefined") {
+        Memory.rooms[current_room_name].global_vars = {
             status: 'peace',
             finish_war: false,
             age_to_drop_and_die: 20,
@@ -123,7 +123,7 @@ module.exports.loop = function () {
             // 'repair_civilian': 0,
             'harvest': 0,
             'undefined': 0,
-            // 'special_carry': 0,
+            'long_harvest': 0,
             'claimer': 0
         };
     }
@@ -167,7 +167,7 @@ module.exports.loop = function () {
         let towers_list = Object.keys(Game.rooms[current_room_name].memory.towers.current);
         let towers_energy_full = true;
         // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
-        if ((units[current_room_name] && units[current_room_name].total > 3) || Memory.rooms[current_room_name].global_vars.status === 'war')
+        if ((units[current_room_name] && units[current_room_name].total >= 3) || Memory.rooms[current_room_name].global_vars.status === 'war')
             for (let i=0;i<towers_list.length;i++) {
                 // console.log('[DEBUG] (main): TOWER[' + i + ']' + ' ID: ' + towers_list[i]);
                 roleTower.run(towers_list[i], units[current_room_name].total);
@@ -176,7 +176,8 @@ module.exports.loop = function () {
         if (Game.time % 5 === 0) {
             // console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
             // room_helpers.check_create_miner(current_room_name, global_vars.spawn_name, units);
-            room_helpers.transfer_link2link(current_room_name)
+            room_helpers.transfer_link2link(current_room_name);
+            room_helpers.verify_all_full(current_room_name);
         }
 
         let current_mod = 0;

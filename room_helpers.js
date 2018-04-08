@@ -68,6 +68,39 @@ var room_helpers = {
         }
         my_spawn.memory.general['create_miner'] = create_miner;
     },
+    verify_all_full: function(room_name) {
+        let all_full = true;
+        let all_links_full = true;
+        let all_towers_full = true;
+        let all_extensions_full = true;
+        let my_room = Game.rooms[room_name];
+        
+        // LINKS
+        if (my_room) {
+            for (let l in my_room.memory.energy_flow.links.destinations) {
+                let current_link = Game.getObjectById(my_room.memory.energy_flow.links.destinations[l]);
+                if (current_link.energy < current_link.energyCapacity) {
+                    all_links_full = false;
+                    break;
+                }
+            }
+            
+            // TOWERS
+            let all_towers = Object.keys(my_room.memory.towers.current);
+            for (let t in all_towers) {
+                let current_tower = Game.getObjectById(all_towers[t]);
+                if (current_tower.energy < 600) {
+                    all_towers_full = false;
+                    break;
+                }     
+            }
+            
+            // Extensions
+            if (my_room.energyAvailable < my_room.energyCapacityAvailable) all_extensions_full = false;
+            // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: All Full: ' + (!all_extensions_full || !all_links_full || !all_towers_full) + '; Ext: ' + all_extensions_full + '; Links: ' + all_links_full + '; Towers: ' + all_extensions_full);
+            my_room.memory.global_vars.all_full = (!all_extensions_full || !all_links_full || !all_towers_full) ? false : true;
+        }
+    },
     transfer_link2link: function(room_name) {
         let my_room = Game.rooms[room_name];
         for (let l_src in my_room.memory.energy_flow.links.sources) {
@@ -94,6 +127,7 @@ var room_helpers = {
         let all_sources = my_room.memory.energy_flow.sources;
         let energy_flow_obj = my_room.memory.energy_flow;
         let local_energy_flow_obj = {
+            long_harvest: my_room.memory.energy_flow.long_harvest,
             sources: my_room.memory.energy_flow.sources, 
             containers: {source :{}}, 
             links: {source: false, controller: false, destinations: [], sources: []}
@@ -145,6 +179,7 @@ var room_helpers = {
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let global_vars = Memory.rooms.global_vars;
         let hostile_creeps = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
+        let most_danger_hostile;
         if (hostile_creeps && hostile_creeps.length > 0 && room_vars.status === 'peace') {
             room_vars.status = 'war';
             let hostile_boosts = {};
@@ -197,7 +232,7 @@ var room_helpers = {
                 '5a962b8fc459521302a045fe', '5a962b8b1de6ab12eac16be3', '5a96062c5723bd4269c0d824', '5a9606294b5e6a425420fd92', '5a9606267629a93737b6502c', '5aa0c3cc89b39e64781ba746',
                 '5aa0c3c8af76d4649b2254b9', '5aa0c3c563159c4aede223f1', '5aa0c3c27ad634646aa08c1a', '5a960632aa03f0374692af1c', '5a96062f69de9865d796c8b3', '5a96063e69de9865d796c8be',
                 '5a90ee1696f41740d4d4b4c9', '5a90ee1e96b6b440aad8c3d3', '5a960213a2a07606dea594f7', '5a960210896b0b06baf0e580', '5a90ee1c1ac6c205f425ab7e', '5a90ee1949f9d34c1b394475']
-            E39N49_avoid = ['5a3c93c377eddf3fcd2289e4', '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7',
+            E39N49_avoid = ['5ac6783156694047ad226984', '5a3c93c377eddf3fcd2289e4', '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7',
                 '5a434aad352f7c7e6c4b88d1', '5a437edae9ad370d6f80c979', '5a436eb786a4a36e5af6c89e', '5a436c93b5b012359cb81bd2', '5a436bb28ee5032e65a12834', '5a4365fd262eb037220fc9b4',
                 '5a4364e3eba40146402df274', '5a4364e3eba40146402df274', '5a4361ecb458c9595ccdf3b7', '5a435fd9176c8f376528dbb8', '5a3ff7de9fceac2ef90ce320', '5a3ff7d8b8d7566bedfb37e9', 
                 '5a3ff7b6f5244f2f04d4a54f', '5a3ff51722e6562eb8171f7b', '5a3ff1135f1df3160a8dbdf3', '5a3fe041f6b67970b93a092a',

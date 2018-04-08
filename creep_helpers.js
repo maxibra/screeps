@@ -31,6 +31,8 @@ var creep_helpers = {
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
         let new_room_creeps = 0;
+        let lng_hrvst_creeps = 0;
+        let create_special = false;
 
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
@@ -39,15 +41,34 @@ var creep_helpers = {
         let name_special = 'gn';
         let current_body = creep_body.general.base;
         let add_body = creep_body.general.add;
-
-        creep_name = '';
+        let creep_name = '';
+        
         // creation of additional creeps for expansion
         if (room_name !== 'E37N48' && units[room_name]['total'] > 3) {
             let new_memory = {role: 'harvest', harvester_type: 'source', target_id: '59f1a59182100e1594f3eb89', stuck: 0};
             for (let i=1; i<=new_room_creeps; i++) {
                 current_new_name = 'max_new-' + i;
                 // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
-                if ( Object.keys(Game.creeps).indexOf(current_new_name) === -1 ) {
+                if ( Object.keys(current_creeps).indexOf(current_new_name) === -1 ) {
+                    creep_name = current_new_name;
+                    creep_memory = new_memory;
+                    break;
+                }
+            }
+        }
+        
+        if (units[room_name]['total'] > 3 && my_room.memory.energy_flow.long_harvest) {
+            let new_memory = {
+                role: 'long_harvest', 
+                harvester_type: 'move_away', 
+                target_id: my_room.memory.energy_flow.long_harvest[0],
+                homeland: room_name,
+                homeland_target: my_room.controller.pos
+            };
+            for (let i=1; i<=lng_hrvst_creeps; i++) {
+                current_new_name = 'lng_hrvst-' + room_name + '-' + i;
+                // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
+                if ( Object.keys(current_creeps).indexOf(current_new_name) === -1 ) {
                     creep_name = current_new_name;
                     creep_memory = new_memory;
                     break;
@@ -59,6 +80,7 @@ var creep_helpers = {
         // console.log('[DEBUG] (create_creep)[' + spawn_name + ']: Creeps: ' +  units[room_name].total + '; Must Be: ' + room_vars.screeps_max_amount[room_vars.status] + '; SPAWING: ' + my_spawn.spawning + '; no needed a New: ' + (creep_name === ''));
         // ********
 
+        // **** if creep_name different from '' is mean create special
         if ((creep_name === '' && (units[room_name].total >= room_vars.screeps_max_amount[room_vars.status])) || my_spawn.spawning) return;
 
         // if (my_room.controller.level > 1) {     // You can create special creeps
