@@ -224,8 +224,12 @@ var room_helpers = {
         // *** LOG
         // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Repair_only: ' +  repair_only[room_name]);
 
-        if (repair_only[room_name]) for(let id in repair_only[room_name]) targets.push(Game.getObjectById(repair_only[room_name][id]))
-        else {
+        if (repair_only[room_name]) {
+            for(let id in repair_only[room_name]) {
+                cur_target = Game.getObjectById(repair_only[room_name][id])
+                if (cur_target < 1000) targets.push(cur_target)
+            }
+        } else {
             E38N48_avoid = ['5aba595ad360fc7cd874e352', '5aba594f74b96f64ff232dc9', '5aa0beee3c525457e6f84f7f', '5ab39a9c8a0c83586e5bfb1e',
                 '5a962bd55044c20a227e09b9', '5a962bcb77d91872df3159b4', '5a962bc5dca94812fc07024f', '5a962bbed183f34ad9a0d823', '5a962bb74e67460a13b276e7', '5a962bb004d2337105e8d4d4',
                 '5a962babcdf030710646711f', '5a962ba4b29c3312dfd01a8b', '5a962b9d53266d146db74952', '5a962b9aefb803145385e4ba', '5a962b974d6ed3145e8181e5', '5a962b94eb14d24ac01c90dc',
