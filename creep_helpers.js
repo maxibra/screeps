@@ -30,7 +30,7 @@ var creep_helpers = {
         let room_name = Game.spawns[spawn_name].room.name
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
-        let new_room_creeps = 0;
+        let new_room_creeps = 10;
         let lng_hrvst_creeps = 0;
         let create_special = false;
 
