@@ -3,6 +3,7 @@ var roleStructCreep = require('role.struct_creep');
 var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 var roleTower = require('struct.tower');
+var screepsplus = require('screepsplus');
 
 // dummy 6
 
@@ -57,6 +58,10 @@ for(var current_room_name in Game.rooms) {
     if (typeof Memory.rooms[current_room_name].energy_flow === "undefined") {
         Memory.rooms[current_room_name].energy_flow = {
             sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
+            mineral: {
+                id: Game.rooms[current_room_name].find(FIND_MINERALS).map(x => x.id)[0], 
+                extractor: false
+            },
             links: {sources: [], destinations: []}
         }
     };
@@ -81,7 +86,11 @@ for(var current_room_name in Game.rooms) {
                     build: 0.6,        // max percentage of builders from total creeps
                     repair_defence: 0.4,          // max percentage of repair units from total creeps
                     repair_civilian: 0.2,          // max percentage of repair units from total creeps
-                    special_carry: 0.3
+                    special_carry: 0.3,
+                    harvest: {
+                        energy: 0.7,
+                        mineral: 0.3
+                    }
                 },
                 peace: {
                     transfer: 0.4,     // max percentage of transfer from total creeps. index is romm's level
@@ -121,7 +130,8 @@ module.exports.loop = function () {
             'upgrade': 0,
             'repair_defence': 0,
             // 'repair_civilian': 0,
-            'harvest': 0,
+            'energy': 0,
+            'mineral': 0,
             'undefined': 0,
             'long_harvest': 0,
             'claimer': 0
@@ -132,7 +142,11 @@ module.exports.loop = function () {
         // cur_creeps[creep_name].memory.stuck = 0;
         splited_name = creep_name.split('-');
         let room_name = cur_creeps[creep_name].room.name;
-        units[room_name][cur_creeps[creep_name].memory.role]++;
+        if (cur_creeps[creep_name].memory.role === 'harvest') {
+            let c_role = (cur_creeps[creep_name].memory.harvester_type === 'mineral') ? 'mineral' : 'energy';
+            units[room_name][c_role]++   
+        }
+        else units[room_name][cur_creeps[creep_name].memory.role]++;
         units[room_name]['total']++;
         units['total']++;
     }
@@ -141,7 +155,7 @@ module.exports.loop = function () {
         console.log('[INFO] (main): TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket)
         for (let cur_room in Game.rooms) {
             let room_status = Memory.rooms[cur_room].global_vars.status;
-            if (units[cur_room]) console.log('[INFO] (main): [' + cur_room + '][' + room_status + '] expected: ' + Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + '; Workers: ' +(units[cur_room].total-units[cur_room].harvest) + '; ' + JSON.stringify(units[cur_room]));
+            if (units[cur_room]) console.log('[INFO] (main): [' + cur_room + '][' + room_status + '] expected: ' + Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + '; Workers: ' +(units[cur_room].total-units[cur_room].energy-units[cur_room].minerals) + '; ' + JSON.stringify(units[cur_room]));
         }
     }
     let tick_between_hard_actions = 2;
@@ -162,7 +176,10 @@ module.exports.loop = function () {
         }
     }
 
+    let avoid_rooms = ['E34N46', 'E35N46', 'E36N46', 'E37N47', 'E34N46', 'E38N47', 'E33N47']
     for(var current_room_name in Game.rooms) {
+        if(avoid_rooms.indexOf(current_room_name) > 0) continue
+        
         // Towers
         let towers_list = Object.keys(Game.rooms[current_room_name].memory.towers.current);
         let towers_energy_full = true;
@@ -202,7 +219,7 @@ module.exports.loop = function () {
             room_helpers.upgrade_energy_flow(current_room_name);
             roleTower.create_towers_list(current_room_name);
         }
-    }
+    }   // loop on all rooms
 
     if (Game.time % 1000 === 0) {
         room_helpers.clean_memory();
@@ -218,6 +235,9 @@ module.exports.loop = function () {
     //     //global_vars.my_room.memory.important_structures = xy_path;
     // }
 
+    if (Game.time % 5 === 0) screepsplus.collect_stats();
+
 //    console.log('[INFO] (main): FINISH UNITS (nominal: ' + Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] + '): ' + JSON.stringify(units));
 
+    
 }
