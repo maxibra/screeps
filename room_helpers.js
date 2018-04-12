@@ -76,10 +76,9 @@ var room_helpers = {
         let my_room = Game.rooms[room_name];
         
         // LINKS
-        dstn_links = my_room.memory.energy_flow.links.destinations;
-        if (my_room && dstn_links && dstn_links.length > 0) {
-            for (let l in dstn_links) {
-                let current_link = Game.getObjectById(dstn_links[l]);
+        if (my_room) {
+            for (let l in my_room.memory.energy_flow.links.destinations) {
+                let current_link = Game.getObjectById(my_room.memory.energy_flow.links.destinations[l]);
                 if (current_link.energy < current_link.energyCapacity) {
                     all_links_full = false;
                     break;
@@ -129,8 +128,7 @@ var room_helpers = {
         let energy_flow_obj = my_room.memory.energy_flow;
         let local_energy_flow_obj = {
             long_harvest: my_room.memory.energy_flow.long_harvest,
-            sources: my_room.memory.energy_flow.sources,
-            mineral: my_room.memory.energy_flow.mineral,
+            sources: my_room.memory.energy_flow.sources, 
             containers: {source :{}}, 
             links: {source: false, controller: false, destinations: [], sources: []}
         }
@@ -171,18 +169,10 @@ var room_helpers = {
             else local_energy_flow_obj.links.destinations.push(all_links[l].id);
         }
             
-         // check TERMINAL in the room
-        let extractor_target = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_EXTRACTOR)});
-        local_energy_flow_obj.mineral.extractor = (extractor_target.length > 0) ? extractor_target[0].id : false; 
-        
         // check STORAGE in the room
-        let storage_target = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_STORAGE)});
+        storage_target = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_STORAGE)});
         local_energy_flow_obj.storage = (storage_target.length > 0) ? storage_target[0].id : false;
-             
-        // check TERMINAL in the room
-        let terminal_target = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TERMINAL)});
-        local_energy_flow_obj.terminal = (terminal_target.length > 0) ? terminal_target[0].id : false; 
-  
+        
         Game.rooms[room_name].memory.energy_flow = local_energy_flow_obj;
     },
     define_room_status: function(room_name) {
@@ -226,13 +216,10 @@ var room_helpers = {
     get_repair_defence_target: function(room_name) {
         let my_room = Game.rooms[room_name];
         let targets = [];
-        let min_hits = 1000000;
         repair_only = {
             'E38N48': ['5aa0bee77ad634646aa08a49', '5ab39a6b04e7f14b97aa3056', '5ab39a586e59881daa1eb094', '5ab39a827ad7de1dd176d6db',
                        '5aa0befa7d8eb10a43e101d3', '5aa0bef30f678357d2601767', '5ab39ab7e7f5aa102de370ac', '5ab39ad233287758623d625e', '5ab39aed8e83a870b36a81e5',
-                       '5ac72c64c769531bae38da9b', '5ac7589eb96a887ad73984a6'],
-            'E34N47': ['5accf67195d45e308db882e7', '5acc6089c5bb62037cc61e14', '5a97231c4283e76ef6df150c', '5a972319ffa70134f8d01414',
-                       '5a974acf34a154567c596a8c', '5a974ad2117e0f568f21505c', '5a974ad4fc8a790fee2caba9', '5acc6089c5bb62037cc61e14']
+                       '5ac72c64c769531bae38da9b', '5ac7589eb96a887ad73984a6']
         }
         // *** LOG
         // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Repair_only: ' +  repair_only[room_name]);
@@ -240,10 +227,9 @@ var room_helpers = {
         if (repair_only[room_name]) {
             for(let id in repair_only[room_name]) {
                 cur_target = Game.getObjectById(repair_only[room_name][id])
-                if (cur_target.hits < min_hits) targets.push(cur_target)
+                if (cur_target < 1000) targets.push(cur_target)
             }
         } else {
-            E34N47_avoid = [];
             E38N48_avoid = ['5aba595ad360fc7cd874e352', '5aba594f74b96f64ff232dc9', '5aa0beee3c525457e6f84f7f', '5ab39a9c8a0c83586e5bfb1e',
                 '5a962bd55044c20a227e09b9', '5a962bcb77d91872df3159b4', '5a962bc5dca94812fc07024f', '5a962bbed183f34ad9a0d823', '5a962bb74e67460a13b276e7', '5a962bb004d2337105e8d4d4',
                 '5a962babcdf030710646711f', '5a962ba4b29c3312dfd01a8b', '5a962b9d53266d146db74952', '5a962b9aefb803145385e4ba', '5a962b974d6ed3145e8181e5', '5a962b94eb14d24ac01c90dc',
@@ -261,8 +247,7 @@ var room_helpers = {
             E37N48_avoid = ['5abc9c2488988449d6f1d066', '5abc9261ce03634b9a5884de']
             let avoid_stricts = E39N49_avoid.concat(E38N48_avoid);
             avoid_stricts = avoid_stricts.concat(E37N48_avoid);
-            avoid_stricts = avoid_stricts.concat(E34N47_avoid);
-            targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && object.hits < min_hits && avoid_stricts.indexOf(object.id) === -1});
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && object.hits < 1000000 && avoid_stricts.indexOf(object.id) === -1});
         }
         // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
