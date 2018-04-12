@@ -218,6 +218,8 @@ module.exports.loop = function () {
     //     //global_vars.my_room.memory.important_structures = xy_path;
     // }
 
+    if (Game.time % 5 === 0) screepsplus.collect_stats();
+
 //    console.log('[INFO] (main): FINISH UNITS (nominal: ' + Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] + '): ' + JSON.stringify(units));
 
 }
