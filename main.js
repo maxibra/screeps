@@ -3,11 +3,7 @@ var roleStructCreep = require('role.struct_creep');
 var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 var roleTower = require('struct.tower');
-
-// dummy 6
-
-// var spawn_name = 'max';
-// var room_name = 'E39N49';   // Object.keys(Game.rooms)[0];
+var screepsplus = require('screepsplus');
 
 if (typeof Memory.rooms.global_vars === "undefined") {
     Memory.rooms.global_vars = {
