@@ -24,19 +24,20 @@ function body_cost(body) {
     return cost;
 }
 
+//  Game.spawns['max_E38N48'].spawnCreep([MOVE,MOVE,MOVE,CLAIM], 'max_new-20', {role: 'claimer'})
 var creep_helpers = {
     create_creep: function(spawn_name, units) {
         let my_spawn = Game.spawns[spawn_name];
         let room_name = Game.spawns[spawn_name].room.name
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
-        let new_room_creeps = 10;
+        let new_room_creeps = 0;
         let lng_hrvst_creeps = 0;
         let create_special = false;
 
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
-        let creep_memory = {role: 'harvester', target_id: false, stuck: 0};
+        let creep_memory = {role: 'harvest', target_id: false, stuck: 0};
         let current_creep_types = room_vars.creep_types[room_vars.status];
         let name_special = 'gn';
         let current_body = creep_body.general.base;
@@ -44,8 +45,8 @@ var creep_helpers = {
         let creep_name = '';
         
         // creation of additional creeps for expansion
-        if (room_name !== 'E37N48' && units[room_name]['total'] > 3) {
-            let new_memory = {role: 'harvest', harvester_type: 'source', target_id: '59f1a59182100e1594f3eb89', stuck: 0};
+        if (units[room_name]['total'] > 3) {
+            let new_memory = {role: 'claimer'};
             for (let i=1; i<=new_room_creeps; i++) {
                 current_new_name = 'max_new-' + i;
                 // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
@@ -63,10 +64,11 @@ var creep_helpers = {
                 harvester_type: 'move_away', 
                 target_id: my_room.memory.energy_flow.long_harvest[0],
                 homeland: room_name,
+                special: 'long_harvest',
                 homeland_target: my_room.controller.pos
             };
             for (let i=1; i<=lng_hrvst_creeps; i++) {
-                current_new_name = 'lng_hrvst-' + room_name + '-' + i;
+                current_new_name = 'lng_hrvst-' + room_name + '-' + i + '-sp';
                 // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
                 if ( Object.keys(current_creeps).indexOf(current_new_name) === -1 ) {
                     creep_name = current_new_name;
