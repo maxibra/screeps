@@ -26,7 +26,7 @@ var structCreep = {
         if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Controller: ' + JSON.stringify(controller_position) + '; Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
         // ********
         // *** UNIT LOG
-        if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: long_harvester: ' + JSON.stringify(my_room.memory.energy_flow.long_harvester));
+        // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: long_harvester: ' + JSON.stringify(my_room.memory.energy_flow.long_harvester));
         // ********
  
         var transfer_target;
@@ -56,6 +56,11 @@ var structCreep = {
             // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfers: ' + transfer_procent +' / ' + current_creep_types.transfer);
             // ********
             transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
+
+            // *** UNIT LOG
+            // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS target TOWER: ' + transfer_target);
+            // ********
+
             if (transfer_target && !my_room.memory.towers.current[transfer_target.id]) my_room.memory.towers.current[transfer_target.id] = creep.name;
             else {  // transfer to link
                 transfer_target = false;
@@ -75,9 +80,7 @@ var structCreep = {
                         && (object.energy < object.energyCapacity))});
                 }
             }
-            // *** UNIT LOG
-            // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS target: ' + transfer_target);
-            // ********
+
             if(transfer_target && (transfer_procent < current_creep_types.transfer)) {
                 creep.say('transfering');
                 creep.memory.role = 'transfer';
@@ -104,11 +107,11 @@ var structCreep = {
                 creep.say('civilian repair');
                 creep.memory.role = 'repair_civilian';
                 //units[room_name].repair_civilian++;
-            } else if (my_room.memory.energy_flow.storage) {
-                creep.say('transfering');
-                creep.memory.role = 'transfer';
-                transfer_target = Game.getObjectById(my_room.memory.energy_flow.storage);
-            } else if (units[room_name].upgrade === 0 && creep.ticksToLive > 300) {
+            // } else if (my_room.memory.energy_flow.storage) {
+            //     creep.say('transfering');
+            //     creep.memory.role = 'transfer';
+            //     transfer_target = Game.getObjectById(my_room.memory.energy_flow.storage);
+            } else if (room_name !== 'E39N49') {
                 creep.say('upgrading');
                 creep.memory.role = 'upgrade';
             }
