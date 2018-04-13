@@ -40,12 +40,12 @@ var structCreep = {
                 creep.memory.role = 'harvest';
                 creep.memory.target_id == false;                
         // } else if ((room_vars.status === 'peace' && units[room_name]['upgrade'] < 1 && units[room_name]['total'] >= 3 && creep.ticksToLive > 900) || creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4) {
-        // } else if ( (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4 && units[room_name]['total'] > 2)||
-        //             (room_vars.status === 'peace' && units[room_name]['total'] >= 3 && creep.ticksToLive > 1000 && 
-        //             creep.room.lookForAtArea(LOOK_CREEPS,controller_position.y-3,controller_position.x-3,controller_position.y+3,controller_position.x+3, true).length === 0)) {
-        //     if (creep.memory.role !== 'upgrade') creep.say('upgrading');
-        //     creep.memory.role = 'upgrade';
-        //     units[room_name]['upgrade']++;
+        } else if ( (creep.pos.getRangeTo(Game.rooms[room_name].controller) < 4 && units[room_name]['total'] > 2)||
+                    (room_vars.status === 'peace' && units[room_name]['total'] >= 3 && creep.ticksToLive > 1000 &&
+                    creep.room.lookForAtArea(LOOK_CREEPS,controller_position.y-3,controller_position.x-3,controller_position.y+3,controller_position.x+3, true).length === 0)) {
+            if (creep.memory.role !== 'upgrade') creep.say('upgrading');
+            creep.memory.role = 'upgrade';
+            units[room_name]['upgrade']++;
         } else if (condition2change_role) {
             var current_workers = units[room_name]['total'] - units[room_name]['harvest'];
             var current_creep_types = room_vars.creep_types[room_vars.status];

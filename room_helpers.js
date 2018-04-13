@@ -173,15 +173,15 @@ var room_helpers = {
             
          // check TERMINAL in the room
         let extractor_target = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_EXTRACTOR)});
-        local_energy_flow_obj.mineral.extractor = (extractor_target.length > 0) ? extractor_target[0].id : false; 
+        local_energy_flow_obj.mineral.extractor = (extractor_target && extractor_target.length > 0) ? extractor_target[0].id : false;
         
         // check STORAGE in the room
         let storage_target = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_STORAGE)});
-        local_energy_flow_obj.storage = (storage_target.length > 0) ? storage_target[0].id : false;
+        local_energy_flow_obj.storage = (storage_target && storage_target.length > 0) ? storage_target[0].id : false;
              
         // check TERMINAL in the room
         let terminal_target = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TERMINAL)});
-        local_energy_flow_obj.terminal = (terminal_target.length > 0) ? terminal_target[0].id : false; 
+        local_energy_flow_obj.terminal = (terminal_target && terminal_target.length > 0) ? terminal_target[0].id : false;
   
         Game.rooms[room_name].memory.energy_flow = local_energy_flow_obj;
     },
