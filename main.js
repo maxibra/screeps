@@ -1,9 +1,10 @@
-//var global_vars = require('global_vars');
 var roleStructCreep = require('role.struct_creep');
 var creep_helpers = require('creep_helpers');
 var room_helpers = require('room_helpers');
 var roleTower = require('struct.tower');
 var screepsplus = require('screepsplus');
+
+// Game.creeps['max_new-1'].moveTo(Game.getObjectById('5ad024eac27319698ef58448'))
 
 if (typeof Memory.rooms.global_vars === "undefined") {
     Memory.rooms.global_vars = {
@@ -53,6 +54,12 @@ for(var current_room_name in Game.rooms) {
     if (typeof Memory.rooms[current_room_name].energy_flow === "undefined") {
         Memory.rooms[current_room_name].energy_flow = {
             sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
+            mineral: {
+                id: Game.rooms[current_room_name].find(FIND_MINERALS).map(x => x.id)[0], 
+                extractor: false
+            },
+            dropped: {},
+            tombstone: {},
             links: {sources: [], destinations: []}
         }
     };
@@ -77,14 +84,22 @@ for(var current_room_name in Game.rooms) {
                     build: 0.6,        // max percentage of builders from total creeps
                     repair_defence: 0.4,          // max percentage of repair units from total creeps
                     repair_civilian: 0.2,          // max percentage of repair units from total creeps
-                    special_carry: 0.3
+                    special_carry: 0.3,
+                    harvest: {
+                        energy: 0.7,
+                        mineral: 0.3
+                    }
                 },
                 peace: {
                     transfer: 0.4,     // max percentage of transfer from total creeps. index is romm's level
                     build: 0.3,        // max percentage of builders from total creeps
                     repair_defence: 0.1,          // max percentage of repair units from total creeps
                     repair_civilian: 0.1,          // max percentage of repair units from total creeps
-                    special_carry: 0.4
+                    special_carry: 0.4,
+                    harvest: {
+                        energy: 0.7,
+                        mineral: 0.3
+                    }
                 }
             }
         }
@@ -116,7 +131,7 @@ module.exports.loop = function () {
             'build': 0,
             'upgrade': 0,
             'repair_defence': 0,
-            // 'repair_civilian': 0,
+            'repair_civilian': 0,
             'harvest': 0,
             'undefined': 0,
             'long_harvest': 0,
@@ -158,7 +173,12 @@ module.exports.loop = function () {
         }
     }
 
+    let avoid_rooms = ['E34N46', 'E35N46', 'E36N46', 'E37N47', 'E34N46', 'E33N47']
     for(var current_room_name in Game.rooms) {
+        if(avoid_rooms.indexOf(current_room_name) > 0) continue
+
+        // Memory.rooms[current_room_name].energy_flow.sources= Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id)
+        
         // Towers
         let towers_list = Object.keys(Game.rooms[current_room_name].memory.towers.current);
         let towers_energy_full = true;
@@ -191,7 +211,7 @@ module.exports.loop = function () {
             // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             room_helpers.get_build_targets(current_room_name);
             room_helpers.get_repair_defence_target(current_room_name);
-            // room_helpers.get_repair_civilianl_target(current_room_name);
+            if (current_room_name === 'E38N47') room_helpers.get_repair_civilianl_target(current_room_name);
         }
 
         if (Game.time % 300 === 0) {
