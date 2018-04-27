@@ -5,6 +5,7 @@ var roleTower = require('struct.tower');
 var screepsplus = require('screepsplus');
 
 // Game.creeps['max_new-1'].moveTo(Game.getObjectById('5ad024eac27319698ef58448'))
+// Game.spawns['E37N48'].spawnCreep([CLAIM,MOVE,MOVE,MOVE], 'its_my', {memory: {role: 'its_my'; target_pos: {x: 39, y:30, roomName: 'E38N47'}}});
 
 if (typeof Memory.rooms.global_vars === "undefined") {
     Memory.rooms.global_vars = {
@@ -55,12 +56,17 @@ for(var current_room_name in Game.rooms) {
         Memory.rooms[current_room_name].energy_flow = {
             sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
             mineral: {
-                id: Game.rooms[current_room_name].find(FIND_MINERALS).map(x => x.id)[0], 
+                id: Game.rooms[current_room_name].find(FIND_MINERALS).map(x => x.id)[0],
+                type: Game.rooms[current_room_name].find(FIND_MINERALS).map(x => x.mineralType)[0],
                 extractor: false
             },
             dropped: {},
             tombstone: {},
-            links: {sources: [], destinations: []}
+            links: {sources: [], destinations: []},
+            containers: {
+                source: {},
+                other: {}
+            }
         }
     };
 
@@ -120,6 +126,8 @@ function get_struct_obj(x, y) {
 }
 
 module.exports.loop = function () {
+    // act_out = Game.rooms['E38N47'].controller.activateSafeMode()
+    // console.log('[DEBUG] (main): SafeMode: ' + act_out)
     var units = {'total': 0};
 // 59f1a59182100e1594f3eb84
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
@@ -130,21 +138,25 @@ module.exports.loop = function () {
             'transfer': 0,
             'build': 0,
             'upgrade': 0,
+            'upgrader': 0,
             'repair_defence': 0,
             'repair_civilian': 0,
             'harvest': 0,
             'undefined': 0,
             'long_harvest': 0,
-            'claimer': 0
+            'claimer': 0,
+            'sp_total': 0,
         };
     }
 
     for (let creep_name in cur_creeps) {
         // cur_creeps[creep_name].memory.stuck = 0;
+        let creep_carry = Object.keys(cur_creeps[creep_name].carry);
         splited_name = creep_name.split('-');
         let room_name = cur_creeps[creep_name].room.name;
         units[room_name][cur_creeps[creep_name].memory.role]++;
         units[room_name]['total']++;
+        if (cur_creeps[creep_name].memory.special) units[room_name]['sp_total']++;
         units['total']++;
     }
 
@@ -152,7 +164,12 @@ module.exports.loop = function () {
         console.log('[INFO] (main): TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket)
         for (let cur_room in Game.rooms) {
             let room_status = Memory.rooms[cur_room].global_vars.status;
-            if (units[cur_room]) console.log('[INFO] (main): [' + cur_room + '][' + room_status + '] expected: ' + Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + '; Workers: ' +(units[cur_room].total-units[cur_room].harvest) + '; ' + JSON.stringify(units[cur_room]));
+            if (units[cur_room]) 
+                console.log('[INFO] (main): [' + cur_room + '][' + room_status + '] expected: ' + 
+                            Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + 
+                            '; Workers: ' + (units[cur_room].total-units[cur_room].sp_total-units[cur_room].harvest) + '; ' +
+                            '; Special: ' + units[cur_room].sp_total + '; ' +
+                            JSON.stringify(units[cur_room]));
         }
     }
     let tick_between_hard_actions = 2;
@@ -164,7 +181,9 @@ module.exports.loop = function () {
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         var creep_role = creep.memory.role
+        // if (name === 'E39N49-2-86-300-gn') continue
         roleStructCreep.run(creep, units);
+        if (Game.time % 25 === 0 && Object.keys(creep.carry).length === 1) creep.memory.has_minerals = false;
     }
 
     if (Game.time % 8 === 0) {
@@ -176,14 +195,16 @@ module.exports.loop = function () {
     let avoid_rooms = ['E34N46', 'E35N46', 'E36N46', 'E37N47', 'E34N46', 'E33N47']
     for(var current_room_name in Game.rooms) {
         if(avoid_rooms.indexOf(current_room_name) > 0) continue
-
+        
+        
+        // Memory.rooms[current_room_name].energy_flow.mineral.type = Game.rooms[current_room_name].find(FIND_MINERALS).map(x => x.mineralType)[0]
         // Memory.rooms[current_room_name].energy_flow.sources= Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id)
         
         // Towers
         let towers_list = Object.keys(Game.rooms[current_room_name].memory.towers.current);
         let towers_energy_full = true;
-        // console.log('[DEBUG] (main): TOWERS: ' + towers_list.length);
-        if ((units[current_room_name] && units[current_room_name].total >= 3) || Memory.rooms[current_room_name].global_vars.status === 'war')
+        // console.log('[DEBUG] (main)[' + current_room_name + ']: TOWERS: ' + JSON.stringify(towers_list));
+        if ((units[current_room_name] && units[current_room_name].total >= 2) || Memory.rooms[current_room_name].global_vars.status === 'war')
             for (let i=0;i<towers_list.length;i++) {
                 // console.log('[DEBUG] (main): TOWER[' + i + ']' + ' ID: ' + towers_list[i]);
                 roleTower.run(towers_list[i], units[current_room_name].total);
@@ -197,7 +218,7 @@ module.exports.loop = function () {
         }
 
         let current_mod = 0;
-        if (Game.time % 10 === current_mod) {  // run every 10 ticks
+        if (Game.time % 1 === current_mod) {  // run every 10 ticks
             // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             //        room_helpers.get_transfer_target(current_room_name);
             room_helpers.define_room_status(current_room_name);
@@ -211,9 +232,25 @@ module.exports.loop = function () {
             // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             room_helpers.get_build_targets(current_room_name);
             room_helpers.get_repair_defence_target(current_room_name);
-            if (current_room_name === 'E38N47') room_helpers.get_repair_civilianl_target(current_room_name);
+            // if (current_room_name === 'E38N47') room_helpers.get_repair_civilianl_target(current_room_name);
         }
 
+        if (Game.time % 10 === 0) {
+            // Use terminal to send energy between rooms
+            // if (current_room_name === 'E39N49') {
+            let cur_terminal_id = Game.rooms[current_room_name].memory.energy_flow.terminal;
+            // console.log('[INFO] (main)[' + current_room_name +']: ' + cur_terminal_id);
+            if (cur_terminal_id) {
+                let cur_terminal = Game.getObjectById(cur_terminal_id);
+                let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
+                let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
+                if (energy2transfer > 1000) {
+                    cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E38N48');
+                    // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
+                }
+            }
+        }
+        
         if (Game.time % 300 === 0) {
             room_helpers.upgrade_energy_flow(current_room_name);
             roleTower.create_towers_list(current_room_name);

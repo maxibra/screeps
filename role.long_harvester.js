@@ -8,7 +8,7 @@ var RoleLongHarvester = {
         let my_room = Game.rooms[room_name];
         let long_harvester_mem = creep.memory;
         let action_out;
-        let target_pos = creep.memory.target_id;
+        let target_pos = creep.memory.far_target;
         // let source_away = creep.memory.target_id;
         console.log('[DEBUG] (RoleLongHarvester) [' + creep.name +']: ' + 'MEM: ' + JSON.stringify(long_harvester_mem));
 
@@ -23,15 +23,15 @@ var RoleLongHarvester = {
                 action_out = creep.moveTo(cur_source_away, global_vars.moveTo_op);
                 break;
             case 'source':
-                action_out = creep.harvest(cur_source_away);
+                action_out = creep.harvest(creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE));
                 break;
             case 'move_back':
-                action_out = creep.moveTo(creep.memory.homeland_target, global_vars.moveTo_op);
+                action_out = creep.moveTo(Game.getObjectById(creep.memory.homeland_target), global_vars.moveTo_op);
                 break;                
         }
 
-        if (creep.energy === 0 && creep.pos.isNearTo(target)) creep.memory.harvester_type = 'source';
-        if (creep.energy === creep.energyCapacity) {
+        if (creep.carry.energy === 0 && creep.pos.isNearTo(cur_source_away)) creep.memory.harvester_type = 'source';
+        if (creep.carry.energy === creep.carryCapacity) {
             creep.memory.harvester_type = 'move_back';
             if (room_name === creep.memory.homeland) {
                 creep.memory.role = 'undefined';

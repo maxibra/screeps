@@ -80,7 +80,8 @@ var room_helpers = {
         if (my_room && dstn_links && dstn_links.length > 0) {
             for (let l in dstn_links) {
                 let current_link = Game.getObjectById(dstn_links[l]);
-                if (current_link.energy < current_link.energyCapacity) {
+                if (current_link.energy/current_link.energyCapacity < 0.9) {
+                    // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: LINK: ' + dstn_links[l] + ' is empty');
                     all_links_full = false;
                     break;
                 }
@@ -121,8 +122,8 @@ var room_helpers = {
     upgrade_energy_flow: function(room_name) {
         // Containers
         let my_room = Game.rooms[room_name];
-        // let all_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
-        // let all_continers_ids = all_containers.map(x => x.id);
+        let all_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
+        let all_continers_ids = all_containers.map(x => x.id);
         let all_links = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
         let all_links_ids = all_links.map(x => x.id);
         let all_sources = my_room.memory.energy_flow.sources;
@@ -131,28 +132,32 @@ var room_helpers = {
             long_harvest: my_room.memory.energy_flow.long_harvest,
             sources: my_room.memory.energy_flow.sources,
             mineral: my_room.memory.energy_flow.mineral,
-            containers: {source :{}}, 
+            containers: {source :{}, other: {}}, 
             links: {source: false, controller: false, destinations: [], sources: []}
         }
         // Sort containers
         // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
-        // for (let i = 0; i < all_containers.length; i++) {
-        //     if (all_containers[i].pos.getRangeTo(my_room.controller) < 5) {
-        //         local_energy_flow_obj.containers.controller[all_containers[i].id] = my_room.controller;
-        //         container_defined = true
-        //     } else {
-        //         for (let j = 0; j < all_sources.length; j++) {
-        //             if (all_containers[i].pos.getRangeTo(Game.getObjectById(all_sources[j])) === 1) {
-        //                 local_energy_flow_obj.containers.source[all_containers[i].id] = all_sources[j];
-        //                 container_defined = true;
-        //                 // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Added Container: ' + all_containers[i].id + '; Source: ' + JSON.stringify(energy_flow_obj));
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Container: ' + all_containers[i].id + ' is Defined: ' + container_defined);
-        //     if (!container_defined && (local_energy_flow_obj.containers.other !== all_containers[i].id)) local_energy_flow_obj.containers.other[all_containers[i].id] = false;
-        // }
+        for (let i = 0; i < all_containers.length; i++) {
+            let container_defined = false;
+            // if (all_containers[i].pos.getRangeTo(my_room.controller) < 5) {
+            //     local_energy_flow_obj.containers.controller[all_containers[i].id] = my_room.controller;
+            //     container_defined = true
+            // } else {
+            for (let j = 0; j < all_sources.length; j++) {
+                if (all_containers[i].pos.isNearTo(Game.getObjectById(all_sources[j]))) {
+                    
+                    local_energy_flow_obj.containers.source[all_containers[i].id] = {
+                        source_id: all_sources[j],
+                        miner_id: (my_room.memory.energy_flow.containers.source[all_containers[i].id]) ? my_room.memory.energy_flow.containers.source[all_containers[i].id].miner_id : false
+                    };
+                    container_defined = true;
+                    // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Added Container: ' + all_containers[i].id + '; Source: ' + JSON.stringify(energy_flow_obj));
+                    break;
+                }
+            }
+            // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Container: ' + all_containers[i].id + ' is Defined: ' + container_defined);
+            if (!container_defined) local_energy_flow_obj.containers.other[all_containers[i].id] = false;
+        }
 
         // Links
         // *** LOG
@@ -171,7 +176,7 @@ var room_helpers = {
             else local_energy_flow_obj.links.destinations.push(all_links[l].id);
         }
             
-         // check TERMINAL in the room
+         // check EXTRACTOR in the room
         let extractor_targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_EXTRACTOR)});
         local_energy_flow_obj.mineral.extractor = (extractor_targets.length > 0 && extractor_targets.length > 0) ? extractor_targets[0].id : false;
         
@@ -183,7 +188,7 @@ var room_helpers = {
         let terminal_targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TERMINAL)});
         local_energy_flow_obj.terminal = (terminal_targets.length > 0  && terminal_targets.length > 0) ? terminal_targets[0].id : false;
   
-        Game.rooms[room_name].memory.energy_flow = local_energy_flow_obj;
+        my_room.memory.energy_flow = local_energy_flow_obj;
     },
     define_room_status: function(room_name) {
         let room_vars = Game.rooms[room_name].memory.global_vars;
@@ -228,11 +233,21 @@ var room_helpers = {
         let targets = [];
         let min_hits = 1000000;
         repair_only = {
+            'E38N49': ['5ae294df600f8573214e7d09',],
             'E38N48': ['5aa0bee77ad634646aa08a49', '5ab39a6b04e7f14b97aa3056', '5ab39a586e59881daa1eb094', '5ab39a827ad7de1dd176d6db',
                        '5aa0befa7d8eb10a43e101d3', '5aa0bef30f678357d2601767', '5ab39ab7e7f5aa102de370ac', '5ab39ad233287758623d625e', '5ab39aed8e83a870b36a81e5',
                        '5ac72c64c769531bae38da9b', '5ac7589eb96a887ad73984a6'],
             'E34N47': ['5accf67195d45e308db882e7', '5acc6089c5bb62037cc61e14', '5a97231c4283e76ef6df150c', '5a972319ffa70134f8d01414',
-                       '5a974acf34a154567c596a8c', '5a974ad2117e0f568f21505c', '5a974ad4fc8a790fee2caba9', '5acc6089c5bb62037cc61e14']
+                       '5a974acf34a154567c596a8c', '5a974ad2117e0f568f21505c', '5a974ad4fc8a790fee2caba9', '5acc6089c5bb62037cc61e14'],
+            'E38N47': ['5adfbd7de9560f0a300272ce', '5adfdc2128fc8b0ef2d913c6', '5ae245346abb293c46008058', // containers
+                       '5adfd2e9baf8e72a189f6fe3']                              // rampart
+                    //   '5ae024185de6c16a098144cf'
+                    //   '5ae0226a28fc8b0ef2d9319c', '5ae01fd32442e73df79d657a']
+                    //   '5add07ddfae3986d75b339d6', '5add07d8b1c4fa2d23056648', '5add07d225e73b0d635afacf', '5add07cd8f560c0d75852114', '5add07c7e95c2c6b701bf6f0',
+                    //   '5add07ada5ea876b7607732c', '5adfd13d53d7a60a47637765',
+                    //   '5adfa6d2d8df4445a0180476', '5adfa6d536cbe50a35f443d4', '5adfa6dacec9320ea3313f20', '5adfa6757675f2458c829bb8', '5adfa670d4212c457030d842',
+                    //   '5adfa66a0409f23c73cf2996', '5adfa6652da4b40a5fab775d',
+                    //   '5adfbbb899d2c03c36ead47a', '5adfbbbada0f976c5c1f8d02', '5add8406b21f98456a04e9cc', '5add0790b260d40d64a01627', '5adfde9c60a36d2a01d07ea7']
         }
         // *** LOG
         // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Repair_only: ' +  repair_only[room_name]);
@@ -240,7 +255,8 @@ var room_helpers = {
         if (repair_only[room_name]) {
             for(let id in repair_only[room_name]) {
                 cur_target = Game.getObjectById(repair_only[room_name][id])
-                if (cur_target.hits < min_hits) targets.push(cur_target)
+                // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Current: ' +  repair_only[room_name][id]);
+                if (cur_target.hits < min_hits && cur_target.hits < cur_target.hitsMax) targets.push(cur_target)
             }
         } else {
             E34N47_avoid = [];
@@ -258,11 +274,11 @@ var room_helpers = {
                 '5a3fe9300796205f06f8956d', '5a3feac9824fe1202d5ceb63', '5a437edae9ad370d6f80c979', '5a436eb786a4a36e5af6c89e', '5a436c93b5b012359cb81bd2', '5a436bb28ee5032e65a12834',
                 '5a4365fd262eb037220fc9b4', '5a4364e3eba40146402df274', '5a43637fb8cafb5972604b24', '5a4361ecb458c9595ccdf3b7', '5a435fd9176c8f376528dbb8', '5a3c93c377eddf3fcd2289e4',
                 '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7', '5a434aad352f7c7e6c4b88d1']
-            E37N48_avoid = ['5abc9c2488988449d6f1d066', '5abc9261ce03634b9a5884de']
+            E37N48_avoid = [] // ['5abc9c2488988449d6f1d066', '5abc9261ce03634b9a5884de']
             let avoid_stricts = E39N49_avoid.concat(E38N48_avoid);
             avoid_stricts = avoid_stricts.concat(E37N48_avoid);
             avoid_stricts = avoid_stricts.concat(E34N47_avoid);
-            targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && object.hits < min_hits && avoid_stricts.indexOf(object.id) === -1});
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && (object.hits < min_hits && object.hits < object.hitsMax) && avoid_stricts.indexOf(object.id) === -1});
         }
         // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
@@ -271,7 +287,7 @@ var room_helpers = {
     },
     get_repair_civilianl_target: function(room_name) {
         let my_room = Game.rooms[room_name];
-        let targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER) && object.hits < object.hitsMax});
+        let targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
         my_room.memory.targets.repair_civilian = targets[0] ? targets[0].id : false;
     },
