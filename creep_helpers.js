@@ -24,14 +24,52 @@ function body_cost(body) {
     return cost;
 }
 
-//  Game.spawns['max_E38N48'].spawnCreep([MOVE,MOVE,MOVE,CLAIM], 'max_new-20', {role: 'claimer'})
+function remote_target(room_name) {
+    let target;
+    switch (room_name) { 
+        case 'E34N47':  
+            target = ['E33N47', 'E32N47']; //, 'E32N48'];
+            break;
+        case 'E37N48':
+            target = ['E37N49']; //, 'E36N48']; // 'E34N46'];
+            break;
+        case 'E38N47':
+            target = ['E38N46',]; // 'E34N46'];
+            break;
+        case 'E38N48':
+            target = ['E38N49',]; // 'E34N46'];
+            break;
+    }
+    return target;
+}
+
+function special_harvester_memory(room_name) {
+    let target;
+    switch (room_name) { 
+        case 'E34N47':  
+            target = '5ad6960923774a6d4aa48dae';
+            break;
+        case 'E37N48':
+            target = '5acc524f6bec176d808adb71';
+            break;
+        case 'E38N47':
+            target = '5adfbd7de9560f0a300272ce';
+            break;
+        case 'E38N48':
+            target = '5ad024eac27319698ef58448';
+        break;
+    }
+    return {source_id: target, homeland: room_name};
+}
+
+//  Game.spawns['max_E37N48'].spawnCreep([MOVE,MOVE,MOVE,CLAIM], 'its_my', {role: 'its_my'})
 var creep_helpers = {
     create_creep: function(spawn_name, units) {
         let my_spawn = Game.spawns[spawn_name];
         let room_name = Game.spawns[spawn_name].room.name
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
-        let new_room_creeps = 1;
+        let new_room_creeps = 8;
         let attacker_creeps = 0;
         let lng_hrvst_creeps = 0;
         let energy_helpers = 2;
@@ -93,36 +131,46 @@ var creep_helpers = {
                 name_prefix: 'mnrl_mnr_' + room_name,
                 amount: 1,
                 avoid: !(my_room.memory.energy_flow.mineral.extractor)
+            },
+            remote_harvest: {
+                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
+                // body: [MOVE,WORK,CARRY],
+                memory: special_harvester_memory(room_name),
+                name_prefix: 'rmt_hrvst_' + room_name,
+                amount: 2,
+                target: remote_target(room_name),
+                avoid: !(room_name === 'E38N48' || room_name === 'E37N48' || room_name === 'E34N47') // || room_name === 'E38N47')
             }
-            // remote_harvest: {
-            //     body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
-            //     memory: {
-            //         harvester_type: 'move_away', 
-            //         far_target: my_room.memory.energy_flow.long_harvest[0],
-            //         homeland: room_name,
-            //         homeland_target: my_room.controller.id
-            //     },
-            //     name_prefix: 'rmt_hrvst_' + room_name,
-            //     amount: 1,
-            //     avoid: !(room_name === ')
-            // }
         }
         
         //  **** New implementations of special creeps
+        // console.log('[INFO] (create_creep)[' + room_name + ']: SPECIAL cond: ' + (universal_creeps >= room_vars.screeps_max_amount[room_vars.status]))
+
         if (universal_creeps >= room_vars.screeps_max_amount[room_vars.status]) {
             for (let creep_type in special_creeps) {
+                // console.log('CREEP Type: ' + creep_type);
                 current_obj = special_creeps[creep_type];
-                if (current_obj.avoid) continue;
+                if (current_obj.avoid || current_obj.amount === 0 || 
+                    (creep_type == 'mineral_miner' && Game.getObjectById(my_room.memory.energy_flow.mineral.id).mineralAmount === 0)) continue;
                 for (let i=1; i<=current_obj.amount; i++) {
-                    current_new_name = current_obj.name_prefix + '-' + i + '-sp';
-                    if ( Object.keys(current_creeps).indexOf(current_new_name) === -1 ) {
-                        creep_name = current_new_name;
-                        creep_memory = current_obj.memory;
-                        creep_memory['role'] = creep_type;
-                        creep_memory['special'] =  creep_type;    // needed to prevent role changing after harvesting
-                        current_body = current_obj.body;
-                        add_body = false;       // needed to prevent dynamic body creation
-                        break;                        
+                    let targets = (current_obj.target) ? current_obj.target : [false,];
+                    // console.log('[INFO] (create_creep)[' + room_name + ']: TARGETS: ' + JSON.stringify(targets))
+                    for (let t in targets) {
+                        current_new_name = (targets[t]) ? current_obj.name_prefix + '_' + targets[t] + '-' + i + '-sp' :
+                                                 current_obj.name_prefix + '-' + i + '-sp';
+                                                 
+                        // console.log('[INFO] (create_creep)[' + room_name + ']: Name: ' + current_new_name)
+
+                        if ( Object.keys(current_creeps).indexOf(current_new_name) === -1 ) {
+                            creep_name = current_new_name;
+                            creep_memory = current_obj.memory;
+                            if (targets[t]) creep_memory.far_target = targets[t];
+                            creep_memory['role'] = creep_type;
+                            creep_memory['special'] =  creep_type;    // needed to prevent role changing after harvesting
+                            current_body = current_obj.body;
+                            add_body = false;       // needed to prevent dynamic body creation
+                            break;                        
+                        }
                     }
                 }
             }           
@@ -274,7 +322,7 @@ var creep_helpers = {
         switch(action_res) {
             case OK:
                 creep.memory.target_id = target.id;
-                if (my_room.memory.towers.current[target.id] === creep.id) my_room.memory.towers.current[target.id] = false;
+                if (my_room.memory.towers && my_room.memory.towers.current[target.id] === creep.id) my_room.memory.towers.current[target.id] = false;
                 break;
             case ERR_NOT_IN_RANGE:
                 creep.moveTo(target, global_vars.moveTo_ops);

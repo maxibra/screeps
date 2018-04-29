@@ -80,7 +80,7 @@ var room_helpers = {
         if (my_room && dstn_links && dstn_links.length > 0) {
             for (let l in dstn_links) {
                 let current_link = Game.getObjectById(dstn_links[l]);
-                if (current_link.energy/current_link.energyCapacity < 0.9) {
+                if (current_link && current_link.energy/current_link.energyCapacity < 0.9) {
                     // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: LINK: ' + dstn_links[l] + ' is empty');
                     all_links_full = false;
                     break;
@@ -128,10 +128,11 @@ var room_helpers = {
         let all_links_ids = all_links.map(x => x.id);
         let all_sources = my_room.memory.energy_flow.sources;
         let energy_flow_obj = my_room.memory.energy_flow;
+        let cur_mineral = (my_room.memory.energy_flow.mineral) ? my_room.memory.energy_flow.mineral : {};
         let local_energy_flow_obj = {
             long_harvest: my_room.memory.energy_flow.long_harvest,
             sources: my_room.memory.energy_flow.sources,
-            mineral: my_room.memory.energy_flow.mineral,
+            mineral: cur_mineral,
             containers: {source :{}, other: {}}, 
             links: {source: false, controller: false, destinations: [], sources: []}
         }
@@ -178,6 +179,7 @@ var room_helpers = {
             
          // check EXTRACTOR in the room
         let extractor_targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_EXTRACTOR)});
+        console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: LOCAL FLOW: ' + JSON.stringify(local_energy_flow_obj)) 
         local_energy_flow_obj.mineral.extractor = (extractor_targets.length > 0 && extractor_targets.length > 0) ? extractor_targets[0].id : false;
         
         // check STORAGE in the room
@@ -233,21 +235,27 @@ var room_helpers = {
         let targets = [];
         let min_hits = 1000000;
         repair_only = {
-            'E38N49': ['5ae294df600f8573214e7d09',],
-            'E38N48': ['5aa0bee77ad634646aa08a49', '5ab39a6b04e7f14b97aa3056', '5ab39a586e59881daa1eb094', '5ab39a827ad7de1dd176d6db',
+            'E38N49': ['5ae294df600f8573214e7d09', '5ae2f6c68416ac191f939153'], // containers
+            'E38N48': ['5ae2f286456b3d0ea1c6f1b4', '5ae2fac36abb293c4600d1a1',  // containers
+                       '5aa0bee77ad634646aa08a49', '5ab39a6b04e7f14b97aa3056', '5ab39a586e59881daa1eb094', '5ab39a827ad7de1dd176d6db',
                        '5aa0befa7d8eb10a43e101d3', '5aa0bef30f678357d2601767', '5ab39ab7e7f5aa102de370ac', '5ab39ad233287758623d625e', '5ab39aed8e83a870b36a81e5',
                        '5ac72c64c769531bae38da9b', '5ac7589eb96a887ad73984a6'],
-            'E34N47': ['5accf67195d45e308db882e7', '5acc6089c5bb62037cc61e14', '5a97231c4283e76ef6df150c', '5a972319ffa70134f8d01414',
+            'E34N47': ['5ae3634ad3967d39624771d0',  // container 
+                       '5acc6089c5bb62037cc61e14',  // rampart
+                       '5accf67195d45e308db882e7', '5a97231c4283e76ef6df150c', '5a972319ffa70134f8d01414',
                        '5a974acf34a154567c596a8c', '5a974ad2117e0f568f21505c', '5a974ad4fc8a790fee2caba9', '5acc6089c5bb62037cc61e14'],
-            'E38N47': ['5adfbd7de9560f0a300272ce', '5adfdc2128fc8b0ef2d913c6', '5ae245346abb293c46008058', // containers
-                       '5adfd2e9baf8e72a189f6fe3']                              // rampart
-                    //   '5ae024185de6c16a098144cf'
-                    //   '5ae0226a28fc8b0ef2d9319c', '5ae01fd32442e73df79d657a']
-                    //   '5add07ddfae3986d75b339d6', '5add07d8b1c4fa2d23056648', '5add07d225e73b0d635afacf', '5add07cd8f560c0d75852114', '5add07c7e95c2c6b701bf6f0',
-                    //   '5add07ada5ea876b7607732c', '5adfd13d53d7a60a47637765',
-                    //   '5adfa6d2d8df4445a0180476', '5adfa6d536cbe50a35f443d4', '5adfa6dacec9320ea3313f20', '5adfa6757675f2458c829bb8', '5adfa670d4212c457030d842',
-                    //   '5adfa66a0409f23c73cf2996', '5adfa6652da4b40a5fab775d',
-                    //   '5adfbbb899d2c03c36ead47a', '5adfbbbada0f976c5c1f8d02', '5add8406b21f98456a04e9cc', '5add0790b260d40d64a01627', '5adfde9c60a36d2a01d07ea7']
+                    //   '5ae4c7fac34576097c19c154', '5ae4c7fd02a75a3c6822ce58', '5ae4c7ff2f4e6a3253b01575', '5ae4c8022a35133912bfc0d4', '5ae4c80571f07c317036f407', '5ae4c80ad0b67f3944d4a6dd',
+                    //   '5ae4ef5ea3702131094b5a3d', '5ae4ef631b3cfa3938b84eb2', '5ae4ef61156cc6326b475f16'],
+            'E38N47': ['5ae4c398fad40139450c92d3',
+                       '5adfbd7de9560f0a300272ce', '5adfdc2128fc8b0ef2d913c6', '5ae245346abb293c46008058', // containers
+                       '5adfd2e9baf8e72a189f6fe3',  '5ae4a799eaccbf11e1925b25',                            // rampart
+                       '5ae024185de6c16a098144cf',
+                       '5ae0226a28fc8b0ef2d9319c', '5ae01fd32442e73df79d657a',
+                       '5add07ddfae3986d75b339d6', '5add07d8b1c4fa2d23056648', '5add07d225e73b0d635afacf', '5add07cd8f560c0d75852114', '5add07c7e95c2c6b701bf6f0',
+                       '5add07ada5ea876b7607732c', '5adfd13d53d7a60a47637765',
+                       '5adfa6d2d8df4445a0180476', '5adfa6d536cbe50a35f443d4', '5adfa6dacec9320ea3313f20', '5adfa6757675f2458c829bb8', '5adfa670d4212c457030d842',
+                       '5adfa66a0409f23c73cf2996', '5adfa6652da4b40a5fab775d',
+                       '5adfbbb899d2c03c36ead47a', '5adfbbbada0f976c5c1f8d02', '5add8406b21f98456a04e9cc', '5add0790b260d40d64a01627', '5adfde9c60a36d2a01d07ea7']
         }
         // *** LOG
         // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Repair_only: ' +  repair_only[room_name]);
@@ -256,10 +264,22 @@ var room_helpers = {
             for(let id in repair_only[room_name]) {
                 cur_target = Game.getObjectById(repair_only[room_name][id])
                 // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Current: ' +  repair_only[room_name][id]);
-                if (cur_target.hits < min_hits && cur_target.hits < cur_target.hitsMax) targets.push(cur_target)
+                if (cur_target && cur_target.hits < min_hits && cur_target.hits < cur_target.hitsMax) targets.push(cur_target)
             }
         } else {
+            E36N48_avoid = ['5ae499b6b0db053c306741a2', // rampart to remove
+                            '5ae4629ee028fc11d5592552', '5ae46283a200d042b659d71d', '5ae4627cee797138fa78382d', '5ae46281e028fc11d559253f', '5ae4629b4390a242a4bc145d',
+                            '5ae45d6506014c098e685a0f', '5ae45d401b3cfa3938b80d92', '5ae45d3e71f07c317036c511', '5ae45d39b4f57132597200b0',
+                            '5ae45d33d24b6b325f9b070a', '5ae45d19e028fc11d55922a3', '5ae45cfea4d90142c2bce1d8', '5ae45ce3de930e393efcb67d',
+                            '5ae45b908a126e099a685b12', '5ae45b8a592d9e11a5f6658b', '5ae45c372995ea326511ee7e', '5ae45b88687bce3c31603d7d', '5ae45c3cc34576097c198f6a', '5ae45b85a2505b11b19d3d04',
+                            '5ae45b469a54d8394f5ec9de', '5ae45bbffad40139450c63ac', 
+                            '5ae445b966b757327b80fd05', '5ae445beee797138fa782b36', '5ae447b21687e93115abe670', '5ae447afd0b67f3944d46c80', '5ae447adcb5e3209ac04526b' , '5ae447aae028fc11d5591807'];
             E34N47_avoid = [];
+            E38N47_avoid = ['5ae407d5d24b6b325f9ae11c', '5ae407d74390a242a4bbea7d', '5ae407da99d2c03c36ecc68b', '5ae407dd8a126e099a683326', '5ae407df6922543906ffce2d',
+                            '5ae407e2687bce3c31601686', '5ae4090ae78e533c7ff2cb9a', '5ae4085602a75a3c682277dc', '5ae40859e78e533c7ff2cb5f', '5ae4085ce35d18395c3a1388',
+                            '5ae4085ee35d18395c3a138c', '5ae4086361b7a5318563af54', '5ae408691b3cfa3938b7e5dc', '5ae4086e2f4e6a3253afc0ab', '5ae40873de930e393efc8ebc',
+                            '5add084b4b4b0e4d1132d67b', '5add084e25e73b0d635afb06', '5add08512c04dc6d3c9fa52e', '5add085cc65975451efc2b80'];
+
             E38N48_avoid = ['5aba595ad360fc7cd874e352', '5aba594f74b96f64ff232dc9', '5aa0beee3c525457e6f84f7f', '5ab39a9c8a0c83586e5bfb1e',
                 '5a962bd55044c20a227e09b9', '5a962bcb77d91872df3159b4', '5a962bc5dca94812fc07024f', '5a962bbed183f34ad9a0d823', '5a962bb74e67460a13b276e7', '5a962bb004d2337105e8d4d4',
                 '5a962babcdf030710646711f', '5a962ba4b29c3312dfd01a8b', '5a962b9d53266d146db74952', '5a962b9aefb803145385e4ba', '5a962b974d6ed3145e8181e5', '5a962b94eb14d24ac01c90dc',
@@ -278,6 +298,9 @@ var room_helpers = {
             let avoid_stricts = E39N49_avoid.concat(E38N48_avoid);
             avoid_stricts = avoid_stricts.concat(E37N48_avoid);
             avoid_stricts = avoid_stricts.concat(E34N47_avoid);
+            avoid_stricts = avoid_stricts.concat(E38N47_avoid);
+            avoid_stricts = avoid_stricts.concat(E36N48_avoid);
+
             targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && (object.hits < min_hits && object.hits < object.hitsMax) && avoid_stricts.indexOf(object.id) === -1});
         }
         // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
@@ -294,6 +317,7 @@ var room_helpers = {
     get_build_targets: function(room_name) {
         // Extensions have highest priority
         let my_room = Game.rooms[room_name];
+        // if (room_name === 'E33N47') console.log('[DEBUG] (get_build_targets)[: ' + room_name + '; OBJ: ' + JSON.stringify(my_room));
         // let targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: {structureType: STRUCTURE_EXTENSION}});
         targets = [];
         // Defence structures are secondary priority
@@ -301,23 +325,8 @@ var room_helpers = {
         // All other structures
         if (targets.length === 0) targets = my_room.find(FIND_CONSTRUCTION_SITES);
 
-        // Sort targets by close to spawn
-        // let closest_obj = targets[0];
-        // console.log('[DEBUG] (get_build_targets): targets: ' + JSON.stringify(targets[0].ops));
-//         if (closest_obj) {
-//             let closest_obj_range = Math.abs(my_spawn.pos.x-closest_obj.pos.x) + Math.abs(my_spawn.pos.y-closest_obj.pos.y);
-//             for (let i=1;i<targets.length;i++) {
-//                 let sob_range = Math.abs(my_spawn.pos.x-targets[i].pos.x) + Math.abs(my_spawn.pos.y-targets[i].pos.y);
-//                 //            console.log('[DEBUG] (get_build_targets): Current (' + closest_obj.id + '): ' + closest_obj_range + '; Next(' + targets[i].id + '): ' + sob_range);
-//                 if (sob_range < closest_obj_range) {
-//                     closest_obj = targets[i];
-//                     closest_obj_range = sob_range;
-//                 }
-//                 //            console.log('[DEBUG] (get_build_targets): Choosen: ' + closest_obj.id);
-//             }
-// //        targets.sort((a,b) => (Math.abs(my_spawn.pos.x-a.pos.x) + Math.abs(my_spawn.pos.y-a.pos.y)) - (Math.abs(my_spawn.pos.x-b.pos.x) + Math.abs(my_spawn.pos.y-b.pos.y)));
-// //        if (closest_obj) console.log('[DEBUG] (get_build_targets): Closest target (' + closest_obj.id + '): ' + JSON.stringify(closest_obj));
-//         }
+        // if (room_name === 'E36N48') console.log('[DEBUG](get_build_targets)[: ' + room_name + '; TARGETS: ' + JSON.stringify(targets));
+
         targets_id = [];
         for (let i in targets) targets_id.push(targets[i].id);
         // my_room.memory.targets.build = (targets.length > 0) ? targets[0].id : false;

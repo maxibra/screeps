@@ -1,5 +1,16 @@
 var StructTower;
 
+function is_millitary(creep_obj) {
+    let millitary_types = ['attack','ranged_attack','heal','claim'];
+    let body_types = _.map(body_obj,'type');
+    let millitary_creep = false;
+    for(let i in millitary_types)
+        if (body_types.indexOf(millitary_types[i]) > 0) {
+            millitary_creep = true;
+            break;
+        }
+}
+
 StructTower = {
     run: function (current_tower_id, creeps_amount) {
         /*
@@ -16,7 +27,7 @@ StructTower = {
         
         let room_name = current_tower.room.name;
         let room_vars = Game.rooms[room_name].memory.global_vars;
-        let target2repair = false;
+        let target2repair;
         let target2attack;
         // TODO: Optimize road target (save it)
 
@@ -28,11 +39,12 @@ StructTower = {
         // console.log('[DEBUG] (StructTower.run) [' + room_name + '] ENERGY PROC: ' + tower_energy_proc)
 
         if (room_vars.status == 'war') {
-            all_hostile = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
+            all_hostile = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS, {filter: object => (object.owner.username !== 'Sergeev' || 
+                                                                                             (object.owner.username === 'Sergeev' && is_millitary(object)))});
             all_hostile.sort((a,b) => current_tower.pos.getRangeTo(a) - current_tower.pos.getRangeTo(b));   // sort from closer to far
             console.log('[INFO] (StructTower.run) [' + room_name + '] ATTACKERS: ' + JSON.stringify(all_hostile))
             if (all_hostile.length > 0) target2attack = all_hostile[0];
-            if (room_name === 'E38N47' && current_tower.pos.getRangeTo(all_hostile[0]) > 10) target2attack = false;
+            // if (room_name === 'E38N47' && current_tower.pos.getRangeTo(all_hostile[0]) > 10) target2attack = false;
 
             let heal_is_found = false;
             for (let h in all_hostile) {
@@ -47,15 +59,17 @@ StructTower = {
 
             // if (room_name === 'E37N48' )
             // target2attack = false;
-            // target2attack = Game.getObjectById('5ae0b7c9b0845c1cb86d5cf2')
+            // target2attack = Game.getObjectById('5ae4996838739844d2c51bd4')
             
             
             if (tower_energy_proc > 0.7) target2repair = Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
             console.log('[INFO] (StructTower.run) [' + room_name + '] it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
         } else if (tower_energy_proc > 0.7 && !(Game.time % 2)) {
 
-            targets2repair = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7))});
+            targets2repair = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7) &&
+                                                                                             !(room_name === 'E36N48' && (object.pos.x < 16 || object.pos.y < 11 || object.pos.y > 39)))});
             // console.log('[DEBUG] (StructTower.run): Road X: ' + targets2repair.pos.x + '; Road y: ' + targets2repair.pos.y);
+            
             target2repair = targets2repair.length > 0 ? targets2repair[0] : []; //Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
 
             // ***** LOG

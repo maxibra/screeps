@@ -164,7 +164,7 @@ module.exports.loop = function () {
         console.log('[INFO] (main): TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket)
         for (let cur_room in Game.rooms) {
             let room_status = Memory.rooms[cur_room].global_vars.status;
-            if (units[cur_room]) 
+            if (units[cur_room])
                 console.log('[INFO] (main): [' + cur_room + '][' + room_status + '] expected: ' + 
                             Memory.rooms[cur_room].global_vars.screeps_max_amount[room_status] + 
                             '; Workers: ' + (units[cur_room].total-units[cur_room].sp_total-units[cur_room].harvest) + '; ' +
@@ -192,7 +192,7 @@ module.exports.loop = function () {
         }
     }
 
-    let avoid_rooms = ['E34N46', 'E35N46', 'E36N46', 'E37N47', 'E34N46', 'E33N47']
+    let avoid_rooms = ['E34N46', 'E35N46', 'E36N46', 'E37N47', 'E34N46', 'E37N46']
     for(var current_room_name in Game.rooms) {
         if(avoid_rooms.indexOf(current_room_name) > 0) continue
         
@@ -217,8 +217,9 @@ module.exports.loop = function () {
             room_helpers.verify_all_full(current_room_name);
         }
 
+        // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
         let current_mod = 0;
-        if (Game.time % 1 === current_mod) {  // run every 10 ticks
+        if (Game.time % 10 === current_mod) {  // run every 10 ticks
             // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             //        room_helpers.get_transfer_target(current_room_name);
             room_helpers.define_room_status(current_room_name);
@@ -226,16 +227,18 @@ module.exports.loop = function () {
             // if (dropped_resources.length > 0) Game.notify('We Have Dropped Resources in our area: ' + dropped_resources.length);
 
         }
+        // console.log('[DEBUG] (main)[' + current_room_name + '] BUILD')
 
         current_mod = current_mod + tick_between_hard_actions;
         if (Game.time % 10 === current_mod) {  // run every 10 ticks
-            // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
+            // console.log('[INFO] (main) [' + current_room_name + ']: RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             room_helpers.get_build_targets(current_room_name);
             room_helpers.get_repair_defence_target(current_room_name);
             // if (current_room_name === 'E38N47') room_helpers.get_repair_civilianl_target(current_room_name);
         }
 
-        if (Game.time % 10 === 0) {
+        current_mod = current_mod + tick_between_hard_actions;
+        if (Game.time % 10 === current_mod) {
             // Use terminal to send energy between rooms
             // if (current_room_name === 'E39N49') {
             let cur_terminal_id = Game.rooms[current_room_name].memory.energy_flow.terminal;
