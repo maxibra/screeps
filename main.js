@@ -163,6 +163,7 @@ module.exports.loop = function () {
     if (Game.time % 5 === 0) {
         console.log('[INFO] (main): TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket)
         for (let cur_room in Game.rooms) {
+            if (!Memory.rooms[cur_room].global_vars) continue;
             let room_status = Memory.rooms[cur_room].global_vars.status;
             if (units[cur_room])
                 console.log('[INFO] (main): [' + cur_room + '][' + room_status + '] expected: ' + 
@@ -201,7 +202,11 @@ module.exports.loop = function () {
         // Memory.rooms[current_room_name].energy_flow.sources= Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id)
         
         // Towers
-        let towers_list = Object.keys(Game.rooms[current_room_name].memory.towers.current);
+        if (!Memory.rooms[current_room_name].global_vars) {
+            console.log('[WARN][' + current_room_name +']: global_vars doesnt defined for the room. Skip the room');
+            continue;
+        }
+        let towers_list = (Game.rooms[current_room_name].memory.towers) ? Object.keys(Game.rooms[current_room_name].memory.towers.current) : {};
         let towers_energy_full = true;
         // console.log('[DEBUG] (main)[' + current_room_name + ']: TOWERS: ' + JSON.stringify(towers_list));
         if ((units[current_room_name] && units[current_room_name].total >= 2) || Memory.rooms[current_room_name].global_vars.status === 'war')
@@ -243,12 +248,12 @@ module.exports.loop = function () {
             // if (current_room_name === 'E39N49') {
             let cur_terminal_id = Game.rooms[current_room_name].memory.energy_flow.terminal;
             // console.log('[INFO] (main)[' + current_room_name +']: ' + cur_terminal_id);
-            if (cur_terminal_id) {
+            if (cur_terminal_id && current_room_name !== 'E38N47') {
                 let cur_terminal = Game.getObjectById(cur_terminal_id);
                 let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
                 let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
                 if (energy2transfer > 1000) {
-                    cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E38N48');
+                    cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E38N47');
                     // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
                 }
             }

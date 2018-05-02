@@ -78,7 +78,8 @@ var RoleHarvester = {
             } else {
                 // target = false
                 target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {filter: object => (creep.pos.getRangeTo(object) < 5 || object.energy > 200)});
-                if (target && creep.memory.special !== 'upgrader' && !(room_name === 'E39N49' && target.pos.x > 35) && !(room_name === 'E37N48' && target.pos.x <10)) { // && !(room_name === 'E38N47' && my_room.memory.global_vars.status === 'war')) { //  && room_name !== 'E38N47') {
+                if (target && creep.memory.special !== 'upgrader' && !(room_name === 'E39N49' && target.pos.x > 35) && 
+                !(room_name === 'E34N47' && creep.pos.x < 15 && creep.pos.y > 30)) { // && !(room_name === 'E38N47' && my_room.memory.global_vars.status === 'war')) { //  && room_name !== 'E38N47') {
                     harvester_type = 'dropped';
                     // my_room.memory.energy_flow.dropped[target.id] = creep.name
                 } else {
@@ -88,7 +89,8 @@ var RoleHarvester = {
                                                                                               Object.keys(object.store).length > 1)
 
                     }); //|| creep.pos.getRangeTo(object, 2)});
-                    if (target && creep.memory.special !== 'upgrader' && my_room.memory.global_vars.status === 'peace') {  //&& room_name !== 'E38N47') {
+                    if (target && creep.memory.special !== 'upgrader' && my_room.memory.global_vars.status === 'peace' &&
+                        !(room_name === 'E34N47' && creep.pos.x < 15 && creep.pos.y > 30)) {  //&& room_name !== 'E38N47') {
                         harvester_type = 'tombstone';
                         // my_room.memory.energy_flow.tombstone[target.id] = creep.name
                     } else if (creep.memory.special !== 'upgrader' && room_full_container) { // ||  
@@ -129,9 +131,10 @@ var RoleHarvester = {
         switch(harvester_type) {
             case 'tombstone':
                 for (let r in target.store) {
-                    if (r !== 'energy') creep.memory.has_minerals = true;
                     let total_carry = _.sum(creep.carry);
-                    if (total_carry < creep.carryCapacity) creep.withdraw(target, r);
+                    if (total_carry < creep.carryCapacity) action_out = creep.withdraw(target, r);
+                    if (action_out === OK && r !== 'energy') creep.memory.has_minerals = true;
+
                 }
             case 'container':
             case 'link':

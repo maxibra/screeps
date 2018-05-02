@@ -246,15 +246,13 @@ var room_helpers = {
                        '5a974acf34a154567c596a8c', '5a974ad2117e0f568f21505c', '5a974ad4fc8a790fee2caba9', '5acc6089c5bb62037cc61e14'],
                     //   '5ae4c7fac34576097c19c154', '5ae4c7fd02a75a3c6822ce58', '5ae4c7ff2f4e6a3253b01575', '5ae4c8022a35133912bfc0d4', '5ae4c80571f07c317036f407', '5ae4c80ad0b67f3944d4a6dd',
                     //   '5ae4ef5ea3702131094b5a3d', '5ae4ef631b3cfa3938b84eb2', '5ae4ef61156cc6326b475f16'],
-            'E38N47': ['5ae4c398fad40139450c92d3',
-                       '5adfbd7de9560f0a300272ce', '5adfdc2128fc8b0ef2d913c6', '5ae245346abb293c46008058', // containers
-                       '5adfd2e9baf8e72a189f6fe3',  '5ae4a799eaccbf11e1925b25',                            // rampart
-                       '5ae024185de6c16a098144cf',
+            'E38N47': ['5ae8ba3e06014c098e6a5913', // containers
+                       '5adfd2e9baf8e72a189f6fe3',                            // rampart
                        '5ae0226a28fc8b0ef2d9319c', '5ae01fd32442e73df79d657a',
                        '5add07ddfae3986d75b339d6', '5add07d8b1c4fa2d23056648', '5add07d225e73b0d635afacf', '5add07cd8f560c0d75852114', '5add07c7e95c2c6b701bf6f0',
                        '5add07ada5ea876b7607732c', '5adfd13d53d7a60a47637765',
                        '5adfa6d2d8df4445a0180476', '5adfa6d536cbe50a35f443d4', '5adfa6dacec9320ea3313f20', '5adfa6757675f2458c829bb8', '5adfa670d4212c457030d842',
-                       '5adfa66a0409f23c73cf2996', '5adfa6652da4b40a5fab775d',
+                       '5adfa66a0409f23c73cf2996', '5adfa6652da4b40a5fab775d', '5ae8da39e7e0f042c805233b',
                        '5adfbbb899d2c03c36ead47a', '5adfbbbada0f976c5c1f8d02', '5add8406b21f98456a04e9cc', '5add0790b260d40d64a01627', '5adfde9c60a36d2a01d07ea7']
         }
         // *** LOG
@@ -267,7 +265,7 @@ var room_helpers = {
                 if (cur_target && cur_target.hits < min_hits && cur_target.hits < cur_target.hitsMax) targets.push(cur_target)
             }
         } else {
-            E36N48_avoid = ['5ae499b6b0db053c306741a2', // rampart to remove
+            E36N48_avoid = ['5ae499b6b0db053c306741a2', '5ae6227e71f07c31703786a8', // rampart to remove
                             '5ae4629ee028fc11d5592552', '5ae46283a200d042b659d71d', '5ae4627cee797138fa78382d', '5ae46281e028fc11d559253f', '5ae4629b4390a242a4bc145d',
                             '5ae45d6506014c098e685a0f', '5ae45d401b3cfa3938b80d92', '5ae45d3e71f07c317036c511', '5ae45d39b4f57132597200b0',
                             '5ae45d33d24b6b325f9b070a', '5ae45d19e028fc11d55922a3', '5ae45cfea4d90142c2bce1d8', '5ae45ce3de930e393efcb67d',
@@ -293,7 +291,9 @@ var room_helpers = {
                 '5a3ff5a84172f32ee0f2a126', '5a3ff3498bf01e096223d330', '5a3fef638bd11d24563999c5', '5a3fee6787ab8c2441b9587a', '5a3fed02265a181611e3f081', '5a3fe9f63cc43f5f102d6a7c',
                 '5a3fe9300796205f06f8956d', '5a3feac9824fe1202d5ceb63', '5a437edae9ad370d6f80c979', '5a436eb786a4a36e5af6c89e', '5a436c93b5b012359cb81bd2', '5a436bb28ee5032e65a12834',
                 '5a4365fd262eb037220fc9b4', '5a4364e3eba40146402df274', '5a43637fb8cafb5972604b24', '5a4361ecb458c9595ccdf3b7', '5a435fd9176c8f376528dbb8', '5a3c93c377eddf3fcd2289e4',
-                '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7', '5a434aad352f7c7e6c4b88d1']
+                '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7', '5a434aad352f7c7e6c4b88d1',
+                '5ae6092e2a35133912c04a54', '5ae609281b3cfa3938b8c79b', '5ae60922d0b67f3944d5351a', '5ae60913a4d90142c2bd997c', '5ae609106abb293c46023290', '5ae609106abb293c46023290','5ae6090bf3c15a391871ec30',  // 3rd line
+                '5ae609488a126e099a691e45', '5ae6094571f07c3170377bc9', '5ae6094e663c3431216646d5', '5ae609542e007b09769bff27', '5ae6095fa200d042b65a8d1a']
             E37N48_avoid = [] // ['5abc9c2488988449d6f1d066', '5abc9261ce03634b9a5884de']
             let avoid_stricts = E39N49_avoid.concat(E38N48_avoid);
             avoid_stricts = avoid_stricts.concat(E37N48_avoid);
@@ -323,7 +323,7 @@ var room_helpers = {
         // Defence structures are secondary priority
         if (targets.length === 0) targets = my_room.find(FIND_MY_CONSTRUCTION_SITES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER)});
         // All other structures
-        if (targets.length === 0) targets = my_room.find(FIND_CONSTRUCTION_SITES);
+        if (targets.length === 0) targets = my_room.find(FIND_MY_CONSTRUCTION_SITES);
 
         // if (room_name === 'E36N48') console.log('[DEBUG](get_build_targets)[: ' + room_name + '; TARGETS: ' + JSON.stringify(targets));
 

@@ -2,13 +2,14 @@ var StructTower;
 
 function is_millitary(creep_obj) {
     let millitary_types = ['attack','ranged_attack','heal','claim'];
-    let body_types = _.map(body_obj,'type');
+    let body_types = _.map(creep_obj.body,'type');
     let millitary_creep = false;
     for(let i in millitary_types)
         if (body_types.indexOf(millitary_types[i]) > 0) {
             millitary_creep = true;
             break;
         }
+    return millitary_creep;
 }
 
 StructTower = {

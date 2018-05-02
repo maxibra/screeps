@@ -25,10 +25,11 @@ function body_cost(body) {
 }
 
 function remote_target(room_name) {
+    // Object of rooms with remote targets
     let target;
     switch (room_name) { 
         case 'E34N47':  
-            target = ['E33N47', 'E32N47']; //, 'E32N48'];
+            target = ['E33N47', 'E32N47', 'E32N48'];
             break;
         case 'E37N48':
             target = ['E37N49']; //, 'E36N48']; // 'E34N46'];
@@ -44,19 +45,20 @@ function remote_target(room_name) {
 }
 
 function special_harvester_memory(room_name) {
+    // ID's of destination inside homeland of remote harvesters
     let target;
     switch (room_name) { 
         case 'E34N47':  
-            target = '5ad6960923774a6d4aa48dae';
+            target = ['5ad6960923774a6d4aa48dae', '5ae67365c435f742aab3d036'];
             break;
         case 'E37N48':
-            target = '5acc524f6bec176d808adb71';
+            target = ['5acc524f6bec176d808adb71',];
             break;
         case 'E38N47':
-            target = '5adfbd7de9560f0a300272ce';
+            target = ['5adfbd7de9560f0a300272ce',];
             break;
         case 'E38N48':
-            target = '5ad024eac27319698ef58448';
+            target = ['5ae4db5bcb5e3209ac04979b', '5ad024eac27319698ef58448',];
         break;
     }
     return {source_id: target, homeland: room_name};
@@ -69,10 +71,10 @@ var creep_helpers = {
         let room_name = Game.spawns[spawn_name].room.name
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
-        let new_room_creeps = 8;
+        let new_room_creeps = 0;
         let attacker_creeps = 0;
         let lng_hrvst_creeps = 0;
-        let energy_helpers = 2;
+        let energy_helpers = 0;
         let upgraders = 0;
         let create_special = false;
 
