@@ -83,7 +83,7 @@ StructTower = {
         let current_creep_types = room_vars.creep_types[current_life_status];
 //        console.log('[DEBUG] (StructTower.run)[' + current_tower_id + ']: Targets to attack: ' + target2attack.length);
         if (target2attack) {
-            console.log('[DEBUG] (StructTower.run)[' + current_tower_id + ']: Attack (' + target2attack.id)
+            console.log('[DEBUG] (StructTower.run)[' + room_name +'][' + current_tower_id + ']: Attack (' + target2attack.id)
             current_tower.attack(target2attack);
             // current_creep_types.repair_civilian = 0.4;
             // current_creep_types.repair_defence = 0.1;

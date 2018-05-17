@@ -242,25 +242,28 @@ module.exports.loop = function () {
             // if (current_room_name === 'E38N47') room_helpers.get_repair_civilianl_target(current_room_name);
         }
 
+
         current_mod = current_mod + tick_between_hard_actions;
         if (Game.time % 10 === current_mod) {
             // Use terminal to send energy between rooms
-            // if (current_room_name === 'E39N49') {
-            let cur_terminal_id = Game.rooms[current_room_name].memory.energy_flow.terminal;
-            // console.log('[INFO] (main)[' + current_room_name +']: ' + cur_terminal_id);
-            if (cur_terminal_id && current_room_name !== 'E38N47') {
-                let cur_terminal = Game.getObjectById(cur_terminal_id);
-                let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
-                let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
-                if (energy2transfer > 1000) {
-                    cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E38N47');
-                    // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
+            if (current_room_name === 'E39N49') {
+                let cur_terminal_id = Game.rooms[current_room_name].memory.energy_flow.terminal;
+                // console.log('[INFO] (main)[' + current_room_name +']: ' + cur_terminal_id);
+                if (cur_terminal_id && current_room_name !== 'E34N47') {
+                    let cur_terminal = Game.getObjectById(cur_terminal_id);
+                    let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
+                    let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
+                    if (energy2transfer > 1000) {
+                        cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E34N47');
+                        // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
+                    }
                 }
             }
         }
         
         if (Game.time % 300 === 0) {
             room_helpers.upgrade_energy_flow(current_room_name);
+            room_helpers.update_labs_info(current_room_name);
             roleTower.create_towers_list(current_room_name);
         }
     }

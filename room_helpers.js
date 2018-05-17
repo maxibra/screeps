@@ -35,6 +35,18 @@ function get_stright_path(FromPos, ToPos) {
     var stright_path = [];
 }
 
+function is_millitary(creep_obj) {
+    let millitary_types = ['attack','ranged_attack','heal','claim'];
+    let body_types = _.map(creep_obj.body,'type');
+    let millitary_creep = false;
+    for(let i in millitary_types)
+        if (body_types.indexOf(millitary_types[i]) > 0) {
+            millitary_creep = true;
+            break;
+        }
+    return millitary_creep;
+}
+
 var room_helpers = {
     check_create_miner: function(room_name, spawn_name, units) {
         let my_room = Game.rooms[room_name];
@@ -73,6 +85,7 @@ var room_helpers = {
         let all_links_full = true;
         let all_towers_full = true;
         let all_extensions_full = true;
+        let is_no_constructions = true;
         let my_room = Game.rooms[room_name];
         
         // LINKS
@@ -86,22 +99,26 @@ var room_helpers = {
                     break;
                 }
             }
-            
-            // TOWERS
-            let all_towers = Object.keys(my_room.memory.towers.current);
-            for (let t in all_towers) {
-                let current_tower = Game.getObjectById(all_towers[t]);
-                if (current_tower.energy < 600) {
-                    all_towers_full = false;
-                    break;
-                }     
-            }
-            
-            // Extensions
-            if (my_room.energyAvailable < my_room.energyCapacityAvailable) all_extensions_full = false;
-            // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: All Full: ' + (!all_extensions_full || !all_links_full || !all_towers_full) + '; Ext: ' + all_extensions_full + '; Links: ' + all_links_full + '; Towers: ' + all_extensions_full);
-            my_room.memory.global_vars.all_full = (!all_extensions_full || !all_links_full || !all_towers_full) ? false : true;
+        }   
+
+        // TOWERS
+        let all_towers = Object.keys(my_room.memory.towers.current);
+        for (let t in all_towers) {
+            let current_tower = Game.getObjectById(all_towers[t]);
+            if (current_tower.energy < 600) {
+                all_towers_full = false;
+                break;
+            }     
         }
+            
+        // Extensions
+        if (my_room.energyAvailable < my_room.energyCapacityAvailable) all_extensions_full = false;
+        // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: All Full: ' + (!all_extensions_full || !all_links_full || !all_towers_full) + '; Ext: ' + all_extensions_full + '; Links: ' + all_links_full + '; Towers: ' + all_extensions_full);
+
+        // Build constaructions
+        if (my_room.memory.targets.build.length > 0) is_no_constructions = false;
+        
+        my_room.memory.global_vars.all_full = (!all_extensions_full || !all_links_full || !all_towers_full || !is_no_constructions) ? false : true;
     },
     transfer_link2link: function(room_name) {
         let my_room = Game.rooms[room_name];
@@ -118,6 +135,52 @@ var room_helpers = {
                 if (source_link.energy < 100) break;
             }
         }
+    },
+    update_labs_info: function(room_name) {
+        // Containers
+        let my_room = Game.rooms[room_name];
+        let all_labs = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LAB)});
+        let all_labs_ids = all_labs.map(x => x.id);
+        let all_lab_flags = my_room.find(FIND_FLAGS, {filter: object => (object.name.split('-')[0] === 'lab')});
+        let labs_info = {
+            reagent: {},
+            produce: {},
+            process: {},
+            booster: {}
+        };
+        let lab_reagent_positions = {};
+        let lab_produce_positions = {};
+        let lab_process_positions = {};
+        
+        for (let f in all_lab_flags) {
+            let flag_pos_str = all_lab_flags[f].pos.x +'-' + all_lab_flags[f].pos.y;
+            let flag_name_splitted = all_lab_flags[f].name.split('-');
+            let lab_mineral = flag_name_splitted[1];
+            let mineral_stage = flag_name_splitted[2];
+            if (mineral_stage === 'reagent') 
+                lab_reagent_positions[flag_pos_str] = lab_mineral;
+            else if (mineral_stage === 'produce')
+                lab_produce_positions[flag_pos_str] = lab_mineral;
+            else if (mineral_stage === 'process')
+                lab_process_positions[flag_pos_str] = lab_mineral;
+            else
+                console.log('[ERROR] (room_helpers.update_labs_info)[' + room_name  +']: ' + all_lab_flags[f].name + ' Doesnt have definition');
+        }
+        
+        for (let l in all_labs) {
+            let lab_pos_str = all_labs[l].pos.x + '-' + all_labs[l].pos.y;
+            if (Object.keys(lab_reagent_positions).indexOf(lab_pos_str) >= 0 ) 
+                labs_info.reagent[all_labs[l].id] = lab_reagent_positions[lab_pos_str];
+            else if (Object.keys(lab_produce_positions).indexOf(lab_pos_str) >= 0 ) 
+                labs_info.produce[all_labs[l].id] = lab_reagent_positions[lab_pos_str];  
+            else if (Object.keys(lab_process_positions).indexOf(lab_pos_str) >= 0 ) 
+                labs_info.process[all_labs[l].id] = lab_reagent_positions[lab_pos_str];
+            else if (all_labs[l].pos.getRangeTo(my_room.storage) < 5)
+                labs_info.booster[all_labs[l].id] = all_labs[l].mineralType;
+            else
+                console.log('[ERROR] (room_helpers.update_labs_info)[' + room_name  +']: The lab ' + all_labs[l].id + ' (' + lab_pos_str + ') Doesnt have definition: ' + all_labs[l].pos.getRangeTo(my_room.storage));
+        }
+        my_room.memory.labs = labs_info;
     },
     upgrade_energy_flow: function(room_name) {
         // Containers
@@ -195,7 +258,8 @@ var room_helpers = {
     define_room_status: function(room_name) {
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let global_vars = Memory.rooms.global_vars;
-        let hostile_creeps = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS);
+        let hostile_creeps = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS, {filter: object => (object.owner.username !== 'Sergeev' || 
+                                                                                             (object.owner.username === 'Sergeev' && is_millitary(object)))});
         let most_danger_hostile;
         if (hostile_creeps && hostile_creeps.length > 0 && room_vars.status === 'peace') {
             room_vars.status = 'war';
@@ -236,14 +300,14 @@ var room_helpers = {
         let min_hits = 1000000;
         repair_only = {
             'E38N49': ['5ae294df600f8573214e7d09', '5ae2f6c68416ac191f939153'], // containers
-            'E38N48': ['5ae2f286456b3d0ea1c6f1b4', '5ae2fac36abb293c4600d1a1',  // containers
-                       '5aa0bee77ad634646aa08a49', '5ab39a6b04e7f14b97aa3056', '5ab39a586e59881daa1eb094', '5ab39a827ad7de1dd176d6db',
-                       '5aa0befa7d8eb10a43e101d3', '5aa0bef30f678357d2601767', '5ab39ab7e7f5aa102de370ac', '5ab39ad233287758623d625e', '5ab39aed8e83a870b36a81e5',
-                       '5ac72c64c769531bae38da9b', '5ac7589eb96a887ad73984a6'],
-            'E34N47': ['5ae3634ad3967d39624771d0',  // container 
-                       '5acc6089c5bb62037cc61e14',  // rampart
-                       '5accf67195d45e308db882e7', '5a97231c4283e76ef6df150c', '5a972319ffa70134f8d01414',
-                       '5a974acf34a154567c596a8c', '5a974ad2117e0f568f21505c', '5a974ad4fc8a790fee2caba9', '5acc6089c5bb62037cc61e14'],
+            // 'E38N48': ['5ae2f286456b3d0ea1c6f1b4', '5ae2fac36abb293c4600d1a1',  // containers
+            //           '5aa0bee77ad634646aa08a49', '5ab39a6b04e7f14b97aa3056', '5ab39a586e59881daa1eb094', '5ab39a827ad7de1dd176d6db',
+            //           '5aa0befa7d8eb10a43e101d3', '5aa0bef30f678357d2601767', '5ab39ab7e7f5aa102de370ac', '5ab39ad233287758623d625e', '5ab39aed8e83a870b36a81e5',
+            //           '5ac72c64c769531bae38da9b', '5ac7589eb96a887ad73984a6'],
+            // 'E34N47': ['5ae3634ad3967d39624771d0',  // container 
+            //           '5acc6089c5bb62037cc61e14',  // rampart
+            //           '5accf67195d45e308db882e7', '5a97231c4283e76ef6df150c', '5a972319ffa70134f8d01414',
+            //           '5a974acf34a154567c596a8c', '5a974ad2117e0f568f21505c', '5a974ad4fc8a790fee2caba9', '5acc6089c5bb62037cc61e14'],
                     //   '5ae4c7fac34576097c19c154', '5ae4c7fd02a75a3c6822ce58', '5ae4c7ff2f4e6a3253b01575', '5ae4c8022a35133912bfc0d4', '5ae4c80571f07c317036f407', '5ae4c80ad0b67f3944d4a6dd',
                     //   '5ae4ef5ea3702131094b5a3d', '5ae4ef631b3cfa3938b84eb2', '5ae4ef61156cc6326b475f16'],
             'E38N47': ['5ae8ba3e06014c098e6a5913', // containers
@@ -269,31 +333,20 @@ var room_helpers = {
                             '5ae4629ee028fc11d5592552', '5ae46283a200d042b659d71d', '5ae4627cee797138fa78382d', '5ae46281e028fc11d559253f', '5ae4629b4390a242a4bc145d',
                             '5ae45d6506014c098e685a0f', '5ae45d401b3cfa3938b80d92', '5ae45d3e71f07c317036c511', '5ae45d39b4f57132597200b0',
                             '5ae45d33d24b6b325f9b070a', '5ae45d19e028fc11d55922a3', '5ae45cfea4d90142c2bce1d8', '5ae45ce3de930e393efcb67d',
+                            '5ae9d96afa9ab031264eabb1', '5ae9d96ccf93c9315d28ac4a', '5ae9d96f3d1c9711c21bfbf0', '5ae9d9724390a242a4be64dc', '5ae9d97fa4d90142c2bf30fd', '5ae9d994d7b511312ddf3f8c',
                             '5ae45b908a126e099a685b12', '5ae45b8a592d9e11a5f6658b', '5ae45c372995ea326511ee7e', '5ae45b88687bce3c31603d7d', '5ae45c3cc34576097c198f6a', '5ae45b85a2505b11b19d3d04',
                             '5ae45b469a54d8394f5ec9de', '5ae45bbffad40139450c63ac', 
                             '5ae445b966b757327b80fd05', '5ae445beee797138fa782b36', '5ae447b21687e93115abe670', '5ae447afd0b67f3944d46c80', '5ae447adcb5e3209ac04526b' , '5ae447aae028fc11d5591807'];
-            E34N47_avoid = [];
+            E34N47_avoid = ['5a975264eb51b07607843a07', '5acc6c9859930d6d93bf843d', '5a975253f5f37e593a6612a2', '5acc61a5af3bc77aef2f50c1', '5a9b3b98dfaa79680d2d2152', '5a97524d3a577b75cbf6b83a', '5a97524d3a577b75cbf6b83a', // Northout
+                            '5a98aaa9fd5e170305c61bfc', '5a98aaa5ed8b961cea137744', '5acc619f905a7a18609b2196', '5a98aaaf5f5a69093a23b73c', '5acc6214612b937ab09ee415', '5a98aabc9081677f2e16d808', '5a98aac16cca98531f152d54', // Northin
+                            '5acc6d718583106d2d0df104', '5aa70ac88c782b6131a5f33a', '5aa70ad185818e2c8c35d088', '5aa70ad73e59533e668b5b9f', '5aa70add541fda14aeaadf9b', '5aa70ada02a93f3e72865e4e', '5aa70ace1536552c96f7ff0e'];
             E38N47_avoid = ['5ae407d5d24b6b325f9ae11c', '5ae407d74390a242a4bbea7d', '5ae407da99d2c03c36ecc68b', '5ae407dd8a126e099a683326', '5ae407df6922543906ffce2d',
                             '5ae407e2687bce3c31601686', '5ae4090ae78e533c7ff2cb9a', '5ae4085602a75a3c682277dc', '5ae40859e78e533c7ff2cb5f', '5ae4085ce35d18395c3a1388',
                             '5ae4085ee35d18395c3a138c', '5ae4086361b7a5318563af54', '5ae408691b3cfa3938b7e5dc', '5ae4086e2f4e6a3253afc0ab', '5ae40873de930e393efc8ebc',
                             '5add084b4b4b0e4d1132d67b', '5add084e25e73b0d635afb06', '5add08512c04dc6d3c9fa52e', '5add085cc65975451efc2b80'];
 
-            E38N48_avoid = ['5aba595ad360fc7cd874e352', '5aba594f74b96f64ff232dc9', '5aa0beee3c525457e6f84f7f', '5ab39a9c8a0c83586e5bfb1e',
-                '5a962bd55044c20a227e09b9', '5a962bcb77d91872df3159b4', '5a962bc5dca94812fc07024f', '5a962bbed183f34ad9a0d823', '5a962bb74e67460a13b276e7', '5a962bb004d2337105e8d4d4',
-                '5a962babcdf030710646711f', '5a962ba4b29c3312dfd01a8b', '5a962b9d53266d146db74952', '5a962b9aefb803145385e4ba', '5a962b974d6ed3145e8181e5', '5a962b94eb14d24ac01c90dc',
-                '5a962b8fc459521302a045fe', '5a962b8b1de6ab12eac16be3', '5a96062c5723bd4269c0d824', '5a9606294b5e6a425420fd92', '5a9606267629a93737b6502c', '5aa0c3cc89b39e64781ba746',
-                '5aa0c3c8af76d4649b2254b9', '5aa0c3c563159c4aede223f1', '5aa0c3c27ad634646aa08c1a', '5a960632aa03f0374692af1c', '5a96062f69de9865d796c8b3', '5a96063e69de9865d796c8be',
-                '5a90ee1696f41740d4d4b4c9', '5a90ee1e96b6b440aad8c3d3', '5a960213a2a07606dea594f7', '5a960210896b0b06baf0e580', '5a90ee1c1ac6c205f425ab7e', '5a90ee1949f9d34c1b394475']
-            E39N49_avoid = ['5ac6783156694047ad226984', '5a3c93c377eddf3fcd2289e4', '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7',
-                '5a434aad352f7c7e6c4b88d1', '5a437edae9ad370d6f80c979', '5a436eb786a4a36e5af6c89e', '5a436c93b5b012359cb81bd2', '5a436bb28ee5032e65a12834', '5a4365fd262eb037220fc9b4',
-                '5a4364e3eba40146402df274', '5a4364e3eba40146402df274', '5a4361ecb458c9595ccdf3b7', '5a435fd9176c8f376528dbb8', '5a3ff7de9fceac2ef90ce320', '5a3ff7d8b8d7566bedfb37e9', 
-                '5a3ff7b6f5244f2f04d4a54f', '5a3ff51722e6562eb8171f7b', '5a3ff1135f1df3160a8dbdf3', '5a3fe041f6b67970b93a092a',
-                '5a3ff5a84172f32ee0f2a126', '5a3ff3498bf01e096223d330', '5a3fef638bd11d24563999c5', '5a3fee6787ab8c2441b9587a', '5a3fed02265a181611e3f081', '5a3fe9f63cc43f5f102d6a7c',
-                '5a3fe9300796205f06f8956d', '5a3feac9824fe1202d5ceb63', '5a437edae9ad370d6f80c979', '5a436eb786a4a36e5af6c89e', '5a436c93b5b012359cb81bd2', '5a436bb28ee5032e65a12834',
-                '5a4365fd262eb037220fc9b4', '5a4364e3eba40146402df274', '5a43637fb8cafb5972604b24', '5a4361ecb458c9595ccdf3b7', '5a435fd9176c8f376528dbb8', '5a3c93c377eddf3fcd2289e4',
-                '5a4a8d9320171220b29bfbab', '5a3c9af47739a911457f0943', '5a4235091752005a72e4bf72', '5a3c8b5bf0d6a259c0ea8758', '5a3c8b3ea0bbf83fe1d871b7', '5a434aad352f7c7e6c4b88d1',
-                '5ae6092e2a35133912c04a54', '5ae609281b3cfa3938b8c79b', '5ae60922d0b67f3944d5351a', '5ae60913a4d90142c2bd997c', '5ae609106abb293c46023290', '5ae609106abb293c46023290','5ae6090bf3c15a391871ec30',  // 3rd line
-                '5ae609488a126e099a691e45', '5ae6094571f07c3170377bc9', '5ae6094e663c3431216646d5', '5ae609542e007b09769bff27', '5ae6095fa200d042b65a8d1a']
+            E38N48_avoid = [];
+            E39N49_avoid = []
             E37N48_avoid = [] // ['5abc9c2488988449d6f1d066', '5abc9261ce03634b9a5884de']
             let avoid_stricts = E39N49_avoid.concat(E38N48_avoid);
             avoid_stricts = avoid_stricts.concat(E37N48_avoid);
@@ -325,12 +378,14 @@ var room_helpers = {
         // All other structures
         if (targets.length === 0) targets = my_room.find(FIND_MY_CONSTRUCTION_SITES);
 
+        // if (room_name === 'E33N47') console.log('[DEBUG] (get_build_targets)[: ' + room_name + '; TARGETS: ' + JSON.stringify(targets));
         // if (room_name === 'E36N48') console.log('[DEBUG](get_build_targets)[: ' + room_name + '; TARGETS: ' + JSON.stringify(targets));
 
         targets_id = [];
         for (let i in targets) targets_id.push(targets[i].id);
         // my_room.memory.targets.build = (targets.length > 0) ? targets[0].id : false;
-        my_room.memory.targets.build = (targets.length > 0) ? targets_id : false;
+        if (room_name === 'E33N47') console.log('[DEBUG] (get_build_targets)[: ' + room_name + '] ; TARGETS length: ' + targets_id.length + '; TARGETS: ' + JSON.stringify(targets_id));
+        my_room.memory.targets.build = (targets_id.length > 0) ? targets_id : false;
     },
     clean_memory: function() {
         // Clean died creeps
