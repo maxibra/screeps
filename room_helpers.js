@@ -55,7 +55,60 @@ function link_transfer(source_link, destination_link) {
     }    
 }
 
+function get_mineral_reagents(mineral) {
+    let reagents = false;
+    let splitted;
+    
+    if ( mineral === 'G' ) {
+        reagents = ['ZK', 'UL'];
+    } else if ( mineral.length === 2 ) {
+        reagents = mineral.split('');
+    } else if ( mineral.length === 4 ) {
+        splitted = mineral.split('2');
+        if ( splitted[0].length === 2 )
+            reagents = [splitted[0], 'OH'];
+        else if ( splitted[0].length === 3 )
+            reagents = [splitted[0][0] + 'O', 'OH'];
+    } else if ( mineral.length === 5 ) {
+        splitted = mineral.split('X');
+        if ( splitted[1].length === 4 )
+            reagents = [splitted[1], 'X'];
+    }
+    
+    if ( !reagents )
+        console.log('[ERROR](room.helpers-get_mineral_reagents): "' + mineral + '" Is unknown mineral; Reagents: ' + reagents);
+    
+    return reagents;
+}
+
+function add_room_mineral2memory(new_room_by_mineral, room_name, mineral, lab_phase) {
+    if (!new_room_by_mineral[lab_phase][mineral])
+        new_room_by_mineral[lab_phase][mineral] = [room_name,];
+    else if (new_room_by_mineral[lab_phase][mineral].indexOf(room_name) < 0)
+        new_room_by_mineral[lab_phase][mineral].push(room_name);
+    console.log('[ERROR](room.helpers-add_room_mineral2memory)[' +  room_name + '] mineral: ' + mineral + '; phase: ' + lab_phase + '; room_by_mineral: ' + JSON.stringify(new_room_by_mineral));
+}
+
+
 var room_helpers = {
+    transfer_mineral: function(room_name) {
+        let my_room = Game.rooms[room_name];
+        if (!my_room) return;
+        
+        let global_vars = Memory.rooms.global_vars;
+        let minimum_send_room = 15000;
+        let minimum_received_room = 4500;
+        let send_amount = 500;
+        let room_mineral = my_room.memory.energy_flow.mineral.type;
+        
+        if (my_room.terminal.store[room_mineral] > global_vars.minerals.minimum_send_room)
+            for (let dst_room_index in global_vars.room_by_mineral.reagent[room_mineral]) {
+                let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
+                if (room_name === dst_room_name || Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral) continue;
+                if (Game.rooms[dst_room_name].store[room_mineral] < global_vars.minerals.max_in_terminal) 
+                    cur_terminal.send(room_mineral, global_vars.minerals.send_amount, dst_room_name);    
+            }
+    },
     check_create_miner: function(room_name, spawn_name, units) {
         let my_room = Game.rooms[room_name];
         let my_spawn = Game.spawns[spawn_name];
@@ -155,9 +208,11 @@ var room_helpers = {
             }
         }
     },
-    update_labs_info: function(room_name) {
+    update_labs_info: function(room_name, room_by_mineral) {
         // Containers
         let my_room = Game.rooms[room_name];
+        if (!my_room) return; 
+        
         let all_labs = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LAB)});
         let all_labs_ids = all_labs.map(x => x.id);
         let all_lab_flags = my_room.find(FIND_FLAGS, {filter: object => (object.name.split('-')[0] === 'lab')});
@@ -167,9 +222,11 @@ var room_helpers = {
             process: {},
             booster: {}
         };
+
         let lab_reagent_positions = {};
         let lab_produce_positions = {};
         let lab_process_positions = {};
+        let labs_id_by_mineral = {};
         
         for (let f in all_lab_flags) {
             let flag_pos_str = all_lab_flags[f].pos.x +'-' + all_lab_flags[f].pos.y;
@@ -188,22 +245,44 @@ var room_helpers = {
         
         for (let l in all_labs) {
             let lab_pos_str = all_labs[l].pos.x + '-' + all_labs[l].pos.y;
-            if (Object.keys(lab_reagent_positions).indexOf(lab_pos_str) >= 0 ) 
-                labs_info.reagent[all_labs[l].id] = lab_reagent_positions[lab_pos_str];
-            else if (Object.keys(lab_produce_positions).indexOf(lab_pos_str) >= 0 ) 
-                labs_info.produce[all_labs[l].id] = lab_produce_positions[lab_pos_str];  
-            else if (Object.keys(lab_process_positions).indexOf(lab_pos_str) >= 0 ) 
-                labs_info.process[all_labs[l].id] = lab_process_positions[lab_pos_str];
-            else if (all_labs[l].pos.getRangeTo(my_room.storage) < 5)
-                labs_info.booster[all_labs[l].id] = all_labs[l].mineralType;
-            else
+            if (Object.keys(lab_reagent_positions).indexOf(lab_pos_str) >= 0 ) {
+                labs_info.reagent[all_labs[l].id] = {type: lab_reagent_positions[lab_pos_str]};
+                labs_id_by_mineral[lab_reagent_positions[lab_pos_str]] = all_labs[l].id;
+                add_room_mineral2memory(room_by_mineral, room_name, lab_reagent_positions[lab_pos_str], 'reagent');
+            } else if (Object.keys(lab_produce_positions).indexOf(lab_pos_str) >= 0 ) {
+                labs_info.produce[all_labs[l].id] = {type: lab_produce_positions[lab_pos_str]};
+                labs_id_by_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id;
+            } else if (Object.keys(lab_process_positions).indexOf(lab_pos_str) >= 0 ) {
+                labs_info.process[all_labs[l].id] = {type: lab_process_positions[lab_pos_str]};
+                labs_id_by_mineral[lab_process_positions[lab_pos_str]] = all_labs[l].id;
+            } else if (all_labs[l].pos.getRangeTo(my_room.storage) < 5) {
+                labs_info.booster[all_labs[l].id] = {type: all_labs[l].mineralType};
+            } else
                 console.log('[ERROR] (room_helpers.update_labs_info)[' + room_name  +']: The lab ' + all_labs[l].id + ' (' + lab_pos_str + ') Doesnt have definition: ' + all_labs[l].pos.getRangeTo(my_room.storage));
         }
+        
+        // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers.update_labs_info)[' + room_name  +'] LABS by mineral: ' + JSON.stringify(labs_id_by_mineral));
+        // Define reagent for produce and process
+        let prod_labs = Object.keys(labs_info.produce);
+        for (let pl in prod_labs) {
+            let mineral_reagents = get_mineral_reagents(labs_info.produce[prod_labs[pl]]['type']);
+            // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers.update_labs_info)[' + room_name  +']: LAB ' + prod_labs[pl] + '; Reargents: ' + mineral_reagents); 
+            labs_info.produce[prod_labs[pl]]['reagents'] = [labs_id_by_mineral[mineral_reagents[0]], labs_id_by_mineral[mineral_reagents[1]]];
+        }
+        let process_labs = Object.keys(labs_info.process);
+        for (let pl in process_labs) {
+            let mineral_reagents = get_mineral_reagents(labs_info.process[process_labs[pl]]['type']);
+            // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers.update_labs_info)[' + room_name  +']: LAB ' + process_labs[pl] + '; Reargents: ' + mineral_reagents); 
+            labs_info.process[process_labs[pl]]['reagents'] = [labs_id_by_mineral[mineral_reagents[0]], labs_id_by_mineral[mineral_reagents[1]]];
+        }
+        
         my_room.memory.labs = labs_info;
     },
     upgrade_energy_flow: function(room_name) {
         // Containers
         let my_room = Game.rooms[room_name];
+        if (!my_room) return;
+        
         let all_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
         let all_continers_ids = all_containers.map(x => x.id);
         let all_links = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
@@ -296,7 +375,7 @@ var room_helpers = {
                                                                                                             (object.owner.username === 'Sergeev' && is_millitary(object)))}) :
                                          [];
         let most_danger_hostile;
-        console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
+        // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
         if (hostile_creeps && hostile_creeps.length > 0 && room_vars.status === 'peace') {
             room_vars.status = 'war';
             let hostile_boosts = {};
@@ -315,7 +394,7 @@ var room_helpers = {
                 console.log('[DEBUG] (room_helpers-define_room_status): Hostiles: ' + hostile_creeps.length + '; FINISH WAR: ' +  (Game.time + hostile_creeps[0].ticksToLive) + '; Current time: ' + Game.time + '; Hostile life: ' + hostile_creeps[0].ticksToLive);
                 room_vars.finish_war = (hostile_creeps.length > 0) ? (Game.time + hostile_creeps[0].ticksToLive - 20) : room_vars.finish_war; 
             }
-        } else if (room_vars.status === 'war') {
+        } else if (room_vars.status === 'war' && !room_vars.finish_war) {
             room_vars.finish_war = Game.time + global_vars.update_period.after_war;
             // console.log('[DEBUG] (define_room_status)[' + room_name + '] Define finish war to ' +  (Game.time + global_vars.update_period.after_war));
         }
@@ -359,7 +438,7 @@ var room_helpers = {
                        '5ae0226a28fc8b0ef2d9319c', '5ae01fd32442e73df79d657a',
                        '5add07ddfae3986d75b339d6', '5add07d8b1c4fa2d23056648', '5add07d225e73b0d635afacf', '5add07cd8f560c0d75852114', '5add07c7e95c2c6b701bf6f0',
                        '5add07ada5ea876b7607732c', '5adfd13d53d7a60a47637765',
-                       '5adfa6d2d8df4445a0180476', '5adfa6d536cbe50a35f443d4', '5adfa6dacec9320ea3313f20', '5adfa6757675f2458c829bb8', '5adfa670d4212c457030d842',
+                       '5b081c9ada8a5f144621fc44', '5b0820cbaad0b67499d90c15', '5adfa6dacec9320ea3313f20', '5adfa6757675f2458c829bb8', '5adfa670d4212c457030d842',
                        '5adfa66a0409f23c73cf2996', '5adfa6652da4b40a5fab775d', '5ae8da39e7e0f042c805233b',
                        '5adfbbb899d2c03c36ead47a', '5adfbbbada0f976c5c1f8d02', '5add8406b21f98456a04e9cc', '5add0790b260d40d64a01627', '5adfde9c60a36d2a01d07ea7']
         }

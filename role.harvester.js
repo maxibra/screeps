@@ -151,7 +151,7 @@ var RoleHarvester = {
             case 'tombstone':
                 for (let r in target.store) {
                     let total_carry = _.sum(creep.carry);
-                    console.log('[DEBUG] (RoleHarvester)[' + creep.name +']: Carry: ' + total_carry)
+                    // console.log('[DEBUG] (RoleHarvester)[' + creep.name +']: Carry: ' + total_carry)
                     if (total_carry < creep.carryCapacity) action_out = creep.withdraw(target, r);
                     if (action_out === OK && r !== 'energy') creep.memory.has_minerals = true;
                 }

@@ -25,7 +25,15 @@ if (typeof Memory.rooms.global_vars === "undefined") {
             after_war: 150,
             towers: 1000
         },
-        age_to_drop_and_die: 10
+        age_to_drop_and_die: 10,
+        room_by_mineral: {},
+        minerals: {
+            minimum_send_room: 5000,
+            minimum_received_room: 4000,
+            max_in_terminal: 6000,
+            send_amount: 500,
+            transfer_batch: 300
+        }
     }
 }
 
@@ -195,6 +203,10 @@ module.exports.loop = function () {
 
     let avoid_rooms = ['global_vars', 'E31N48', 'E39N50', 'E40N49']
     let current_rooms_in_memory = Object.keys(Memory.rooms);
+    let room_by_mineral = {
+        reagent: {}
+    };
+    let rare_time_range = 300;
     for(var room_index in current_rooms_in_memory) {
         current_room_name = current_rooms_in_memory[room_index];
         if(avoid_rooms.indexOf(current_room_name) > -1) continue
@@ -226,7 +238,7 @@ module.exports.loop = function () {
 
         // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
         let current_mod = 0;
-        if (Game.time % 1 === current_mod) {  // run every 10 ticks
+        if (Game.time % 4 === current_mod) {  // run every 10 ticks
             // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             //        room_helpers.get_transfer_target(current_room_name);
             room_helpers.define_room_status(current_room_name);
@@ -247,30 +259,38 @@ module.exports.loop = function () {
 
         current_mod = current_mod + tick_between_hard_actions;
         if (Game.time % 10 === current_mod) {
+            let cur_terminal_id = Memory.rooms[current_room_name].energy_flow.terminal;
+            let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
             // Use terminal to send energy between rooms
             if (current_room_name === 'E30N40') {
-                let cur_terminal_id = Memory.rooms[current_room_name].energy_flow.terminal;
                 // console.log('[INFO] (main)[' + current_room_name +']: ' + cur_terminal_id);
                 if (cur_terminal_id) {
-                    let cur_terminal = Game.getObjectById(cur_terminal_id);
                     let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
                     let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
                     if (energy2transfer > 2000) energy2transfer = 2000;
-                    if (energy2transfer > 1000 && cur_terminal.store[RESOURCE_ENERGY] > 50000) {
-                        cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E30N40');
+                    if (energy2transfer > 1000 && cur_terminal.store[RESOURCE_ENERGY] > 100000) {
+                        cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E38N47');
                         // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
                     }
                 }
             }
+            
+            if (current_room_name === 'E38N47' && cur_terminal_id && cur_terminal.store['Z'] > 180000) {
+                cur_terminal.send('Z', 2000 , 'E39N49');      
+            }
         }
         
-        if (Game.time % 300 === 0) {
+        if (Game.time % rare_time_range === 0) {
             room_helpers.upgrade_energy_flow(current_room_name);
-            room_helpers.update_labs_info(current_room_name);
+            room_helpers.update_labs_info(current_room_name, room_by_mineral);
             roleTower.create_towers_list(current_room_name);
         }
     }
 
+    if (Game.time % rare_time_range === 0) {
+        Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
+        
+    }
     if (Game.time % 1000 === 0) {
         room_helpers.clean_memory();
     }

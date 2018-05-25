@@ -43,7 +43,7 @@ StructTower = {
             all_hostile = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS, {filter: object => (object.owner.username !== 'Sergeev' || 
                                                                                              (object.owner.username === 'Sergeev' && is_millitary(object)))});
             all_hostile.sort((a,b) => current_tower.pos.getRangeTo(a) - current_tower.pos.getRangeTo(b));   // sort from closer to far
-            console.log('[INFO] (StructTower.run) [' + room_name + '] ATTACKERS: ' + JSON.stringify(all_hostile))
+            // console.log('[INFO] (StructTower.run) [' + room_name + '] ATTACKERS: ' + JSON.stringify(all_hostile))
             if (all_hostile.length > 0) target2attack = all_hostile[0];
             // if (room_name === 'E38N47' && current_tower.pos.getRangeTo(all_hostile[0]) > 10) target2attack = false;
 
@@ -67,8 +67,8 @@ StructTower = {
             console.log('[INFO] (StructTower.run) [' + room_name + '] it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
         } else if (tower_energy_proc > 0.7 && !(Game.time % 2)) {
 
-            targets2repair = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7) &&
-                                                                                             !(room_name === 'E36N48' && (object.pos.x < 16 || object.pos.y < 11 || object.pos.y > 39)))});
+            targets2repair = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7))}) // &&
+                                                                                            //  !(room_name === 'E36N48' && (object.pos.x < 16 || object.pos.y < 11 || object.pos.y > 39)))});
             // console.log('[DEBUG] (StructTower.run): Road X: ' + targets2repair.pos.x + '; Road y: ' + targets2repair.pos.y);
             
             target2repair = targets2repair.length > 0 ? targets2repair[0] : []; //Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
@@ -98,11 +98,14 @@ StructTower = {
     },
     create_towers_list: function (room_name) {
         let towers_list = [];
-        let room_vars = Game.rooms[room_name].memory.global_vars;
-        let all_towers = Game.rooms[room_name].find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+        let my_room = Game.rooms[room_name];
+        if (!my_room) return; 
+        
+        let room_vars = my_room.memory.global_vars;
+        let all_towers = my_room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         for (let i=0;i<all_towers.length;i++) {
             //            console.log('[DEBUG] (main): TOWER' + JSON.stringify(all_towers[i]));
-            if (!Game.rooms[room_name].memory.towers.current[all_towers[i].id]) Game.rooms[room_name].memory.towers.current[all_towers[i].id] = false;
+            if (!my_room.memory.towers.current[all_towers[i].id]) my_room.memory.towers.current[all_towers[i].id] = false;
         }
         // }
         if (towers_list.length > 0) room_vars.creep_types[room_vars.status].repair_civilian = 0;
