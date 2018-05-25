@@ -10,7 +10,7 @@ var RoleHarvester = {
         let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
         let action_out;
         let harvester_type = false;     // needed to use saved id
-        let creep_name4log ='stam';
+        let creep_name4log ='E34N47-2-1-17-20-gn';
         let far_source = Game.getObjectById('59f1a54882100e1594f3e357');
         let close_source = Game.getObjectById('59f1a54882100e1594f3e356')
         // let bad_condition = (creep_name == '')
@@ -65,7 +65,7 @@ var RoleHarvester = {
             let range2link;
             switch (room_name) {
                 case 'E34N47':
-                    range2link = 5;
+                    range2link = 8;
                     break;
                 case 'E36N48':
                     range2link = 4;
@@ -76,6 +76,8 @@ var RoleHarvester = {
                 default: 
                     range2link = 5;
             }
+            let destination_links = my_room.memory.energy_flow.links.destinations;
+            destination_links.push(my_room.memory.energy_flow.links.near_controller);
             for (let l in my_room.memory.energy_flow.links.destinations) {
                 cur_target = Game.getObjectById(my_room.memory.energy_flow.links.destinations[l]);
                 if (cur_target && creep.pos.getRangeTo(cur_target) <= range2link && cur_target.energy > 0) {
@@ -149,7 +151,7 @@ var RoleHarvester = {
             case 'tombstone':
                 for (let r in target.store) {
                     let total_carry = _.sum(creep.carry);
-                    // console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: Carry: ' + total_carry)
+                    console.log('[DEBUG] (RoleHarvester)[' + creep.name +']: Carry: ' + total_carry)
                     if (total_carry < creep.carryCapacity) action_out = creep.withdraw(target, r);
                     if (action_out === OK && r !== 'energy') creep.memory.has_minerals = true;
                 }
@@ -193,7 +195,7 @@ var RoleHarvester = {
                 creep.memory.target_id = false;
                 creep.memory.harvester_type = false;
         }
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' ACTION OUT: ' + action_out);
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' ACTION OUT: ' + action_out + '; Target: ' + target.id);
 
         if (action_out === OK) creep.memory.stuck = 0;
         else if (action_out === ERR_NOT_IN_RANGE) {

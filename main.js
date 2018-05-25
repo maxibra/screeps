@@ -62,7 +62,7 @@ for(var current_room_name in Game.rooms) {
             },
             dropped: {},
             tombstone: {},
-            links: {sources: [], destinations: []},
+            links: {near_source: [], near_controller: [], sources: [], destinations: []},
             containers: {
                 source: {},
                 other: {}
@@ -193,10 +193,12 @@ module.exports.loop = function () {
         }
     }
 
-    let avoid_rooms = ['E34N46', 'E35N46', 'E36N46', 'E37N47', 'E34N46', 'E37N46']
-    for(var current_room_name in Game.rooms) {
-        if(avoid_rooms.indexOf(current_room_name) > 0) continue
-        
+    let avoid_rooms = ['global_vars', 'E31N48', 'E39N50', 'E40N49']
+    let current_rooms_in_memory = Object.keys(Memory.rooms);
+    for(var room_index in current_rooms_in_memory) {
+        current_room_name = current_rooms_in_memory[room_index];
+        if(avoid_rooms.indexOf(current_room_name) > -1) continue
+        // delete Memory.rooms[current_room_name].energy_flow.energy_flow.storage
         
         // Memory.rooms[current_room_name].energy_flow.mineral.type = Game.rooms[current_room_name].find(FIND_MINERALS).map(x => x.mineralType)[0]
         // Memory.rooms[current_room_name].energy_flow.sources= Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id)
@@ -206,7 +208,7 @@ module.exports.loop = function () {
             console.log('[WARN][' + current_room_name +']: global_vars doesnt defined for the room. Skip the room');
             continue;
         }
-        let towers_list = (Game.rooms[current_room_name].memory.towers) ? Object.keys(Game.rooms[current_room_name].memory.towers.current) : {};
+        let towers_list = (Memory.rooms[current_room_name].towers) ? Object.keys(Memory.rooms[current_room_name].towers.current) : {};
         let towers_energy_full = true;
         // console.log('[DEBUG] (main)[' + current_room_name + ']: TOWERS: ' + JSON.stringify(towers_list));
         if ((units[current_room_name] && units[current_room_name].total >= 2) || Memory.rooms[current_room_name].global_vars.status === 'war')
@@ -224,11 +226,11 @@ module.exports.loop = function () {
 
         // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
         let current_mod = 0;
-        if (Game.time % 10 === current_mod) {  // run every 10 ticks
+        if (Game.time % 1 === current_mod) {  // run every 10 ticks
             // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             //        room_helpers.get_transfer_target(current_room_name);
             room_helpers.define_room_status(current_room_name);
-            // dropped_resources = Game.rooms[current_room_name].find(FIND_DROPPED_RESOURCES)
+            // dropped_resources = Memory.rooms[current_room_name].find(FIND_DROPPED_RESOURCES)
             // if (dropped_resources.length > 0) Game.notify('We Have Dropped Resources in our area: ' + dropped_resources.length);
 
         }
@@ -246,15 +248,16 @@ module.exports.loop = function () {
         current_mod = current_mod + tick_between_hard_actions;
         if (Game.time % 10 === current_mod) {
             // Use terminal to send energy between rooms
-            if (current_room_name === 'E39N49') {
-                let cur_terminal_id = Game.rooms[current_room_name].memory.energy_flow.terminal;
+            if (current_room_name === 'E30N40') {
+                let cur_terminal_id = Memory.rooms[current_room_name].energy_flow.terminal;
                 // console.log('[INFO] (main)[' + current_room_name +']: ' + cur_terminal_id);
-                if (cur_terminal_id && current_room_name !== 'E34N47') {
+                if (cur_terminal_id) {
                     let cur_terminal = Game.getObjectById(cur_terminal_id);
                     let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
                     let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
-                    if (energy2transfer > 1000) {
-                        cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E34N47');
+                    if (energy2transfer > 2000) energy2transfer = 2000;
+                    if (energy2transfer > 1000 && cur_terminal.store[RESOURCE_ENERGY] > 50000) {
+                        cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E30N40');
                         // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
                     }
                 }
@@ -284,6 +287,6 @@ module.exports.loop = function () {
 
     if (Game.time % 5 === 0) screepsplus.collect_stats();
 
-//    console.log('[INFO] (main): FINISH UNITS (nominal: ' + Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] + '): ' + JSON.stringify(units));
+//    console.log('[INFO] (main): FINISH UNITS (nominal: ' + Memory.rooms[global_vars.room_name].global_vars.screeps_max_amount[Game.spawns[spawn_name].memory.general.creeps_max_amount] + '): ' + JSON.stringify(units));
 
 }

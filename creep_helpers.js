@@ -24,6 +24,19 @@ function body_cost(body) {
     return cost;
 }
 
+function upgrader_body(room_name) {
+    let body;
+    switch (room_name) {
+        case 'E39N49':
+        case 'E38N48': 
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY];
+            break;
+        default:
+            body = [MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY];
+    }
+    return body;
+}
+
 function remote_target(room_name) {
     // Object of rooms with remote targets
     let target = false;
@@ -52,12 +65,10 @@ function special_harvester_memory(room_name) {
     let target = false;
     switch (room_name) { 
         case 'E34N47':  
-            target = ['5afe0270ff9d380d22e28298', // north link of of E33N47
-                      '5af77c2caba2f708b74580b4', '5af7fb6d72bccd0cc9c29cf7', '5afc6f3612e8d50cf8eb8831'];  // containers of E33N47
+            target = ['5af77c2caba2f708b74580b4', '5af7fb6d72bccd0cc9c29cf7', '5afc6f3612e8d50cf8eb8831'];  // containers of E33N47
             break;
         case 'E33N47':  
-            target = ['5afe0270ff9d380d22e28298', // north link of of E33N47
-                      '5af77c2caba2f708b74580b4', '5af7fb6d72bccd0cc9c29cf7', '5afc6f3612e8d50cf8eb8831'];  // containers of E33N47
+            target = ['5af77c2caba2f708b74580b4', '5af7fb6d72bccd0cc9c29cf7', '5afc6f3612e8d50cf8eb8831'];  // containers of E33N47
             break;
         case 'E37N48':
             target = ['5acc524f6bec176d808adb71',];
@@ -66,7 +77,7 @@ function special_harvester_memory(room_name) {
             target = ['5adfbd7de9560f0a300272ce',];
             break;
         case 'E38N48':
-            target = ['5ae4db5bcb5e3209ac04979b', '5ad024eac27319698ef58448'];
+            target = ['5ae4db5bcb5e3209ac04979b', '5affb81b83717b6924fc5d49']; 
         break;
     }
     return {source_id: target, homeland: room_name};
@@ -114,14 +125,14 @@ var creep_helpers = {
             //     amount: 0
             // },   
             // energy_helper: {
-            //     body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
+            //     body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
             //     memory: {},
-            //     name_prefix: 'energy_helper',
-            //     amount: 1
+            //     name_prefix: 'energy_helper_' + room_name,
+            //     amount: 1,
+            //     avoid: !(room_name == 'E38N48')
             // },   
             upgrader: {
-                body: (my_room.energyCapacityAvailable > 2050) ? [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY] :
-                                                                 [MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY],
+                body: upgrader_body(room_name),
                 memory: {},
                 name_prefix: 'upgrader_' + room_name,
                 amount: 1
@@ -150,7 +161,8 @@ var creep_helpers = {
             // },
             mineral_miner: {
                 // body: [MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY],
-                body: [MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
+                // body: [MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
+                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 memory: {},
                 name_prefix: 'mnrl_mnr_' + room_name,
                 amount: 1,
@@ -180,7 +192,7 @@ var creep_helpers = {
                 memory: {},
                 name_prefix: 're_transfer_' + room_name,
                 amount: 1,
-                avoid: !(room_name === 'E34N47')
+                avoid: !(room_name === 'E30N40')
             }
         }
         
