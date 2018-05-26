@@ -10,7 +10,7 @@ var RoleHarvester = {
         let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
         let action_out;
         let harvester_type = false;     // needed to use saved id
-        let creep_name4log ='E34N47-2-1-17-20-gn';
+        let creep_name4log ='stam';
         let far_source = Game.getObjectById('59f1a54882100e1594f3e357');
         let close_source = Game.getObjectById('59f1a54882100e1594f3e356')
         // let bad_condition = (creep_name == '')
@@ -54,6 +54,12 @@ var RoleHarvester = {
         // }
 
         if (creep.memory.role !== 'harvest') creep.say('harvesting');
+        // if (creep.memory.stuck > 3 && room_name === 'E38N47') {
+        //     if (creep.name === 'E38N47-1-60-110-gn') console.log('[DEBUG] (RoleHarvester) [' + creep.name +']: Move to link');
+        //     harvester_type = 'link';
+        //     target = Game.getObjectById(my_room.memory.energy_flow.links.near_controller);
+        //     // creep.memory.stuck = 0;
+        // } else 
         if (creep.memory.target_id) {
             target = Game.getObjectById(creep.memory.target_id);
             harvester_type = creep.memory.harvester_type;
@@ -183,10 +189,10 @@ var RoleHarvester = {
                         c_id = '59f1a54882100e1594f3e356';
                         break;
                     case 'E38N47':
-                        c_id = my_room.memory.energy_flow.links.near_controller;
-                        creep.memory.target_id = c_id;
-                        creep.memory.harvester_type = 'link';
-                        break;                        
+                        // c_id = my_room.memory.energy_flow.links.near_controller;
+                        // creep.memory.target_id = c_id;
+                        // creep.memory.harvester_type = 'link';
+                        // break;                        
                     default:
                         creep.memory.target_id = false;
                         creep.memory.harvester_type = false;                        
@@ -197,8 +203,7 @@ var RoleHarvester = {
                 creep.memory.target_id = false;
                 creep.memory.harvester_type = false;
         }
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' ACTION OUT: ' + action_out + '; Target: ' + target.id);
-
+        if (creep.name === creep_name4log || creep.name === 'E38N47-0-58-110-gn') console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' ACTION OUT: ' + action_out + '; Target: ' + target.id);
         if (action_out === OK) creep.memory.stuck = 0;
         else if (action_out === ERR_NOT_IN_RANGE) {
             if (creep.pos.getRangeTo(target) <= 3) creep.memory.stuck++;
@@ -233,7 +238,7 @@ var RoleHarvester = {
         // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']:' );
 
         // all source's types with immediate harvesting (pickup, withdraw)
-        if (harvester_type !== 'source' && harvester_type !== 'mineral') {
+        if (harvester_type !== 'source' && harvester_type !== 'mineral' && !(harvester_type === 'go_close' && room_name === 'E38N47')) {
             creep.memory.role = (creep.memory.special) ? creep.memory.special : 'undefined';
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;

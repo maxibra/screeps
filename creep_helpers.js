@@ -27,6 +27,7 @@ function body_cost(body) {
 function upgrader_body(room_name) {
     let body;
     let room_level = Game.rooms[room_name].controller.level;
+    if (room_name === 'E38N47') room_level = 8;
     switch (room_level) {
         case 8: 
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY];
@@ -189,8 +190,9 @@ var creep_helpers = {
                 avoid: !(room_name === 'E30N40')    // Fake room name
             },
             energy_shuttle: {
-                body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
-                amount: 1,
+                // body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
+                body: [MOVE,MOVE,CARRY,CARRY,CARRY,CARRY], // carry: 200
+                amount: 0,
                 avoid: !(room_name === 'E38N47')
             },
             // mineral_shuttle: {
