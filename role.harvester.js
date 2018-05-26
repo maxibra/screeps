@@ -183,7 +183,9 @@ var RoleHarvester = {
                         c_id = '59f1a54882100e1594f3e356';
                         break;
                     case 'E38N47':
-                        c_id = '5add3cd931ca274d234324e7';
+                        c_id = my_room.memory.energy_flow.links.near_controller;
+                        creep.memory.target_id = c_id;
+                        creep.memory.harvester_type = 'link';
                         break;                        
                     default:
                         creep.memory.target_id = false;

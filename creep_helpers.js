@@ -186,7 +186,12 @@ var creep_helpers = {
                 // body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 amount: 1,
-                avoid: !(room_name === 'E30N40')
+                avoid: !(room_name === 'E30N40')    // Fake room name
+            },
+            energy_shuttle: {
+                body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
+                amount: 1,
+                avoid: !(room_name === 'E38N47')
             },
             // mineral_shuttle: {
             //     body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400

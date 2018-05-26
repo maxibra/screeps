@@ -85,20 +85,6 @@ var structCreep = {
             creep.memory.role = 'claimer';
         } else if (creep.name.substring(0,7) === 'max_new' && room_name === 'E38N47' && room_vars.status === 'war' && creep.pos.y > 14 && creep.pos.x < 18) {
             creep.memory.role = 'go_close';
-        
-        // } else if (creep.name.substring(0,9) === 'lng_hrvst' ) { // && creep.ticksToLive > 1499 && !creep.memory.homeland && creep.memory.homeland !== room_name) {
-        //     creep.memory = {
-        //                 role: 'long_harvest', 
-        //                 harvester_type: 'move_away', 
-        //                 target_id: my_room.memory.energy_flow.long_harvest[0],
-        //                 homeland: room_name,
-        //                 special: 'long_harvest',
-        //                 homeland_target: my_room.controller.pos
-        //     }
-        } else if (room_name === 'E36N48' && creep.pos.y < 8) {    // Go back to room with X mineral
-            let action_out = creep.moveTo(Game.getObjectById('59f1a56b82100e1594f3e7c3'), global_vars.moveTo_ops);
-            console.log('[DEBUG] (' + room_name + '](' + creep.name + '): Need to back. Act: ' + action_out)
-            return;
         } else if (creep.name.substring(0,1) === 'E' && creep.name.substring(0,6) !== room_name) { // Go back back from wrong room
             console.log('[DEBUG] (' + room_name + ']: ' + creep.name.substring(0,6))
             creep.moveTo(Game.rooms[creep.name.substring(0,6)].controller, global_vars.moveTo_ops);
@@ -241,6 +227,20 @@ var structCreep = {
         // ********
             
         switch(creep_role) {
+            case 'energy_shuttle':
+                source_container = Game.getObjectById(Object.keys(my_room.memory.energy_flow.containers.source)[0]);
+                if (source_container.store['energy'] === 2000) {
+                    target2transfer = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_LINK || object.structureType === STRUCTURE_EXTENSION || 
+                                                                                                           object.structureType === STRUCTURE_SPAWN || object.structureType === STRUCTURE_TOWER) && (object.energy/object.energyCapacity < 0.8))});
+                
+                    if (!target2transfer) target2transfer = my_room.terminal;
+                        
+                    let energy_missing = target2transfer.energyCapacity - target2transfer.energy;
+                    let energy2transfer = (energy_missing < creep.carry[RESOURCE_ENERGY] ? energy_missing : creep.carry[RESOURCE_ENERGY]); 
+                    let act_response = creep.transfer(cur_transfer_target, RESOURCE_ENERGY, energy2transfer);
+                    creep_helpers.most_creep_action_results(creep, cur_transfer_target, act_response, creep_role);   
+                }
+                break;
             case 'mineral_shuttle':
                 let my_room_mineral_type = my_room.memory.energy_flow.mineral.type;
                 console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Type: ' + my_room_mineral_type + '; Carry: ' + JSON.stringify(creep.carry) + '; Terminal: ' + my_room.terminal.store[my_room_mineral_type] );

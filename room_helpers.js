@@ -433,8 +433,8 @@ var room_helpers = {
             //           '5a974acf34a154567c596a8c', '5a974ad2117e0f568f21505c', '5a974ad4fc8a790fee2caba9', '5acc6089c5bb62037cc61e14'],
                     //   '5ae4c7fac34576097c19c154', '5ae4c7fd02a75a3c6822ce58', '5ae4c7ff2f4e6a3253b01575', '5ae4c8022a35133912bfc0d4', '5ae4c80571f07c317036f407', '5ae4c80ad0b67f3944d4a6dd',
                     //   '5ae4ef5ea3702131094b5a3d', '5ae4ef631b3cfa3938b84eb2', '5ae4ef61156cc6326b475f16'],
-            'E38N47': ['5ae8ba3e06014c098e6a5913', // containers
-                       '5adfd2e9baf8e72a189f6fe3',                            // rampart
+            'E38N47': ['5b080c5e7969af3e3c15dadd', // containers
+                       '5adfd2e9baf8e72a189f6fe3', // rampart
                        '5ae0226a28fc8b0ef2d9319c', '5ae01fd32442e73df79d657a',
                        '5add07ddfae3986d75b339d6', '5add07d8b1c4fa2d23056648', '5add07d225e73b0d635afacf', '5add07cd8f560c0d75852114', '5add07c7e95c2c6b701bf6f0',
                        '5add07ada5ea876b7607732c', '5adfd13d53d7a60a47637765',
