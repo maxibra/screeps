@@ -93,21 +93,27 @@ function add_room_mineral2memory(new_room_by_mineral, room_name, mineral, lab_ph
 var room_helpers = {
     transfer_mineral: function(room_name) {
         let my_room = Game.rooms[room_name];
-        if (!my_room) return;
+        
+        let cur_room_terminal = (my_room) ? my_room.terminal : false;
+        if (!cur_room_terminal) return;   // The room without my controller or without terminal
         
         let global_vars = Memory.rooms.global_vars;
-        let minimum_send_room = 15000;
-        let minimum_received_room = 4500;
-        let send_amount = 500;
         let room_mineral = my_room.memory.energy_flow.mineral.type;
         
-        if (my_room.terminal.store[room_mineral] > global_vars.minerals.minimum_send_room)
-            for (let dst_room_index in global_vars.room_by_mineral.reagent[room_mineral]) {
-                let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
-                if (room_name === dst_room_name || Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral) continue;
-                if (Game.rooms[dst_room_name].store[room_mineral] < global_vars.minerals.max_in_terminal) 
-                    cur_terminal.send(room_mineral, global_vars.minerals.send_amount, dst_room_name);    
-            }
+        // console.log('[DEBUG] (room_helpers.transfer_mineral): Room: ' + room_name + '; Terminal: ' + cur_room_terminal);
+        
+        for (let dst_room_index in global_vars.room_by_mineral.reagent[room_mineral]) {
+            let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
+            if (room_name === dst_room_name || Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
+                Game.rooms[dst_room_name].terminal.store[room_mineral] > global_vars.minerals.received_room ||
+                cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
+                cur_room_terminal.cooldown > 0)       
+                    continue;
+            let send_out = cur_room_terminal.send(room_mineral, global_vars.minerals.send_amount, dst_room_name);
+            if (send_out === OK) console.log('[INFO] (room_helpers.transfer_mineral): Sent ' + global_vars.minerals.send_amount + ' of ' + room_mineral + ' from ' + room_name + ' to ' + dst_room_name);
+            else console.log('[ERROR] (room_helpers.transfer_mineral): FAILED [' + send_out + '] transfer from ' + room_name + ' to ' + dst_room_name);
+            
+        }
     },
     check_create_miner: function(room_name, spawn_name, units) {
         let my_room = Game.rooms[room_name];
@@ -332,13 +338,14 @@ var room_helpers = {
             if (all_flags[f].name.substring(0,8) === 'link_src') link_src_positions.push(all_flags[f].pos.x +'-' + all_flags[f].pos.y);
             else link_dst_positions.push(all_flags[f].pos.x +'-' + all_flags[f].pos.y);
 
+        let range2near_source = (room_name === 'E32N49') ? 1 : 8;
         for (let l in all_links) {
             // if (room_name == 'E38N48') console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: LINK: ' + all_links[l].id);
             let link_pos_str = all_links[l].pos.x + '-' + all_links[l].pos.y;
             if (link_src_positions.indexOf(link_pos_str) >= 0) {
                 let is_near_source = false;
                 for (let s in my_room.memory.energy_flow.sources) {
-                    if (all_links[l].pos.getRangeTo(Game.getObjectById(my_room.memory.energy_flow.sources[s])) < 8) {   // Range 8 is for E39N49
+                    if (all_links[l].pos.getRangeTo(Game.getObjectById(my_room.memory.energy_flow.sources[s])) < range2near_source) {   // Range 8 is for E39N49
                         local_energy_flow_obj.links.near_sources.push(all_links[l].id);
                         is_near_source = true;
                         break;
@@ -389,7 +396,7 @@ var room_helpers = {
             room_vars.status = 'peace';
             room_vars.finish_war = false;
             Game.notify('[' + room_name + '] It"s time for PEACE');
-        } else if (room_vars.status === 'war' && (room_name === 'E32N47' || room_name === 'E32N48' || room_name === 'E32N49')) {
+        } else if (room_vars.status === 'war' && (room_name === 'E32N47' || room_name === 'E32N48')) {
             if(hostile_creeps.length > 0 && !room_vars.finish_war) {    // need the if here for logical flow
                 console.log('[DEBUG] (room_helpers-define_room_status): Hostiles: ' + hostile_creeps.length + '; FINISH WAR: ' +  (Game.time + hostile_creeps[0].ticksToLive) + '; Current time: ' + Game.time + '; Hostile life: ' + hostile_creeps[0].ticksToLive);
                 room_vars.finish_war = (hostile_creeps.length > 0) ? (Game.time + hostile_creeps[0].ticksToLive - 20) : room_vars.finish_war; 
@@ -477,7 +484,7 @@ var room_helpers = {
             avoid_stricts = avoid_stricts.concat(E38N47_avoid);
             avoid_stricts = avoid_stricts.concat(E36N48_avoid);
 
-            targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && (object.hits < min_hits && object.hits < object.hitsMax) && avoid_stricts.indexOf(object.id) === -1});
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && (object.hits < min_hits && object.hits < (object.hitsMax*0.65)) && avoid_stricts.indexOf(object.id) === -1});
         }
         // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
@@ -509,7 +516,7 @@ var room_helpers = {
         targets_id = [];
         for (let i in targets) targets_id.push(targets[i].id);
         // my_room.memory.targets.build = (targets.length > 0) ? targets[0].id : false;
-        if (room_name === 'E33N47') console.log('[DEBUG] (get_build_targets)[: ' + room_name + '] ; TARGETS length: ' + targets_id.length + '; TARGETS: ' + JSON.stringify(targets_id));
+        // if (room_name === 'E33N47') console.log('[DEBUG] (room_helpers.get_build_targets)[: ' + room_name + '] ; TARGETS length: ' + targets_id.length + '; TARGETS: ' + JSON.stringify(targets_id));
         my_room.memory.targets.build = (targets_id.length > 0) ? targets_id : false;
     },
     clean_memory: function() {
