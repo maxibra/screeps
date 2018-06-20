@@ -38,7 +38,7 @@ if (typeof Memory.rooms.global_vars === "undefined") {
 }
 for(var current_spawn_name in Game.spawns) {
     if (typeof Game.spawns[current_spawn_name].memory.general === "undefined") {
-        Game.spawns[spawn_name].memory.general = {
+        Game.spawns[current_spawn_name].memory.general = {
             gen: 0,
             index: 0,
             status: 'peace',
@@ -153,6 +153,8 @@ module.exports.loop = function () {
             'undefined': 0,
             'long_harvest': 0,
             'claimer': 0,
+            'mineral_miner': 0,
+            'energy_miner': 0,
             'sp_total': 0,
         };
     }
@@ -195,19 +197,27 @@ module.exports.loop = function () {
     // Creeps
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
+        // if (name == 'E33N47-0-79-290-gn') {
+        //     creep.memory.role = 'undefine'
+        //     creep.memory.target_id = false
+        // }
         var creep_role = creep.memory.role
         // if (name === 'E39N49-2-86-300-gn') continue
+        // if (creep.name ==='E36N48-1-37-290-gn') {
+        //     if (creep.transfer(Game.getObjectById('5aecf50f8a126e099a6c2d05'), 'L') !== OK) creep.moveTo(Game.getObjectById('5aecf50f8a126e099a6c2d05'))
+        // } else {
         roleStructCreep.run(creep, units);
         if (Game.time % 25 === 0 && Object.keys(creep.carry).length === 1) creep.memory.has_minerals = false;
     }
 
     if (Game.time % 8 === 0) {
         for(var current_spawn_name in Game.spawns) {
+            // console.log('[DEBUG](main)[' + current_spawn_name +']: Trying to create creep'); 
             creep_helpers.create_creep(current_spawn_name, units);
         }
     }
 
-    let avoid_rooms = ['global_vars', 'E31N48', 'E39N50', 'E40N49'];
+    let avoid_rooms = ['global_vars', 'E39N50', 'E40N49'];
     let current_rooms_in_memory = Object.keys(Memory.rooms);
     let room_by_mineral = {
         reagent: {}
@@ -268,27 +278,29 @@ module.exports.loop = function () {
             let cur_terminal_id = Memory.rooms[current_room_name].energy_flow.terminal;
             let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
             // Use terminal to send energy between rooms
-            if (current_room_name === 'E39N49') {
+            // if (current_room_name === 'E36N48') {
                 // console.log('[INFO] (main)[' + current_room_name +']: ' + cur_terminal_id);
-                if (cur_terminal_id) {
-                    let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
-                    let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
-                    if (energy2transfer > 2000) energy2transfer = 2000;
-                    if (energy2transfer > 1000 && cur_terminal.store[RESOURCE_ENERGY] > 100000) {
-                        cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E33N47');
-                        // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
-                    }
+                // if (cur_terminal_id) {
+                if ((Game.time % 50 === 0 ) && (Game.time % 2 === 0 ) && current_room_name === 'E36N48') {
+                    // let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
+                    // let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
+                    // if (energy2transfer > 2000) energy2transfer = 2000;
+                    // if (energy2transfer > 1000 && cur_terminal.store[RESOURCE_ENERGY] > 100000) {
+                    //     cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E32N49');
+                    //     // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
+                    // }
+                // } else if  (current_room_name === 'E39N49' && cur_terminal_id && cur_terminal.store['K'] > 1000) {
+                //     let tr_out = cur_terminal.send(RESOURCE_KEANIUM, 1000, 'E32N49');
+                //     console.log('[INFO] (main)[' + current_room_name +']: Try transfer. out: ' + tr_out);
+                } else if (current_room_name === 'E38N47' && cur_terminal_id && cur_terminal.store['Z'] > 100000) {
+                    cur_terminal.send('Z', 2000 , 'E39N49'); 
                 }
             }
+            // }
             
-            if (current_room_name === 'E38N47' && cur_terminal_id && cur_terminal.store['Z'] > 100000) {
-                cur_terminal.send('Z', 2000 , 'E39N49');      
-            }
-        }
-        
-        if (Game.time % 20 === 0) {
-            room_helpers.transfer_mineral(current_room_name);   
-        }
+        // if (Game.time % 20 === 0) {
+        //     room_helpers.transfer_mineral(current_room_name);   
+        // }
         
         if (Game.time % rare_time_range === 0) {
             room_helpers.upgrade_energy_flow(current_room_name);
