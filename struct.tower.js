@@ -1,18 +1,6 @@
-var StructTower;
+var creep_helpers = require('creep_helpers');
 
-function is_millitary(creep_obj) {
-    let millitary_types = ['attack','ranged_attack','heal','claim'];
-    let body_types = _.map(creep_obj.body,'type');
-    let millitary_creep = false;
-    for(let i in millitary_types)
-        if (body_types.indexOf(millitary_types[i]) > 0) {
-            millitary_creep = true;
-            break;
-        }
-    return millitary_creep;
-}
-
-StructTower = {
+var StructTower = {
     run: function (current_tower_id, creeps_amount) {
         /*
          current_tower    -   Object of current tower
@@ -29,6 +17,7 @@ StructTower = {
         let room_name = current_tower.room.name;
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let target2repair;
+        let target2heal;
         let target2attack;
         // TODO: Optimize road target (save it)
 
@@ -41,7 +30,7 @@ StructTower = {
 
         if (room_vars.status == 'war') {
             all_hostile = Game.rooms[room_name].find(FIND_HOSTILE_CREEPS, {filter: object => (object.owner.username !== 'Sergeev' || 
-                                                                                             (object.owner.username === 'Sergeev' && is_millitary(object)))});
+                                                                                             (object.owner.username === 'Sergeev' && creep_helpers.is_millitary(object)))});
             all_hostile.sort((a,b) => current_tower.pos.getRangeTo(a) - current_tower.pos.getRangeTo(b));   // sort from closer to far
             // console.log('[INFO] (StructTower.run) [' + room_name + '] ATTACKERS: ' + JSON.stringify(all_hostile))
             if (all_hostile.length > 0) target2attack = all_hostile[0];
@@ -65,13 +54,16 @@ StructTower = {
             
             if (tower_energy_proc > 0.7) target2repair = Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
             console.log('[INFO] (StructTower.run) [' + room_name + '] it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
-        } else if (tower_energy_proc > 0.7 && !(Game.time % 2)) {
+        } else if (tower_energy_proc > 0.7 && !(Game.time % 3) && creeps_amount > 1) {
 
-            targets2repair = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_ROAD || object.structureType === STRUCTURE_CONTAINER) && (object.hits/object.hitsMax < 0.7))}) // &&
+            let targets2repair = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_ROAD || object.structureType === STRUCTURE_CONTAINER) && (object.hits/object.hitsMax < 0.7))}) // &&
                                                                                             //  !(room_name === 'E36N48' && (object.pos.x < 16 || object.pos.y < 11 || object.pos.y > 39)))});
             // console.log('[DEBUG] (StructTower.run): Road X: ' + targets2repair.pos.x + '; Road y: ' + targets2repair.pos.y);
-            
             target2repair = targets2repair.length > 0 ? targets2repair[0] : []; //Game.getObjectById(Game.rooms[room_name].memory.targets.repair_defence);
+            
+            let targets2heal = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => (object.owner.username !== 'Sergeev' || 
+                                                                                             (object.owner.username === 'Sergeev' && creep_helpers.is_millitary(object)))});
+            target2heal            
 
             // ***** LOG
             // console.log('[DEBUG] (StructTower.run){' + Game.time + '} [' + current_tower.room.name + ' : ' + current_tower_id + ']: Roads to repear: ' + targets2repair.length); // + '; Defence: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
@@ -87,7 +79,7 @@ StructTower = {
             current_tower.attack(target2attack);
             // current_creep_types.repair_civilian = 0.4;
             // current_creep_types.repair_defence = 0.1;
-        } else if (target2repair ) {
+        } else if (target2repair) {
             current_tower.repair(target2repair);
             // current_creep_types.repair_civilian = 0;
             // current_creep_types.repair_defence = 0;

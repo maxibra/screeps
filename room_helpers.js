@@ -201,8 +201,11 @@ var room_helpers = {
         for (let l_src in my_room.memory.energy_flow.links.sources) {
             source_link = Game.getObjectById(my_room.memory.energy_flow.links.sources[l_src]);
             if (!(source_link && (source_link.energy > 100))) continue;
-            let destination_links = [my_room.memory.energy_flow.links.near_controller,];
+            let destination_links = [my_room.memory.energy_flow.links.near_controller,];    // First link to get energy is near controller
             destination_links = destination_links.concat(my_room.memory.energy_flow.links.destinations);
+            
+            // if ( room_name === 'E32N49') console.log('[ERROR] (room_helpers.transfer_link2link)[' + room_name  +'] Destination Links: ' + JSON.stringify(destination_links));
+            
             for (let l_dst in destination_links) {
                 destination_link = Game.getObjectById(destination_links[l_dst])
                 if (destination_link && (destination_link.energy/destination_link.energyCapacity < 0.9)) {
@@ -378,7 +381,7 @@ var room_helpers = {
         let room_vars = Memory.rooms[room_name].global_vars;
         let global_vars = Memory.rooms.global_vars;
         let my_room = Game.rooms[room_name];
-        let hostile_creeps = (my_room) ? Game.rooms[room_name].find(FIND_HOSTILE_CREEPS, {filter: object => (object.owner.username !== 'Sergeev' || 
+        let hostile_creeps = (my_room) ? my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (object.owner.username !== 'Sergeev' || 
                                                                                                             (object.owner.username === 'Sergeev' && is_millitary(object)))}) :
                                          [];
         let most_danger_hostile;
@@ -424,7 +427,8 @@ var room_helpers = {
     get_repair_defence_target: function(room_name) {
         let my_room = Game.rooms[room_name];
         let targets = [];
-        let min_hits = 1000000;
+        // let min_hits = 1000000;
+        let min_hits = 200000;
         
         if (!my_room) return; // The room contains no controller
 
