@@ -63,7 +63,7 @@ function remote_target(room_name) {
             target = ['E27N48', 'E29N48', 'E27N47', 'E29N49'];
             break;
         case 'E32N49':  
-            target = ['E31N49',]; // 'E33N49'];
+            target = ['E31N49', 'E33N49'];
             break;
         case 'E33N47':  
             target = ['E32N48', 'E31N48', 'E32N47'];
@@ -132,10 +132,16 @@ function remote_harvester_info(room_name) {
                 amount: 1
             }
             break;             
+        case 'E33N49': 
+            info_object = {
+                homeland_destinations: ['5b3417a491f5f036a937b8e9', '5b33639acb21c464f0c933a3'],
+                amount: 2
+            }
+            break;   
         case 'E37N49': 
             info_object = {
                 homeland_destinations: ['5b09ba8ca6affe14523f5310', '5b0dd640c5612c1429e91c8a', '5acc524f6bec176d808adb71'],
-                amount: 1
+                amount: 2
             }
             break;
         case 'E38N49': 
