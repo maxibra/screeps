@@ -56,8 +56,8 @@ var StructTower = {
             if (tower_energy_proc > 0.7) target2repair = Game.getObjectById(my_room.memory.targets.repair_defence);
             console.log('[INFO] (StructTower.run) [' + room_name + '] it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
         } else if (tower_energy_proc > 0.7 && !(Game.time % 3) && creeps_amount > 1) {
-            let targets2repair = (my_room.memory.targets.repair_defence) ? [Game.getObjectById(my_room.memory.targets.repair_defence),] : [];
-            targets2repair = targets2repair.concat(my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7))}));
+            let targets2repair = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7))});
+            if (my_room.memory.targets.repair_defence) targets2repair.push(Game.getObjectById(my_room.memory.targets.repair_defence));
             if (targets2repair.length > 0) target2repair = targets2repair[0];
             
             // let targets2heal = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => ()});

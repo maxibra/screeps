@@ -117,7 +117,7 @@ var RoleHarvester = {
                     range2link = 4;
                     break;
                 case 'E33N47':
-                    range2link = 2;
+                    range2link = 20;
                     break;
                 default: 
                     range2link = 5;
