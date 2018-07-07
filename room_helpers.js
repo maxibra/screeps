@@ -434,24 +434,6 @@ var room_helpers = {
 
         repair_only = {
             'E38N49': ['5ae294df600f8573214e7d09', '5ae2f6c68416ac191f939153'], // containers
-            // 'E38N48': ['5ae2f286456b3d0ea1c6f1b4', '5ae2fac36abb293c4600d1a1',  // containers
-            //           '5aa0bee77ad634646aa08a49', '5ab39a6b04e7f14b97aa3056', '5ab39a586e59881daa1eb094', '5ab39a827ad7de1dd176d6db',
-            //           '5aa0befa7d8eb10a43e101d3', '5aa0bef30f678357d2601767', '5ab39ab7e7f5aa102de370ac', '5ab39ad233287758623d625e', '5ab39aed8e83a870b36a81e5',
-            //           '5ac72c64c769531bae38da9b', '5ac7589eb96a887ad73984a6'],
-            // 'E34N47': ['5ae3634ad3967d39624771d0',  // container 
-            //           '5acc6089c5bb62037cc61e14',  // rampart
-            //           '5accf67195d45e308db882e7', '5a97231c4283e76ef6df150c', '5a972319ffa70134f8d01414',
-            //           '5a974acf34a154567c596a8c', '5a974ad2117e0f568f21505c', '5a974ad4fc8a790fee2caba9', '5acc6089c5bb62037cc61e14'],
-                    //   '5ae4c7fac34576097c19c154', '5ae4c7fd02a75a3c6822ce58', '5ae4c7ff2f4e6a3253b01575', '5ae4c8022a35133912bfc0d4', '5ae4c80571f07c317036f407', '5ae4c80ad0b67f3944d4a6dd',
-                    //   '5ae4ef5ea3702131094b5a3d', '5ae4ef631b3cfa3938b84eb2', '5ae4ef61156cc6326b475f16'],
-            'E38N47': ['5b080c5e7969af3e3c15dadd', // containers
-                       '5adfd2e9baf8e72a189f6fe3', // rampart
-                       '5ae0226a28fc8b0ef2d9319c', '5ae01fd32442e73df79d657a',
-                       '5add07ddfae3986d75b339d6', '5add07d8b1c4fa2d23056648', '5add07d225e73b0d635afacf', '5add07cd8f560c0d75852114', '5add07c7e95c2c6b701bf6f0',
-                       '5add07ada5ea876b7607732c', '5adfd13d53d7a60a47637765',
-                       '5b081c9ada8a5f144621fc44', '5b0820cbaad0b67499d90c15', '5adfa6dacec9320ea3313f20', '5adfa6757675f2458c829bb8', '5adfa670d4212c457030d842',
-                       '5adfa66a0409f23c73cf2996', '5adfa6652da4b40a5fab775d', '5ae8da39e7e0f042c805233b',
-                       '5adfbbb899d2c03c36ead47a', '5adfbbbada0f976c5c1f8d02', '5add8406b21f98456a04e9cc', '5add0790b260d40d64a01627', '5adfde9c60a36d2a01d07ea7']
         }
         // *** LOG
         // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Repair_only: ' +  repair_only[room_name]);
@@ -463,19 +445,14 @@ var room_helpers = {
                 if (cur_target && cur_target.hits < min_hits && cur_target.hits < cur_target.hitsMax) targets.push(cur_target)
             }
         } else {
-            E38N47_avoid = ['5ae407d5d24b6b325f9ae11c', '5ae407d74390a242a4bbea7d', '5ae407da99d2c03c36ecc68b', '5ae407dd8a126e099a683326', '5ae407df6922543906ffce2d',
-                            '5ae407e2687bce3c31601686', '5ae4090ae78e533c7ff2cb9a', '5ae4085602a75a3c682277dc', '5ae40859e78e533c7ff2cb5f', '5ae4085ce35d18395c3a1388',
-                            '5ae4085ee35d18395c3a138c', '5ae4086361b7a5318563af54', '5ae408691b3cfa3938b7e5dc', '5ae4086e2f4e6a3253afc0ab', '5ae40873de930e393efc8ebc',
-                            '5add084b4b4b0e4d1132d67b', '5add084e25e73b0d635afb06', '5add08512c04dc6d3c9fa52e', '5add085cc65975451efc2b80'];
+            E38N47_avoid = [];
+                            // '5add084b4b4b0e4d1132d67b', '5add084e25e73b0d635afb06', '5add085cc65975451efc2b80'];
 
-            E38N48_avoid = ['5ac7589eb96a887ad73984a6'];    // South rampart will be removed
             E39N49_avoid = []
-            E37N48_avoid = [] // ['5abc9c2488988449d6f1d066', '5abc9261ce03634b9a5884de']
-            let avoid_stricts = E39N49_avoid.concat(E38N48_avoid);
-            avoid_stricts = avoid_stricts.concat(E37N48_avoid);
-            avoid_stricts = avoid_stricts.concat(E38N47_avoid);
+            let avoid_stricts = E39N49_avoid.concat(E38N47_avoid);
 
-            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && object.hits < (min_hits * 0.95) && avoid_stricts.indexOf(object.id) === -1)});
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
+                                                                        object.hits < (min_hits * 0.95) && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1)});
         }
         // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
