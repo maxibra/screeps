@@ -138,7 +138,7 @@ var structCreep = {
             if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfers: ' + transfer_procent +' / ' + current_creep_types.transfer);
             // ********
             transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
-
+            let room_enegry_is_good = (my_room.energyAvailable > (my_room.energyCapacityAvailable * 0.6));
             // *** UNIT LOG
             // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS target TOWER: ' + transfer_target);
             // ********
@@ -146,7 +146,7 @@ var structCreep = {
             //     transfer_target = Game.getObjectById('5ad1a3171db6bf2fc4648b26');   // ID of far link in the room E34N47
             //     creep.memory.role = 'transfer';
             // } else 
-            if (transfer_target && !my_room.memory.towers.current[transfer_target.id]) {
+            if (transfer_target && room_enegry_is_good && !my_room.memory.towers.current[transfer_target.id]) {
                 // *** LOG
                 if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target TOWER: ' + JSON.stringify(transfer_target));
                 creep.say('transfering');
@@ -176,7 +176,7 @@ var structCreep = {
                     }
                 }
                 // if (room_name === 'E32N49') console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target LINK: ' + JSON.stringify(transfer_target));
-                if (!transfer_target) { // transfer to extensions or spawn
+                if (!(transfer_target && room_enegry_is_good)) { // transfer to extensions or spawn
                     transfer_target = creep.pos.findClosestByPath(FIND_STRUCTURES,
                         {filter: object => ((object.structureType === STRUCTURE_EXTENSION || object.structureType === STRUCTURE_SPAWN)
                         && (object.energy < object.energyCapacity))});
