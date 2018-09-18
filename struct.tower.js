@@ -10,7 +10,7 @@ var StructTower = {
         let current_tower = Game.getObjectById(current_tower_id);
 
         if (!current_tower) {
-            console.log('[ERROR] (StructTower.run) Tower: ' + current_tower_id + ' doesnt exist');
+            console.log('[ERROR] (StructTower.run)[ + current_tower.room.name + ] Tower: ' + current_tower_id + ' doesnt exist');
             return;
         }
         
@@ -30,12 +30,13 @@ var StructTower = {
         // console.log('[DEBUG] (StructTower.run) [' + room_name + '] ENERGY PROC: ' + tower_energy_proc)
 
         if (room_vars.status == 'war') {
-            all_hostile = my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (object.owner.username !== 'Sergeev' || 
-                                                                                             (object.owner.username === 'Sergeev' && creep_helpers.is_millitary(object)))});
+            all_hostile = my_room.find(FIND_HOSTILE_CREEPS);
+                //  , {filter: object => (object.owner.username !== 'Sergeev' || (object.owner.username === 'Sergeev' && creep_helpers.is_millitary(object)))});
             all_hostile.sort((a,b) => current_tower.pos.getRangeTo(a) - current_tower.pos.getRangeTo(b));   // sort from closer to far
-            // console.log('[INFO] (StructTower.run) [' + room_name + '] ATTACKERS: ' + JSON.stringify(all_hostile))
-            if (all_hostile.length > 0) target2attack = all_hostile[0];
-            // if (room_name === 'E38N47' && current_tower.pos.getRangeTo(all_hostile[0]) > 10) target2attack = false;
+            if (all_hostile.length > 0) {
+                target2attack = all_hostile[0];
+                console.log('[INFO] (StructTower.run) [' + room_name + '] Target to Attack: ' + target2attack.id);
+            }
 
             let heal_is_found = false;
             for (let h in all_hostile) {
@@ -47,23 +48,18 @@ var StructTower = {
                 }
                 if (heal_is_found) break;
             }
-
-            // if (room_name === 'E37N48' )
-            // target2attack = false;
-            // target2attack = Game.getObjectById('5ae4996838739844d2c51bd4')
-            
             
             if (tower_energy_proc > 0.7) target2repair = Game.getObjectById(my_room.memory.targets.repair_defence);
             console.log('[INFO] (StructTower.run) [' + room_name + '] it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
         } else if (tower_energy_proc > 0.7 && !(Game.time % 3) && creeps_amount > 1) {
             let targets2repair = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7))});
             if (my_room.memory.targets.repair_defence) targets2repair.push(Game.getObjectById(my_room.memory.targets.repair_defence));
-            if (targets2repair.length > 0) target2repair = targets2repair[0];
+            if (targets2repair.length > 0 && !(room_name === 'E26N48' && targets2repair[0].structureType === 'constructedWall')) target2repair = targets2repair[0];
             
             // let targets2heal = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => ()});
 
         }
-//        console.log('[DEBUG] (StructTower.run)[ ' + current_tower.id + ']: To Attack: ' + (target2attack?target2attack.length:0) + '; To repair: ' + (target2repair?target2repair.length:0));
+        // console.log('[DEBUG] (StructTower.run)[ ' + current_tower.id + ']: To Attack: ' + (target2attack?target2attack.length:0) + '; To repair: ' + (target2repair?target2repair.length:0));
         let current_life_status = room_vars.status;
         let current_creep_types = room_vars.creep_types[current_life_status];
 //        console.log('[DEBUG] (StructTower.run)[' + current_tower_id + ']: Targets to attack: ' + target2attack.length);
@@ -77,6 +73,11 @@ var StructTower = {
             // current_creep_types.repair_civilian = 0;
             // current_creep_types.repair_defence = 0;
             // current_creep_types.transfer = 0.5;
+        } else {
+            my_heal = my_room.find(FIND_MY_CREEPS, {filter: object => (object.hits < object.hitsMax)})
+            if (my_heal.length > 0) {
+                current_tower.heal(my_heal[0]);
+            }
         }
 
         return (current_tower.energyCapacity - current_tower.energy);

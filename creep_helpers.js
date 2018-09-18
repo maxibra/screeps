@@ -2,8 +2,8 @@ var global_vars = Memory.rooms.global_vars;
 
 var creep_body = {
     general: {
-        base: [WORK,CARRY,MOVE],
-        add: [WORK,CARRY,MOVE]
+        base: [CARRY,CARRY,MOVE],
+        add: [CARRY,CARRY,MOVE]
     },
     special_carry: {
         base: [CARRY,CARRY,MOVE],
@@ -15,6 +15,10 @@ var creep_body = {
     },
     special_miner: {
         base: [WORK,WORK,WORK,WORK,WORK,MOVE,MOVE]
+    },
+    build: {
+        base: [WORK,CARRY,MOVE],
+        add: [WORK,CARRY,MOVE]
     }
 }
 
@@ -25,17 +29,24 @@ function body_cost(body) {
 }
 
 function upgrader_body(room_name) {
-    let room_level = Game.rooms[room_name].controller.level;
-    if (room_name === 'E36N48' || room_name === 'E34N47' || room_name === 'E33N47' || room_name === 'E32N49') room_level = 8;
-    else if (room_name === 'E38N47')  room_level = 8;
-    else if (room_name === 'E28N48') room_level = 8;
-
+    let room_level = 1;
+    // let room_level = Game.rooms[room_name].controller.level;
+    if (room_name === 'E26N48') room_level = 102;
     switch (room_level) {
+        case 1: 
+            body = [MOVE,WORK,CARRY];  // 2/T
+            break;
+        case 2: 
+            body = [MOVE,WORK,WORK,CARRY];  // 2/T
+            break;
         case 8: 
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY];  // 15/T
             break;
         case 10:
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY];   // upgrade = 10/T
+            break;
+        case 102:
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY];   // upgrade = 10/T carry = 200
             break;
         case 11:
             body = [MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY]; // upgarde = 8/T (2400 per 300T)
@@ -43,11 +54,17 @@ function upgrader_body(room_name) {
         case 20:
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY]; // 20/T
             break;
+        case 23:
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY]; // 23/T
+            break;
         case 25:
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY]; // 25/T
             break;
-        case 40:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY];   // upgrade = 10/T carry = 200
+        case 30:
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY]; // 30/T
+            break;
+        case 36:
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY]; // 36/T
             break;
         default:
             body = [MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY];
@@ -55,18 +72,40 @@ function upgrader_body(room_name) {
     return body;
 }
 
+function upgraders_amount(room_name) {
+    // Object of rooms with remote targets
+    let upgraders = (Game.rooms[room_name].controller.ticksToDowngrade < 100000) ? 1 : 0;
+    // switch (room_name) {
+    //     case 'E27N41':
+    //         upgraders = 2;
+    //         break;
+    // }
+    return upgraders;
+}
 function remote_target(room_name) {
     // Object of rooms with remote targets
     let target = false;
-    switch (room_name) { 
+    switch (room_name) {
+        case 'E26N48':  
+            target = ['E25N48', 'E25N49', 'E26N47'];
+            break;   
+        case 'E27N41':  
+            target = ['E26N41', 'E26N42', 'E28N41'];
+            break;        
+        case 'E32N53':  
+            target = ['E32N52', 'E31N52', 'E33N54', 'E32N54'];
+            break;        
+        case 'E27N45':  
+            target = ['E27N46', 'E27N44'];
+            break;
         case 'E28N48':  
-            target = ['E27N48', 'E29N48', 'E27N47', 'E29N49'];
+            target = ['E27N48', 'E27N47']; //, 'E29N48', 'E29N49', 'E28N49'];
             break;
         case 'E32N49':  
             target = ['E31N49', 'E33N49'];
             break;
         case 'E33N47':  
-            target = ['E32N48', 'E31N48', 'E32N47'];
+            target = ['E32N47']; //, 'E32N49']; //'E32N48', 'E31N48',  'E33N48'];
             break;
         case 'E37N48':
             target = ['E37N49']; //, 'E36N48']; // 'E34N46'];
@@ -85,6 +124,84 @@ function remote_harvester_info(room_name) {
     // ID's of destination inside homeland of remote harvesters
     let info_object = {};
     switch (room_name) {
+        case 'E26N47':             
+            info_object = {
+                homeland_destinations: ['5b936b9a2b516b50267186e1', '5b91c3c550c0524d4dc7add2'],
+                amount: 2
+            }
+            break;        
+        case 'E25N48':             
+            info_object = {
+                homeland_destinations: ['5b91b7ab69a64562799ac8bb', '5b91b2c1501cf2629da0fe55', '5b8b8ebdb81548407f98d8cd'],
+                amount: 1
+            }
+            break;
+        case 'E25N49':             
+            info_object = {
+                homeland_destinations: ['5b91b7ab69a64562799ac8bb', '5b91b2c1501cf2629da0fe55', '5b8b8ebdb81548407f98d8cd'],
+                amount: 1
+            }
+            break;
+        case 'E26N42':             
+            info_object = {
+                homeland_destinations: ['5b7b813e3e1314168cf6872b', '5b7b75f7ff7a3e3d3c3266c7', '5b7b9da33b41006a20d49491'],
+                amount: 4
+            }
+            break;
+        case 'E28N41':             
+            info_object = {
+                homeland_destinations: ['5b7818f69606f140031f82b2', '5b80cc7d127ab96b4f666215', '5b7b9da33b41006a20d49491'],
+                amount: 1
+            }
+            break;
+        case 'E26N41':             
+            info_object = {
+                homeland_destinations: ['5b76fe18049a5b16bc433811',],
+                amount: 1
+            }
+            break;
+        case 'E32N54':             
+            info_object = {
+                homeland_destinations: ['5b61da92a30f486dd74f76a9', '5b67896265965e6dc7b72b82', '5b67071f529e6f26f0cd6244', '5b677e7a617b6e5cdc93a8be'],
+                amount: 4
+            }
+            break;
+        case 'E33N54':             
+            info_object = {
+                homeland_destinations: ['5b61da92a30f486dd74f76a9', '5b67896265965e6dc7b72b82', '5b677e7a617b6e5cdc93a8be', '5b67071f529e6f26f0cd6244'],
+                amount: 3
+            }
+            break;
+        case 'E31N52': 
+            info_object = {
+                homeland_destinations: ['5b613b019007134cd78dc2dd', '5b61401594e55f270224e7c3', '5b6142677b80103f4714004b', '5b61d763b7d44e6423cbb914'],
+                amount: 2
+            }
+            break;
+        case 'E32N52': 
+            info_object = {
+                homeland_destinations: ['5b613b019007134cd78dc2dd', '5b61401594e55f270224e7c3', '5b6142677b80103f4714004b', '5b61d763b7d44e6423cbb914'],
+                amount: 3
+            }
+            break;
+        case 'E27N46': 
+            info_object = {
+                homeland_destinations: ['5b46993b0f4ec249f6ddd878', '5b59dc5b2bde613971b9ba8c'],
+                amount: 2
+            }
+            break;
+        case 'E27N44': 
+            info_object = {
+                homeland_destinations: ['5b46a969e30571430d348744', '5b4e6a9383b2287c458398ca', '5b468a489ddd223460384234', '5b52b31b7c9ee34db2ab8e7b'],
+                amount: 3
+            }
+            break;
+        case 'E28N49': 
+            info_object = {
+                homeland_destinations: ['5b45be9f1e189e61e50b576c',],
+                amount: 1
+            }
+            break;
         case 'E27N47': 
             info_object = {
                 homeland_destinations: ['5b34d0a3e6e0fa316db08a31',],
@@ -109,33 +226,46 @@ function remote_harvester_info(room_name) {
                 amount: 3
             }
             break;
+        case 'E32N49':
+            info_object = {
+                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd'],
+                amount: 1
+            }
+            break;
+        case 'E33N48':
+            info_object = {
+                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd', '5afd5c94f1eabb6ce7a18052'],
+                amount: 6
+            }
+            break;
         case 'E32N47': 
             info_object = {
-                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5af77c2caba2f708b74580b4', '5af7fb6d72bccd0cc9c29cf7', '5afc6f3612e8d50cf8eb8831'],
+                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd', '5afd5c94f1eabb6ce7a18052'],
                 amount: 1
             }
             break;
         case 'E32N48': 
             info_object = {
-                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5af77c2caba2f708b74580b4', '5af7fb6d72bccd0cc9c29cf7', '5afc6f3612e8d50cf8eb8831'],
+                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd', '5afd5c94f1eabb6ce7a18052'],
                 amount: 2
             }
+            break;
         case 'E31N48': 
             info_object = {
-                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5af77c2caba2f708b74580b4', '5af7fb6d72bccd0cc9c29cf7', '5afc6f3612e8d50cf8eb8831'],
-                amount: 4
+                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd', '5afd5c94f1eabb6ce7a18052'],
+                amount: 5
             }
             break;      
         case 'E31N49': 
             info_object = {
-                homeland_destinations: ['5b1a42e409384a778ed5e8f4', '5b153b87c5612c1429ec169b'],
+                homeland_destinations: ['5b1a42e409384a778ed5e8f4', '5b153b87c5612c1429ec169b'], // , '5b1f9978e65319287dc4ac89'],
                 amount: 1
             }
             break;             
         case 'E33N49': 
             info_object = {
-                homeland_destinations: ['5b3417a491f5f036a937b8e9', '5b33639acb21c464f0c933a3'],
-                amount: 2
+                homeland_destinations: ['5b4387d9a8f9805e72b9a05c', '5b3417a491f5f036a937b8e9', '5b33639acb21c464f0c933a3'], //, '5b1f9978e65319287dc4ac89'],
+                amount: 3
             }
             break;   
         case 'E37N49': 
@@ -183,14 +313,14 @@ function is_remote_room_in_war(room_name) {
     return its_war;
 }
 
-//  Game.spawns['max_E37N48'].spawnCreep([MOVE,MOVE,MOVE,CLAIM], 'its_my', {role: 'its_my'})
+//  Game.spawns['max_E38N48-2'].spawnCreep([MOVE,MOVE,MOVE,CLAIM], 'its_my', {role: 'its_my', claim_room: 'E38N47'})
 var creep_helpers = {
     create_creep: function(spawn_name, units) {
         let my_spawn = Game.spawns[spawn_name];
         let room_name = Game.spawns[spawn_name].room.name
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
-        let new_room_creeps = 0;
+        let new_room_creeps = 1;
         let create_special = false;
 
         let current_creeps = Game.creeps;
@@ -199,11 +329,24 @@ var creep_helpers = {
         let current_creep_types = room_vars.creep_types[room_vars.status];
         let name_special = 'gn';
         let current_body = creep_body.general.base;
-        var add_body = creep_body.general.add;
+        let add_body = creep_body.general.add;
         let creep_name = '';
+        
+        if (my_room.memory.targets.build.length > 0 || units[room_name]['energy_miner'] < my_room.memory.energy_flow.sources.length ||
+            my_room.controller.ticksToDowngrade < 140300) {
+            current_body = creep_body.build.base;
+            add_body = creep_body.build.add;
+        }
+        console.log('(creep_helpers.create_creep) [' + room_name + '] Units ' + JSON.stringify(units));
+
         let universal_creeps = units[room_name]['total'] - units[room_name]['sp_total'];
         
-        let avoid_remote = !(room_name === 'E33N47' || room_name === 'E37N48' || room_name === 'E38N48' || room_name === 'E28N48' || room_name === 'E32N49');
+        let avoid_remote = !(room_name === 'E38N48'); // ||
+                            //  room_name === 'E28N48' || room_name === 'E33N47' ||
+                            //  room_name === 'E32N49' || room_name === 'E28N48' || 
+                            //  room_name === 'E27N45' || 
+                            //  room_name === 'E32N53' || room_name === 'E27N41' ||
+                            //  room_name === 'E26N48');
         
         let remote_room_in_war = is_remote_room_in_war(room_name)
         // if (room_name === 'E28N48') console.log('(creep_helpers.create_creep) [' + room_name + '] In WAR: ' + remote_room_in_war);
@@ -217,6 +360,20 @@ var creep_helpers = {
             //     name_prefix: 'max_new',
             //     amount: 4
             // },   
+            attacker_constructions: {
+                body:  [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK],
+                memory: {constructions2attack: ['5a4e91517f68e87c650b4ae8', ]},
+                name_prefix: 'attacker_const_' + room_name,
+                amount: 0,
+                avoid: !(room_name === 'E28N48')
+            },
+            guard: {
+                body: [TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL,HEAL],
+                name_prefix: 'quard_' + room_name,
+                memory: {post: [4, 9, 'E38N47']},
+                amount: 1,
+                avoid: !(room_name === 'E38N48')
+            },
             attacker: {
                 body:  [MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,HEAL],
                 memory: {room_in_war: remote_room_in_war},
@@ -232,8 +389,8 @@ var creep_helpers = {
             },   
             upgrader: {
                 body: upgrader_body(room_name),
-                amount: 1,
-                // avoid: (room_name === 'E32N49')
+                amount: upgraders_amount(room_name),
+                // avoid: (room_name === 'E26N48')
             },
             remote_energy_miner: {
                 // body: [MOVE,MOVE,WORK,WORK,WORK],
@@ -241,12 +398,14 @@ var creep_helpers = {
                 memory: {stuck: 0},
                 name_prefix: 'rmt_nrg_mnr' + room_name,
                 rmt_targets: remote_target(room_name),
+                amount: 0,
                 // amount: ((Memory.rooms[creep.memory.far_target]) ? Object.keys(Memory.rooms[creep.memory.far_target].energy_flow.containers.source).length : 0),
                 avoid: avoid_remote
-                // amount: 1
             },
             remote_harvest: {
-                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750
+                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750, Harvest: 16/T
+                    // ((my_room.energyCapacityAvailable >= 1550) ? [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY] : // Carry: 750
+                    //                                     [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]),    // Carry: 600
                 // body: [MOVE,WORK,CARRY],
                 name_prefix: 'rmt_hrvst_' + room_name,
                 rmt_targets: remote_target(room_name),
@@ -254,11 +413,13 @@ var creep_helpers = {
             // }
             },
             remote_claimer: {
+                // Game.getObjectById('5b6ea23987f6041778623097').signController(Game.getObjectById('59f1a4d382100e1594f3d993'), "Stay away from unnecessary conflicts :)")
                 body: [MOVE,MOVE,CLAIM,CLAIM],
                 name_prefix: 'rmt_claimer_' + room_name,
                 amount: 1,
                 rmt_targets: remote_target(room_name),
-                avoid: avoid_remote
+                avoid: avoid_remote ,
+                remote_avoid: ['E28N49',]
             },
             lab_assistent: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 800
@@ -269,12 +430,12 @@ var creep_helpers = {
             },   
             energy_helper: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 500
-                // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 1000
-                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry:1500
+                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 1000
+                // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry:1500
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 2K
                 name_prefix: 'energy_helper_' + room_name,
                 amount: 0,
-                avoid: !(room_name === 'E37N48')
+                avoid: !(room_name === 'E28N48')
             },
             // transfer: {
             //     body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
@@ -287,14 +448,15 @@ var creep_helpers = {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 name_prefix: 'mnrl_mnr_' + room_name,
-                amount: 1,
-                avoid: (!(my_room.memory.energy_flow.mineral.extractor && Game.getObjectById(my_room.memory.energy_flow.mineral.id).mineralAmount > 0) || room_name === 'E39N49')
+                amount: 0,
+                avoid: (!(my_room.memory.energy_flow.mineral.extractor && Game.getObjectById(my_room.memory.energy_flow.mineral.id).mineralAmount > 0) || 
+                        (my_room.storage && (_.sum(_.values(my_room.storage.store)) > (my_room.storage.storeCapacity * 0.9))))
             },
             re_transfer: {
                 // body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],   // CARRY: 500
-                amount: 0,
-                avoid: !(room_name === 'E38N48' || room_name === 'E37N48')    // Fake room name
+                amount: 2,
+                avoid: !(room_name === 'E32N53') // || room_name === 'E27N45' || room_name === 'E38N48' || room_name === 'E37N48')   
             },
             energy_shuttle: {
                 // body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
@@ -314,14 +476,15 @@ var creep_helpers = {
         //  **** New implementations of special creeps
         // console.log('[INFO] (create_creep)[' + room_name + ']: SPECIAL cond: ' + (universal_creeps)); // >= room_vars.screeps_max_amount[room_vars.status]))
 
-        if (universal_creeps >= room_vars.screeps_max_amount[room_vars.status]) {
+        if (universal_creeps >= room_vars.screeps_max_amount[room_vars.status] &&
+            room_vars.status === 'peace') {
             let cur_special_creeps = (units[room_name]['energy_miner'] >= Object.keys(my_room.memory.energy_flow.containers.source).length) ?
                                                 special_creeps :
                                                 {'energy_miner': special_creeps['energy_miner']};
             // console.log('(create_creep) [' + room_name + '] Energy miners: ' + units[room_name]['energy_miner'] + '; Source containers: ' + Object.keys(my_room.memory.energy_flow.containers.source).length);
             let need2cretae_creep_type = false;
             for (let creep_type in cur_special_creeps) {
-                // console.log('CREEP Type: ' + creep_type);
+                // console.log('(creep_helpers.create_creep) [' + room_name + '] CREEP Type: ' + creep_type);
                 current_obj = cur_special_creeps[creep_type];
                 current_name_prefix = (current_obj.name_prefix) ? current_obj.name_prefix : (creep_type + '_' + room_name);
 
@@ -348,7 +511,9 @@ var creep_helpers = {
                 for (let t in rmt_targets) {
                     let remote_room = rmt_targets[t];
                     let creeps_amount;
-                    if (creep_type === 'remote_energy_miner') {
+                    if (creep_type === 'remote_claimer' && current_obj.remote_avoid.indexOf(remote_room) >= 0 ) {
+                        continue;
+                    } else if (creep_type === 'remote_energy_miner') {
                         creeps_amount = (Memory.rooms[remote_room] && Memory.rooms[remote_room].energy_flow) ? Object.keys(Memory.rooms[remote_room].energy_flow.containers.source).length : 0;
                     } else if (creep_type === 'remote_harvest') {
                         rmt_harvester_obj = remote_harvester_info(remote_room);
@@ -394,16 +559,18 @@ var creep_helpers = {
         // **** Finish special
         
         // creation of additional creeps for expansion
-        if (room_name === 'E32N49'  && universal_creeps >= 3) {
+        let new_room = 'E38N48'; 
+        if (room_name === new_room && Memory.rooms[new_room].global_vars.status === 'peace' && universal_creeps >= my_room.memory.global_vars.screeps_max_amount.peace) {
+            // console.log('[DEBUG] (create_creep): New creeps: ' + new_room_creeps)
             let new_memory = {role: 'claimer'};
             for (let i=1; i<=new_room_creeps; i++) {
                 current_new_name = 'max_new-' + i;
                 // console.log('[DEBUG] (create_creep): CURRENT NAME: ' + current_new_name)
-                if ( Object.keys(current_creeps).indexOf(current_new_name) === -1 && Memory.rooms['E31N49'] === 'peace') {
+                if ( Object.keys(current_creeps).indexOf(current_new_name) === -1) {
                     creep_name = current_new_name;
                     creep_memory = new_memory;
-                    // current_body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY];
-                    current_body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY];  // carry: 400
+                    current_body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]; // carry 1000
+                    // current_body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY];  // carry: 400
                     // current_body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
                     // current_body = [MOVE,MOVE,WORK,WORK,CARRY,CARRY];
                     add_body = false;
@@ -430,12 +597,14 @@ var creep_helpers = {
             possible_body = possible_body.concat(add_body);
             if (i%2 == 0) possible_body.push(MOVE);
             possible_body_cost = body_cost(possible_body);
-            if (possible_body_cost > max_body_cost) break;
+            if (possible_body_cost > max_body_cost || possible_body.length > 50) break;
         }
 
         let current_body_cost = body_cost(current_body);
-        if (room_name === 'E37N48' ) console.log('[DEBUG] (create_creep): [' + spawn_name + '] Current body: ' +  current_body_cost);
         if (creep_name === '' ) creep_name = spawn_name.substring(4) + '-' + my_spawn.memory.general.index + '-' + my_spawn.memory.general.gen + '-' + (current_body_cost/10) + '-' + name_special;
+
+        
+        // if (room_name === 'E32N49' ) console.log('[DEBUG] (create_creep): [' + spawn_name + '] Creep: ' + creep_name +'; body cost: ' +  current_body_cost + '; Body: ' + JSON.stringify(current_body));
 
         if (current_body_cost > Game.rooms[room_name].energyAvailable) {
             console.log('[DEBUG] (create_creep): [' + spawn_name + '] WAITing to create creep ' + creep_name + ': ' +  Game.rooms[room_name].energyAvailable + '/' + current_body_cost);
