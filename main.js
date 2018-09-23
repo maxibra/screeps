@@ -144,15 +144,15 @@ module.exports.loop = function () {
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
     var cur_creeps = Game.creeps ? Game.creeps : {};
 
-    let only_rooms = ['E33N47', 'E38N48', 'E28N48', 'E38N47', 'E27N47', 'E27N48', 'E32N47', 'E32N49']; //, 'E38N49'];
+    let only_rooms = ['E28N48', 'E33N47', 'E34N47', 'E37N48', 'E38N47', 'E38N48', 'E39N49', 'E38N49']; //, 'E27N47', 'E27N48', 'E32N47', 'E32N49'];
     let avoid_rooms = ['global_vars', 'E26N40', 'E26N43', 'E26N44', 'E26N46', 'E27N40', 'E28N47', 'E29N47', 'E30N48', 'E31N53', 'E34N46', 'E39N50', 'E40N49'];
     
     let run_on_roooms = (only_rooms.length > 0) ? only_rooms : Object.keys(Memory.rooms);
     
-    console.log('[INFO] (main)[Before CREEP] Creeps: ' + Object.keys(Game.creeps))
-    console.log('[INFO] (main)[Before CREEP] Creeps: ' + Object.keys(Game.creeps).length + '; CPU Used: ' + Game.cpu.getUsed() + '; Ticket Limit: ' + Game.cpu.tickLimit)
+    // console.log('[INFO] (main)[Before CREEP] Creeps: ' + Object.keys(Game.creeps))
+    // console.log('[INFO] (main)[Before CREEP] Creeps: ' + Object.keys(Game.creeps).length + '; CPU Used: ' + Game.cpu.getUsed() + '; Ticket Limit: ' + Game.cpu.tickLimit)
 
-    console.log('[INFO] (main)[Before units] CPU Used: ' + Game.cpu.getUsed() + '; Ticket Limit: ' + Game.cpu.tickLimit)
+    // console.log('[INFO] (main)[Before units] CPU Used: ' + Game.cpu.getUsed() + '; Ticket Limit: ' + Game.cpu.tickLimit)
     if (Game.time % 10 === 0) {
         units['total'] = 0;
         for(let room_index in run_on_roooms) {
@@ -185,7 +185,7 @@ module.exports.loop = function () {
             let room_name = cur_creeps[creep_name].room.name;
             if (run_on_roooms.indexOf(room_name) < 0) continue;
             
-            console.log('[INFO] (main)[' + creep_name + '] Room: ' + room_name + '; Units: ' + JSON.stringify(units))
+            // console.log('[INFO] (main)[' + creep_name + '] Room: ' + room_name + '; Units: ' + JSON.stringify(units))
             units[room_name][cur_creeps[creep_name].memory.role]++;
             units[room_name]['total']++;
             if (cur_creeps[creep_name].memory.special) units[room_name]['sp_total']++;
@@ -241,11 +241,12 @@ module.exports.loop = function () {
         // console.log('[INFO] (main)[' + creep.name +'] After  CPU Used: ' + Game.cpu.getUsed())
         if (Game.time % 25 === 0 && Object.keys(creep.carry).length === 1) creep.memory.has_minerals = false;
     }
-    console.log('[INFO] (main)[After CREEPS RUN] CPU Used: ' + Game.cpu.getUsed() + '; Ticket Limit: ' + Game.cpu.tickLimit)
+    console.log('[INFO] (main)[After CREEPS RUN] CPU Used: ' + Game.cpu.getUsed() + '; Creeps: ' + Object.keys(Game.creeps).length + '; Ticket Limit: ' + Game.cpu.tickLimit)
 
     if (Game.time % 8 === 0) {
         for(var current_spawn_name in Game.spawns) {
-            if (run_on_roooms.indexOf(Game.spawns[current_spawn_name].room.name) < 0) continue;
+            if (run_on_roooms.indexOf(Game.spawns[current_spawn_name].room.name) < 0 || 
+                Game.spawns[current_spawn_name].room.name === 'E39N49') continue;
             // console.log('[DEBUG](main)[' + current_spawn_name +']: Trying to create creep'); 
             creep_helpers.create_creep(current_spawn_name, units);
         }
@@ -319,9 +320,9 @@ module.exports.loop = function () {
 
 
         current_mod = current_mod + tick_between_hard_actions;
-        if (Game.time % 10 === current_mod) {
-            room_helpers.transfer_energy(current_room_name);
-        }
+        // if (Game.time % 10 === current_mod) {
+        //     room_helpers.transfer_energy(current_room_name);
+        // }
         
         // if (Game.time % 20 === 0) {
         //     room_helpers.transfer_mineral(current_room_name);   

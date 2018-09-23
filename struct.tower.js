@@ -35,10 +35,10 @@ var StructTower = {
                 hostile2attack = Game.getObjectById(my_room.memory.hostile2attack);
                 if (hostile2attack && hostile2attack.room.name !== room_name) hostile2attack = false;
             }
-            console.log('[DEBUG] [structTower] Hostile2Attack by getObject:' + ((hostile2attack)?hostile2attack.id:'NA'))
+            // console.log('[DEBUG] [structTower] Hostile2Attack by getObject:' + ((hostile2attack)?hostile2attack.id:'NA'))
             
             if (!hostile2attack) {
-                console.log('[DEBUG] (structTower)('+ room_name + ') Searching target to ATTACk')
+                // console.log('[DEBUG] (structTower)('+ room_name + ') Searching target to ATTACk')
                 all_hostile = my_room.find(FIND_HOSTILE_CREEPS);
                     //  , {filter: object => (object.owner.username !== 'Sergeev' || (object.owner.username === 'Sergeev' && creep_helpers.is_millitary(object)))});
                 all_hostile.sort((a,b) => current_tower.pos.getRangeTo(a) - current_tower.pos.getRangeTo(b));   // sort from closer to far
@@ -57,7 +57,7 @@ var StructTower = {
                     if (heal_is_found) break;
                 }
                 my_room.memory.hostile2attack = (target2attack) ? target2attack.id : false;
-                console.log('[INFO] (StructTower.run) [' + room_name + '] Target to Attack: ' + JSON.stringify(target2attack));
+                // console.log('[INFO] (StructTower.run) [' + room_name + '] Target to Attack: ' + JSON.stringify(target2attack));
             } else {
                 target2attack = hostile2attack;    
             }

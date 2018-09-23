@@ -100,7 +100,7 @@ var room_helpers = {
     transfer_energy: function(room_name) {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
-        let destination_rooms = ['E32N49', 'E27N41', 'E27N45', 'E38N47'];
+        let destination_rooms = ['E38N48', ];
         // let destination_terminal = false;
         if (destination_rooms.indexOf(room_name) >= 0) return;   // Don't send to itself :)
 
@@ -113,9 +113,9 @@ var room_helpers = {
                 cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer) {
                 
                 let send_out = cur_terminal.send(RESOURCE_ENERGY, 2000, destination_room);
-                console.log('[ERROR](room.transfer_energyy)[' +  room_name + '] Send out: ' + send_out)
+                console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
                 if (send_out === OK) {
-                    console.log('[ERROR](room.transfer_energyy)[' +  room_name + '] destination (' + destination_room + '): ' + destination_terminal.store[RESOURCE_ENERGY] + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
+                    console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + destination_terminal.store[RESOURCE_ENERGY] + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
                     break;
                 }
                 // let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
@@ -153,13 +153,16 @@ var room_helpers = {
                 if (target.pos.x < 2) is_inside = false;
                 break;
             case 'E34N47':
-                if (target.pos.x > 17 && target.pos.y > 34) is_inside = false;
+                if (target.pos.x < 28 && target.pos.y > 34) is_inside = false;
                 break;
             case 'E36N48':
                 if (target.pos.x < 15 || target.pos.y < 11 || (target.pos.x < 32 && target.pos.y > 38)) is_inside = false;
                 break;
+            case 'E37N48':
+                if (target.pos.x < 12 || target.pos.y < 8) is_inside = false;
+                break;  
             case 'E38N47':
-                if (target.pos.x < 9 || target.pos.y > 15) is_inside = false;
+                if (target.pos.x < 5 || target.pos.y > 28) is_inside = false;
                 break;    
             case 'E38N48':
                 if (target.pos.x < 15 || target.pos.y < 19) is_inside = false;
@@ -275,7 +278,9 @@ var room_helpers = {
         for (let near_src in my_room.memory.energy_flow.links.near_sources) {    // link near source transfer to controller ONLY!!
             let near_source_link = Game.getObjectById(my_room.memory.energy_flow.links.near_sources[near_src]);
             if (!(near_source_link && (near_source_link.energy > 100))) continue;
-            link_transfer(near_source_link, Game.getObjectById(my_room.memory.energy_flow.links.near_controller))
+            // console.log('[ERROR] (room_helpers.transfer_link2link)[' + room_name  +'] Destination link:' + Game.getObjectById(my_room.memory.energy_flow.links.near_controller))
+            if (near_source_link && my_room.memory.energy_flow.links.near_controller)
+                link_transfer(near_source_link, Game.getObjectById(my_room.memory.energy_flow.links.near_controller))
         }
         
         for (let l_src in my_room.memory.energy_flow.links.sources) {
@@ -288,7 +293,8 @@ var room_helpers = {
             // if ( room_name === 'E32N49') console.log('[ERROR] (room_helpers.transfer_link2link)[' + room_name  +'] Destination Links: ' + JSON.stringify(destination_links));
             
             for (let l_dst in destination_links) {
-                current_link_sent = link_transfer(source_link, Game.getObjectById(destination_links[l_dst]));
+                if (source_link && destination_links[l_dst])
+                    current_link_sent = link_transfer(source_link, Game.getObjectById(destination_links[l_dst]));
                 if (current_link_sent) break;
             }
             if (current_link_sent) break;
