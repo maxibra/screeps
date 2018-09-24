@@ -153,7 +153,7 @@ var room_helpers = {
                 if (target.pos.x < 2) is_inside = false;
                 break;
             case 'E34N47':
-                if (target.pos.x < 28 && target.pos.y > 34) is_inside = false;
+                if (target.pos.x < 28 || target.pos.y > 34) is_inside = false;
                 break;
             case 'E36N48':
                 if (target.pos.x < 15 || target.pos.y < 11 || (target.pos.x < 32 && target.pos.y > 38)) is_inside = false;

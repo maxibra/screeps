@@ -282,7 +282,7 @@ module.exports.loop = function () {
         let towers_list = (Memory.rooms[current_room_name].towers) ? Object.keys(Memory.rooms[current_room_name].towers.current) : {};
         let towers_energy_full = true;
         // console.log('[DEBUG] (main)[' + current_room_name + ']: TOWERS: ' + JSON.stringify(towers_list));
-        if ((units[current_room_name] && units[current_room_name].total >= 2) || Memory.rooms[current_room_name].global_vars.status === 'war')
+        if ((units[current_room_name] && units[current_room_name].total >= 1) || Memory.rooms[current_room_name].global_vars.status === 'war')
             for (let i=0;i<towers_list.length;i++) {
                 // console.log('[DEBUG] (main): TOWER[' + i + ']' + ' ID: ' + towers_list[i]);
                 roleTower.run(towers_list[i], units[current_room_name].total-units[current_room_name].sp_total);
@@ -343,6 +343,9 @@ module.exports.loop = function () {
         room_helpers.clean_memory();
     }
 
+    console.log('[INFO] (main)[End of Cycle] CPU Used: ' + Game.cpu.getUsed() + '; Ticket Limit: ' + Game.cpu.tickLimit)
+    console.log('----------------------------------------------------');
+    
     // Create first roads
     // if (typeof my_room.memory.roads == "undefined") {
     //     my_room.memory.roads = [];

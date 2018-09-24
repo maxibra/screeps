@@ -92,8 +92,10 @@ var structCreep = {
             creep.suicide();
             return;
         }
-        let condition2change_role = (iam_general && ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
-            creep.memory.role === 'undefined'));
+        let condition2change_role = (iam_general && 
+                                     ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
+                                       creep.memory.role === 'upgrade' && my_room.energyAvailable < (my_room.energyCapacityAvailable*0.7) ||
+                                       creep.memory.role === 'undefined'));
                 
         // *** LOG
         // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Time: ' + Game.time + '; Controller: ' + JSON.stringify(controller_position) + '; Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
@@ -204,7 +206,7 @@ var structCreep = {
                         && (object.energy < object.energyCapacity))});
                 }
                 
-                // if (room_name === 'E33N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target (EXTENSIONS?): ' + transfer_target.structureType);
+                // if (room_name === 'E38N48') console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target (EXTENSIONS?): ' + transfer_target.structureType);
                 let booster_lab_id = (my_room.memory.labs) ? Object.keys(my_room.memory.labs.booster)[0] : false;
                 if (!transfer_target && booster_lab_id) {    
                     let booster_lab = Game.getObjectById(booster_lab_id);
@@ -268,7 +270,7 @@ var structCreep = {
                     transfer_target = Game.getObjectById(my_room.memory.energy_flow.storage);
                 } else if (my_room.controller.level < 8 ||
                            (my_room.controller.level === 8 && units[room_name]['upgrader'] === 0)) {
-                    creep.say('upgrading');
+                    creep.say('1-upgrading');
                     creep.memory.role = 'upgrade';
                 }
                 // }
