@@ -78,14 +78,14 @@ var structCreep = {
 
         // if(room_name === 'E38N47') return;
         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Conduction to suicide: ' + ((creep.name.substring(0,6) === room_name)&& my_room.energyAvailable > (my_room.energyCapacityAvailable * 0.8)));
-        if(creep.name.substring(0,6) === room_name && room_vars.status === 'peace' &&
-           my_room.energyAvailable > (my_room.energyCapacityAvailable * 0.8) &&
-           creep.carry['energy'] === 0 &&
-           (my_room.memory.targets.build.length < 0 || // my_room.controller.ticksToDowngrade > 143000 ||
-            my_room.terminal.store['energy'] < 15000)) {    // It's universal creep. change it to transfer unit
-            creep.suicide();
-            return;
-        }
+        // if(creep.name.substring(0,6) === room_name && room_vars.status === 'peace' &&
+        //   my_room.energyAvailable > (my_room.energyCapacityAvailable * 0.8) &&
+        //   creep.carry['energy'] === 0 &&
+        //   (my_room.memory.targets.build.length === 0 || // my_room.controller.ticksToDowngrade > 143000 ||
+        //     my_room.terminal.store['energy'] < 15000)) { 
+        //     creep.suicide();
+        //     return;
+        // }
         
         const add = (a, b) => a + b; 
         if (creep.name.substring(0,7) === 'nrg_mnr' && (Object.keys(Game.rooms[room_name].memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store.energy).reduce(add)) === 4000) {
@@ -94,7 +94,7 @@ var structCreep = {
         }
         let condition2change_role = (iam_general && 
                                      ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
-                                       creep.memory.role === 'upgrade' && my_room.energyAvailable < (my_room.energyCapacityAvailable*0.7) ||
+                                       creep.memory.role === 'upgrade' && my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85) ||
                                        creep.memory.role === 'undefined'));
                 
         // *** LOG
