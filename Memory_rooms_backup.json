@@ -1,11 +1,11 @@
 {
   "global_vars": {
+    "min_tower_enrg2repair": 0.3,
     "defence_level": 750000,
     "terminal_max_energy_storage": 170000,
     "terminal_min2transfer": 100000,
     "terminal_emergency_ration": 50000,
     "storage_emergency_ration": 100000,
-    "range3cntrl_link": 5,
     "update_period": {
       "towers": 1000,
       "after_war": 20
@@ -66,13 +66,8 @@
       "send_amount": 500,
       "transfer_batch": 300
     },
-    "towers": {
-      "current": {},
-      "next_update": 6682768
-    },
-    "targets": {},
     "units": {
-      "total": 21,
+      "total": 20,
       "E28N48": {
         "total": 3,
         "transfer": 1,
@@ -107,9 +102,9 @@
       },
       "E34N47": {
         "total": 2,
-        "transfer": 1,
+        "transfer": 0,
         "build": 0,
-        "upgrade": 0,
+        "upgrade": 1,
         "upgrader": 0,
         "repair_defence": 0,
         "repair_civilian": 0,
@@ -138,14 +133,14 @@
         "sp_total": 0
       },
       "E38N47": {
-        "total": 1,
-        "transfer": 1,
+        "total": 2,
+        "transfer": 0,
         "build": 0,
-        "upgrade": 0,
+        "upgrade": 1,
         "upgrader": 0,
         "repair_defence": 0,
         "repair_civilian": 0,
-        "harvest": 0,
+        "harvest": 1,
         "undefined": 0,
         "long_harvest": 0,
         "claimer": 0,
@@ -154,43 +149,10 @@
         "sp_total": 0
       },
       "E38N48": {
-        "total": 5,
+        "total": 4,
         "transfer": 1,
         "build": 0,
-        "upgrade": 0,
-        "upgrader": 0,
-        "repair_defence": 0,
-        "repair_civilian": 0,
-        "harvest": 0,
-        "undefined": 1,
-        "long_harvest": 0,
-        "claimer": 0,
-        "mineral_miner": 0,
-        "energy_miner": 2,
-        "sp_total": 2,
-        "worker": null
-      },
-      "E39N49": {
-        "total": 2,
-        "transfer": 1,
-        "build": 0,
-        "upgrade": 0,
-        "upgrader": 0,
-        "repair_defence": 0,
-        "repair_civilian": 0,
-        "harvest": 0,
-        "undefined": 1,
-        "long_harvest": 0,
-        "claimer": 0,
-        "mineral_miner": 0,
-        "energy_miner": 0,
-        "sp_total": 0
-      },
-      "E38N49": {
-        "total": 2,
-        "transfer": 0,
-        "build": 0,
-        "upgrade": 0,
+        "upgrade": 1,
         "upgrader": 0,
         "repair_defence": 0,
         "repair_civilian": 0,
@@ -199,10 +161,40 @@
         "long_harvest": 0,
         "claimer": 0,
         "mineral_miner": 0,
+        "energy_miner": 2,
+        "sp_total": 2
+      },
+      "E39N49": {
+        "total": 2,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 1,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 1,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
         "energy_miner": 0,
-        "sp_total": 2,
-        "repair": null,
-        "remote_claimer": null
+        "sp_total": 0
+      },
+      "E38N49": {
+        "total": 1,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 1,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 1
       }
     }
   },
@@ -241,7 +233,7 @@
           "mineral": 0.3
         }
       },
-      "all_full": false
+      "all_full": true
     },
     "targets": {
       "repair_defence": false,
@@ -251,7 +243,7 @@
       "current": {
         "5a49ff12ec7b3b10a354a59c": false,
         "5ab96d35e0a5586e44f1a0bb": false,
-        "5acfed2e55c56a20a12ac4c6": "worker_E38N48_E39N49-1",
+        "5acfed2e55c56a20a12ac4c6": false,
         "5af85dd6cf5dd44c708fbddc": false
       },
       "target2repair": false
@@ -416,7 +408,7 @@
       "storage": "5ad17b568583106d2d10469e",
       "terminal": "5ab6e6172b3c7537a3122af8"
     },
-    "endReservation": 9733485,
+    "endReservation": 9734361,
     "labs": {
       "reagent": {},
       "produce": {},
@@ -428,8 +420,8 @@
     "towers": {
       "current": {
         "5ac5e977644e0317aa0d7604": false,
-        "5ac5f089f70edd11fa2ada3f": false,
-        "5ad238662c075c4b7968d2ee": "E38N48-2-gn",
+        "5ac5f089f70edd11fa2ada3f": "E38N48-1-gn",
+        "5ad238662c075c4b7968d2ee": false,
         "5afd2405a62eb5695a148d85": false,
         "5afd26b300e130692ad0bf72": false,
         "5b9d1202530c9f43ac6282f1": false
@@ -438,7 +430,7 @@
     },
     "targets": {
       "build": false,
-      "repair_defence": "5ba47b14b88d8d25f4848042"
+      "repair_defence": "5b8c2bb0aba5a56a610f2b87"
     },
     "energy_flow": {
       "sources": [
@@ -745,7 +737,7 @@
     "towers": {
       "current": {
         "5acc9a90de98dd18662abb5f": false,
-        "5ae60042a2505b11b19dfb9b": "worker_E33N47_E34N47-2",
+        "5ae60042a2505b11b19dfb9b": false,
         "5af715b01c04254c89262a28": false,
         "5b3a47b2ae35b477df805297": false
       },
@@ -753,7 +745,7 @@
     },
     "targets": {
       "build": false,
-      "repair_defence": "5ba3d6812247ba4728b540ea"
+      "repair_defence": "5ba473987895c43a87452d6f"
     },
     "energy_flow": {
       "sources": [
@@ -880,13 +872,13 @@
     },
     "towers": {
       "current": {
-        "5ba1521969a6456279a0bcc3": "worker_E38N48_E38N47-1",
+        "5ba1521969a6456279a0bcc3": false,
         "5ba88b8f64412d6ee2f1e153": false
       }
     },
     "targets": {
       "build": false,
-      "repair_defence": "5b8bfa624602265638d860ca",
+      "repair_defence": "5ba318092247ba4728b4f562",
       "repair_civilian": "5ad6dd34167dff51f7fa7714"
     },
     "energy_flow": {
@@ -922,7 +914,7 @@
   "E33N47": {
     "towers": {
       "current": {
-        "5af90671cf5dd44c70900c65": "E33N47-1-gn",
+        "5af90671cf5dd44c70900c65": false,
         "5b9d0d509c4c2623db5f4a01": false,
         "5b9d0e5c4b74e64627983890": false,
         "5b9d3c5f73710c463378a90c": false,
@@ -933,7 +925,7 @@
     },
     "targets": {
       "build": false,
-      "repair_defence": "5b8eadaaff7a3e3d3c39705a"
+      "repair_defence": "5b8ead1e5a28eb5655c476b1"
     },
     "energy_flow": {
       "sources": [
@@ -1930,16 +1922,16 @@
       "current": {
         "5b2bf4dbf797931b65f49b01": false,
         "5b307bd0c4992a27b315446e": false,
-        "5b3e2b7d22271c6c0697ca06": "E28N48-1-gn",
+        "5b3e2b7d22271c6c0697ca06": false,
         "5b6290361ce2d8147c5e2e87": false,
         "5b62a6130b4b5664341871ad": false,
-        "5b62a66762b7fa10b38ede94": false
+        "5b62a66762b7fa10b38ede94": "E28N48-1-gn"
       },
       "next_update": 7242720
     },
     "targets": {
       "build": false,
-      "repair_defence": "5b621c517829786dd9a51bd9"
+      "repair_defence": "5b70398a733c3316f8e36840"
     },
     "energy_flow": {
       "sources": [
@@ -1955,11 +1947,11 @@
         "source": {
           "5b9e962569a64562799fbfc7": {
             "source_id": "59f1a4e382100e1594f3db19",
-            "miner_id": "5ba9ce2931976a3a9a292362"
+            "miner_id": "5ba9e23ca810bb1cc2633cad"
           },
           "5b9ea90705ebba43b81e9f20": {
             "source_id": "59f1a4e382100e1594f3db1b",
-            "miner_id": "5ba9ce2931976a3a9a292361"
+            "miner_id": "5ba9e23ca810bb1cc2633cac"
           }
         },
         "other": {}

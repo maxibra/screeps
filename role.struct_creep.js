@@ -94,7 +94,7 @@ var structCreep = {
         }
         let condition2change_role = (iam_general && 
                                      ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
-                                       creep.memory.role === 'upgrade' && my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85) ||
+                                      (creep.memory.role === 'upgrade' && my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85)) ||
                                        creep.memory.role === 'undefined'));
                 
         // *** LOG
@@ -156,7 +156,8 @@ var structCreep = {
             // *** UNIT LOG
             // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfers: ' + transfer_procent +' / ' + current_creep_types.transfer);
             // ********
-            transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && (object.energy/object.energyCapacity < 0.8))});
+            transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && 
+                                                                                                  object.energy/object.energyCapacity < (Memory.rooms.global_vars.min_tower_enrg2repair+0.1))});
             let current_body_cost = (my_room.energyCapacityAvailable < my_room.memory.global_vars.max_body_cost) ? my_room.energyCapacityAvailable : my_room.memory.global_vars.max_body_cost;
             // let room_enegry_is_good = (my_room.energyAvailable >= (my_room.energyCapacityAvailable * 0.6) && my_room.energyAvailable >= current_body_cost);
             // *** UNIT LOG
