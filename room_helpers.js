@@ -1,5 +1,4 @@
-// var global_vars = require('global_vars')();
-// var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+var creep_helpers = require('creep_helpers');
 
 function get_direction_name(dx, dy) {
     if (dx == 0 && dy < 0) return TOP;
@@ -100,7 +99,7 @@ var room_helpers = {
     transfer_energy: function(room_name) {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
-        let destination_rooms = ['E38N48', ];
+        let destination_rooms = ['E38N48', 'E33N47'];
         // let destination_terminal = false;
         if (destination_rooms.indexOf(room_name) >= 0) return;   // Don't send to itself :)
 
@@ -478,7 +477,8 @@ var room_helpers = {
                 else hostile_boosts[cur_boost]++;
             }
             avoid_hostiles = ['Invader', ]; //'rogersnape63', 'Kraetzin'];
-            if (avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0) Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(hostile_boosts));
+            let millitary_body = creep_helpers.is_millitary(hostile_creeps[0]);
+            if (avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0 && millitary_body) Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(millitary_body));
         } else if (room_vars.finish_war && room_vars.finish_war < Game.time && room_vars.status === 'war') {
             room_vars.status = 'peace';
             room_vars.finish_war = false;
@@ -534,7 +534,7 @@ var room_helpers = {
             let avoid_stricts = E39N49_avoid.concat(E27N47_avoid);
 
             targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
-                                                                        object.hits < (min_hits * 0.95) && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1)});
+                                                                        object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1)});
         }
         // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);

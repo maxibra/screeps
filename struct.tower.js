@@ -73,6 +73,8 @@ var StructTower = {
             if (my_room.memory.targets.repair_defence) targets2repair.push(Game.getObjectById(my_room.memory.targets.repair_defence));
             if (targets2repair.length) target2repair = targets2repair[0];
             
+            // target2repair = false;   // Uncomment to disable reparing
+            
             // let targets2heal = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => ()});
 
         }

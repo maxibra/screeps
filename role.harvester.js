@@ -32,8 +32,7 @@ var RoleHarvester = {
         let full_containers = [];
         for (let c in room_containers) {
             let current_container = Game.getObjectById(room_containers[c]);
-            if (current_container && current_container.store[RESOURCE_ENERGY] >= creep.carryCapacity && 
-                !(room_name === 'E32N49' && current_container.pos.getRangeTo(my_room.controller) < 10))
+            if (current_container && current_container.store[RESOURCE_ENERGY] >= (creep.carryCapacity*0.92))
                 full_containers.push(current_container);
         }
         // if (room_name === 'E33N47') console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] Containers: ' + JSON.stringify(full_containers));
@@ -153,7 +152,7 @@ var RoleHarvester = {
                             if (target &&
                                 ((room_name === 'E34N47' && target.id === far_source.id && creep.room.lookForAtArea(LOOK_CREEPS,far_source.pos.y-1,far_source.pos.x-3,far_source.pos.y+3,far_source.pos.x, true).length > 0))){
                                     harvester_type = 'go_close';
-                            } else if (target && creep.body.map(x=>x.type).indexOf('work') > -1 && !(room_name === 'E32N49' && (my_room.controller.pos.findInRange(FIND_MY_CREEPS, 3).length > 2 || target.id === '59f1a52082100e1594f3e02b'))) harvester_type = 'source';
+                            } else if (target && creep.body.filter(x=>x.type==='work').length > 2) harvester_type = 'source';
                             else if (creep.room.name == 'E39N49' || creep.room.name == 'E38N48' || creep.room.name == 'E32N49') harvester_type = 'go_close';
                         }
                     }

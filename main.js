@@ -52,18 +52,18 @@ for(var current_room_name in Game.rooms) {
     // Initialie the room memory
     // console.log('[DEBUG] (main)[' + current_room_name + ': INITIAL Global: ' + JSON.stringify(Memory.rooms[current_room_name]));
 
-    if (typeof Memory.rooms[current_room_name].towers === "undefined") {
+    if (Memory.rooms[current_room_name] && typeof Memory.rooms[current_room_name].towers === "undefined") {
         Memory.rooms[current_room_name].towers = {
             current: {},
             next_update: Game.time,
         }
     }
 
-    if (typeof Memory.rooms[current_room_name].targets === "undefined") {
+    if (Memory.rooms[current_room_name] && typeof Memory.rooms[current_room_name].targets === "undefined") {
         Memory.rooms[current_room_name].targets = {};
     }
 
-    if (typeof Memory.rooms[current_room_name].energy_flow === "undefined") {
+    if (Memory.rooms[current_room_name] && typeof Memory.rooms[current_room_name].energy_flow === "undefined") {
         Memory.rooms[current_room_name].energy_flow = {
             sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
             mineral: {
@@ -81,7 +81,7 @@ for(var current_room_name in Game.rooms) {
         }
     };
 
-    if (typeof Memory.rooms[current_room_name].global_vars === "undefined") {
+    if (Memory.rooms[current_room_name] && typeof Memory.rooms[current_room_name].global_vars === "undefined") {
         Memory.rooms[current_room_name].global_vars = {
             status: 'peace',
             finish_war: false,
@@ -144,7 +144,7 @@ module.exports.loop = function () {
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
     var cur_creeps = Game.creeps ? Game.creeps : {};
 
-    let only_rooms = ['E28N48', 'E33N47', 'E34N47', 'E37N48', 'E38N47', 'E38N48', 'E39N49', 'E38N49']; //, 'E27N47', 'E27N48', 'E32N47', 'E32N49'];
+    let only_rooms = ['E28N48', 'E33N47', 'E34N47', 'E37N48', 'E38N47', 'E38N48', 'E39N49', 'E38N49']; //, 'E27N47', 'E27N48']; //, 'E32N47', 'E32N49'];
     let avoid_rooms = ['global_vars', 'E26N40', 'E26N43', 'E26N44', 'E26N46', 'E27N40', 'E28N47', 'E29N47', 'E30N48', 'E31N53', 'E34N46', 'E39N50', 'E40N49'];
     
     let run_on_roooms = (only_rooms.length > 0) ? only_rooms : Object.keys(Memory.rooms);
@@ -177,7 +177,6 @@ module.exports.loop = function () {
         let creeps_amount = 0
         for (let creep_name in cur_creeps) {
             creeps_amount = creeps_amount + 1;
-            // if (creep_name === 'rmt_hrvst_E27N41_E26N41-2-sp') cur_creeps[creep_name].suicide();
             
             // cur_creeps[creep_name].memory.stuck = 0;
             let creep_carry = Object.keys(cur_creeps[creep_name].carry);
@@ -202,7 +201,8 @@ module.exports.loop = function () {
     if (Game.time % 5 === 0) {
         console.log('[INFO] (main): ******** TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket + '  **************');
         for (let cur_room in Game.rooms) {
-            if (!Memory.rooms[cur_room].global_vars) continue;
+            // console.log('[INFO] (main) ROOM: ' +  cur_room);
+            if (!(Memory.rooms[cur_room] && Memory.rooms[cur_room].global_vars)) continue;
             let room_status = Memory.rooms[cur_room].global_vars.status;
             // if (units[cur_room])
             //     console.log('[INFO] (main): [' + cur_room + '][' + room_status + '] expected: ' + 
@@ -228,7 +228,7 @@ module.exports.loop = function () {
         var creep = Game.creeps[name];
         
         // console.log('ROOM: ' + creep.room.name)
-        // if (creep.room.name === 'E28N48') creep.source_id = ['5b2fd3f9c656780b1fee6911',];
+        // if (creep.room.name === 'E28N48') creep.memory.source_id = ['5b2fd3f9c656780b1fee6911',];
 
         // if ( name === 'E34N47-2-6-110-gn') {
         //     let my_terminal = Game.getObjectById('5adea2c316b2ab2a2a2b472f');

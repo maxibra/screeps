@@ -101,7 +101,7 @@ function remote_target(room_name) {
             target = ['E27N46', 'E27N44'];
             break;
         case 'E28N48':  
-            target = ['E27N48', 'E27N47']; //, 'E29N48', 'E29N49', 'E28N49'];
+            target = ['E27N48', ]; // 'E27N47']; //, 'E29N48', 'E29N49', 'E28N49'];
             break;
         case 'E32N49':  
             target = ['E31N49', 'E33N49'];
@@ -319,6 +319,8 @@ function is_remote_room_in_war(room_name) {
 var creep_helpers = {
     create_creep: function(spawn_name, units) {
         let my_spawn = Game.spawns[spawn_name];
+        if (my_spawn.spawning) return;
+        
         let room_name = Game.spawns[spawn_name].room.name
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
@@ -339,24 +341,30 @@ var creep_helpers = {
         let creep_memory = {role: 'harvest', target_id: false, stuck: 0};
         let current_creep_types = room_vars.creep_types[room_vars.status];
         let name_special = 'gn';
+        let universal_creeps = units[room_name]['total'] - units[room_name]['sp_total'];
         let current_body = creep_body.general.base;
         let add_body = creep_body.general.add;
         let finalize_body = creep_body.general.finalize;
         let creep_name = '';
         
-        if (my_room.memory.targets.build.length > 0 || my_room.controller.ticksToDowngrade < 140300 ||
-            my_room.terminal.store['energy'] < 15000) {
-            //  || units[room_name]['energy_miner'] < my_room.memory.energy_flow.sources.length) {
-            current_body = creep_body.build.base;
-            add_body = creep_body.build.add;
-            finalize_body = creep_body.build.finalize;
-        }
+        // // console.log('[DEBUG] (create_creep)['+ spawn_name + ' basic Body: ' + JSON.stringify(current_body));
+        // if (my_room.energyAvailable > 400 && 
+        //     (my_room.memory.targets.build.length > 0 || my_room.controller.ticksToDowngrade < 140300 ||
+        //      my_room.terminal.store['energy'] < 15000)) {
+        //     //  || units[room_name]['energy_miner'] < my_room.memory.energy_flow.sources.length) {
+        //     current_body = creep_body.build.base;
+        //     add_body = creep_body.build.add;
+        //     finalize_body = creep_body.build.finalize;
+        // }
         // console.log('(creep_helpers.create_creep) [' + room_name + '] Units ' + JSON.stringify(units));
 
-        let universal_creeps = units[room_name]['total'] - units[room_name]['sp_total'];
+        if (universal_creeps === 0 && my_room.energyAvailable >= 300 && my_room.energyAvailable < 305) {
+            current_body = [MOVE,MOVE,CARRY,CARRY];
+            finalize_body = [CARRY,CARRY];
+        }
         
-        let avoid_remote = !(room_name === 'E38N48'); // ||
-                            //  room_name === 'E28N48' || room_name === 'E33N47' ||
+        let avoid_remote = !(room_name === 'E38N48'); // || room_name === 'E28N48');
+                            // || room_name === 'E33N47' ||
                             //  room_name === 'E32N49' || room_name === 'E28N48' || 
                             //  room_name === 'E27N45' || 
                             //  room_name === 'E32N53' || room_name === 'E27N41' ||
@@ -618,17 +626,18 @@ var creep_helpers = {
         const add = (a, b) => a + b; 
         if (creep_name === '' ||    // there is no need to create a file
             (creep_name.substring(0,7) === 'nrg_mnr' && 
-             (Object.keys(Game.rooms[room_name].memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store.energy).reduce(add)) > (Object.keys(Game.rooms[room_name].memory.energy_flow.containers.source).length * 1000))) return; 
+             (Object.keys(my_room.memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store.energy).reduce(add)) > (Object.keys(my_room.memory.energy_flow.containers.source).length * 1000))) return; 
         
-        let max_body_cost = ((universal_creeps === 0 || !add_body) && (Game.rooms[room_name].energyAvailable < room_vars.max_body_cost)) ? Game.rooms[room_name].energyAvailable : room_vars.max_body_cost;
+        let max_body_cost = ((universal_creeps === 0 || !add_body) && (my_room.energyAvailable < room_vars.max_body_cost)) ? my_room.energyAvailable : room_vars.max_body_cost;
         let possible_body = current_body;
         let possible_body_cost = body_cost(possible_body);
         let body_finalize_cost = (finalize_body) ? body_cost(finalize_body) : 0;
         max_body_cost = max_body_cost - body_finalize_cost;
-        if (room_name === 'E37N48' ) console.log('[DEBUG] (create_creep): [' + spawn_name + '] Universal: ' + universal_creeps + '; Max:' + room_vars.screeps_max_amount[room_vars.status] + '; Add body: ' + add_body + '; Max body cost: ' + max_body_cost + '; Current body:' + current_body)
+        // if (room_name === 'E37N48' ) console.log('[DEBUG] (create_creep): [' + spawn_name + '] Universal: ' + universal_creeps + '; Max:' + room_vars.screeps_max_amount[room_vars.status] + '; Add body: ' + add_body + '; Max body cost: ' + max_body_cost + '; Current body:' + current_body)
 
         for (i=2;possible_body_cost <= Game.rooms[room_name].energyCapacityAvailable;i++) {
             current_body = possible_body;
+            // if (room_name === 'E38N48') console.log('[DEBUG] (create_creep): [' + spawn_name + '] ' + i + ' Current body: ' + JSON.stringify(current_body));
             possible_body = possible_body.concat(add_body);
             if (i%2 === 0 && creep_name.substring(0,6) !== room_name) possible_body.push(MOVE);
             possible_body_cost = body_cost(possible_body);
@@ -657,14 +666,14 @@ var creep_helpers = {
     },
     is_millitary: function(creep_obj) {
         let millitary_types = ['attack','ranged_attack','heal','claim'];
-        let body_types = _.map(creep_obj.body,'type');
-        let millitary_creep = false;
-        for(let i in millitary_types)
-            if (body_types.indexOf(millitary_types[i]) > 0) {
-                millitary_creep = true;
-                break;
+        let creep_body = creep_obj.body;
+        let millitary_body = {};
+        for(let b in creep_body) {
+            if (millitary_types.indexOf(creep_body[b].type) > 0) {
+                millitary_body[creep_body[b].type] = (millitary_body[creep_body[b].type]) ? millitary_body[creep_body[b].type] + creep_body[b].hits : creep_body[b].hits; 
             }
-        return millitary_creep;
+        }
+        return (Object.keys(millitary_body).length > 0) ? millitary_body : false;
     },
     drop_energy2container: function(creep) {
         if (creep.memory.role == 'dropper') {

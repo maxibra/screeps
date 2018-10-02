@@ -94,11 +94,12 @@ var structCreep = {
         }
         let condition2change_role = (iam_general && 
                                      ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
-                                      (creep.memory.role === 'upgrade' && my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85)) ||
+                                      (creep.memory.target_id === my_room.controller.id && my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85)) ||
                                        creep.memory.role === 'undefined'));
                 
         // *** LOG
-        // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Time: ' + Game.time + '; Controller: ' + JSON.stringify(controller_position) + '; Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
+        // if (creep.name === log_name) 
+        // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Time: ' + Game.time + '; Controller: ' + JSON.stringify(controller_position) + '; Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
         // ********
         // *** UNIT LOG
         // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Start Creep mem: ' + JSON.stringify(creep.memory));
@@ -254,9 +255,9 @@ var structCreep = {
                     // Return here repair
                 } else if (my_room.controller.level === 8 && my_room.controller.ticksToDowngrade < 140000 && creep.body.map(x=>x.type).indexOf('work') > -1) {
                     creep.memory.role = 'upgrade';
-                } else if ((room_name === 'E32N49' || my_room.controller.level === 8) && 
+                } else if (my_room.controller.level === 8 && 
                            my_room.memory.energy_flow.terminal && 
-                           my_room.memory.global_vars.all_full && 
+                        //   my_room.memory.global_vars.all_full && 
                            my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage) {
                     creep.say('transfering');
                     creep.memory.role = 'transfer';
@@ -264,7 +265,7 @@ var structCreep = {
                     // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFER to terminal: ' + transfer_target);
                 } else if (my_room.controller.level === 8 && 
                            my_room.memory.energy_flow.storage && 
-                           my_room.memory.global_vars.all_full &&
+                        //   my_room.memory.global_vars.all_full &&
                            _.sum(my_room.storage.store) < 900000) {
                     creep.say('transfering');
                     creep.memory.role = 'transfer';
@@ -931,7 +932,7 @@ var structCreep = {
                 let worker_room = creep.name.substring(14, 20);
                 let worker_location = new RoomPosition(25, 25, worker_room);
                  // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Location: ' + new_location + '; Range: ' + (creep.pos.getRangeTo(new_location) > 3)) 
-                if (creep.pos.getRangeTo(worker_location) > 24) creep.moveTo(worker_location, global_vars.moveTo_ops)
+                if (creep.pos.getRangeTo(worker_location) > 23) creep.moveTo(worker_location, global_vars.moveTo_ops)
                 else {     // Need if creep came with any energy
                 // if (room_name === 'E38N47' && creep.pos.y > 2) {     // Need if creep came with any energy
                     console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Change to undefined') 
