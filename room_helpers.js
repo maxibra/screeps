@@ -97,24 +97,31 @@ function add_room_mineral2memory(new_room_by_mineral, room_name, mineral, lab_ph
 
 var room_helpers = {
     transfer_energy: function(room_name) {
+        let my_room = Game.rooms[room_name];
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
-        let destination_rooms = ['E38N48', 'E33N47'];
-        // let destination_terminal = false;
-        if (destination_rooms.indexOf(room_name) >= 0) return;   // Don't send to itself :)
+        // let destination_rooms = Object.keys(Memory.rooms);
+        let destination_rooms = ['E38N47', 'E37N48', 'E39N49', 'E34N47'];
 
         for (let r in destination_rooms) {
-            let destination_room = destination_rooms[r];
-            let destination_terminal = Game.rooms[destination_room].terminal;
+            let destination_room_name = destination_rooms[r];
+            let destination_room = Game.rooms[destination_room_name];
+            let destination_terminal = destination_room.terminal;
+            if (destination_room_name === room_name ||   // Don't send to itself
+                destination_room.controller.level === 8 ||
+                !destination_terminal) return;  
 
+            // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Try to transfer to ' + destination_room_name);
+                
             if (destination_terminal && cur_terminal && cur_terminal.cooldown === 0 &&
                 destination_terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage && 
-                cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer) {
+                cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer && 
+                destination_room.memory.energy_flow.store_used.terminal < destination_room.memory.energy_flow.max_store.terminal) {
                 
-                let send_out = cur_terminal.send(RESOURCE_ENERGY, 2000, destination_room);
+                let send_out = cur_terminal.send(RESOURCE_ENERGY, 2000, destination_room_name);
                 console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
                 if (send_out === OK) {
-                    console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + destination_terminal.store[RESOURCE_ENERGY] + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
+                    console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + my_room.memory.energy_flow.store_used.terminal + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
                     break;
                 }
                 // let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
@@ -158,7 +165,7 @@ var room_helpers = {
                 if (target.pos.x < 15 || target.pos.y < 11 || (target.pos.x < 32 && target.pos.y > 38)) is_inside = false;
                 break;
             case 'E37N48':
-                if (target.pos.x < 12 || target.pos.y < 8) is_inside = false;
+                if (target.pos.x < 12 || target.pos.y < 10) is_inside = false;
                 break;  
             case 'E38N47':
                 if (target.pos.x < 5 || target.pos.y > 28) is_inside = false;
@@ -384,6 +391,8 @@ var room_helpers = {
         let local_energy_flow_obj = {
             long_harvest: my_room.memory.energy_flow.long_harvest,
             sources: my_room.memory.energy_flow.sources,
+            store_used: my_room.memory.energy_flow.store_used,
+            max_store: my_room.memory.energy_flow.max_store,
             mineral: cur_mineral,
             containers: {source :{}, other: {}}, 
             links: {near_sources: [], near_controller: false, destinations: [], sources: []}

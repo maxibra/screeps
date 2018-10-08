@@ -52,8 +52,10 @@ var StructTower = {
                 let heal_is_found = false;
                 for (let h in all_hostile) {
                     for(let b in all_hostile[h].body) {
-                        if (all_hostile[h].body[b].type === 'heal' && current_tower.pos.getRangeTo(all_hostile[0] < 38)) {
+                        // console.log('[INFO] (StructTower.run) [' + room_name + ']Search fr Healer. Type: ' + all_hostile[h].body[b].type);
+                        if (all_hostile[h].body[b].type === 'heal' && current_tower.pos.getRangeTo(all_hostile[0]) < 38) {
                             target2attack = all_hostile[h];
+                            // console.log('[INFO] (StructTower.run) [' + room_name + '] Enemy healer is found');
                             break;
                         }
                     }

@@ -77,7 +77,8 @@ for(var current_room_name in Game.rooms) {
             containers: {
                 source: {},
                 other: {}
-            }
+            },
+            store_used: {}
         }
     };
 
@@ -245,8 +246,7 @@ module.exports.loop = function () {
 
     if (Game.time % 8 === 0) {
         for(var current_spawn_name in Game.spawns) {
-            if (run_on_roooms.indexOf(Game.spawns[current_spawn_name].room.name) < 0 || 
-                Game.spawns[current_spawn_name].room.name === 'E39N49') continue;
+            if (run_on_roooms.indexOf(Game.spawns[current_spawn_name].room.name) < 0) continue;
             // console.log('[DEBUG](main)[' + current_spawn_name +']: Trying to create creep'); 
             creep_helpers.create_creep(current_spawn_name, units);
         }
@@ -257,12 +257,17 @@ module.exports.loop = function () {
     };
     let rare_time_range = 300;
     for(var room_index in run_on_roooms) {
-        current_room_name = run_on_roooms[room_index];
+        let current_room_name = run_on_roooms[room_index];
+        let my_room = Game.rooms[current_room_name];
         if(avoid_rooms.indexOf(current_room_name) > -1 || only_rooms.indexOf(current_room_name) < 0) {
             // console.log('[DEBUG] (main)[' + current_room_name + '] Skipped the room')
             continue
         }
         // delete Memory.rooms[current_room_name].energy_flow.energy_flow.storage
+        
+        // Memory.rooms[current_room_name].energy_flow.store_used = {};
+        // delete Memory.rooms[current_room_name].energy_flow.max_used;
+        // Memory.rooms[current_room_name].energy_flow.max_store = {storage: 900000, terminal: 280000}
 
         // console.log('[DEBUG] ROOM: ' + current_room_name)
         // if (current_room_name === 'E28N48') {
@@ -273,7 +278,7 @@ module.exports.loop = function () {
         // }
         
         // Memory.rooms[current_room_name].energy_flow.sources= Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id)
-        
+
         // Towers
         if (!Memory.rooms[current_room_name].global_vars) {
             console.log('[WARN][' + current_room_name +']: global_vars doesnt defined for the room. Skip the room');
@@ -320,13 +325,16 @@ module.exports.loop = function () {
 
 
         current_mod = current_mod + tick_between_hard_actions;
-        // if (Game.time % 10 === current_mod) {
-        //     room_helpers.transfer_energy(current_room_name);
-        // }
+        if (Game.time % 10 === current_mod) {
+            room_helpers.transfer_energy(current_room_name);
+        }
         
-        // if (Game.time % 20 === 0) {
-        //     room_helpers.transfer_mineral(current_room_name);   
-        // }
+        if (Game.time % 30 === 0) {
+            // room_helpers.transfer_mineral(current_room_name); 
+            // Count storeage capacity of terminal and storage
+            Memory.rooms[current_room_name].energy_flow.store_used.storage = _.sum(my_room.storage.store)
+            Memory.rooms[current_room_name].energy_flow.store_used.terminal = _.sum(my_room.terminal.store)
+        }
         
         if (Game.time % rare_time_range === 0) {
             room_helpers.upgrade_energy_flow(current_room_name);
