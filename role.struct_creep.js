@@ -186,9 +186,10 @@ var structCreep = {
             } else {  
                 transfer_target = false; 
                 let range2link = 5;
-                if (room_name === 'E39N49') range2link = 15;  //  || room_name === 'E32N53'
-                else if (room_name === 'E37N48') range2link = 9;
-                else if (room_name === 'E38N47') range2link = 16;
+                if (room_name === 'E39N49') range2link = 18; 
+                else if (room_name === 'E38N47') range2link = 15;  //  || room_name === 'E32N53'
+                else if (room_name === 'E37N48' || room_name === 'E34N47') range2link = 30;
+                else if (room_name === 'E34N47') range2link = 10;
                 // else if (room_name === 'E38N47' || room_name === 'E36N47' || room_name === 'E27N41') range2link = 10;
                 // else if (room_name === 'E33N47' || room_name === 'E28N48') range2link = 3;
                 // else if (room_name === 'E32N53') range2link = 0;
@@ -198,7 +199,7 @@ var structCreep = {
                 // let link_sources = (my_room.memory.energy_flow.links.near_sources) ? my_room.memory.energy_flow.links.near_sources : [];
                 let link_sources = my_room.memory.energy_flow.links.near_sources;
                 link_sources = link_sources.concat(my_room.memory.energy_flow.links.sources);
-                link_sources = link_sources.concat(my_room.memory.energy_flow.links.near_controller);
+                // link_sources = link_sources.concat(my_room.memory.energy_flow.links.near_controller);
 
                 // if (room_name === 'E32N49') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LINKS: ' + link_sources + '; ENgry_FLow: ' + JSON.stringify(my_room.memory.energy_flow.links));
 

@@ -343,7 +343,7 @@ var creep_helpers = {
                 'E39N49': 0
             },
             'E33N47': {
-                'E34N47': 0
+                'E34N47': 1
             }
         }
         let create_special = false;
@@ -360,15 +360,17 @@ var creep_helpers = {
         let creep_name = '';
         
         // // console.log('[DEBUG] (create_creep)['+ spawn_name + ' basic Body: ' + JSON.stringify(current_body));
-        // if (my_room.energyAvailable > 400 && 
-        //     (my_room.memory.targets.build.length > 0 || my_room.controller.ticksToDowngrade < 140300 ||
-        //      my_room.terminal.store['energy'] < 15000)) {
-        //     //  || units[room_name]['energy_miner'] < my_room.memory.energy_flow.sources.length) {
-        //     current_body = creep_body.build.base;
-        //     add_body = creep_body.build.add;
-        //     finalize_body = creep_body.build.finalize;
-        // }
-        // console.log('(creep_helpers.create_creep) [' + room_name + '] Units ' + JSON.stringify(units));
+        if (my_room.energyAvailable > 400 && 
+            (my_room.memory.targets.build.length > 0)) {
+            // || my_room.controller.ticksToDowngrade < 140300 
+            // || my_room.terminal.store['energy'] < 15000)) {
+            // || units[room_name]['energy_miner'] < my_room.memory.energy_flow.sources.length) {
+            console.log('[DEBUG] (creep_helpers.create_creep) [' + room_name + '] Get Builder body');
+            current_body = creep_body.build.base;
+            add_body = creep_body.build.add;
+            finalize_body = creep_body.build.finalize;
+        }
+        // console.log('[DEBUG] (creep_helpers.create_creep) [' + room_name + '] Units ' + JSON.stringify(units));
 
         if (universal_creeps === 0 && my_room.energyAvailable < 450) {
             // current_body = [MOVE,MOVE,CARRY,CARRY];

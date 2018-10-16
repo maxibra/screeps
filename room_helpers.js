@@ -247,16 +247,24 @@ var room_helpers = {
         
         // LINKS
         // dstn_links = my_room.memory.energy_flow.links.destinations;
+        // dstn_links = dstn_links.concat(my_room.memory.energy_flow.links.near_controller);
         // if (my_room && dstn_links && dstn_links.length > 0) {
-        //     for (let l in dstn_links) {
-        //         let current_link = Game.getObjectById(dstn_links[l]);
-        //         if (current_link && current_link.energy/current_link.energyCapacity < 0.9) {
-        //             // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: LINK: ' + dstn_links[l] + ' is empty');
-        //             all_links_full = false;
-        //             break;
-        //         }
-        //     }
-        // }   
+            // for (let l in dstn_links) {
+            //     let current_link = Game.getObjectById(dstn_links[l]);
+            //     if (current_link && current_link.energy/current_link.energyCapacity < 0.9) {
+            //         console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: LINK: ' + dstn_links[l] + ' is empty');
+                    
+        src_links = my_room.memory.energy_flow.links.near_sources;
+        if (my_room && src_links && src_links.length > 0) {
+            for (let l in src_links) {
+                let current_link = Game.getObjectById(src_links[l]);
+                if (current_link && current_link.energy/current_link.energyCapacity < 0.9) {
+                    // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: LINK: ' + src_links[l] + ' is empty');
+                    all_links_full = false;
+                    break;
+                }
+            }
+        }   
 
         // TOWERS
         let all_towers = Object.keys(my_room.memory.towers.current);

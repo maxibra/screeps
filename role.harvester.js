@@ -161,6 +161,7 @@ var RoleHarvester = {
         // ACTION
         switch(harvester_type) {
             case 'tombstone':
+                console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] TARGET: ' + JSON.stringify(target));
                 for (let r in target.store) {
                     let total_carry = _.sum(creep.carry);
                     // console.log('[DEBUG] (RoleHarvester)[' + creep.name +']: Carry: ' + total_carry)
