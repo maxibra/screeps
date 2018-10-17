@@ -160,14 +160,17 @@ var structCreep = {
             var current_creep_types = room_vars.creep_types[room_vars.status];
             //TODO: Improve pleace of tower. don't search per creep
             let transfer_procent = units[room_name]['transfer']/current_workers;
+            let extensions_first = ((my_room.energyCapacityAvailable*0.9) > my_room.energyAvailable);
 
             // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: BUILD structures: ' + (my_room.memory.targets.build.length)) // && units[room_name]['build']/current_workers < current_creep_types.build));
 
             // *** UNIT LOG
             // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfers: ' + transfer_procent +' / ' + current_creep_types.transfer);
             // ********
-            transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && 
-                                                                                                  object.energy/object.energyCapacity < (Memory.rooms.global_vars.min_tower_enrg2repair+0.1))});
+            if (Memory.rooms[room_name].global_vars.status === 'peace' && !extensions_first)
+                transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER && 
+                                                                                                      object.energy/object.energyCapacity < (Memory.rooms.global_vars.min_tower_enrg2repair+0.1))});
+
             let current_body_cost = (my_room.energyCapacityAvailable < my_room.memory.global_vars.max_body_cost) ? my_room.energyCapacityAvailable : my_room.memory.global_vars.max_body_cost;
             // let room_enegry_is_good = (my_room.energyAvailable >= (my_room.energyCapacityAvailable * 0.6) && my_room.energyAvailable >= current_body_cost);
             // *** UNIT LOG
@@ -188,8 +191,7 @@ var structCreep = {
                 let range2link = 5;
                 if (room_name === 'E39N49') range2link = 18; 
                 else if (room_name === 'E38N47') range2link = 15;  //  || room_name === 'E32N53'
-                else if (room_name === 'E37N48' || room_name === 'E34N47') range2link = 30;
-                else if (room_name === 'E34N47') range2link = 10;
+                else if (room_name === 'E37N48' || room_name === 'E34N47') range2link = 10;
                 // else if (room_name === 'E38N47' || room_name === 'E36N47' || room_name === 'E27N41') range2link = 10;
                 // else if (room_name === 'E33N47' || room_name === 'E28N48') range2link = 3;
                 // else if (room_name === 'E32N53') range2link = 0;
@@ -206,6 +208,7 @@ var structCreep = {
                 for (let l in link_sources) { // try transfer to link
                     cur_transfer_target = Game.getObjectById(link_sources[l]);
                     if (cur_transfer_target && 
+                        Memory.rooms[room_name].global_vars.status === 'peace' && !extensions_first &&
                         ((cur_transfer_target.energy/cur_transfer_target.energyCapacity < 0.7) && (creep.pos.getRangeTo(cur_transfer_target) < range2link) ||
                         (creep.pos.isNearTo(cur_transfer_target) && cur_transfer_target.energy < cur_transfer_target.energyCapacity))) {
                         transfer_target =  cur_transfer_target;

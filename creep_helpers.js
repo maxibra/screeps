@@ -32,8 +32,8 @@ function body_cost(body) {
 function upgrader_body(room_name) {
     let room_level = 1;
     // let room_level = Game.rooms[room_name].controller.level;
-    if (room_name === 'E39N49' || room_name === 'E37N48' || room_name === 'E34N47' || room_name === 'E38N47') room_level = 162;
-    // else if (room_name === 'E37N48') room_level = 162;
+    if (room_name === 'E39N49' || room_name === 'E34N47' || room_name === 'E38N47') room_level = 162;
+    else if (room_name === 'E37N48') room_level = 1440;
     switch (room_level) {
         case 1: 
             body = [MOVE,WORK,CARRY];  // 2/T
@@ -44,14 +44,11 @@ function upgrader_body(room_name) {
         case 8: 
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY];  // 15/T (cost: 2,050)
             break;
-        case 10:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY];   // upgrade = 10/T
+        case 1030:
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]; // upgrade: 10/T; carry: 300 (cost: 1,550)
             break;
-        case 102:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY];   // upgrade = 10/T carry = 200
-            break;
-        case 11:
-            body = [MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY]; // upgarde = 8/T (2400 per 300T)
+        case 1440:
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]; // upgrade = 14/T carry = 400 (cost: 2,200)
             break;
         case 145:
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY]; // upgrade = 14/T carry = 50 (cost: 1,800)
@@ -62,20 +59,8 @@ function upgrader_body(room_name) {
         case 1715:  // 350/28T
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY]; // upgrade = 17/T(5.1K/300T) carry = 150 (cost: 2,300 [level:6])
             break;
-        case 20:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY]; // 20/T
-            break;
-        case 23:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY]; // 23/T
-            break;
-        case 25:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY]; // 25/T
-            break;
-        case 30:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY]; // 30/T
-            break;
-        case 36:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY]; // 36/T
+        case 3045:
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]; // upgrade: 30/T; carry: 450 (cost: 2,350)
             break;
         default:
             body = [MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY];
@@ -87,8 +72,8 @@ function upgraders_amount(room_name) {
     // Object of rooms with remote targets
     // let upgraders = (Game.rooms[room_name].controller.ticksToDowngrade < 100000) ? 1 : 0;
     let upgraders = 0;
-    if (room_name === 'E39N49' || room_name === 'E37N48' || room_name === 'E34N47' || room_name === 'E38N47') upgraders = 1;
-    // else if (room_name === 'E37N48')  upgraders = 1;
+    if (room_name === 'E39N49' || room_name === 'E34N47' || room_name === 'E38N47') upgraders = 1;
+    else if (room_name === 'E37N48')  upgraders = 2;
     // switch (room_name) {
     //     case 'E27N41':
     //         upgraders = 2;
@@ -284,14 +269,14 @@ function remote_harvester_info(room_name) {
             break;   
         case 'E37N49': 
             info_object = {
-                homeland_destinations: ['5b09ba8ca6affe14523f5310', '5b0dd640c5612c1429e91c8a', '5acc524f6bec176d808adb71'],
-                amount: 2
+                homeland_destinations: ['5bc6d6dbb7a49f2a41ed12e9', '5acc524f6bec176d808adb71'],
+                amount: 1
             }
             break;
         case 'E38N49': 
             info_object = {
                 homeland_destinations: ['5ae4db5bcb5e3209ac04979b', '5affb81b83717b6924fc5d49'],
-                amount: 1
+                amount: 2
             }
             break;
         // case 'E28N48':
@@ -377,12 +362,7 @@ var creep_helpers = {
             finalize_body = [MOVE, WORK];
         }
         
-        let avoid_remote = !(room_name === 'E38N48'); // || room_name === 'E28N48');
-                            // || room_name === 'E33N47' ||
-                            //  room_name === 'E32N49' || room_name === 'E28N48' || 
-                            //  room_name === 'E27N45' || 
-                            //  room_name === 'E32N53' || room_name === 'E27N41' ||
-                            //  room_name === 'E26N48');
+        let avoid_remote = !(room_name === 'E38N48' || room_name === 'E37N48'); // || room_name === 'E28N48');
         
         let remote_room_in_war = is_remote_room_in_war(room_name)
         // if (room_name === 'E28N48') console.log('(creep_helpers.create_creep) [' + room_name + '] In WAR: ' + remote_room_in_war);
@@ -427,9 +407,10 @@ var creep_helpers = {
                 memory: {stuck: 0},
                 name_prefix: 'rmt_nrg_mnr' + room_name,
                 rmt_targets: remote_target(room_name),
-                amount: 0,
+                amount: 1,
                 // amount: ((Memory.rooms[creep.memory.far_target]) ? Object.keys(Memory.rooms[creep.memory.far_target].energy_flow.containers.source).length : 0),
-                avoid: avoid_remote
+                // avoid: avoid_remote
+                avoid: !(room_name === 'E37N48' || room_name === 'E38N48')
             },
             remote_harvest: {
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750, Harvest: 16/T
