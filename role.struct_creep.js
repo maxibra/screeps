@@ -71,6 +71,10 @@ var structCreep = {
         let controller_position = Game.rooms['E39N49'].controller.pos;
         let far_source = Game.getObjectById('59f1a54882100e1594f3e357');    // far away source of E34N47
         let range2upgrade = (room_name === 'E38N47') ? 6 : 4;
+        // console.log('[DEBUG] (structCreep.run)[' + room_name + ']');
+        let fill_terminal = (my_room.terminal && 
+                             my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
+                             my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
         
         // It's nothing todo
         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] unemployed role: ' + creep.memory.role + '; full: ' + my_room.memory.global_vars.all_full + 'store_used.terminal: ' + my_room.memory.energy_flow.store_used.terminal + '; max_store.terminal: ' + my_room.memory.energy_flow.max_store.terminal);
@@ -98,15 +102,20 @@ var structCreep = {
         
         // Suicide of energy miners if both of containers near cources are full.
         const add = (a, b) => a + b; 
-        if (creep.name.substring(0,7) === 'nrg_mnr' && (Object.keys(Game.rooms[room_name].memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store.energy).reduce(add)) === 4000) {
+        if (creep.name.substring(0,7) === 'nrg_mnr' && 
+            !fill_terminal &&
+            (Object.keys(my_room.memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store.energy).reduce(add)) === 4000) {
             creep.suicide();
             return;
         }
         
         let condition2change_role = (iam_general && 
                                      ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
-                                      (creep.memory.target_id === my_room.controller.id && my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85)) ||
-                                       creep.memory.role === 'undefined'));
+                                      creep.memory.role === 'undefined' ||
+                                      (creep.memory.target_id === my_room.controller.id && 
+                                        (my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85) ||
+                                        (my_room.controller.ticksToDowngrade > 145000 &&
+                                         fill_terminal)))));
         
         if (condition2change_role) creep.memory.target_id = false;  
         // *** LOG
@@ -160,7 +169,7 @@ var structCreep = {
             var current_creep_types = room_vars.creep_types[room_vars.status];
             //TODO: Improve pleace of tower. don't search per creep
             let transfer_procent = units[room_name]['transfer']/current_workers;
-            let extensions_first = ((my_room.energyCapacityAvailable*0.9) > my_room.energyAvailable);
+            let extensions_first = my_room.memory.energy_flow.extension_first;
 
             // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: BUILD structures: ' + (my_room.memory.targets.build.length)) // && units[room_name]['build']/current_workers < current_creep_types.build));
 
@@ -189,19 +198,15 @@ var structCreep = {
             } else {  
                 transfer_target = false; 
                 let range2link = 5;
-                if (room_name === 'E39N49') range2link = 18; 
-                else if (room_name === 'E38N47') range2link = 15;  //  || room_name === 'E32N53'
-                else if (room_name === 'E37N48' || room_name === 'E34N47') range2link = 10;
-                // else if (room_name === 'E38N47' || room_name === 'E36N47' || room_name === 'E27N41') range2link = 10;
-                // else if (room_name === 'E33N47' || room_name === 'E28N48') range2link = 3;
-                // else if (room_name === 'E32N53') range2link = 0;
-                // // else if (room_name === 'E28N48') range2link = 16;
-                // else range2link = 4; // 34n47, 33N47 
-                
+                if (room_name === 'E39N49' ||
+                    room_name === 'E37N48') range2link = 18; 
+                else if (room_name === 'E38N47' || 
+                         room_name === 'E34N47') range2link = 15;
+
                 // let link_sources = (my_room.memory.energy_flow.links.near_sources) ? my_room.memory.energy_flow.links.near_sources : [];
                 let link_sources = my_room.memory.energy_flow.links.near_sources;
-                link_sources = link_sources.concat(my_room.memory.energy_flow.links.sources);
-                // link_sources = link_sources.concat(my_room.memory.energy_flow.links.near_controller);
+                // link_sources = link_sources.concat(my_room.memory.energy_flow.links.sources);
+                if (room_name =='E34N47') link_sources = link_sources.concat(my_room.memory.energy_flow.links.near_controller);
 
                 // if (room_name === 'E32N49') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LINKS: ' + link_sources + '; ENgry_FLow: ' + JSON.stringify(my_room.memory.energy_flow.links));
 
@@ -268,13 +273,13 @@ var structCreep = {
                     creep.memory.role = 'repair_defence';
                     //units[room_name].repair_defence++;
                     // Return here repair
-                } else if (my_room.controller.level === 8 && my_room.controller.ticksToDowngrade < 140000 && creep.body.map(x=>x.type).indexOf('work') > -1) {
+                } else if (my_room.controller.level === 8 && my_room.controller.ticksToDowngrade < 140000) { //  && creep.body.map(x=>x.type).indexOf('work') > -1) {
+                    creep.say('low_controller');
                     creep.memory.role = 'upgrade';
                 } else if ((my_room.controller.level === 8 || units[room_name]['upgrader'] > 0) && 
                            my_room.memory.energy_flow.terminal && 
                         //   my_room.memory.global_vars.all_full && 
-                           my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
-                           my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal) {
+                           fill_terminal) {
                     creep.say('to_terminal');
                     creep.memory.role = 'transfer';
                     transfer_target = Game.getObjectById(my_room.memory.energy_flow.terminal);
@@ -569,6 +574,7 @@ var structCreep = {
                 break;
             case 'remote_harvest':
                 let name4log = 'stam';
+                let remote_source;
                 // if ((!Memory.rooms[creep.memory.far_target] || !Memory.rooms[creep.memory.far_target].energy_flow) && room_name !== creep.memory.far_target) {
                 //     creep.moveTo(new RoomPosition(25, 25, creep.memory.far_target));
                 //     return;
@@ -576,7 +582,7 @@ var structCreep = {
                 // if (creep.name === name4log) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mem: ' + JSON.stringify(creep.memory));
                 if (creep.carry[RESOURCE_ENERGY] === 0 || creep.memory.role === 'harvest') {
                     let transfer_target = creep.pos.findClosestByRange(FIND_TOMBSTONES,{filter: object => (object.store[RESOURCE_ENERGY] > 200 && 
-                                                                                                           room_helpers.is_inside_wall(room_name, object))});
+                                                                                                           !room_helpers.is_inside_wall(room_name, object))});
                     if (!transfer_target) {
                         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Room: ' + creep.memory.far_target);
                         if (Memory.rooms[creep.memory.far_target] && Memory.rooms[creep.memory.far_target].energy_flow) { 
@@ -648,8 +654,8 @@ var structCreep = {
                                 break;
                         }
 
-                        let remote_source = (room_name == creep.memory.far_target) ? creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE) :
-                                                                                     newRoomPosition;  
+                        remote_source = (room_name == creep.memory.far_target) ? creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE) :
+                                                                                 newRoomPosition;  
                         
                         // console.log('[DEBUG][' + creep.name + '] REMOUTE: ' + remote_source)
                         if (creep.harvest(remote_source) !== OK) creep.moveTo(remote_source, global_vars.moveTo_ops);
@@ -718,6 +724,11 @@ var structCreep = {
                         if (creep.name === name4log) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] TARGET: ' + current_target);
                         break;
                 }
+                // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] REMOTE source: ' +  remote_source);
+                // if (creep.memory.role === 'harvest' && remote_source.energyAvailable === 0) {
+                //     creep.memory.role = 'undefined';
+                //     creep.memory.target_id = false;  
+                // }
                 // if (creep.name === name4log) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mem finish: ' + JSON.stringify(creep.memory));
                 break;
             case 'mineral_miner':
@@ -811,7 +822,8 @@ var structCreep = {
                     'E32N49': Game.getObjectById('5b33639acb21c464f0c933a3'),
                     'E27N41': Game.getObjectById('5b7b9da33b41006a20d49491'),
                 }
-                if ((room_name === 'E34N47' || room_name === 'E28N48') && withdraw_target.energy === 0 && my_room.terminal.store[RESOURCE_ENERGY] > 20000) withdraw_target = my_room.terminal;
+                // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']');
+                if ((room_name === 'E34N47' || room_name === 'E28N48') && (!withdraw_target || withdraw_target.energy === 0) && my_room.terminal.store[RESOURCE_ENERGY] > 20000) withdraw_target = my_room.terminal;
                 if (controller_containers[room_name] && controller_containers[room_name].store.energy >= creep.carryCapacity) withdraw_target = controller_containers[room_name];
                 
                 if (creep.carry[RESOURCE_ENERGY] === 0) {
@@ -1003,14 +1015,14 @@ var structCreep = {
                         creep.heal(creep);
                     } else if (Memory.rooms[room_name].global_vars.status ==='war') {
                         Memory.rooms[room_name].global_vars.status = 'peace';
-                        Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] We won on claimed area');
+                        // Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] We won on claimed area');
                     } else {
                         let my_creep2heal = creep.pos.findClosestByRange(FIND_MY_CREEPS, {filter: object => (object.hits < object.hitsMax)});
                         // console.log('[DEBUG] (structCreep-attacker): Creep to heal: ' + (my_creep2heal?my_creep2heal.id:0)); 
                         if (my_creep2heal) {
                             if (creep.heal(my_creep2heal) !== OK) creep.moveTo(my_creep2heal);
                         } else {
-                            Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] All creeps are healthy on the room. Bye, Bye');
+                            // Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] All creeps are healthy on the room. Bye, Bye');
                             creep.suicide();
                         }
                     }

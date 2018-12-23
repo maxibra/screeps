@@ -32,8 +32,9 @@ function body_cost(body) {
 function upgrader_body(room_name) {
     let room_level = 1;
     // let room_level = Game.rooms[room_name].controller.level;
-    if (room_name === 'E39N49' || room_name === 'E34N47' || room_name === 'E38N47') room_level = 162;
-    else if (room_name === 'E37N48') room_level = 1440;
+    if (Game.rooms[room_name].controller.level === 6) room_level = 1440;
+    else if (Game.rooms[room_name].controller.level === 7) room_level = 2040;
+        
     switch (room_level) {
         case 1: 
             body = [MOVE,WORK,CARRY];  // 2/T
@@ -44,23 +45,17 @@ function upgrader_body(room_name) {
         case 8: 
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY];  // 15/T (cost: 2,050)
             break;
-        case 1030:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]; // upgrade: 10/T; carry: 300 (cost: 1,550)
-            break;
         case 1440:
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]; // upgrade = 14/T carry = 400 (cost: 2,200)
-            break;
-        case 145:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY]; // upgrade = 14/T carry = 50 (cost: 1,800)
             break;
         case 162:   // 400/28T
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY]; // upgrade = 16/T(4.8K/300T) carry = 200 (cost: 2,200 [level:6])
             break;
-        case 1715:  // 350/28T
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY]; // upgrade = 17/T(5.1K/300T) carry = 150 (cost: 2,300 [level:6])
+        case 1640:   // 400/28T
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]; // upgrade = 16/T(4.8K/300T) carry = 400 (cost: 2,400 [level:7])
             break;
-        case 3045:
-            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]; // upgrade: 30/T; carry: 450 (cost: 2,350)
+        case 2040:   // 400/28T
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]; // upgrade = 20/T(6K/300T) carry = 400 (cost: 2,600 [level:7])
             break;
         default:
             body = [MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY];
@@ -71,37 +66,19 @@ function upgrader_body(room_name) {
 function upgraders_amount(room_name) {
     // Object of rooms with remote targets
     // let upgraders = (Game.rooms[room_name].controller.ticksToDowngrade < 100000) ? 1 : 0;
-    let upgraders = 0;
-    if (room_name === 'E39N49' || room_name === 'E34N47' || room_name === 'E38N47') upgraders = 1;
-    else if (room_name === 'E37N48')  upgraders = 2;
-    // switch (room_name) {
-    //     case 'E27N41':
-    //         upgraders = 2;
-    //         break;
-    // }
+    let upgraders = 1;
+    // if (room_name === 'E39N49') upgraders = 2;
+    // else if (room_name === 'E33N47' ||
+    //          room_name === 'E37N48' ||
+    //          room_name === 'E38N48') upgraders = 0;
     return upgraders;
 }
 function remote_target(room_name) {
     // Object of rooms with remote targets
     let target = false;
     switch (room_name) {
-        case 'E26N48':  
-            target = ['E25N48', 'E25N49', 'E26N47'];
-            break;   
-        case 'E27N41':  
-            target = ['E26N41', 'E26N42', 'E28N41'];
-            break;        
-        case 'E32N53':  
-            target = ['E32N52', 'E31N52', 'E33N54', 'E32N54'];
-            break;        
-        case 'E27N45':  
-            target = ['E27N46', 'E27N44'];
-            break;
         case 'E28N48':  
-            target = ['E27N48', ]; // 'E27N47']; //, 'E29N48', 'E29N49', 'E28N49'];
-            break;
-        case 'E32N49':  
-            target = ['E31N49', 'E33N49'];
+            target = ['E27N48', 'E27N47']; //, 'E29N48', 'E29N49', 'E28N49'];
             break;
         case 'E33N47':  
             target = ['E32N47']; //, 'E32N49']; //'E32N48', 'E31N48',  'E33N48'];
@@ -109,9 +86,6 @@ function remote_target(room_name) {
         case 'E37N48':
             target = ['E37N49']; //, 'E36N48']; // 'E34N46'];
             break;
-        // case 'E38N47':
-        //     target = ['E38N46',]; // 'E34N46'];
-        //     break;
         case 'E38N48':
             target = ['E38N49',]; // 'E34N46'];
             break;
@@ -123,150 +97,19 @@ function remote_harvester_info(room_name) {
     // ID's of destination inside homeland of remote harvesters
     let info_object = {};
     switch (room_name) {
-        case 'E26N47':             
-            info_object = {
-                homeland_destinations: ['5b936b9a2b516b50267186e1', '5b91c3c550c0524d4dc7add2'],
-                amount: 2
-            }
-            break;        
-        case 'E25N48':             
-            info_object = {
-                homeland_destinations: ['5b91b7ab69a64562799ac8bb', '5b91b2c1501cf2629da0fe55', '5b8b8ebdb81548407f98d8cd'],
-                amount: 1
-            }
-            break;
-        case 'E25N49':             
-            info_object = {
-                homeland_destinations: ['5b91b7ab69a64562799ac8bb', '5b91b2c1501cf2629da0fe55', '5b8b8ebdb81548407f98d8cd'],
-                amount: 1
-            }
-            break;
-        case 'E26N42':             
-            info_object = {
-                homeland_destinations: ['5b7b813e3e1314168cf6872b', '5b7b75f7ff7a3e3d3c3266c7', '5b7b9da33b41006a20d49491'],
-                amount: 4
-            }
-            break;
-        case 'E28N41':             
-            info_object = {
-                homeland_destinations: ['5b7818f69606f140031f82b2', '5b80cc7d127ab96b4f666215', '5b7b9da33b41006a20d49491'],
-                amount: 1
-            }
-            break;
-        case 'E26N41':             
-            info_object = {
-                homeland_destinations: ['5b76fe18049a5b16bc433811',],
-                amount: 1
-            }
-            break;
-        case 'E32N54':             
-            info_object = {
-                homeland_destinations: ['5b61da92a30f486dd74f76a9', '5b67896265965e6dc7b72b82', '5b67071f529e6f26f0cd6244', '5b677e7a617b6e5cdc93a8be'],
-                amount: 4
-            }
-            break;
-        case 'E33N54':             
-            info_object = {
-                homeland_destinations: ['5b61da92a30f486dd74f76a9', '5b67896265965e6dc7b72b82', '5b677e7a617b6e5cdc93a8be', '5b67071f529e6f26f0cd6244'],
-                amount: 3
-            }
-            break;
-        case 'E31N52': 
-            info_object = {
-                homeland_destinations: ['5b613b019007134cd78dc2dd', '5b61401594e55f270224e7c3', '5b6142677b80103f4714004b', '5b61d763b7d44e6423cbb914'],
-                amount: 2
-            }
-            break;
-        case 'E32N52': 
-            info_object = {
-                homeland_destinations: ['5b613b019007134cd78dc2dd', '5b61401594e55f270224e7c3', '5b6142677b80103f4714004b', '5b61d763b7d44e6423cbb914'],
-                amount: 3
-            }
-            break;
-        case 'E27N46': 
-            info_object = {
-                homeland_destinations: ['5b46993b0f4ec249f6ddd878', '5b59dc5b2bde613971b9ba8c'],
-                amount: 2
-            }
-            break;
-        case 'E27N44': 
-            info_object = {
-                homeland_destinations: ['5b46a969e30571430d348744', '5b4e6a9383b2287c458398ca', '5b468a489ddd223460384234', '5b52b31b7c9ee34db2ab8e7b'],
-                amount: 3
-            }
-            break;
-        case 'E28N49': 
-            info_object = {
-                homeland_destinations: ['5b45be9f1e189e61e50b576c',],
-                amount: 1
-            }
-            break;
         case 'E27N47': 
-            info_object = {
-                homeland_destinations: ['5b34d0a3e6e0fa316db08a31',],
-                amount: 1
-            }
-            break;
         case 'E27N48': 
             info_object = {
                 homeland_destinations: ['5b34d0a3e6e0fa316db08a31',],
                 amount: 1
             }
             break;
-        case 'E29N48': 
-            info_object = {
-                homeland_destinations: ['5b2fd3f9c656780b1fee6911', '5b2cc739f727462af9e9828a'],
-                amount: 2
-            }
-            break;
-        case 'E29N49':
-            info_object = {
-                homeland_destinations: ['5b2fd3f9c656780b1fee6911', '5b2cc739f727462af9e9828a'],
-                amount: 3
-            }
-            break;
-        case 'E32N49':
-            info_object = {
-                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd'],
-                amount: 1
-            }
-            break;
-        case 'E33N48':
-            info_object = {
-                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd', '5afd5c94f1eabb6ce7a18052'],
-                amount: 6
-            }
-            break;
         case 'E32N47': 
             info_object = {
-                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd', '5afd5c94f1eabb6ce7a18052'],
+                homeland_destinations: ['5bc93291594e063956202344', '5b0152f1ff0838345ccf8ae0', '5be4f60e92dbe1251cd139fd', '5afeea7935a4236af6a130d7'],
                 amount: 1
             }
             break;
-        case 'E32N48': 
-            info_object = {
-                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd', '5afd5c94f1eabb6ce7a18052'],
-                amount: 2
-            }
-            break;
-        case 'E31N48': 
-            info_object = {
-                homeland_destinations: ['5b0152f1ff0838345ccf8ae0', '5b4ea2b7e792cb16a95750cd', '5afd5c94f1eabb6ce7a18052'],
-                amount: 5
-            }
-            break;      
-        case 'E31N49': 
-            info_object = {
-                homeland_destinations: ['5b1a42e409384a778ed5e8f4', '5b153b87c5612c1429ec169b'], // , '5b1f9978e65319287dc4ac89'],
-                amount: 1
-            }
-            break;             
-        case 'E33N49': 
-            info_object = {
-                homeland_destinations: ['5b4387d9a8f9805e72b9a05c', '5b3417a491f5f036a937b8e9', '5b33639acb21c464f0c933a3'], //, '5b1f9978e65319287dc4ac89'],
-                amount: 3
-            }
-            break;   
         case 'E37N49': 
             info_object = {
                 homeland_destinations: ['5bc6d6dbb7a49f2a41ed12e9', '5acc524f6bec176d808adb71'],
@@ -278,22 +121,6 @@ function remote_harvester_info(room_name) {
                 homeland_destinations: ['5ae4db5bcb5e3209ac04979b', '5affb81b83717b6924fc5d49'],
                 amount: 2
             }
-            break;
-        // case 'E28N48':
-        //     target = ['5b2fd3f9c656780b1fee6911', '5b2cc739f727462af9e9828a'];
-        //     break;
-        // case "E32N49":
-        //     target = ['5b1a42e409384a778ed5e8f4', '5b153b87c5612c1429ec169b'];
-        //     break;
-        // case 'E33N47':  
-        //     target = ['5b0152f1ff0838345ccf8ae0', '5af77c2caba2f708b74580b4', '5af7fb6d72bccd0cc9c29cf7', '5afc6f3612e8d50cf8eb8831'];  // containers of E33N47
-        //     break;
-        // case 'E37N48':
-        //     target = ['5b09ba8ca6affe14523f5310', '5b0dd640c5612c1429e91c8a', '5acc524f6bec176d808adb71'];
-        //     break;
-        // case 'E38N48':
-        //     target = ['5ae4db5bcb5e3209ac04979b', '5affb81b83717b6924fc5d49']; 
-        //     break;
     }
     return info_object;
 }
@@ -328,7 +155,7 @@ var creep_helpers = {
                 'E39N49': 0
             },
             'E33N47': {
-                'E34N47': 1
+                'E34N47': 0
             }
         }
         let create_special = false;
@@ -346,7 +173,7 @@ var creep_helpers = {
         
         // // console.log('[DEBUG] (create_creep)['+ spawn_name + ' basic Body: ' + JSON.stringify(current_body));
         if (my_room.energyAvailable > 400 && 
-            (my_room.memory.targets.build.length > 0)) {
+            my_room.memory.targets.build.length > 0) {
             // || my_room.controller.ticksToDowngrade < 140300 
             // || my_room.terminal.store['energy'] < 15000)) {
             // || units[room_name]['energy_miner'] < my_room.memory.energy_flow.sources.length) {
@@ -362,7 +189,10 @@ var creep_helpers = {
             finalize_body = [MOVE, WORK];
         }
         
-        let avoid_remote = !(room_name === 'E38N48' || room_name === 'E37N48'); // || room_name === 'E28N48');
+        let avoid_remote = !(room_name === 'E38N48' || 
+                             room_name === 'E37N48' || 
+                             room_name === 'E33N47' || 
+                             room_name === 'E28N48');
         
         let remote_room_in_war = is_remote_room_in_war(room_name)
         // if (room_name === 'E28N48') console.log('(creep_helpers.create_creep) [' + room_name + '] In WAR: ' + remote_room_in_war);
@@ -407,13 +237,10 @@ var creep_helpers = {
                 memory: {stuck: 0},
                 name_prefix: 'rmt_nrg_mnr' + room_name,
                 rmt_targets: remote_target(room_name),
-                amount: 1,
-                // amount: ((Memory.rooms[creep.memory.far_target]) ? Object.keys(Memory.rooms[creep.memory.far_target].energy_flow.containers.source).length : 0),
-                // avoid: avoid_remote
-                avoid: !(room_name === 'E37N48' || room_name === 'E38N48')
+                avoid: avoid_remote // !(room_name === 'E37N48' || room_name === 'E38N48')
             },
             remote_harvest: {
-                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750, Harvest: 16/T
+                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750, Harvest: 16/T; Cost: 2,150
                     // ((my_room.energyCapacityAvailable >= 1550) ? [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY] : // Carry: 750
                     //                                     [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]),    // Carry: 600
                 // body: [MOVE,WORK,CARRY],
@@ -424,7 +251,7 @@ var creep_helpers = {
             },
             remote_claimer: {
                 // Game.getObjectById('5b6ea23987f6041778623097').signController(Game.getObjectById('59f1a4d382100e1594f3d993'), "Stay away from unnecessary conflicts :)")
-                body: [MOVE,MOVE,CLAIM,CLAIM],
+                body: [MOVE,MOVE,CLAIM,CLAIM],  // Cost: 1,300
                 name_prefix: 'rmt_claimer_' + room_name,
                 amount: 1,
                 rmt_targets: remote_target(room_name),

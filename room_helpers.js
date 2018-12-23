@@ -53,7 +53,7 @@ function link_transfer(source_link, destination_link) {
     
     // if (source_link.id === '5ac80cb1efc817037dc137dd') console.log('[DEBUG](room.helpers-link_transfer): Destination (' + destination_link.id + ') missing energy: ' +  dst_missing + '; Source (' + source_link.id + '): ' + source_link.energy);
     
-    if (destination_link && dst_missing >= source_link.energy) {
+    if (source_link.cooldown === 0 && destination_link && dst_missing >= source_link.energy) {
             source_link.transferEnergy(destination_link, source_link.energy);
             energy_sent = true;
     }
@@ -96,22 +96,31 @@ function add_room_mineral2memory(new_room_by_mineral, room_name, mineral, lab_ph
 
 
 var room_helpers = {
+    define_extension_first: function(room_name) {
+        let my_room = Game.rooms[room_name];
+        my_room.memory.energy_flow.extension_first = ((my_room.energyCapacityAvailable*0.5) > my_room.energyAvailable);    
+    },
     transfer_energy: function(room_name) {
         let my_room = Game.rooms[room_name];
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E38N47', 'E37N48', 'E39N49', 'E34N47'];
+        let destination_rooms = ['E34N47', 'E38N47', 'E39N49', 'E37N48', 'E38N48'];    //
 
+        // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));
+
+        if (destination_rooms.indexOf(room_name) >= 0) return;    // Destination room don't send eneregy
+        
         for (let r in destination_rooms) {
             let destination_room_name = destination_rooms[r];
             let destination_room = Game.rooms[destination_room_name];
             let destination_terminal = destination_room.terminal;
-            if (destination_room_name === room_name ||   // Don't send to itself
-                destination_room.controller.level === 8 ||
-                !destination_terminal) return;  
-
             // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Try to transfer to ' + destination_room_name);
+            if (!destination_terminal) {
+                    // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Skip ' + destination_room_name + '; Conditions: ' + (destination_room.controller.level === 8 && destination_room_name !== 'E38N47'));
+                    continue;  
+            }
+            // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Try to transfer to ' + destination_room_name + '; Cond: ' + (cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer));
                 
             if (destination_terminal && cur_terminal && cur_terminal.cooldown === 0 &&
                 destination_terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage && 
@@ -119,7 +128,7 @@ var room_helpers = {
                 destination_room.memory.energy_flow.store_used.terminal < destination_room.memory.energy_flow.max_store.terminal) {
                 
                 let send_out = cur_terminal.send(RESOURCE_ENERGY, 2000, destination_room_name);
-                console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
+                // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
                 if (send_out === OK) {
                     console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + my_room.memory.energy_flow.store_used.terminal + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
                     break;
@@ -174,7 +183,7 @@ var room_helpers = {
                 if (target.pos.x < 15 || target.pos.y < 19) is_inside = false;
                 break;
             case 'E39N49':
-                if (target.pos.x > 42 || target.pos.y < 16) is_inside = false;
+                if (target.pos.x > 42 || target.pos.x < 20 || target.pos.y < 16) is_inside = false;
                 break;
             }        
         return is_inside;
@@ -289,17 +298,12 @@ var room_helpers = {
     transfer_link2link: function(room_name) {
         let my_room = Game.rooms[room_name];
         if (!my_room) return; // The room contains no controller
-        for (let near_src in my_room.memory.energy_flow.links.near_sources) {    // link near source transfer to controller ONLY!!
-            let near_source_link = Game.getObjectById(my_room.memory.energy_flow.links.near_sources[near_src]);
-            if (!(near_source_link && (near_source_link.energy > 100))) continue;
-            // console.log('[ERROR] (room_helpers.transfer_link2link)[' + room_name  +'] Destination link:' + Game.getObjectById(my_room.memory.energy_flow.links.near_controller))
-            if (near_source_link && my_room.memory.energy_flow.links.near_controller)
-                link_transfer(near_source_link, Game.getObjectById(my_room.memory.energy_flow.links.near_controller))
-        }
-        
-        for (let l_src in my_room.memory.energy_flow.links.sources) {
+
+        let source_links = my_room.memory.energy_flow.links.near_sources;
+        source_links = source_links.concat(my_room.memory.energy_flow.links.sources)
+        for (let l_src in source_links) {
             let current_link_sent = false;
-            source_link = Game.getObjectById(my_room.memory.energy_flow.links.sources[l_src]);
+            source_link = Game.getObjectById(source_links[l_src]);
             if (!(source_link && (source_link.energy > 100))) continue;
             let destination_links = (my_room.memory.energy_flow.links.near_controller) ? [my_room.memory.energy_flow.links.near_controller,] : [];    // First link to get energy is near controller
             destination_links = destination_links.concat(my_room.memory.energy_flow.links.destinations);
@@ -307,11 +311,21 @@ var room_helpers = {
             // if ( room_name === 'E32N49') console.log('[ERROR] (room_helpers.transfer_link2link)[' + room_name  +'] Destination Links: ' + JSON.stringify(destination_links));
             
             for (let l_dst in destination_links) {
-                if (source_link && destination_links[l_dst])
-                    current_link_sent = link_transfer(source_link, Game.getObjectById(destination_links[l_dst]));
+                let dst_l = Game.getObjectById(destination_links[l_dst]);
+                if (source_link && dst_l)
+                    current_link_sent = link_transfer(source_link, dst_l);
                 if (current_link_sent) break;
             }
             if (current_link_sent) break;
+        }
+        
+        for (let near_src in my_room.memory.energy_flow.links.near_sources) {    // link near source transfer to controller ONLY!!
+            let near_source_link = Game.getObjectById(my_room.memory.energy_flow.links.near_sources[near_src]);
+            if (!(near_source_link && (near_source_link.energy > 100))) continue;
+            // console.log('[ERROR] (room_helpers.transfer_link2link)[' + room_name  +'] Destination link:' + Game.getObjectById(my_room.memory.energy_flow.links.near_controller))
+            let dst_link = Game.getObjectById(my_room.memory.energy_flow.links.near_controller);
+            if (near_source_link && my_room.memory.energy_flow.links.near_controller && dst_link)
+                link_transfer(near_source_link, dst_link);
         }
     },
     update_labs_info: function(room_name, room_by_mineral) {
@@ -499,7 +513,7 @@ var room_helpers = {
         } else if (room_vars.finish_war && room_vars.finish_war < Game.time && room_vars.status === 'war') {
             room_vars.status = 'peace';
             room_vars.finish_war = false;
-            Game.notify('[' + room_name + '] It"s time for PEACE');
+            // Game.notify('[' + room_name + '] It"s time for PEACE');
         } else if (room_vars.status === 'war' && (room_name === 'E32N47' || room_name === 'E32N48')) {
             if(hostile_creeps.length > 0 && !room_vars.finish_war) {    // need the if here for logical flow
                 console.log('[DEBUG] (room_helpers-define_room_status): Hostiles: ' + hostile_creeps.length + '; FINISH WAR: ' +  (Game.time + hostile_creeps[0].ticksToLive) + '; Current time: ' + Game.time + '; Hostile life: ' + hostile_creeps[0].ticksToLive);
@@ -547,8 +561,11 @@ var room_helpers = {
             }
         } else {
             E39N49_avoid = []
-            E27N47_avoid = ['5b6318fbc418492703632855',];
-            let avoid_stricts = E39N49_avoid.concat(E27N47_avoid);
+            E38N47_avoid = ['5bf10cb261ef99031f97d884', '5bf10cc8166f13033947d85e', '5bf10cec9be909030411c9f3', '5bf10d03b1f81602f362b550'];
+            E28N48_avoid = ['5b628bc03df03010c281a64c', '5b628c0d359a5b585b99ca37', '5b628c231e49e63f6cec41e4', '5b628c293081766dddad14a6', '5b628c301407e03f53c353ca',
+                            '5b2beba06a39f839fe4b7b43', '5b2beba310a9471b92ac8652', '5b2beba971b3e77e476e344a', '5b2bebaff727462af9e92a2a',
+                            '5b703a9eb44c5d078a0851a4', '5b703a9eb44c5d078a0851a4', '5b703aabc866f7408b947fb5', '5b703ab2a122607be3dafe5e'];
+            let avoid_stricts = E39N49_avoid.concat(E38N47_avoid);
 
             targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
                                                                         object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1)});

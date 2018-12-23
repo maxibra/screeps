@@ -48,8 +48,11 @@ for(var current_spawn_name in Game.spawns) {
     }
 }
 
-for(var current_room_name in Game.rooms) {
+let init_avoid_rooms = ['E29N47', 'E29N49'];
+for(var current_room_name in Memory.rooms) {
     // Initialie the room memory
+    if (current_room_name === 'global_vars' ||
+        init_avoid_rooms.indexOf(current_room_name) >= 0) continue;
     // console.log('[DEBUG] (main)[' + current_room_name + ': INITIAL Global: ' + JSON.stringify(Memory.rooms[current_room_name]));
 
     if (Memory.rooms[current_room_name] && typeof Memory.rooms[current_room_name].towers === "undefined") {
@@ -64,6 +67,7 @@ for(var current_room_name in Game.rooms) {
     }
 
     if (Memory.rooms[current_room_name] && typeof Memory.rooms[current_room_name].energy_flow === "undefined") {
+        console.log('[DEBUG] (main)[' + current_room_name + '] INIT energy_flow');
         Memory.rooms[current_room_name].energy_flow = {
             sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
             mineral: {
@@ -145,7 +149,7 @@ module.exports.loop = function () {
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
     var cur_creeps = Game.creeps ? Game.creeps : {};
 
-    let only_rooms = ['E28N48', 'E33N47', 'E34N47', 'E37N48', 'E38N47', 'E38N48', 'E39N49', 'E38N49', 'E37N49']; //, 'E27N47', 'E27N48']; //, 'E32N47', 'E32N49'];
+    let only_rooms = ['E28N48', 'E33N47', 'E34N47', 'E37N48', 'E38N47', 'E38N48', 'E39N49', 'E38N49', 'E37N49', 'E32N47', 'E27N48', 'E27N47']; //, 'E32N49'];
     let avoid_rooms = ['global_vars', 'E26N40', 'E26N43', 'E26N44', 'E26N46', 'E27N40', 'E28N47', 'E29N47', 'E30N48', 'E31N53', 'E34N46', 'E39N50', 'E40N49'];
     
     let run_on_roooms = (only_rooms.length > 0) ? only_rooms : Object.keys(Memory.rooms);
@@ -260,7 +264,9 @@ module.exports.loop = function () {
         let current_room_name = run_on_roooms[room_index];
         let my_room = Game.rooms[current_room_name];
         
-        if(avoid_rooms.indexOf(current_room_name) > -1 || only_rooms.indexOf(current_room_name) < 0) {
+        if(avoid_rooms.indexOf(current_room_name) > -1 || 
+           only_rooms.indexOf(current_room_name) < 0 ||
+           !my_room) {
             // console.log('[DEBUG] (main)[' + current_room_name + '] Skipped the room')
             continue
         }
@@ -327,14 +333,19 @@ module.exports.loop = function () {
 
         current_mod = current_mod + tick_between_hard_actions;
         if (Game.time % 10 === current_mod) {
+        // if (current_room_name === 'E39N49' && Game.time % 2 === 0) {
+            // console.log('[INFO] (main) [' + current_room_name + ']: RUN  "transfer_energy" ' + current_mod + '. Time: ' + Game.time);
             room_helpers.transfer_energy(current_room_name);
         }
         
         if (Game.time % 30 === 0) {
             // room_helpers.transfer_mineral(current_room_name); 
-            // Count storeage capacity of terminal and storage
-            if (my_room.storage) Memory.rooms[current_room_name].energy_flow.store_used.storage = _.sum(my_room.storage.store)
+            // Count storage capacity of terminal and storage
+            if (my_room.storage &&
+                Memory.rooms[current_room_name].energy_flow.store_used) 
+                    Memory.rooms[current_room_name].energy_flow.store_used.storage = _.sum(my_room.storage.store)
             if (my_room.terminal) Memory.rooms[current_room_name].energy_flow.store_used.terminal = _.sum(my_room.terminal.store)
+            room_helpers.define_extension_first(current_room_name);
         }
         
         if (Game.time % rare_time_range === 0) {
