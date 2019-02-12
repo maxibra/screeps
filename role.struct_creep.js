@@ -75,7 +75,7 @@ var structCreep = {
         let fill_terminal = (my_room.terminal && 
                              my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
                              my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
-        
+        let critical_controller_downgrade = (room_vars.status === 'peace') ? 198000 : 130000
         // It's nothing todo
         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] unemployed role: ' + creep.memory.role + '; full: ' + my_room.memory.global_vars.all_full + 'store_used.terminal: ' + my_room.memory.energy_flow.store_used.terminal + '; max_store.terminal: ' + my_room.memory.energy_flow.max_store.terminal);
         if (my_room.memory.global_vars.all_full && creep.memory.role === 'undefined' &&
@@ -86,19 +86,11 @@ var structCreep = {
                 return;
         }
                            
-
-        // if (room_name === 'E34N47') range2upgrade = 5;
-
-        // if(room_name === 'E38N47') return;
-        // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Conduction to suicide: ' + ((creep.name.substring(0,6) === room_name)&& my_room.energyAvailable > (my_room.energyCapacityAvailable * 0.8)));
-        // if(creep.name.substring(0,6) === room_name && room_vars.status === 'peace' &&
-        //   my_room.energyAvailable > (my_room.energyCapacityAvailable * 0.8) &&
-        //   creep.carry['energy'] === 0 &&
-        //   (my_room.memory.targets.build.length === 0 || // my_room.controller.ticksToDowngrade > 143000 ||
-        //     my_room.terminal.store['energy'] < 15000)) { 
-        //     creep.suicide();
-        //     return;
-        // }
+        if(creep.name.slice(-2) === "gn" && creep.carry['energy'] === 0 && creep.ticksToLive < 20) { 
+            console.log('[DEBUG] (structCreep.run)[' + creep.name + '] A few live to do something. Suicide')
+            creep.suicide();
+            return;
+        }
         
         // Suicide of energy miners if both of containers near cources are full.
         const add = (a, b) => a + b; 
@@ -273,7 +265,7 @@ var structCreep = {
                     creep.memory.role = 'repair_defence';
                     //units[room_name].repair_defence++;
                     // Return here repair
-                } else if (my_room.controller.level === 8 && my_room.controller.ticksToDowngrade < 140000) { //  && creep.body.map(x=>x.type).indexOf('work') > -1) {
+                } else if (my_room.controller.level === 8 && my_room.controller.ticksToDowngrade < critical_controller_downgrade) { //  && creep.body.map(x=>x.type).indexOf('work') > -1) {
                     creep.say('low_controller');
                     creep.memory.role = 'upgrade';
                 } else if ((my_room.controller.level === 8 || units[room_name]['upgrader'] > 0) && 

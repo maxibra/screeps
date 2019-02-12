@@ -143,14 +143,14 @@ var RoleHarvester = {
             }
 
             if (target) {
-                if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] (target) Changed to ' + target.id);
+                // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] (target) Changed to ' + target.id);
                 creep.memory.target_id = target.id;
                 creep.memory.harvester_type = harvester_type;
                 if (iam_general) creep.memory.role = 'harvest';   // change role if the creep isn't from special role
             }
         }
 
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' Target: ' + JSON.stringify(target) + '; AFTER TARGET: ' + JSON.stringify(creep.memory));
+        // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' Target: ' + JSON.stringify(target) + '; AFTER TARGET: ' + JSON.stringify(creep.memory));
 
         // ACTION
         switch(harvester_type) {
@@ -207,8 +207,8 @@ var RoleHarvester = {
                 creep.memory.target_id = false;
                 creep.memory.harvester_type = false;
         }
-        if (creep.name === creep_name4log || creep.name === 'E38N47-0-58-110-gn') console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' ACTION OUT: ' + action_out + '; Target: ' + target.id);
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] ACTION OUT:' + action_out);
+        // if (creep.name === creep_name4log || creep.name === 'E38N47-0-58-110-gn') console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +' ACTION OUT: ' + action_out + '; Target: ' + target.id);
+        // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] ACTION OUT:' + action_out);
         if (action_out === OK) creep.memory.stuck = 0;
         else if (action_out === ERR_NOT_IN_RANGE) {
             if (creep.pos.getRangeTo(target) <= 3) creep.memory.stuck++;
@@ -220,7 +220,7 @@ var RoleHarvester = {
                 let next_source = false;
                 let next_type;
                 for (let c in room_source_containers) {
-                    if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] TARGET: ' + target.id + '; Container: ' +  c);
+                    // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] TARGET: ' + target.id + '; Container: ' +  c);
                     if (target.id === room_source_containers[c].source_id) {
                         next_source = c;
                         next_type = 'container';
@@ -242,18 +242,18 @@ var RoleHarvester = {
                 // } else 
                 if (next_source && !(room_name === 'E34N47' && next_source.id === far_source.id &&
                                             creep.room.lookForAtArea(LOOK_CREEPS,far_source.pos.y-1,far_source.pos.x-3,far_source.pos.y+3,far_source.pos.x, true).length > 0)) {
-                    if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] (next_source) Changed to ' + next_source);
+                    // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] (next_source) Changed to ' + next_source);
                     creep.memory.target_id = next_source;    
                     creep.memory.harvester_type = next_type;
                 } else {
-                    if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] (!!next_source) Changed to false');
+                    // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] (!!next_source) Changed to false');
                     creep.memory.target_id = false;
                     creep.memory.harvester_type = 'go_close'
                 }
                 creep.memory.stuck = 0;
-                if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] STUCK: ' + creep.memory.stuck + '; NEXT Source: ' + next_source + '; TYPE: ' + next_type);
+                // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] STUCK: ' + creep.memory.stuck + '; NEXT Source: ' + next_source + '; TYPE: ' + next_type);
             } else { 
-                if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] TARGET DOESN"t changed: ' + target.id);
+                // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] TARGET DOESN"t changed: ' + target.id);
                 creep.memory.target_id = target.id;
             }
         } else if (action_out === ERR_INVALID_TARGET) {

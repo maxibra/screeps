@@ -66,11 +66,10 @@ function upgrader_body(room_name) {
 function upgraders_amount(room_name) {
     // Object of rooms with remote targets
     // let upgraders = (Game.rooms[room_name].controller.ticksToDowngrade < 100000) ? 1 : 0;
-    let upgraders = 1;
+    let upgraders = 0;
     // if (room_name === 'E39N49') upgraders = 2;
-    // else if (room_name === 'E33N47' ||
-    //          room_name === 'E37N48' ||
-    //          room_name === 'E38N48') upgraders = 0;
+    if (room_name === 'E38N47' ||
+        room_name === 'E39N49') upgraders = 1;
     return upgraders;
 }
 function remote_target(room_name) {
@@ -237,10 +236,11 @@ var creep_helpers = {
                 memory: {stuck: 0},
                 name_prefix: 'rmt_nrg_mnr' + room_name,
                 rmt_targets: remote_target(room_name),
-                avoid: avoid_remote // !(room_name === 'E37N48' || room_name === 'E38N48')
+                avoid: !(room_name === 'E28N48')
             },
             remote_harvest: {
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750, Harvest: 16/T; Cost: 2,150
+                    // [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 1500, Harvest: 6/T; Cost: 2.650K
                     // ((my_room.energyCapacityAvailable >= 1550) ? [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY] : // Carry: 750
                     //                                     [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]),    // Carry: 600
                 // body: [MOVE,WORK,CARRY],
