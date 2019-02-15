@@ -169,7 +169,7 @@ var creep_helpers = {
         let add_body = creep_body.general.add;
         let finalize_body = creep_body.general.finalize;
         let creep_name = '';
-        
+
         // // console.log('[DEBUG] (create_creep)['+ spawn_name + ' basic Body: ' + JSON.stringify(current_body));
         if (my_room.energyAvailable > 400 && 
             my_room.memory.targets.build.length > 0) {
@@ -236,7 +236,7 @@ var creep_helpers = {
                 memory: {stuck: 0},
                 name_prefix: 'rmt_nrg_mnr' + room_name,
                 rmt_targets: remote_target(room_name),
-                avoid: !(room_name === 'E28N48')
+                avoid: !avoid_remote
             },
             remote_harvest: {
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750, Harvest: 16/T; Cost: 2,150
@@ -261,9 +261,9 @@ var creep_helpers = {
             lab_assistent: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 800
                 body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 300
-                amount: 0,
+                amount: 1,
                 // avoid: (Object.keys(my_room.memory.labs.reagent).length === 0)
-                avoid: !(room_name === 'E39N49')
+                // avoid: !(room_name === 'E39N49')
             },   
             energy_helper: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 500

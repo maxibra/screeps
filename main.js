@@ -257,7 +257,8 @@ module.exports.loop = function () {
     }
 
     let room_by_mineral = {
-        reagent: {}
+        reagent: {},
+        produce: {},
     };
     let rare_time_range = 300;
     for(var room_index in run_on_roooms) {
@@ -339,7 +340,7 @@ module.exports.loop = function () {
         }
         
         if (Game.time % 30 === 0) {
-            // room_helpers.transfer_mineral(current_room_name); 
+            room_helpers.transfer_mineral(current_room_name); 
             // Count storage capacity of terminal and storage
             if (my_room.storage &&
                 Memory.rooms[current_room_name].energy_flow.store_used) 

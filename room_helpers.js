@@ -337,10 +337,10 @@ var room_helpers = {
         let all_labs_ids = all_labs.map(x => x.id);
         let all_lab_flags = my_room.find(FIND_FLAGS, {filter: object => (object.name.split('-')[0] === 'lab')});
         let labs_info = {
-            reagent: {},
-            produce: {},
-            process: {},
-            booster: {}
+            reagent: {},    // The lab contains minerals imported to the room or mined in the room.
+            produce: {},    // The lab creates mineral to additional connection with other lab in the room
+            process: {},    // The lab creates final mineral of the room
+            booster: {}     // The lab is near storage and is used to boost creeps
         };
 
         let lab_reagent_positions = {};
@@ -372,6 +372,7 @@ var room_helpers = {
             } else if (Object.keys(lab_produce_positions).indexOf(lab_pos_str) >= 0 ) {
                 labs_info.produce[all_labs[l].id] = {type: lab_produce_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id;
+                add_room_mineral2memory(room_by_mineral, room_name, lab_reagent_positions[lab_pos_str], 'produce');
             } else if (Object.keys(lab_process_positions).indexOf(lab_pos_str) >= 0 ) {
                 labs_info.process[all_labs[l].id] = {type: lab_process_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_process_positions[lab_pos_str]] = all_labs[l].id;
