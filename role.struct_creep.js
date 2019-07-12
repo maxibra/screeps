@@ -386,6 +386,15 @@ var structCreep = {
                 // creep.memory.target_id = false;
                 // break
                 let log_if_room = 'E38N48';
+
+                if (creep.memory.target_id) {
+                    target_object = Game.getObjectById(creep.memory.target_id)
+                    if (creep.pos.isNearTo(target_object)) {
+                        mineral = _.remove(creep.carry, function(mineral_type) { return mineral_type === "energy"; })[0];
+                        if (mineral) creep.transfer(creep.memory.target_id, mineral)
+                    }
+                }
+
                 let closest_target = (creep.memory.target_id) ? Game.getObjectById(creep.memory.target_id) : 
                                                                 creep.pos.findClosestByRange([my_room.terminal, my_room.storage, Game.getObjectById(Object.keys(my_room.memory.labs.produce)[0])])
                 let i_am_near_closest = creep.pos.isNearTo(closest_target);
