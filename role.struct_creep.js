@@ -41,13 +41,14 @@ function getKeyByValue(object, value) {
   return Object.keys(object).find(key => object[key].type === value);
 }
 
-function get_missing_reagent_labs(my_room) {
-    let missing_reagent_labs = [];
+function get_missing_reagent_labs_id(my_room) {
+    let missing_reagent_labs_id = [];
     for (let l in my_room.memory.labs.reagent) {
         let current_lab = Game.getObjectById(l);
-        if (current_lab.mineralAmount < (current_lab.mineralCapacity - Memory.rooms.global_vars.minerals.transfer_batch)) missing_reagent_labs.push(current_lab);
-    }   
-    return missing_reagent_labs;
+        if (current_lab.mineralAmount < (current_lab.mineralCapacity - Memory.rooms.global_vars.minerals.transfer_batch)) missing_reagent_labs_id.push(l);
+    }
+    // console.log('[DEBUG] (structCreep.get_full_produce_labs)[' + my_room.name + '] REAGENT_LABS: ' + JSON.stringify(missing_reagent_labs_id))
+    return missing_reagent_labs_id;
 }
 
 function get_full_produce_labs(my_room) {
@@ -55,7 +56,7 @@ function get_full_produce_labs(my_room) {
     for (let l in my_room.memory.labs.produce) {
         let current_lab = Game.getObjectById(l);
         if (current_lab.mineralAmount > Memory.rooms.global_vars.minerals.transfer_batch) full_produce_labs.push(current_lab);
-    }   
+    }
     return full_produce_labs;
 }
 
@@ -75,7 +76,7 @@ var structCreep = {
         let fill_terminal = (my_room.terminal &&
                              my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
                              my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
-        let critical_controller_downgrade = (room_vars.status === 'peace') ? 198000 : 130000
+        let critical_controller_downgrade = (room_vars.status === 'peace') ? 150000 : 130000
         // It's nothing todo
         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] unemployed role: ' + creep.memory.role + '; full: ' + my_room.memory.global_vars.all_full + 'store_used.terminal: ' + my_room.memory.energy_flow.store_used.terminal + '; max_store.terminal: ' + my_room.memory.energy_flow.max_store.terminal);
 
@@ -406,8 +407,8 @@ var structCreep = {
                     
                     // Here if the creep is near structure
                     creep.memory.target_id = false;
-                    let labs_missing_reagent = get_missing_reagent_labs(my_room);
-                    let missing_reagent_types = labs_missing_reagent.map(t => t.mineralType);
+                    let labs_id_missing_reagent = get_missing_reagent_labs_id(my_room);
+                    let missing_reagent_types = labs_id_missing_reagent.map(t => my_room.memory.labs.reagent[t].type);
                     switch(closest_target.structureType) {
                         case 'terminal':
                         case 'storage':
@@ -425,13 +426,14 @@ var structCreep = {
                             }
                             
                             if (minerals_amount > 0) {
-                                creep.memory.target_id = labs_missing_reagent[0].id;
+                                creep.memory.target_id = labs_id_missing_reagent[0];
+                                if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mineral: ' + mineral_type + '; Store: ' + my_room[src_point].store[mineral_type] + '; Lab missing:' + missing_reagent_types.indexOf(mineral_type));
                                 break;
                             } else {    // All labs of reagent stage are full
                                 // check if produced minerals exist in terminal to transfer to Storage
                                 for (let teminal_t in my_room[src_point].store) {
                                     if (missing_reagent_types.indexOf(teminal_t) > -1) {
-                                        if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mineral: ' + mineral_type + '; Store: ' + my_room[src_point].store[mineral_type] + '; Lab missing:' + missing_reagent_types.indexOf(mineral_type));
+                                        // if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mineral: ' + mineral_type + '; Store: ' + my_room[src_point].store[mineral_type] + '; Lab missing:' + missing_reagent_types.indexOf(mineral_type));
                                         creep.withdraw(my_room[src_point], teminal_t);     
                                     }
                                 }
@@ -439,6 +441,12 @@ var structCreep = {
                             }
                             break;
                         case 'lab':
+                            let current_lab_mineral = my_room.memory.mineral_by_lab[creep.memory.target_id];
+                            if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run.lab_assistent)[' + creep.name + '] Creep has mineral of the lab: ' + Object.keys(creep.carry).indexOf(current_lab_mineral));
+                            if (Object.keys(creep.carry).indexOf(current_lab_mineral) >= 0) {
+                                creep.transfer(Game.getObjectById(creep.memory.target_id), current_lab_mineral);
+                                break;
+                            } 
                             let labs_full_produce = get_full_produce_labs(my_room);
                             let produce_types = labs_full_produce.map(t => t.mineralType);
                             for (let mineral_type in produce_types) {
@@ -448,10 +456,11 @@ var structCreep = {
                             }                            
                             break;
                         default:
-                            if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Structure type isn"t define');    
+                            if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run.lab_assistent)[' + creep.name + '] Structure type isn"t define');    
                     }
                     
                 }
+                
                 break;
             case 'energy_shuttle':
                 let creep_action;

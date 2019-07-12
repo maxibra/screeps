@@ -347,6 +347,7 @@ var room_helpers = {
         let lab_produce_positions = {};
         let lab_process_positions = {};
         let labs_id_by_mineral = {};
+        let mineral_by_lab = {};
         
         for (let f in all_lab_flags) {
             let flag_pos_str = all_lab_flags[f].pos.x +'-' + all_lab_flags[f].pos.y;
@@ -368,14 +369,17 @@ var room_helpers = {
             if (Object.keys(lab_reagent_positions).indexOf(lab_pos_str) >= 0 ) {
                 labs_info.reagent[all_labs[l].id] = {type: lab_reagent_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_reagent_positions[lab_pos_str]] = all_labs[l].id;
+                mineral_by_lab[all_labs[l].id] = lab_reagent_positions[lab_pos_str];
                 add_room_mineral2memory(room_by_mineral, room_name, lab_reagent_positions[lab_pos_str], 'reagent');
             } else if (Object.keys(lab_produce_positions).indexOf(lab_pos_str) >= 0 ) {
                 labs_info.produce[all_labs[l].id] = {type: lab_produce_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id;
+                mineral_by_lab[all_labs[l].id] = lab_produce_positions[lab_pos_str];
                 add_room_mineral2memory(room_by_mineral, room_name, lab_reagent_positions[lab_pos_str], 'produce');
             } else if (Object.keys(lab_process_positions).indexOf(lab_pos_str) >= 0 ) {
                 labs_info.process[all_labs[l].id] = {type: lab_process_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_process_positions[lab_pos_str]] = all_labs[l].id;
+                mineral_by_lab[all_labs[l].id] = lab_process_positions[lab_pos_str];
             } else if (all_labs[l].pos.getRangeTo(my_room.storage) < 5) {
                 labs_info.booster[all_labs[l].id] = {type: all_labs[l].mineralType};
             } else
@@ -398,6 +402,7 @@ var room_helpers = {
         }
         
         my_room.memory.labs = labs_info;
+        my_room.memory.mineral_by_lab = mineral_by_lab;
     },
     upgrade_energy_flow: function(room_name) {
         // Containers

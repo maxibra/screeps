@@ -213,10 +213,11 @@ var creep_helpers = {
                 avoid: !(room_name === 'E38N48')
             },
             attacker: {
-                body:  [MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,HEAL],
+                // body:  [MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,HEAL], // COST: 820
+                body: [MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.270K
                 memory: {room_in_war: remote_room_in_war},
                 name_prefix: 'attacker_' + room_name,
-                amount: 1,
+                amount: 2,
                 avoid: !(remote_room_in_war)
             },
             energy_miner: {
@@ -236,7 +237,7 @@ var creep_helpers = {
                 memory: {stuck: 0},
                 name_prefix: 'rmt_nrg_mnr' + room_name,
                 rmt_targets: remote_target(room_name),
-                avoid: !avoid_remote
+                avoid: !(room_name === 'E28N48' || room_name === 'E38N48')
             },
             remote_harvest: {
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750, Harvest: 16/T; Cost: 2,150
@@ -261,9 +262,9 @@ var creep_helpers = {
             lab_assistent: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 800
                 body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 300
-                amount: 1,
+                amount: 0,
                 // avoid: (Object.keys(my_room.memory.labs.reagent).length === 0)
-                // avoid: !(room_name === 'E39N49')
+                avoid: !(room_name === 'E38N48')
             },   
             energy_helper: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 500
