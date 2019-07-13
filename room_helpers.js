@@ -757,8 +757,8 @@ var room_helpers = {
         // [ID, mineral]
         let my_room = Game.rooms[room_name];
         greatest_mineral_amount = ['', '']
-        greatest_amount = 500
-        lab_stages = ['produce', 'process']
+        greatest_amount = 250
+        lab_stages = ['produce'] //, 'process']
         for (current_stage in lab_stages) {
             l_ids = Object.keys(my_room.memory.labs[lab_stages[current_stage]])
             for (l in l_ids){
@@ -780,11 +780,11 @@ var room_helpers = {
             minerals = shuffle(minerals)    // Randomize an order of the minerals
 
             for (mineral in minerals) {
-                if (my_room[sources[src]].store[minerals[mineral]] > 500) {
+                if (my_room[sources[src]].store[minerals[mineral]] > 250) {
                     lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[minerals[mineral]])
                     // console.log('MINERAL: ' + mineral +'; LAB ID: ' + my_room.memory.lab_per_mineral[minerals[mineral]])
                     free_space = lab_of_mineral.mineralCapacity - lab_of_mineral.mineralAmount
-                    if (free_space > 500) {
+                    if (free_space > 250) {
                         array2withdraw[my_room[sources[src]].id] = minerals[mineral]
                         break
                     }

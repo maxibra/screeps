@@ -311,7 +311,7 @@ module.exports.loop = function () {
             room_helpers.verify_all_full(current_room_name);
         }
 
-        if (Game.time % 11 === 0) {
+        if (Game.time % 5 === 0) {
             room_helpers.run_lab_reactions(current_room_name);
         }
 

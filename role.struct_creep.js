@@ -399,7 +399,7 @@ var structCreep = {
                         else creep.withdraw(target_object, creep.memory.mineral2withdraw)
                         creep.memory.target_id = false
                     } else creep.moveTo(target_object, global_vars.moveTo_ops);
-                } else {
+                } else {    // target_id doesn't defined
                     const total = _.sum(creep.carry);
                     if (total == 0) {   // The creep is empty
                         // my_room.find(FIND_TOMBSTONES).forEach(tombstone => {
@@ -423,7 +423,10 @@ var structCreep = {
                         }
                     } else  {   // The creep isn't empty
                         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LAB ID : ' + room_helpers.get_lab_by_mineral(room_name, creep.memory.mineral2withdraw))
-                        creep.memory.target_id = my_room.memory.lab_per_mineral[creep.memory.mineral2withdraw]
+                        if (creep.pos.isNearTo(my_room.terminal))
+                            creep.memory.target_id = my_room.memory.lab_per_mineral[creep.memory.mineral2withdraw]
+                        else
+                            creep.memory.target_id = my_room.terminal.id
                         creep.memory.mineral2withdraw = creep.memory.mineral2withdraw
                     }
                 }
@@ -742,8 +745,8 @@ var structCreep = {
                     
                     if (creep.memory.target_id)
                         transfer_target = Game.getObjectById(creep.memory.target_id);
-                    else if (my_lab && my_lab.mineralAmount < 0.85*my_lab.mineralCapacity) 
-                        transfer_target = my_lab;
+                    // else if (my_lab && my_lab.mineralAmount < 0.85*my_lab.mineralCapacity)
+                    //     transfer_target = my_lab;
                     else if ((my_room.terminal && (!my_room.terminal.store[room_mineral_type] || my_room.terminal.store[room_mineral_type] < Memory.rooms.global_vars.minerals.send_room)) ||
                         !my_room.storage) 
                             transfer_target = my_room.terminal;
