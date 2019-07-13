@@ -416,8 +416,11 @@ var structCreep = {
                         console.log('[DEBUG] (structCreep.run)[' + creep.name + '] SOURCES: ' + JSON.stringify(sources_array.length))
 
                         let closest_target2withdraw = creep.pos.findClosestByRange(sources_array)
-                        creep.memory.target_id = closest_target2withdraw.id
-                        creep.memory.mineral2withdraw = sources2withdraw[closest_target2withdraw.id]
+                        console.log('[DEBUG] (structCreep.run)[' + creep.name + '] CLOSEST ID: ' + closest_target2withdraw)
+                        if (closest_target2withdraw) {
+                            creep.memory.target_id = closest_target2withdraw.id
+                            creep.memory.mineral2withdraw = sources2withdraw[closest_target2withdraw.id]
+                        }
                     } else  {   // The creep isn't empty
                         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LAB ID : ' + room_helpers.get_lab_by_mineral(room_name, creep.memory.mineral2withdraw))
                         creep.memory.target_id = my_room.memory.lab_per_mineral[creep.memory.mineral2withdraw]
