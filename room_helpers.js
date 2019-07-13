@@ -782,7 +782,7 @@ var room_helpers = {
             for (mineral in minerals) {
                 if (my_room[sources[src]].store[minerals[mineral]] > 500) {
                     lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[minerals[mineral]])
-                    console.log('MINERAL: ' + mineral +'; LAB ID: ' + my_room.memory.lab_per_mineral[minerals[mineral]])
+                    // console.log('MINERAL: ' + mineral +'; LAB ID: ' + my_room.memory.lab_per_mineral[minerals[mineral]])
                     free_space = lab_of_mineral.mineralCapacity - lab_of_mineral.mineralAmount
                     if (free_space > 500) {
                         array2withdraw[my_room[sources[src]].id] = minerals[mineral]
@@ -792,6 +792,24 @@ var room_helpers = {
             }
         }
         return array2withdraw
+    },
+    run_lab_reactions: function(room_name) {
+        // Start possible reactions
+        // console.log('[' + room_name + '] Trying run reactions on Labs ')
+        let my_room = Game.rooms[room_name];
+        reactions_labs = ['process', 'produce']
+        for (lab_stage in reactions_labs) {
+            lab_ids_of_stage = my_room.memory.labs[reactions_labs[lab_stage]]
+            // console.log('[' + room_name + '] lab_ids_of_stage: ' + JSON.stringify(lab_ids_of_stage))
+            for (lab_id in lab_ids_of_stage){
+                current_lab = Game.getObjectById(lab_id)
+                if (current_lab.cooldown === 0) {
+                    src_lab1 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[0])
+                    src_lab2 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[1])
+                    current_lab.runReaction(src_lab1, src_lab2)
+                } else console.log('[' + room_name + '] Lab: ' + lab_id +'; Couldown: ' + current_lab.cooldown)
+            }
+        }
     }
 };
 

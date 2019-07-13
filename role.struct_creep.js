@@ -413,10 +413,10 @@ var structCreep = {
                         sources2withdraw[lab2withdraw[0]] = lab2withdraw[1]
                         sources_array = []
                         for (l_id in sources2withdraw) sources_array.push(Game.getObjectById(l_id))
-                        console.log('[DEBUG] (structCreep.run)[' + creep.name + '] SOURCES: ' + JSON.stringify(sources_array.length))
+                        // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] SOURCES: ' + JSON.stringify(sources_array.length))
 
                         let closest_target2withdraw = creep.pos.findClosestByRange(sources_array)
-                        console.log('[DEBUG] (structCreep.run)[' + creep.name + '] CLOSEST ID: ' + closest_target2withdraw)
+                        // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] CLOSEST ID: ' + closest_target2withdraw)
                         if (closest_target2withdraw) {
                             creep.memory.target_id = closest_target2withdraw.id
                             creep.memory.mineral2withdraw = sources2withdraw[closest_target2withdraw.id]
@@ -427,7 +427,7 @@ var structCreep = {
                         creep.memory.mineral2withdraw = creep.memory.mineral2withdraw
                     }
                 }
-                console.log('[DEBUG] (structCreep.run)[' + creep.name + '] AFTER Target ID : ' + creep.memory.target_id + '; MINERAL: ' + creep.memory.mineral2withdraw)
+                // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] AFTER Target ID : ' + creep.memory.target_id + '; MINERAL: ' + creep.memory.mineral2withdraw)
                 break;
             case 'energy_shuttle':
                 let creep_action;

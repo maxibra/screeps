@@ -311,6 +311,10 @@ module.exports.loop = function () {
             room_helpers.verify_all_full(current_room_name);
         }
 
+        if (Game.time % 11 === 0) {
+            room_helpers.run_lab_reactions(current_room_name);
+        }
+
         // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
         let current_mod = 0;
         if (Game.time % 4 === current_mod) {  // run every 10 ticks
@@ -349,11 +353,11 @@ module.exports.loop = function () {
             room_helpers.define_extension_first(current_room_name);
         }
         
-        if (Game.time % rare_time_range === 0) {
-            room_helpers.upgrade_energy_flow(current_room_name);
-            room_helpers.update_labs_info(current_room_name, room_by_mineral);
-            roleTower.create_towers_list(current_room_name);
-        }
+        // if (Game.time % rare_time_range === 0) {
+        //     room_helpers.upgrade_energy_flow(current_room_name);
+        //     room_helpers.update_labs_info(current_room_name, room_by_mineral);
+        //     roleTower.create_towers_list(current_room_name);
+        // }
     }
 
     if (Game.time % rare_time_range === 0) {
