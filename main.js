@@ -355,16 +355,19 @@ module.exports.loop = function () {
         
         // if (Game.time % rare_time_range === 0) {
         //     room_helpers.upgrade_energy_flow(current_room_name);
+        //     If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
         //     room_helpers.update_labs_info(current_room_name, room_by_mineral);
         //     roleTower.create_towers_list(current_room_name);
+        //     console.log('[INFO] (main) room_by_mineral: ' + JSON.stringify(room_by_mineral))
         // }
+
     }
 
-    if (Game.time % rare_time_range === 0) {
-        Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
-        
-    }
-    if (Game.time % 1000 === 0) {
+    // if (Game.time % rare_time_range === 1) {
+    //     Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
+    //
+    // }
+    if (Game.time % 1000 === 1) {
         room_helpers.clean_memory();
     }
 

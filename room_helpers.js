@@ -207,26 +207,33 @@ var room_helpers = {
     },
     transfer_mineral: function(room_name) {
         let my_room = Game.rooms[room_name];
-        
+
         let cur_room_terminal = (my_room) ? my_room.terminal : false;
         if (!cur_room_terminal) return;   // The room without my controller or without terminal
-        
+
         let global_vars = Memory.rooms.global_vars;
         let room_mineral = my_room.memory.energy_flow.mineral.type;
-        
-        // console.log('[DEBUG] (room_helpers.transfer_mineral): Room: ' + room_name + '; Terminal: ' + cur_room_terminal);
-        
-        for (let dst_room_index in global_vars.room_by_mineral.reagent[room_mineral]) {
-            let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
-            if (room_name === dst_room_name || Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
-                Game.rooms[dst_room_name].terminal.store[room_mineral] > global_vars.minerals.received_room ||
-                cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
-                cur_room_terminal.cooldown > 0)       
+
+        terminal_minerals = Object.keys(my_room.terminal.store)
+        terminal_minerals.push(my_room.memory.energy_flow.mineral.type)
+
+        // console.log('[DEBUG] (room_helpers.transfer_mineral): Room: ' + room_name + ';  Terminal minerals: ' + JSON.stringify(terminal_minerals));
+
+        for (indx in terminal_minerals) {
+            room_mineral = terminal_minerals[indx]
+            // if (room_name == "E28N48") console.log('[DEBUG] (room_helpers.transfer_mineral): MINERAL ' + room_mineral)
+            for (let dst_room_index in global_vars.room_by_mineral.reagent[room_mineral]) {
+                let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
+                if (room_name === dst_room_name || Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
+                    Game.rooms[dst_room_name].terminal.store[room_mineral] > global_vars.minerals.received_room ||
+                    cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
+                    cur_room_terminal.cooldown > 0)
                     continue;
-            let send_out = cur_room_terminal.send(room_mineral, global_vars.minerals.send_amount, dst_room_name);
-            if (send_out === OK) console.log('[INFO] (room_helpers.transfer_mineral): Sent ' + global_vars.minerals.send_amount + ' of ' + room_mineral + ' from ' + room_name + ' to ' + dst_room_name);
-            else console.log('[ERROR] (room_helpers.transfer_mineral): FAILED [' + send_out + '] transfer from ' + room_name + ' to ' + dst_room_name);
-            
+                let send_out = cur_room_terminal.send(room_mineral, global_vars.minerals.send_amount, dst_room_name);
+                if (send_out === OK) console.log('[INFO] (room_helpers.transfer_mineral): Sent ' + global_vars.minerals.send_amount + ' of ' + room_mineral + ' from ' + room_name + ' to ' + dst_room_name);
+                else console.log('[ERROR] (room_helpers.transfer_mineral): FAILED [' + send_out + '] transfer from ' + room_name + ' to ' + dst_room_name);
+
+            }
         }
     },
     check_create_miner: function(room_name, spawn_name, units) {
