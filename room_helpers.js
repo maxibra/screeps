@@ -814,7 +814,8 @@ var room_helpers = {
                     src_lab1 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[0])
                     src_lab2 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[1])
                     current_lab.runReaction(src_lab1, src_lab2)
-                } else console.log('[' + room_name + '] Lab: ' + lab_id +'; Couldown: ' + current_lab.cooldown)
+                }
+                // else console.log('[' + room_name + '] Lab: ' + lab_id +'; Couldown: ' + current_lab.cooldown)
             }
         }
     }
