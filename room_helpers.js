@@ -224,7 +224,11 @@ var room_helpers = {
             // if (room_name == "E28N48") console.log('[DEBUG] (room_helpers.transfer_mineral): MINERAL ' + room_mineral)
             for (let dst_room_index in global_vars.room_by_mineral.reagent[room_mineral]) {
                 let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
-                if (room_name === dst_room_name || Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
+                if (room_name === dst_room_name ||
+                    (room_name === 'E34N47' && room_mineral === 'G' &&
+                        (!Game.rooms[dst_room_name].terminal.store[room_mineral] ||
+                            Game.rooms[dst_room_name].terminal.store[room_mineral] < 5000)) ||
+                    Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
                     Game.rooms[dst_room_name].terminal.store[room_mineral] > global_vars.minerals.received_room ||
                     cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
                     cur_room_terminal.cooldown > 0)
@@ -787,7 +791,7 @@ var room_helpers = {
             minerals = shuffle(minerals)    // Randomize an order of the minerals
 
             for (mineral in minerals) {
-                if (my_room[sources[src]].store[minerals[mineral]] > 250) {
+                if (my_room[sources[src]].store[minerals[mineral]] >= 250) {
                     lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[minerals[mineral]])
                     // console.log('MINERAL: ' + mineral +'; LAB ID: ' + my_room.memory.lab_per_mineral[minerals[mineral]])
                     free_space = lab_of_mineral.mineralCapacity - lab_of_mineral.mineralAmount

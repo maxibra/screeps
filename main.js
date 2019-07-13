@@ -364,6 +364,7 @@ module.exports.loop = function () {
     }
 
     // if (Game.time % rare_time_range === 1) {
+    //     room_by_mineral['reagent']['G'] =
     //     Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
     //
     // }
