@@ -389,10 +389,9 @@ var structCreep = {
 
                 if (creep.memory.target_id) {
                     target_object = Game.getObjectById(creep.memory.target_id)
-                    console.log('[DEBUG] (structCreep.run)[' + creep.name + '] TARGET ID : ' + creep.memory.target_id + '; MINERAL: ' + creep.memory.mineral2withdraw)
+                    // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] TARGET ID : ' + creep.memory.target_id + '; MINERAL: ' + creep.memory.mineral2withdraw)
                     if (creep.pos.isNearTo(target_object)) {
                         mineral = _.remove(Object.keys(creep.carry), function(mineral_type) { return mineral_type != "energy"; })[0];
-                        console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mineral: ' + mineral)
                         if (mineral) {
                             creep.transfer(target_object, mineral)
                             creep.memory.mineral2withdra = false
@@ -421,7 +420,7 @@ var structCreep = {
                         creep.memory.mineral2withdraw = sources2withdraw[closest_target2withdraw.id]
                     } else  {   // The creep isn't empty
                         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LAB ID : ' + room_helpers.get_lab_by_mineral(room_name, creep.memory.mineral2withdraw))
-                        creep.memory.target_id = room_helpers.get_lab_by_mineral(room_name, creep.memory.mineral2withdraw)
+                        creep.memory.target_id = my_room.memory.lab_per_mineral[creep.memory.mineral2withdraw]
                         creep.memory.mineral2withdraw = creep.memory.mineral2withdraw
                     }
                 }

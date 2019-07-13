@@ -354,6 +354,7 @@ var room_helpers = {
         let all_labs_ids = all_labs.map(x => x.id);
         let all_lab_flags = my_room.find(FIND_FLAGS, {filter: object => (object.name.split('-')[0] === 'lab')});
         let labs_info = {
+            lab_per_mineral: {},
             minerals: {
                 'reagent': [],
                 'produce': [],
@@ -370,13 +371,14 @@ var room_helpers = {
         let lab_process_positions = {};
         let labs_id_by_mineral = {};
         let mineral_by_lab = {};
+        let lab_per_mineral = {}
         
         for (let f in all_lab_flags) {
             let flag_pos_str = all_lab_flags[f].pos.x +'-' + all_lab_flags[f].pos.y;
             let flag_name_splitted = all_lab_flags[f].name.split('-');
             let lab_mineral = flag_name_splitted[1];
             let mineral_stage = flag_name_splitted[2];
-            if (mineral_stage === 'reagent') 
+            if (mineral_stage === 'reagent')
                 lab_reagent_positions[flag_pos_str] = lab_mineral;
             else if (mineral_stage === 'produce')
                 lab_produce_positions[flag_pos_str] = lab_mineral;
@@ -393,18 +395,21 @@ var room_helpers = {
                 labs_info.reagent[all_labs[l].id] = {type: lab_reagent_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_reagent_positions[lab_pos_str]] = all_labs[l].id;
                 mineral_by_lab[all_labs[l].id] = lab_reagent_positions[lab_pos_str];
+                lab_per_mineral[lab_reagent_positions[lab_pos_str]] = all_labs[l].id
                 add_room_mineral2memory(room_by_mineral, room_name, lab_reagent_positions[lab_pos_str], 'reagent');
             } else if (Object.keys(lab_produce_positions).indexOf(lab_pos_str) >= 0 ) {
                 labs_info.minerals.produce.push(lab_produce_positions[lab_pos_str])
                 labs_info.produce[all_labs[l].id] = {type: lab_produce_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id;
                 mineral_by_lab[all_labs[l].id] = lab_produce_positions[lab_pos_str];
+                lab_per_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id
                 add_room_mineral2memory(room_by_mineral, room_name, lab_reagent_positions[lab_pos_str], 'produce');
             } else if (Object.keys(lab_process_positions).indexOf(lab_pos_str) >= 0 ) {
                 labs_info.minerals.process.push(lab_process_positions[lab_pos_str])
                 labs_info.process[all_labs[l].id] = {type: lab_process_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_process_positions[lab_pos_str]] = all_labs[l].id;
                 mineral_by_lab[all_labs[l].id] = lab_process_positions[lab_pos_str];
+                lab_per_mineral[lab_process_positions[lab_pos_str]] = all_labs[l].id
             } else if (all_labs[l].pos.getRangeTo(my_room.storage) < 5) {
                 labs_info.booster[all_labs[l].id] = {type: all_labs[l].mineralType};
             } else
@@ -428,6 +433,7 @@ var room_helpers = {
         
         my_room.memory.labs = labs_info;
         my_room.memory.mineral_by_lab = mineral_by_lab;
+        my_room.memory.lab_per_mineral = lab_per_mineral
     },
     upgrade_energy_flow: function(room_name) {
         // Containers
@@ -768,34 +774,24 @@ var room_helpers = {
         // {<id>: <mineral>, ...}
         let my_room = Game.rooms[room_name];
         array2withdraw = {}
-        sources = ['terminal', 'storage']
+        sources = ['terminal'] // , 'storage']
         for (src in sources) {
             minerals = my_room.memory.labs.minerals.reagent
             minerals = shuffle(minerals)    // Randomize an order of the minerals
 
             for (mineral in minerals) {
                 if (my_room[sources[src]].store[minerals[mineral]] > 500) {
-                    array2withdraw[my_room[sources[src]].id] = minerals[mineral]
-                    break
+                    lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[minerals[mineral]])
+                    console.log('MINERAL: ' + mineral +'; LAB ID: ' + my_room.memory.lab_per_mineral[minerals[mineral]])
+                    free_space = lab_of_mineral.mineralCapacity - lab_of_mineral.mineralAmount
+                    if (free_space > 500) {
+                        array2withdraw[my_room[sources[src]].id] = minerals[mineral]
+                        break
+                    }
                 }
             }
         }
         return array2withdraw
-    },
-    get_lab_by_mineral: function(room_name, mineral) {
-        // The function return ID of a lab with the given mineral
-        let my_room = Game.rooms[room_name];
-        labs_types = ['reagent', 'process']
-        all_labs_of_the_room = my_room.memory.labs
-        for (lab_t in labs_types) {
-            labs_of_type = all_labs_of_the_room[labs_types[lab_t]]
-            for (lab_id in labs_of_type) {
-                // console.log('MINERAL: ' + mineral + '; LAB: ' + lab_id + '; LAB_MINERAL: ' + labs_of_type[lab_id].type)
-                if (labs_of_type[lab_id].type === mineral)
-                    return lab_id
-            }
-        }
-        return ''
     }
 };
 
