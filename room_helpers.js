@@ -94,6 +94,23 @@ function add_room_mineral2memory(new_room_by_mineral, room_name, mineral, lab_ph
     console.log('[ERROR](room.helpers-add_room_mineral2memory)[' +  room_name + '] mineral: ' + mineral + '; phase: ' + lab_phase + '; room_by_mineral: ' + JSON.stringify(new_room_by_mineral));
 }
 
+function shuffle(arra1) {
+    var ctr = arra1.length, temp, index;
+
+// While there are elements in the array
+    while (ctr > 0) {
+// Pick a random index
+        index = Math.floor(Math.random() * ctr);
+// Decrease ctr by 1
+        ctr--;
+// And swap the last element with it
+        temp = arra1[ctr];
+        arra1[ctr] = arra1[index];
+        arra1[index] = temp;
+    }
+    return arra1;
+}
+
 
 var room_helpers = {
     define_extension_first: function(room_name) {
@@ -729,23 +746,56 @@ var room_helpers = {
         return xy_path;
     },
     get_lab2withdraw: function(room_name) {
-        // The function remove Lav ID of greates amount of minerals in 'produce', 'process'
+        // The function return a lab ID of greates amount of minerals in 'produce', 'process'
         // If the amount of greates lab is less than greatest_mineral_amount, then EMPTY string will be returned
+        // [ID, mineral]
         let my_room = Game.rooms[room_name];
-        greatest_mineral_amount_id = ''
-        greatest_mineral_amount = 500
+        greatest_mineral_amount = ['', '']
+        greatest_amount = 500
         lab_stages = ['produce', 'process']
         for (current_stage in lab_stages) {
             l_ids = Object.keys(my_room.memory.labs[lab_stages[current_stage]])
             for (l in l_ids){
                 lab_amount = Game.getObjectById(l_ids[l]).mineralAmount
-                if (lab_amount > greatest_mineral_amount) {
-                    greatest_mineral_amount_id = l_ids[l]
-                    greatest_mineral_amount = lab_amount
+                if (lab_amount > greatest_amount) greatest_mineral_amount = [l_ids[l], Game.getObjectById(l_ids[l]).mineralType]
+            }
+        }
+        return greatest_mineral_amount
+    },
+    create_sources2withdraw: function(room_name) {
+        // The function return array with terminal and storage
+        // If source doesn't have enough resources it missing from the array
+        // {<id>: <mineral>, ...}
+        let my_room = Game.rooms[room_name];
+        array2withdraw = {}
+        sources = ['terminal', 'storage']
+        for (src in sources) {
+            minerals = my_room.memory.labs.minerals.reagent
+            minerals = shuffle(minerals)    // Randomize an order of the minerals
+
+            for (mineral in minerals) {
+                if (my_room[sources[src]].store[minerals[mineral]] > 500) {
+                    array2withdraw[my_room[sources[src]].id] = minerals[mineral]
+                    break
                 }
             }
         }
-        return greatest_mineral_amount_id
+        return array2withdraw
+    },
+    get_lab_by_mineral: function(room_name, mineral) {
+        // The function return ID of a lab with the given mineral
+        let my_room = Game.rooms[room_name];
+        labs_types = ['reagent', 'process']
+        all_labs_of_the_room = my_room.memory.labs
+        for (lab_t in labs_types) {
+            labs_of_type = all_labs_of_the_room[labs_types[lab_t]]
+            for (lab_id in labs_of_type) {
+                // console.log('MINERAL: ' + mineral + '; LAB: ' + lab_id + '; LAB_MINERAL: ' + labs_of_type[lab_id].type)
+                if (labs_of_type[lab_id].type === mineral)
+                    return lab_id
+            }
+        }
+        return ''
     }
 };
 

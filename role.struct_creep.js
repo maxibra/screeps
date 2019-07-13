@@ -389,100 +389,43 @@ var structCreep = {
 
                 if (creep.memory.target_id) {
                     target_object = Game.getObjectById(creep.memory.target_id)
+                    console.log('[DEBUG] (structCreep.run)[' + creep.name + '] TARGET ID : ' + creep.memory.target_id + '; MINERAL: ' + creep.memory.mineral2withdraw)
                     if (creep.pos.isNearTo(target_object)) {
                         mineral = _.remove(Object.keys(creep.carry), function(mineral_type) { return mineral_type != "energy"; })[0];
                         console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mineral: ' + mineral)
-                        if (mineral) creep.transfer(target_object, mineral)
+                        if (mineral) {
+                            creep.transfer(target_object, mineral)
+                            creep.memory.mineral2withdra = false
+                        }
                         else creep.withdraw(target_object, creep.memory.mineral2withdraw)
                         creep.memory.target_id = false
                     } else creep.moveTo(target_object, global_vars.moveTo_ops);
-                }
-                break
+                } else {
+                    const total = _.sum(creep.carry);
+                    if (total == 0) {   // The creep is empty
+                        // my_room.find(FIND_TOMBSTONES).forEach(tombstone => {
+                        //     if(tombstone.creep.my){
+                        //
+                        //     }
+                        // }
+                        // Create object of good sources to withdraw {<id>: <mineral>,...}
+                        sources2withdraw = room_helpers.create_sources2withdraw(room_name)
+                        lab2withdraw = room_helpers.get_lab2withdraw(room_name)
+                        sources2withdraw[lab2withdraw[0]] = lab2withdraw[1]
+                        sources_array = []
+                        for (l_id in sources2withdraw) sources_array.push(Game.getObjectById(l_id))
+                        console.log('[DEBUG] (structCreep.run)[' + creep.name + '] SOURCES: ' + JSON.stringify(sources_array.length))
 
-                lab2withdraw = Game.getObjectById(room_helpers.get_lab2withdraw(room_name))
-
-                let closest_target2withdraw = creep.pos.findClosestByRange([my_room.terminal, my_room.storage, lab2withdraw])
-                switch(closest_target.structureType) {
-                    case 'terminal':
-
-                        break
-                    case 'storage':
-                        break
-                }
-
-                let i_am_near_closest = creep.pos.isNearTo(closest_target);
-                if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Closest: ' + closest_target.structureType + '; Near it: ' + i_am_near_closest + '; taget ID: ' + creep.memory.target_id);
-                if (creep.memory.target_id && !i_am_near_closest) {
-                    if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Moving to: ' + closest_target.structureType);
-                    creep.moveTo(Game.getObjectById(creep.memory.target_id), global_vars.moveTo_ops);
-                    break;
-                }
-                
-                const total = _.sum(creep.carry);
-                if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Carry: ' + total + ' : ' + JSON.stringify(creep.carry));
-                if (total === 0) {  // the creep is empty
-                    if (!i_am_near_closest) {
-                        if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Define target ID: ' +  closest_target.id);
-                        creep.memory.target_id = closest_target.id;
-                        break;
+                        let closest_target2withdraw = creep.pos.findClosestByRange(sources_array)
+                        creep.memory.target_id = closest_target2withdraw.id
+                        creep.memory.mineral2withdraw = sources2withdraw[closest_target2withdraw.id]
+                    } else  {   // The creep isn't empty
+                        // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LAB ID : ' + room_helpers.get_lab_by_mineral(room_name, creep.memory.mineral2withdraw))
+                        creep.memory.target_id = room_helpers.get_lab_by_mineral(room_name, creep.memory.mineral2withdraw)
+                        creep.memory.mineral2withdraw = creep.memory.mineral2withdraw
                     }
-                    
-                    // Here if the creep is near structure
-                    creep.memory.target_id = false;
-                    let labs_id_missing_reagent = get_missing_reagent_labs_id(my_room);
-                    let missing_reagent_types = labs_id_missing_reagent.map(t => my_room.memory.labs.reagent[t].type);
-                    switch(closest_target.structureType) {
-                        case 'terminal':
-                        case 'storage':
-                            let src_point = closest_target.structureType;
-                            let dst_point = (closest_target.structureType === 'terminal') ? 'storage' : 'terminal';
-                            //First check if need to transfer reagent to labs
-                            let minerals_amount = 0;
-                            if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Missing Reagent: ' + JSON.stringify(missing_reagent_types));
-                            for (let mineral_type in missing_reagent_types) {
-                                if (my_room[src_point].store[mineral_type] > Memory.rooms.global_vars.minerals.transfer_batch &&
-                                    missing_reagent_types.indexOf(mineral_type) > -1){
-                                    if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mineral: ' + mineral_type + '; Store: ' + my_room[src_point].store[mineral_type] + '; Lab missing:' + missing_reagent_types.indexOf(mineral_type));
-                                    if (creep.withdraw(my_room[src_point], mineral_type) === OK) minerals_amount++;
-                                }
-                            }
-                            
-                            if (minerals_amount > 0) {
-                                creep.memory.target_id = labs_id_missing_reagent[0];
-                                if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mineral: ' + mineral_type + '; Store: ' + my_room[src_point].store[mineral_type] + '; Lab missing:' + missing_reagent_types.indexOf(mineral_type));
-                                break;
-                            } else {    // All labs of reagent stage are full
-                                // check if produced minerals exist in terminal to transfer to Storage
-                                for (let teminal_t in my_room[src_point].store) {
-                                    if (missing_reagent_types.indexOf(teminal_t) > -1) {
-                                        // if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mineral: ' + mineral_type + '; Store: ' + my_room[src_point].store[mineral_type] + '; Lab missing:' + missing_reagent_types.indexOf(mineral_type));
-                                        creep.withdraw(my_room[src_point], teminal_t);     
-                                    }
-                                }
-                                creep.memory.target_id = my_room[dst_point].id;
-                            }
-                            break;
-                        case 'lab':
-                            let current_lab_mineral = my_room.memory.mineral_by_lab[creep.memory.target_id];
-                            if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run.lab_assistent)[' + creep.name + '] Creep has mineral of the lab: ' + Object.keys(creep.carry).indexOf(current_lab_mineral));
-                            if (Object.keys(creep.carry).indexOf(current_lab_mineral) >= 0) {
-                                creep.transfer(Game.getObjectById(creep.memory.target_id), current_lab_mineral);
-                                break;
-                            } 
-                            let labs_full_produce = get_full_produce_labs(my_room);
-                            let produce_types = labs_full_produce.map(t => t.mineralType);
-                            for (let mineral_type in produce_types) {
-                                if (my_room.terminal.store[t] > my_room.memory.global_vars.minerals.transfer_batch){
-                                    if (creep.withdraw(my_room.terminal, mineral_type) === OK) minerals_amount++;
-                                }
-                            }                            
-                            break;
-                        default:
-                            if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run.lab_assistent)[' + creep.name + '] Structure type isn"t define');    
-                    }
-                    
                 }
-                
+                console.log('[DEBUG] (structCreep.run)[' + creep.name + '] AFTER Target ID : ' + creep.memory.target_id + '; MINERAL: ' + creep.memory.mineral2withdraw)
                 break;
             case 'energy_shuttle':
                 let creep_action;

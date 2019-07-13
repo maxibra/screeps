@@ -265,7 +265,7 @@ var creep_helpers = {
                 amount: 1
                 ,
                 // avoid: (Object.keys(my_room.memory.labs.reagent).length === 0)
-                avoid: !(room_name === 'E38N48')
+                // avoid: !(room_name === 'E38N48')
             },   
             energy_helper: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 500
