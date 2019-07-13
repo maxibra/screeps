@@ -727,6 +727,25 @@ var room_helpers = {
         current_roads.push(road_descriptor);
         my_room.memory.roads = current_roads;
         return xy_path;
+    },
+    get_lab2withdraw: function(room_name) {
+        // The function remove Lav ID of greates amount of minerals in 'produce', 'process'
+        // If the amount of greates lab is less than greatest_mineral_amount, then EMPTY string will be returned
+        let my_room = Game.rooms[room_name];
+        greatest_mineral_amount_id = ''
+        greatest_mineral_amount = 500
+        lab_stages = ['produce', 'process']
+        for (current_stage in lab_stages) {
+            l_ids = Object.keys(my_room.memory.labs[lab_stages[current_stage]])
+            for (l in l_ids){
+                lab_amount = Game.getObjectById(l_ids[l]).mineralAmount
+                if (lab_amount > greatest_mineral_amount) {
+                    greatest_mineral_amount_id = l_ids[l]
+                    greatest_mineral_amount = lab_amount
+                }
+            }
+        }
+        return greatest_mineral_amount_id
     }
 };
 

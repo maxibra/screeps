@@ -390,13 +390,26 @@ var structCreep = {
                 if (creep.memory.target_id) {
                     target_object = Game.getObjectById(creep.memory.target_id)
                     if (creep.pos.isNearTo(target_object)) {
-                        mineral = _.remove(creep.carry, function(mineral_type) { return mineral_type === "energy"; })[0];
-                        if (mineral) creep.transfer(creep.memory.target_id, mineral)
-                    }
+                        mineral = _.remove(Object.keys(creep.carry), function(mineral_type) { return mineral_type != "energy"; })[0];
+                        console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mineral: ' + mineral)
+                        if (mineral) creep.transfer(target_object, mineral)
+                        else creep.withdraw(target_object, creep.memory.mineral2withdraw)
+                        creep.memory.target_id = false
+                    } else creep.moveTo(target_object, global_vars.moveTo_ops);
+                }
+                break
+
+                lab2withdraw = Game.getObjectById(room_helpers.get_lab2withdraw(room_name))
+
+                let closest_target2withdraw = creep.pos.findClosestByRange([my_room.terminal, my_room.storage, lab2withdraw])
+                switch(closest_target.structureType) {
+                    case 'terminal':
+
+                        break
+                    case 'storage':
+                        break
                 }
 
-                let closest_target = (creep.memory.target_id) ? Game.getObjectById(creep.memory.target_id) : 
-                                                                creep.pos.findClosestByRange([my_room.terminal, my_room.storage, Game.getObjectById(Object.keys(my_room.memory.labs.produce)[0])])
                 let i_am_near_closest = creep.pos.isNearTo(closest_target);
                 if (room_name == log_if_room ) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Closest: ' + closest_target.structureType + '; Near it: ' + i_am_near_closest + '; taget ID: ' + creep.memory.target_id);
                 if (creep.memory.target_id && !i_am_near_closest) {
