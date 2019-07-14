@@ -809,12 +809,12 @@ var room_helpers = {
         // console.log('[' + room_name + '] Trying run reactions on Labs ')
         let my_room = Game.rooms[room_name];
         reactions_labs = ['process', 'produce']
+        // if (room_name === 'E34N47') console.log('[DEBUG] (room_helpers-run_lab_reactions): LAB room ' + room_name)
         for (lab_stage in reactions_labs) {
             lab_ids_of_stage = my_room.memory.labs[reactions_labs[lab_stage]]
-            // console.log('[' + room_name + '] lab_ids_of_stage: ' + JSON.stringify(lab_ids_of_stage))
             for (lab_id in lab_ids_of_stage){
                 current_lab = Game.getObjectById(lab_id)
-                if (current_lab.cooldown === 0 && current_lab.mineralAmount < current_lab.ineralCapacity) {
+                if (current_lab.cooldown === 0 && current_lab.mineralAmount < current_lab.mineralCapacity) {
                     src_lab1 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[0])
                     src_lab2 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[1])
                     current_lab.runReaction(src_lab1, src_lab2)
