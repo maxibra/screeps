@@ -311,7 +311,7 @@ module.exports.loop = function () {
             room_helpers.verify_all_full(current_room_name);
         }
 
-        if (Game.time % 5 === 0) {
+        if (Game.time % 5 === 0 && Game.cpu.bucket > 5000) {
             room_helpers.run_lab_reactions(current_room_name);
         }
 
@@ -343,7 +343,7 @@ module.exports.loop = function () {
             room_helpers.transfer_energy(current_room_name);
         }
         
-        if (Game.time % 30 === 0) {
+        if (Game.time % 30 === 0  && Game.cpu.bucket > 6000) {
             room_helpers.transfer_mineral(current_room_name); 
             // Count storage capacity of terminal and storage
             if (my_room.storage &&
@@ -353,21 +353,20 @@ module.exports.loop = function () {
             room_helpers.define_extension_first(current_room_name);
         }
         
-        // if (Game.time % rare_time_range === 0) {
-        //     room_helpers.upgrade_energy_flow(current_room_name);
-        //     If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
-        //     room_helpers.update_labs_info(current_room_name, room_by_mineral);
-        //     roleTower.create_towers_list(current_room_name);
-        //     console.log('[INFO] (main) room_by_mineral: ' + JSON.stringify(room_by_mineral))
-        // }
+        if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
+            room_helpers.upgrade_energy_flow(current_room_name);
+            // If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
+            room_helpers.update_labs_info(current_room_name, room_by_mineral);
+            roleTower.create_towers_list(current_room_name);
+        }
 
     }
 
-    // if (Game.time % rare_time_range === 1) {
-    //     room_by_mineral['reagent']['G'] =
-    //     Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
-    //
-    // }
+    if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
+        // room_by_mineral['reagent']['G'] =
+        Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
+    }
+
     if (Game.time % 1000 === 1) {
         room_helpers.clean_memory();
     }
