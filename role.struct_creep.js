@@ -428,10 +428,21 @@ var structCreep = {
                                 creep.memory.mineral2withdraw = my_room.memory.energy_flow.mineral.type
                             }
                         }
+
+                        if (!creep.memory.target_id ) {  // It's no target was found
+                            room_nuker = my_room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_NUKER } })[0]
+                            if (my_room.storage.store['G'] >= 200 && room_nuker.ghodium <= 4800) {
+                                creep.memory.target_id = my_room.terminal.id
+                                creep.memory.mineral2withdraw = "G"
+                            }
+                        }
                     } else  {   // The creep isn't empty
                         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LAB ID : ' + room_helpers.get_lab_by_mineral(room_name, creep.memory.mineral2withdraw))
                         if (creep.pos.isNearTo(my_room.terminal))
-                            creep.memory.target_id = my_room.memory.lab_per_mineral[creep.memory.mineral2withdraw]
+                            if (creep.memory.mineral2withdraw == 'G')
+                                creep.memory.target_id = my_room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_NUKER } })[0].id
+                            else
+                                creep.memory.target_id = my_room.memory.lab_per_mineral[creep.memory.mineral2withdraw]
                         else
                             creep.memory.target_id = my_room.terminal.id
                         creep.memory.mineral2withdraw = creep.memory.mineral2withdraw

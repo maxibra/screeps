@@ -226,7 +226,7 @@ var room_helpers = {
                 let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
                 if (room_name === 'E34N47' && room_mineral === 'G' &&
                     (!Game.rooms[dst_room_name].terminal.store[room_mineral] ||
-                        Game.rooms[dst_room_name].terminal.store[room_mineral] < 2500)) {}
+                        Game.rooms[dst_room_name].terminal.store[room_mineral] <= 1000)) {}
                 else if (room_name === dst_room_name || !my_room.controller.my ||
                         (reagent_rooms.includes(room_name) && reagent_rooms.includes(dst_room_name)) ||
                         // Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
@@ -814,7 +814,7 @@ var room_helpers = {
             // console.log('[' + room_name + '] lab_ids_of_stage: ' + JSON.stringify(lab_ids_of_stage))
             for (lab_id in lab_ids_of_stage){
                 current_lab = Game.getObjectById(lab_id)
-                if (current_lab.cooldown === 0) {
+                if (current_lab.cooldown === 0 && current_lab.mineralAmount < current_lab.ineralCapacity) {
                     src_lab1 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[0])
                     src_lab2 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[1])
                     current_lab.runReaction(src_lab1, src_lab2)
