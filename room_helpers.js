@@ -221,14 +221,13 @@ var room_helpers = {
 
         for (indx in terminal_minerals) {
             room_mineral = terminal_minerals[indx]
-            // if (room_name == "E28N48") console.log('[DEBUG] (room_helpers.transfer_mineral): MINERAL ' + room_mineral)
             for (let dst_room_index in global_vars.room_by_mineral.reagent[room_mineral]) {
                 let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
                 if (room_name === dst_room_name ||
                     (room_name === 'E34N47' && room_mineral === 'G' &&
                         (!Game.rooms[dst_room_name].terminal.store[room_mineral] ||
                             Game.rooms[dst_room_name].terminal.store[room_mineral] < 5000)) ||
-                    Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
+                    // Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
                     Game.rooms[dst_room_name].terminal.store[room_mineral] > global_vars.minerals.received_room ||
                     cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
                     cur_room_terminal.cooldown > 0)
