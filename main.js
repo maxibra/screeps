@@ -363,7 +363,7 @@ module.exports.loop = function () {
     }
 
     if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
-        // room_by_mineral['reagent']['G'] =
+        room_by_mineral['reagent']['G'] = ['E28N48', 'E33N47', 'E37N48', 'E38N48', 'E38N47', 'E39N49']
         Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
     }
 

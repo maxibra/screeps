@@ -224,20 +224,19 @@ var room_helpers = {
             reagent_rooms = global_vars.room_by_mineral.reagent[room_mineral]
             for (let dst_room_index in reagent_rooms) {
                 let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
-                if (room_name === dst_room_name ||
-                    reagent_rooms.includes(room_name) ||
-                    (room_name === 'E34N47' && room_mineral === 'G' &&
-                        (!Game.rooms[dst_room_name].terminal.store[room_mineral] ||
-                            Game.rooms[dst_room_name].terminal.store[room_mineral] < 5000)) ||
-                    // Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
-                    Game.rooms[dst_room_name].terminal.store[room_mineral] > global_vars.minerals.received_room ||
-                    cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
-                    cur_room_terminal.cooldown > 0)
-                    continue;
+                if (room_name === 'E34N47' && room_mineral === 'G' &&
+                    (!Game.rooms[dst_room_name].terminal.store[room_mineral] ||
+                        Game.rooms[dst_room_name].terminal.store[room_mineral] < 2500)) {}
+                else if (room_name === dst_room_name || !my_room.controller.my ||
+                        (reagent_rooms.includes(room_name) && reagent_rooms.includes(dst_room_name)) ||
+                        // Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
+                        Game.rooms[dst_room_name].terminal.store[room_mineral] > global_vars.minerals.received_room ||
+                        cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
+                        cur_room_terminal.cooldown > 0)
+                            continue;
                 let send_out = cur_room_terminal.send(room_mineral, global_vars.minerals.send_amount, dst_room_name);
                 if (send_out === OK) console.log('[INFO] (room_helpers.transfer_mineral): Sent ' + global_vars.minerals.send_amount + ' of ' + room_mineral + ' from ' + room_name + ' to ' + dst_room_name);
-                else console.log('[ERROR] (room_helpers.transfer_mineral): FAILED [' + send_out + '] transfer from ' + room_name + ' to ' + dst_room_name);
-
+                else console.log('[ERROR] (room_helpers.transfer_mineral): FAILED [' + send_out + '] transfer of "' + room_mineral + '" from ' + room_name + ' to ' + dst_room_name);
             }
         }
     },
