@@ -263,9 +263,8 @@ var creep_helpers = {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 800
                 body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY], // carry: 200
                 // body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
-                amount: 1
-                ,
-                // avoid: (Object.keys(my_room.memory.labs.reagent).length === 0)
+                amount: 1,
+                avoid: (Game.cpu.bucket < 6000)
                 // avoid: !(room_name === 'E38N48')
             },   
             energy_helper: {
