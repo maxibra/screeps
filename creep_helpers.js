@@ -66,7 +66,7 @@ function upgrader_body(room_name) {
 function upgraders_amount(room_name) {
     // Object of rooms with remote targets
     // let upgraders = (Game.rooms[room_name].controller.ticksToDowngrade < 100000) ? 1 : 0;
-    let upgraders = 1;
+    let upgraders = 0;
     // if (room_name === 'E39N49') upgraders = 2;
     if (room_name === 'E38N47' ||
         room_name === 'E39N49') upgraders = 1;
