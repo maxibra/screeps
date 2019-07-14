@@ -431,7 +431,7 @@ var structCreep = {
 
                         if (!creep.memory.target_id ) {  // It's no target was found
                             room_nuker = my_room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_NUKER } })[0]
-                            if (my_room.storage.store['G'] >= 200 && room_nuker.ghodium <= 4800) {
+                            if (my_room.terminal.store['G'] >= 200 && room_nuker.ghodium <= 4800) {
                                 creep.memory.target_id = my_room.terminal.id
                                 creep.memory.mineral2withdraw = "G"
                             }
