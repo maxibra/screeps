@@ -66,7 +66,7 @@ function upgrader_body(room_name) {
 function upgraders_amount(room_name) {
     // Object of rooms with remote targets
     // let upgraders = (Game.rooms[room_name].controller.ticksToDowngrade < 100000) ? 1 : 0;
-    // let upgraders = 1;
+    let upgraders = 1;
     // if (room_name === 'E39N49') upgraders = 2;
     if (room_name === 'E38N47' ||
         room_name === 'E39N49') upgraders = 1;
@@ -290,8 +290,8 @@ var creep_helpers = {
                 name_prefix: 'mnrl_mnr_' + room_name,
                 amount: 1,
                 avoid: (!(my_room.memory.energy_flow.mineral.extractor && Game.getObjectById(my_room.memory.energy_flow.mineral.id).mineralAmount > 0) || 
-                        (my_room.storage && (_.sum(_.values(my_room.storage.store)) > (my_room.storage.storeCapacity * 0.9)))) // ||
-                        // (my_room.terminal && (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] > 50000)))
+                        ((my_room.storage && (_.sum(_.values(my_room.storage.store)) > (my_room.storage.storeCapacity * 0.9))) &&
+                        (my_room.terminal && (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] > 50000))))
             },
             re_transfer: {
                 // body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
