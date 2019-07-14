@@ -352,8 +352,8 @@ module.exports.loop = function () {
             if (my_room.terminal) Memory.rooms[current_room_name].energy_flow.store_used.terminal = _.sum(my_room.terminal.store)
             room_helpers.define_extension_first(current_room_name);
 
-            if (Game.cpu.bucket === 10000) my_room.global_vars.defence_level = 30554000
-            else if (Game.cpu.bucket < 8000) my_room.global_vars.defence_level = 20554000
+            if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.defence_level = 30554000
+            else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.defence_level = 20554000
         }
         
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
