@@ -414,7 +414,7 @@ var room_helpers = {
                 labs_id_by_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id;
                 mineral_by_lab[all_labs[l].id] = lab_produce_positions[lab_pos_str];
                 lab_per_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id
-                add_room_mineral2memory(room_by_mineral, room_name, lab_reagent_positions[lab_pos_str], 'produce');
+                add_room_mineral2memory(room_by_mineral, room_name, lab_produce_positions[lab_pos_str], 'produce');
             } else if (Object.keys(lab_process_positions).indexOf(lab_pos_str) >= 0 ) {
                 labs_info.minerals.process.push(lab_process_positions[lab_pos_str])
                 labs_info.process[all_labs[l].id] = {type: lab_process_positions[lab_pos_str]};
