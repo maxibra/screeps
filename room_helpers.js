@@ -221,9 +221,11 @@ var room_helpers = {
 
         for (indx in terminal_minerals) {
             room_mineral = terminal_minerals[indx]
-            for (let dst_room_index in global_vars.room_by_mineral.reagent[room_mineral]) {
+            reagent_rooms = global_vars.room_by_mineral.reagent[room_mineral]
+            for (let dst_room_index in reagent_rooms) {
                 let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
                 if (room_name === dst_room_name ||
+                    reagent_rooms.includes(room_name) ||
                     (room_name === 'E34N47' && room_mineral === 'G' &&
                         (!Game.rooms[dst_room_name].terminal.store[room_mineral] ||
                             Game.rooms[dst_room_name].terminal.store[room_mineral] < 5000)) ||
