@@ -344,7 +344,8 @@ module.exports.loop = function () {
         }
         
         if (Game.time % 30 === 0  && Game.cpu.bucket > 6000) {
-            room_helpers.transfer_mineral(current_room_name); 
+            room_helpers.transfer_mineral(current_room_name);
+            room_helpers.get_terminals_status()
             // Count storage capacity of terminal and storage
             if (my_room.storage &&
                 Memory.rooms[current_room_name].energy_flow.store_used) 

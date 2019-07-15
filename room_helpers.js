@@ -218,28 +218,37 @@ var room_helpers = {
         terminal_minerals.push(my_room.memory.energy_flow.mineral.type)
 
         // console.log('[DEBUG] (room_helpers.transfer_mineral): Room: ' + room_name + ';  Terminal minerals: ' + JSON.stringify(terminal_minerals));
-
+        we_have_minreal2transfer = false
         for (indx in terminal_minerals) {
             room_mineral = terminal_minerals[indx]
             reagent_rooms = global_vars.room_by_mineral.reagent[room_mineral]
+            min_amount = ['', 0]
             for (let dst_room_index in reagent_rooms) {
                 let dst_room_name = global_vars.room_by_mineral.reagent[room_mineral][dst_room_index];
-                if (room_name === 'E34N47' && room_mineral === 'G' &&
-                    (!Game.rooms[dst_room_name].terminal.store[room_mineral] ||
-                        Game.rooms[dst_room_name].terminal.store[room_mineral] <= 1000)) {}
+                let dst_room_terminal = Game.rooms[dst_room_name].terminal
+                if (room_name === 'E34N47' && room_mineral === 'G' && cur_room_terminal.store[room_mineral] > global_vars.minerals.send_amount &&
+                    (!dst_room_terminal.store[room_mineral] ||
+                        dst_room_terminal.store[room_mineral] <= 1000)) {}
                 else if (room_name === dst_room_name || !my_room.controller.my ||
                         (my_room.memory.energy_flow.mineral.type != room_mineral && reagent_rooms.includes(room_name) &&
                                                                                     reagent_rooms.includes(dst_room_name)) ||
                         // Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
-                        Game.rooms[dst_room_name].terminal.store[room_mineral] > global_vars.minerals.received_room ||
+                        dst_room_terminal.store[room_mineral] > global_vars.minerals.received_room ||
                         cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
                         cur_room_terminal.cooldown > 0)
                             continue;
-                let send_out = cur_room_terminal.send(room_mineral, global_vars.minerals.send_amount, dst_room_name);
-                if (send_out === OK) console.log('[INFO] (room_helpers.transfer_mineral): Sent ' + global_vars.minerals.send_amount + ' of ' + room_mineral + ' from ' + room_name + ' to ' + dst_room_name);
-                else console.log('[ERROR] (room_helpers.transfer_mineral): FAILED [' + send_out + '] transfer of "' + room_mineral + '" from ' + room_name + ' to ' + dst_room_name);
+                // console.log('[DEBUG] (room_helpers.transfer_mineral) Mineral [' + room_mineral + ']: ' + cur_room_terminal.store[room_mineral] +'/' + global_vars.minerals.send_amount + ' ; DST [' + dst_room_name + ']: ' + dst_room_terminal.store[room_mineral] + '; Min[' + min_amount[0] + ']: ' +min_amount[1])
+                if (!dst_room_terminal.store[room_mineral] || dst_room_terminal.store[room_mineral] < min_amount[1] || min_amount[0] == '') min_amount = [dst_room_name, dst_room_terminal.store[room_mineral]]
+            }
+            // console.log('[DEBUG] (room_helpers.transfer_mineral) Minimum Mineral: ' + JSON.stringify(min_amount))
+            if (min_amount[0] != '') {
+                we_have_minreal2transfer = true
+                let send_out = cur_room_terminal.send(room_mineral, global_vars.minerals.send_amount, min_amount[0]);
+                if (send_out === OK) console.log('[INFO] (room_helpers.transfer_mineral): Sent ' + global_vars.minerals.send_amount + ' of ' + room_mineral + ' from ' + room_name + ' to ' + min_amount[0]);
+                else console.log('[ERROR] (room_helpers.transfer_mineral): FAILED [' + send_out + '] transfer of "' + room_mineral + '" from ' + room_name + ' to ' + min_amount[0]);
             }
         }
+        if (!we_have_minreal2transfer) console.log("[INFO] (room_helpers.transfer_mineral)[" + room_name + "]: It's no minerals to transfer")
     },
     check_create_miner: function(room_name, spawn_name, units) {
         let my_room = Game.rooms[room_name];
@@ -364,7 +373,8 @@ var room_helpers = {
         
         let all_labs = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LAB)});
         let all_labs_ids = all_labs.map(x => x.id);
-        let all_lab_flags = my_room.find(FIND_FLAGS, {filter: object => (object.name.split('-')[0] === 'lab')});
+        let all_lab_flags = my_room.find(FIND_FLAGS, {filter: object => (object.name.split('-')[0] === 'lab' ||
+                                                                         object.name.split('-')[0] === 'lab2')});
         let labs_info = {
             lab_per_mineral: {},
             minerals: {
@@ -823,6 +833,17 @@ var room_helpers = {
                 // else console.log('[' + room_name + '] Lab: ' + lab_id +'; Couldown: ' + current_lab.cooldown)
             }
         }
+    },
+    get_terminals_status: function() {
+        // Put to memory status of all terminals
+        // rooms.global_vars.terminal_status
+        terminals_status = {}
+        for (r in Game.rooms) {
+            current_room = Game.rooms[r]
+            if (!current_room.controller.my) continue   // The room isn't mine
+            terminals_status[current_room.name] = current_room.terminal.store
+        }
+        Memory.rooms.global_vars.terminal_status = terminals_status
     }
 };
 
