@@ -447,7 +447,7 @@ var structCreep = {
                         } else  {   // The creep isn't empty
                         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LAB ID : ' + room_helpers.get_lab_by_mineral(room_name, creep.memory.mineral2withdraw))
                         if (creep.pos.isNearTo(my_room.terminal))
-                            if (creep.memory.mineral2withdraw == 'G')
+                            if (creep.memory.mineral2withdraw == 'G' && room_nuker.ghodium <= 4800)
                                 creep.memory.target_id = my_room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_NUKER } })[0].id
                             else
                                 creep.memory.target_id = my_room.memory.lab_per_mineral[creep.memory.mineral2withdraw]

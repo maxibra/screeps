@@ -228,7 +228,8 @@ var room_helpers = {
                     (!Game.rooms[dst_room_name].terminal.store[room_mineral] ||
                         Game.rooms[dst_room_name].terminal.store[room_mineral] <= 1000)) {}
                 else if (room_name === dst_room_name || !my_room.controller.my ||
-                        (reagent_rooms.includes(room_name) && reagent_rooms.includes(dst_room_name)) ||
+                        (my_room.memory.energy_flow.mineral.type != room_mineral && reagent_rooms.includes(room_name) &&
+                                                                                    reagent_rooms.includes(dst_room_name)) ||
                         // Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
                         Game.rooms[dst_room_name].terminal.store[room_mineral] > global_vars.minerals.received_room ||
                         cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
