@@ -841,7 +841,9 @@ var room_helpers = {
         for (r in Game.rooms) {
             current_room = Game.rooms[r]
             if (!current_room.controller.my) continue   // The room isn't mine
+            total_terminal = _.sum(current_room.terminal.store)
             terminals_status[current_room.name] = current_room.terminal.store
+            terminals_status[current_room.name]['total'] = total_terminal
         }
         Memory.rooms.global_vars.terminal_status = terminals_status
     }
