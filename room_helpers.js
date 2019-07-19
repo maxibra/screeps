@@ -230,7 +230,7 @@ var room_helpers = {
             reagent_rooms = (global_vars.room_by_mineral.reagent[room_mineral]) ? global_vars.room_by_mineral.reagent[room_mineral] : []
             if (room_name === 'E33N47') console.log('WO source: ' + my_rooms_wo_src_room)
             potential_dst_rooms = (room_mineral.length == 5) ? my_rooms_wo_src_room : reagent_rooms
-            if (room_name === 'E33N47') console.log('[DEBUG] (room_helpers.transfer_mineral): Current room: ' + room_name + '; Mineral: ' + room_mineral + '; Poten Rooms' + JSON.stringify(potential_dst_rooms)) // + '; Index: ' + dst_room_index)
+            // if (room_name === 'E33N47') console.log('[DEBUG] (room_helpers.transfer_mineral): Current room: ' + room_name + '; Mineral: ' + room_mineral + '; Poten Rooms' + JSON.stringify(potential_dst_rooms)) // + '; Index: ' + dst_room_index)
             for (let dst_room_index in potential_dst_rooms) {
                 let dst_room_name = potential_dst_rooms[dst_room_index];
                 let dst_room_terminal = Game.rooms[dst_room_name].terminal

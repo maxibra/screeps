@@ -429,14 +429,28 @@ var structCreep = {
                             }
                         }
 
-                        if (!creep.memory.target_id ) {  // It's no target was found
-                            room_nuker = my_room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_NUKER } })[0]
-                            if (my_room.terminal.store['G'] >= 200 && room_nuker.ghodium <= 4800) {
+                        // FILL NUKER
+                        // if (!creep.memory.target_id ) {  // It's no target was found
+                        //     room_nuker = my_room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_NUKER } })[0]
+                        //     if (my_room.terminal.store['G'] >= 200 && room_nuker.ghodium <= 4800) {
+                        //         creep.memory.target_id = my_room.terminal.id
+                        //         creep.memory.mineral2withdraw = "G"
+                        //     }
+                        // }
+
+                        // Transfer final processed mineral from terminal to storage
+                        if (!creep.memory.target_id ) {  // It's still no target was found
+                            final_procedure_minerals = Memory.rooms.global_vars.room_by_mineral.final_produce
+                            random_mineral = final_procedure_minerals[Math.floor(Math.random()*final_procedure_minerals.length)]
+                            console.log('[DEBUG] (lab_assistent) Random mineral: ' + random_mineral + '; Storage: ' + my_room.storage.store[random_mineral])
+                            if (my_room.storage.store[random_mineral] < Memory.rooms.global_vars.minerals.received_room ||
+                                !my_room.storage.store[random_mineral]) {
                                 creep.memory.target_id = my_room.terminal.id
-                                creep.memory.mineral2withdraw = "G"
+                                creep.memory.mineral2withdraw = random_mineral
                             }
                         }
 
+                        // Transfer room's mineral from storage to terminal
                         if (!creep.memory.target_id ) {  // It's still no target was found
                             if (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] < 50000) {
                                 creep.memory.target_id = my_room.storage.id
@@ -449,6 +463,8 @@ var structCreep = {
                             room_nuker = my_room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_NUKER}})[0]
                             if (creep.memory.mineral2withdraw == 'G' && room_nuker.ghodium <= 4800)
                                 creep.memory.target_id = my_room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_NUKER}})[0].id
+                            else if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(creep.memory.mineral2withdraw))
+                                creep.memory.target_id = my_room.storage.id
                             else
                                 creep.memory.target_id = my_room.memory.lab_per_mineral[creep.memory.mineral2withdraw]
                         } else
