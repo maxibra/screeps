@@ -151,7 +151,7 @@ module.exports.loop = function () {
 
     let only_rooms = ['E28N48', 'E33N47', 'E34N47', 'E37N48', 'E38N47', 'E38N48', 'E39N49', 'E38N49', 'E37N49', 'E32N47', 'E27N48', 'E27N47']; //, 'E32N49'];
     let avoid_rooms = ['global_vars', 'E26N40', 'E26N43', 'E26N44', 'E26N46', 'E27N40', 'E28N47', 'E29N47', 'E30N48', 'E31N53', 'E34N46', 'E39N50', 'E40N49'];
-    
+
     let run_on_roooms = (only_rooms.length > 0) ? only_rooms : Object.keys(Memory.rooms);
     
     // console.log('[INFO] (main)[Before CREEP ---] Creeps: ' + Object.keys(Game.creeps))
@@ -259,6 +259,7 @@ module.exports.loop = function () {
     let room_by_mineral = {
         reagent: {},
         produce: {},
+        final_produce: []
     };
     let rare_time_range = 300;
     for(var room_index in run_on_roooms) {
@@ -275,7 +276,7 @@ module.exports.loop = function () {
         
         // Memory.rooms[current_room_name].energy_flow.store_used = {};
         // delete Memory.rooms[current_room_name].energy_flow.max_used;
-        // Memory.rooms[current_room_name].energy_flow.max_store = {storage: 900000, terminal: 280000}
+        // Memory.rooms[current_room_name].energy_flow.max_store = {storage: 800000, terminal: 270000}
 
         // console.log('[DEBUG] ROOM: ' + current_room_name)
         // if (current_room_name === 'E28N48') {
