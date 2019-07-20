@@ -60,6 +60,23 @@ function get_full_produce_labs(my_room) {
     return full_produce_labs;
 }
 
+
+function transfer_mineral2boost(creep, storage, booster_lab, mineral) {
+    if (booster_lab.type != mineral) {  // need to clear the lab from worng mineral
+        while (booster_lab.mineralAmount > 0) {
+            const total = _.sum(creep.carry);
+            if (total > 0) {
+                if (creep.carry[mineral] && creep.carry[mineral]) {
+                    if (creep.pos.isNearTo(storage)) {
+                        creep.transfer(target, RESOURCE_ENERGY);
+                    }
+                }
+            }
+        }
+    }
+    // while (booster_lab.mineralAmount)
+}
+
 var structCreep = {
     run: function(creep, units) {
         if(creep.spawning) return;
@@ -1094,11 +1111,46 @@ var structCreep = {
             default:
                 console.log('[ERROR] (structCreep): No role defined for ' + creep.name + '; ROLE: ' + creep_role);
         }
+        // boost_me: function() {
+        //     // boost_ops = {
+        //     //     'move': 'XZHO2',
+        //     //     'attack': 'XUH2O'
+        //     // }
+        // }
+    },
+    boost_me: function(my_room, creep) {
+        boost_price = {
+            'mineral': 30,
+            'energy': 20
+        }
+        boost_type = {
+            'move': 'XZHO2',
+            'attack': 'XUH2O',
+            'ranged_attack': 'XKH2O',
+            'carry': 'XKHO2',
+            'heal': 'XLHO2',
+            'tough': 'XGHO2'
+        }
+        booster_lab = Game.getObjectById(my_room.memory.labs.booster)
 
-        {    // HARVEST
-
-            //console.log('Source:' + source);
-            //return [source.pos.x, source.pos.y];
+        my_body = creep.body
+        my_body_parts = {}
+        full_price = {}
+        for (b_indx in my_body) {
+            if (my_body_parts[my_body[b_indx].type]) my_body_parts[my_body[b_indx].type] += 1
+            else my_body_parts[my_body[b_indx].type] = 1
+            if (full_price[boost_type[my_body[b_indx].type]]) {
+                full_price[boost_type[my_body[b_indx].type]]['mineral'] += boost_price['mineral']
+                full_price[boost_type[my_body[b_indx].type]]['energy'] += boost_price['energy']
+            } else full_price[boost_type[my_body[b_indx].type]] = {'mineral': boost_price['mineral'], 'energy': boost_price['energy']}
+        }
+        for (mineral in full_price) {
+            // Verify that the boosting needs at the most 20% from the current amount of the given mineral in the Storage
+            //      and the needed energy at the most 20% from the current amount of it in the boost lab
+            if ((full_price[mineral]['mineral'] < (my_room.storage.store[mineral]*0.2)) &&
+                (full_price[mineral]['energy'] < (booster_lab.energy*0.2))) {
+                transfer_mineral2boost(creep, my_room.storage, booster_lab, mineral)
+            }
         }
     }
 };
