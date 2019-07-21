@@ -1129,7 +1129,8 @@ var structCreep = {
             'ranged_attack': 'XKH2O',
             'carry': 'XKHO2',
             'heal': 'XLHO2',
-            'tough': 'XGHO2'
+            'tough': 'XGHO2',
+            'work': 'GH2O'
         }
         booster_lab = Game.getObjectById(my_room.memory.labs.booster)
 
