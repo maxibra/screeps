@@ -221,20 +221,20 @@ var room_helpers = {
         terminal_minerals = Object.keys(my_room.terminal.store)
         terminal_minerals.push(my_room.memory.energy_flow.mineral.type)
 
-        // console.log('[DEBUG] (room_helpers.transfer_mineral): Room: ' + room_name + ';  Terminal minerals: ' + JSON.stringify(terminal_minerals));
+        // if(room_name === 'E38N48') console.log('[DEBUG] (room_helpers.transfer_mineral): Room: ' + room_name + ';  Terminal minerals: ' + JSON.stringify(terminal_minerals));
         we_have_minreal2transfer = false
         min_amount = ['', 0, '']    // [dst_room_name,amount_of_mineral_in_dst_terminal, mineral]
         for (indx in terminal_minerals) {
             room_mineral = terminal_minerals[indx]
             if (room_mineral === 'total') continue
             reagent_rooms = (global_vars.room_by_mineral.reagent[room_mineral]) ? global_vars.room_by_mineral.reagent[room_mineral] : []
-            if (room_name === 'E33N47') console.log('WO source: ' + my_rooms_wo_src_room)
-            potential_dst_rooms = (room_mineral.length == 5) ? my_rooms_wo_src_room : reagent_rooms
-            // if (room_name === 'E33N47') console.log('[DEBUG] (room_helpers.transfer_mineral): Current room: ' + room_name + '; Mineral: ' + room_mineral + '; Poten Rooms' + JSON.stringify(potential_dst_rooms)) // + '; Index: ' + dst_room_index)
+            // if (room_name === 'E38N48') console.log('WO source: ' + my_rooms_wo_src_room)
+            potential_dst_rooms = (room_mineral.length == 5 || room_mineral === 'GH2O') ? my_rooms_wo_src_room : reagent_rooms
+            // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers.transfer_mineral): Current room: ' + room_name + '; Mineral: ' + room_mineral + '; Poten Rooms' + JSON.stringify(potential_dst_rooms)) // + '; Index: ' + dst_room_index)
             for (let dst_room_index in potential_dst_rooms) {
                 let dst_room_name = potential_dst_rooms[dst_room_index];
                 let dst_room_terminal = Game.rooms[dst_room_name].terminal
-                if (((room_name === 'E34N47' && room_mineral === 'G') || room_mineral.length == 5) && cur_room_terminal.store[room_mineral] > global_vars.minerals.send_amount &&
+                if (((room_name === 'E34N47' && room_mineral === 'G') || room_mineral.length == 5 || room_mineral == 'GH2O') && cur_room_terminal.store[room_mineral] > global_vars.minerals.send_amount &&
                     (!dst_room_terminal.store[room_mineral] ||
                         dst_room_terminal.store[room_mineral] <= global_vars.minerals.received_room)) {}
                 else if (room_name === dst_room_name || !my_room.controller.my ||
@@ -245,7 +245,7 @@ var room_helpers = {
                         cur_room_terminal.store[room_mineral] < global_vars.minerals.send_amount ||
                         cur_room_terminal.cooldown > 0)
                             continue;
-                // console.log('[DEBUG] (room_helpers.transfer_mineral) Mineral [' + room_mineral + ']: ' + cur_room_terminal.store[room_mineral] +'/' + global_vars.minerals.send_amount + ' ; DST [' + dst_room_name + ']: ' + dst_room_terminal.store[room_mineral] + '; Min[' + min_amount[0] + ']: ' +min_amount[1])
+                // if(room_name === 'E38N48') console.log('[DEBUG] (room_helpers.transfer_mineral) Mineral [' + room_mineral + ']: ' + cur_room_terminal.store[room_mineral] +'/' + global_vars.minerals.send_amount + ' ; DST [' + dst_room_name + ']: ' + dst_room_terminal.store[room_mineral] + '; Min[' + min_amount[0] + ']: ' +min_amount[1])
                 if (!dst_room_terminal.store[room_mineral] || dst_room_terminal.store[room_mineral] < min_amount[1] || min_amount[0] == '')
                     min_amount = [dst_room_name, dst_room_terminal.store[room_mineral], room_mineral]
                 // if (!dst_room_terminal.store[room_mineral] || dst_room_terminal.store[room_mineral] < min_amount[1] || min_amount[0] == '')
@@ -417,7 +417,8 @@ var room_helpers = {
                 lab_reagent_positions[flag_pos_str] = lab_mineral;
             else if (mineral_stage === 'produce') {
                 lab_produce_positions[flag_pos_str] = lab_mineral;
-                if (lab_mineral.length == 5 && !room_by_mineral.final_produce.includes(lab_mineral)) room_by_mineral.final_produce.push(lab_mineral)
+                if ((lab_mineral.length == 5 || lab_mineral === 'GH2O') && !room_by_mineral.final_produce.includes(lab_mineral))
+                    room_by_mineral.final_produce.push(lab_mineral)
             } else if (mineral_stage === 'process')
                 lab_process_positions[flag_pos_str] = lab_mineral;
             else
