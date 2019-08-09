@@ -263,7 +263,7 @@ var creep_helpers = {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 800
                 body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY], // carry: 200
                 // body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
-                amount: 0,
+                amount: 1,
                 avoid: (Game.cpu.bucket < 6000)
                 // avoid: !(room_name === 'E38N48')
             },   
@@ -287,16 +287,17 @@ var creep_helpers = {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 name_prefix: 'mnrl_mnr_' + room_name,
-                amount: 0,
-                avoid: (!(my_room.memory.energy_flow.mineral.extractor && Game.getObjectById(my_room.memory.energy_flow.mineral.id).mineralAmount > 0) || 
-                        ((my_room.storage && (_.sum(_.values(my_room.storage.store)) > (my_room.storage.storeCapacity * 0.9))) &&
-                        (my_room.terminal && (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] > 50000))))
+                amount: 1,
+                avoid: ((my_room.storage && ((my_room.memory.energy_flow.store_used.storage > (my_room.storage.storeCapacity * 0.93)) ||
+                                             (my_room.storage['energy'] < Memory.rooms.global_vars.storage_emergency_ration))) ||
+                        !(my_room.memory.energy_flow.mineral.extractor && Game.getObjectById(my_room.memory.energy_flow.mineral.id).mineralAmount > 0))
+                        // (my_room.terminal && (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] > 50000))))
             },
             re_transfer: {
                 // body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],   // CARRY: 500
-                amount: 2,
-                avoid: !(room_name === 'E32N53') // || room_name === 'E27N45' || room_name === 'E38N48' || room_name === 'E37N48')   
+                amount: 0,
+                avoid: !(room_name === 'E39N49') // || room_name === 'E27N45' || room_name === 'E38N48' || room_name === 'E37N48')
             },
             energy_shuttle: {
                 // body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
@@ -346,8 +347,9 @@ var creep_helpers = {
                 
                 // if (room_name === 'E34N47' ) console.log('(create_creep) [' + room_name + '] Creep type: ' +creep_type);
                 const add = (a, b) => a + b;
+                // console.log('[DEBUG] (create_creep) [' + room_name + '] CONTAINERS: ' + JSON.stringify(my_room.memory.energy_flow.containers))
                 if (creep_type === 'energy_miner' && 
-                    (Object.keys(my_room.memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store.energy).reduce(add)) > (Object.keys(my_room.memory.energy_flow.containers.source).length * 1000))
+                    (Object.keys(my_room.memory.energy_flow.containers.source).map(x => Game.getObjectById(x)       .store.energy).reduce(add)) > (Object.keys(my_room.memory.energy_flow.containers.source).length * 1000))
                     continue;
 
                 let rmt_targets = (current_obj.rmt_targets) ? current_obj.rmt_targets : [false,];    // false is for moke of intra room special creeps

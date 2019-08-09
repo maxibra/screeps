@@ -126,7 +126,7 @@ var structCreep = {
             return;
         }
 
-        // Suicide of energy miners if both of containers near cources are full.
+        // Suicide of energy miners if both of containers near sources are full.
         const add = (a, b) => a + b;
         if (creep.name.substring(0,7) === 'nrg_mnr' &&
             !fill_terminal &&
@@ -253,10 +253,11 @@ var structCreep = {
                         && (object.energy < object.energyCapacity))});
                 }
                 
-                // if (room_name === 'E37N48' && transfer_target) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target (EXTENSIONS?): ' + transfer_target.structureType + '; ID: ' + transfer_target.id + '; transfer_procent: ' + transfer_procent + '; condition: ' + (transfer_target && (transfer_procent <= current_creep_types.transfer)));
+                // if (room_name === 'E38N47' && transfer_target) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target (EXTENSIONS?): ' + transfer_target.structureType + '; ID: ' + transfer_target.id + '; transfer_procent: ' + transfer_procent + '; condition: ' + (transfer_target && (transfer_procent <= current_creep_types.transfer)));
                 let booster_lab_id = (my_room.memory.labs) ? Object.keys(my_room.memory.labs.booster)[0] : false;
                 if (!transfer_target && booster_lab_id) {    
                     let booster_lab = Game.getObjectById(booster_lab_id);
+                    if (room_name === 'E38N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Booster lab: ' + booster_lab)
                     if (booster_lab && booster_lab.energy < booster_lab.energyCapacity) transfer_target = booster_lab;
                 }
                 
@@ -459,8 +460,8 @@ var structCreep = {
                         if (!creep.memory.target_id ) {  // It's still no target was found
                             final_procedure_minerals = Memory.rooms.global_vars.room_by_mineral.final_produce
                             random_mineral = final_procedure_minerals[Math.floor(Math.random()*final_procedure_minerals.length)]
-                            console.log('[DEBUG] (lab_assistent) Random mineral: ' + random_mineral + '; Storage: ' + my_room.storage.store[random_mineral])
-                            if (my_room.storage.store[random_mineral] < Memory.rooms.global_vars.minerals.received_room ||
+                            // console.log('[DEBUG] (lab_assistent) Random mineral: ' + random_mineral + '; Storage: ' + my_room.storage.store[random_mineral])
+                            if (my_room.storage.store[random_mineral] < Memory.rooms.global_vars.minerals.store_final_produce ||
                                 !my_room.storage.store[random_mineral]) {
                                 creep.memory.target_id = my_room.terminal.id
                                 creep.memory.mineral2withdraw = random_mineral
@@ -542,23 +543,23 @@ var structCreep = {
                     
                 break;
             case 're_transfer':
-                // let transfer_type = 'energy';
+                let transfer_type = 'K';
                 // let memory_reagents = Game.rooms['E39N49'].memory.labs.reagent;
                 // let lab = Game.getObjectById((Object.keys(memory_reagents).find(key => memory_reagents[key].type === transfer_type)))
                 // let src_target = my_room.terminal;
                 // let dst_target = (lab.mineralAmount < 0.8 * lab.mineralCapacity) ? lab : my_room.storage;
                 // let dst_target = (lab.mineralAmount < 0.8 * lab.mineralCapacity) ? lab : my_room.storage;
 
-                // let src_target = my_room.terminal;
-                // let dst_target = my_room.storage;
-                let src_target = my_room.storage;
-                let dst_target = my_room.terminal;
+                let src_target = my_room.terminal;
+                let dst_target = my_room.storage;
+                // let src_target = my_room.storage;
+                // let dst_target = my_room.terminal;
                 
                 let carry_total = _.sum(creep.carry);
                 let creep_carries = Object.keys(creep.carry);
                 if (carry_total === 0) {
-                    let current_resource = RESOURCE_ENERGY;
-                    if (src_target.store[current_resource] < 100000) break;
+                    let current_resource = transfer_type;
+                    if (src_target.store[current_resource] < 25000) break;
                     // let current_resource = transfer_type;
 
                     // for (let r in src_target.store) 
@@ -595,12 +596,12 @@ var structCreep = {
                 }
 
 
-                // if (!rmt_container_target) {
-                //     console.log('[ERROR] (structCreep.run-remote_energy_miner)[' + creep.name + ']: No mine is defined: ' + JSON.stringify(creep.memory.far_target));
-                //     break;
-                // } else {
-                //     creep.memory.target_id = first_container_id;
-                // }
+                if (!rmt_container_target) {
+                    console.log('[ERROR] (structCreep.run-remote_energy_miner)[' + creep.name + ']: No mine is defined: ' + JSON.stringify(creep.memory.far_target));
+                    break;
+                } else {
+                    creep.memory.target_id = first_container_id;
+                }
                 
                 // console.log('[ERROR] (structCreep.run-remote_energy_miner)[' + creep.name + ']: Container: ' + rmt_container_target);
                 if (creep.pos.getRangeTo(rmt_container_target) > 0 && creep.pos.getRangeTo(rmt_container_target) < 3) creep.memory.stuck += 1;
@@ -1079,7 +1080,7 @@ var structCreep = {
                         }
                     }
                     
-                    if (creep.attack(target2attack) !== OK) creep.moveTo(target2attack);
+                    if (creep.rangedAttack(target2attack) !== OK || creep.attack(target2attack) !== OK) creep.moveTo(target2attack);
                 }
                 if (creep.room.name === 'E38N49') creep.memory.role = 'undefined';
                 break;                

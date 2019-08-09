@@ -109,13 +109,13 @@ var RoleHarvester = {
                         //                                                                           object.store[RESOURCE_ENERGY] > 200 ||
                         //                                                                           Object.keys(object.store).length === 1)}); //|| creep.pos.getRangeTo(object, 2)});
 
-                        let min_terminal_storage = (room_name === 'E39N49') ? 50000 : Memory.rooms.global_vars.terminal_emergency_ration;
+                        let min_terminal_storage = Memory.rooms.global_vars.terminal_emergency_ration;
                         storage_target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_STORAGE && (my_room.memory.global_vars.status === 'war' ||
                                                                                                                                                             (object.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.storage_emergency_ration &&
-                                                                                                                                                             (!my_room.memory.global_vars.all_full || room_name === 'E38N47')))) || 
+                                                                                                                                                             !my_room.memory.global_vars.all_full))) ||
                                                                                                             (object.structureType === STRUCTURE_TERMINAL && (my_room.memory.global_vars.status === 'war' ||
                                                                                                                                                              object.store[RESOURCE_ENERGY] > min_terminal_storage && 
-                                                                                                                                                             (!my_room.memory.global_vars.all_full || room_name === 'E38N47')))) }); 
+                                                                                                                                                             !my_room.memory.global_vars.all_full))) });
                                                                                                                                                 
                         // if (target && creep.memory.special !== 'upgrader' && my_room.memory.global_vars.status === 'peace' &&
                         //     room_helpers.is_inside_wall(room_name, target)) {

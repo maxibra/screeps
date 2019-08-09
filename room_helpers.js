@@ -417,7 +417,8 @@ var room_helpers = {
                 lab_reagent_positions[flag_pos_str] = lab_mineral;
             else if (mineral_stage === 'produce') {
                 lab_produce_positions[flag_pos_str] = lab_mineral;
-                if ((lab_mineral.length == 5 || lab_mineral === 'GH2O') && !room_by_mineral.final_produce.includes(lab_mineral))
+                if ((lab_mineral.length == 5) // || lab_mineral === 'GH2O') 
+                    && !room_by_mineral.final_produce.includes(lab_mineral))
                     room_by_mineral.final_produce.push(lab_mineral)
             } else if (mineral_stage === 'process')
                 lab_process_positions[flag_pos_str] = lab_mineral;
@@ -487,7 +488,10 @@ var room_helpers = {
         let local_energy_flow_obj = {
             long_harvest: my_room.memory.energy_flow.long_harvest,
             sources: my_room.memory.energy_flow.sources,
-            store_used: my_room.memory.energy_flow.store_used,
+            store_used: {
+                storage: _.sum(my_room.storage.store),
+                terminal: _.sum(my_room.terminal.store)
+            },
             max_store: my_room.memory.energy_flow.max_store,
             mineral: cur_mineral,
             containers: {source :{}, other: {}}, 
@@ -789,7 +793,7 @@ var room_helpers = {
         return xy_path;
     },
     get_lab2withdraw: function(room_name) {
-        // The function return a lab ID of greates amount of minerals in 'produce', 'process'
+        // The function return a lab ID of greates amount of minerals in 'produce' //, 'process'
         // If the amount of greates lab is less than greatest_mineral_amount, then EMPTY string will be returned
         // [ID, mineral]
         let my_room = Game.rooms[room_name];
@@ -799,8 +803,17 @@ var room_helpers = {
         for (current_stage in lab_stages) {
             l_ids = Object.keys(my_room.memory.labs[lab_stages[current_stage]])
             for (l in l_ids){
-                lab_amount = Game.getObjectById(l_ids[l]).mineralAmount
-                if (lab_amount > greatest_amount) greatest_mineral_amount = [l_ids[l], Game.getObjectById(l_ids[l]).mineralType]
+                current_lab = Game.getObjectById(l_ids[l])
+                lab_amount = current_lab.mineralAmount
+                if (room_name === 'E37N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Lab Type: ' + current_lab.mineralType + '; Amount: ' + lab_amount + '; Greates amount: ' + greatest_amount)
+                if (lab_amount > greatest_amount &&
+                    (my_room.terminal.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.store_final_produce) // ||
+                     // my_room.storage.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.store_final_produce)
+                    ) {
+                        greatest_mineral_amount = [l_ids[l], current_lab.mineralType]
+                        greatest_amount = lab_amount
+                        if (room_name === 'E37N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Possible transfer: ' + current_lab.mineralType + ' from ' + l_ids[l])
+                }
             }
         }
         return greatest_mineral_amount
@@ -856,12 +869,11 @@ var room_helpers = {
         for (r in Game.rooms) {
             current_room = Game.rooms[r]
             if (!current_room.controller.my) continue   // The room isn't mine
-            total_terminal = _.sum(current_room.terminal.store)
             terminals_status[r] = {}
             for (store_part in current_room.terminal.store) {
                 terminals_status[r][store_part] = current_room.terminal.store[store_part]
             }
-            terminals_status[r]['total'] = total_terminal
+            terminals_status[r]['total'] = current_room.memory.energy_flow.store_used.terminal
         }
         Memory.rooms.global_vars.terminal_status = terminals_status
     }

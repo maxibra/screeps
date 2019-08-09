@@ -9,8 +9,19 @@ var screepsplus = require('screepsplus');
 
 if (typeof Memory.rooms.global_vars === "undefined") {
     Memory.rooms.global_vars = {
+        min_tower_enrg2repair: 0.6,
+        defence_level: 40554000,
+        terminal_max_energy_storage: 150000,
+        terminal_min2transfer: 70000,
+        terminal_emergency_ration: 80000,
+        storage_emergency_ration: 200000,
+        update_period: {
+            towers: 1000,
+            after_war: 20
+        },
+        age_to_drop_and_die: 10,
         moveTo_ops: {
-            reusePath: 10,           // default: 5
+            reusePath: 15,           // default: 5
             //serializeMemory: false, // default: true
             //noPathFinding: true, // default: false
             visualizePathStyle: {
@@ -25,15 +36,24 @@ if (typeof Memory.rooms.global_vars === "undefined") {
             after_war: 150,
             towers: 1000
         },
-        age_to_drop_and_die: 10,
-        room_by_mineral: {},
+        room_by_mineral: {
+            reagent: {},
+            produce: {},
+            final_produce: {}
+        },
         minerals: {
-            minimum_send_room: 5000,
-            minimum_received_room: 4000,
-            max_in_terminal: 6000,
+            send_room: 40000,
+            received_room: 1000,
+            store_final_produce: 5000,
             send_amount: 500,
             transfer_batch: 300
-        }
+        },
+        units: {},
+        towers: {
+            current: {},
+            next_update: 10332455
+        },
+        targets: {}
     }
 }
 for(var current_spawn_name in Game.spawns) {
@@ -261,7 +281,7 @@ module.exports.loop = function () {
         produce: {},
         final_produce: []
     };
-    let rare_time_range = 300;
+    let rare_time_range = 300;  // 15 minutes
     for(var room_index in run_on_roooms) {
         let current_room_name = run_on_roooms[room_index];
         let my_room = Game.rooms[current_room_name];
@@ -313,7 +333,7 @@ module.exports.loop = function () {
         }
 
         if (Game.time % 5 === 0 && Game.cpu.bucket > 5000) {
-            // room_helpers.run_lab_reactions(current_room_name);
+            room_helpers.run_lab_reactions(current_room_name);
         }
 
         // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
@@ -354,14 +374,14 @@ module.exports.loop = function () {
             if (my_room.terminal) Memory.rooms[current_room_name].energy_flow.store_used.terminal = _.sum(my_room.terminal.store)
             room_helpers.define_extension_first(current_room_name);
 
-            if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.defence_level = 40554000
+            if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.defence_level = 30554000
             else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.defence_level = 20554000
         }
         
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
             room_helpers.upgrade_energy_flow(current_room_name);
             // If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
-            // room_helpers.update_labs_info(current_room_name, room_by_mineral);
+            room_helpers.update_labs_info(current_room_name, room_by_mineral);
             roleTower.create_towers_list(current_room_name);
         }
 
