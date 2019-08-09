@@ -289,7 +289,7 @@ var creep_helpers = {
                 name_prefix: 'mnrl_mnr_' + room_name,
                 amount: 1,
                 avoid: ((my_room.storage && ((my_room.memory.energy_flow.store_used.storage > (my_room.storage.storeCapacity * 0.93)) ||
-                                             (my_room.storage['energy'] < Memory.rooms.global_vars.storage_emergency_ration))) ||
+                                             (my_room.storage.store['energy'] < Memory.rooms.global_vars.storage_emergency_ration))) ||
                         !(my_room.memory.energy_flow.mineral.extractor && Game.getObjectById(my_room.memory.energy_flow.mineral.id).mineralAmount > 0))
                         // (my_room.terminal && (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] > 50000))))
             },
