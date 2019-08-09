@@ -805,14 +805,15 @@ var room_helpers = {
             for (l in l_ids){
                 current_lab = Game.getObjectById(l_ids[l])
                 lab_amount = current_lab.mineralAmount
-                // if (room_name === 'E37N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Lab Type: ' + current_lab.mineralType + '; Amount: ' + lab_amount + '; Greates amount: ' + greatest_amount)
+                // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Lab Type: ' + current_lab.mineralType + '; Amount: ' + lab_amount + '; Greates amount: ' + greatest_amount)
                 if (lab_amount > greatest_amount &&
-                    (my_room.terminal.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.store_final_produce) // ||
+                    ((my_room.terminal.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.store_final_produce) ||
+                        !my_room.terminal.store[current_lab.mineralType])
                      // my_room.storage.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.store_final_produce)
                     ) {
                         greatest_mineral_amount = [l_ids[l], current_lab.mineralType]
                         greatest_amount = lab_amount
-                        // if (room_name === 'E37N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Possible transfer: ' + current_lab.mineralType + ' from ' + l_ids[l])
+                        // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Possible transfer: ' + current_lab.mineralType + ' from ' + l_ids[l])
                 }
             }
         }
@@ -853,7 +854,7 @@ var room_helpers = {
             lab_ids_of_stage = my_room.memory.labs[reactions_labs[lab_stage]]
             for (lab_id in lab_ids_of_stage){
                 current_lab = Game.getObjectById(lab_id)
-                if (current_lab.cooldown === 0 && current_lab.mineralAmount < current_lab.mineralCapacity) {
+                if (current_lab.cooldown === 0 && current_lab.mineralAmount <= (current_lab.mineralCapacity - 5)) {
                     src_lab1 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[0])
                     src_lab2 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[1])
                     current_lab.runReaction(src_lab1, src_lab2)
