@@ -476,7 +476,7 @@ var room_helpers = {
     upgrade_energy_flow: function(room_name) {
         // Containers
         let my_room = Game.rooms[room_name];
-        if (!my_room) return;
+        if (!my_room || !my_room.controller.my) return;
         
         let all_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
         let all_continers_ids = all_containers.map(x => x.id);
@@ -867,7 +867,12 @@ var room_helpers = {
         // Put to memory status of all terminals
         // rooms.global_vars.terminal_status
         terminals_status = {}
-        storage_status_by_mineral = {}
+        storage_status_by_mineral = {
+            energy: {
+                total: 0,
+                terminal: {total: 0},
+                storage: {total: 0}
+            }}
         for (m in Memory.rooms.global_vars.room_by_mineral.final_produce) {
             storage_status_by_mineral[Memory.rooms.global_vars.room_by_mineral.final_produce[m]] = {
                 total: 0,
@@ -880,7 +885,7 @@ var room_helpers = {
             if (!current_room.controller.my) continue   // The room isn't mine
             terminals_status[r] = {}
             for (store_part in current_room.terminal.store) {
-                if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part)) {
+                if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part) || store_part === 'energy') {
                     storage_status_by_mineral[store_part].terminal[r] = current_room.terminal.store[store_part]
                     storage_status_by_mineral[store_part].terminal.total += current_room.terminal.store[store_part]
                     storage_status_by_mineral[store_part].total += current_room.terminal.store[store_part]
@@ -890,7 +895,7 @@ var room_helpers = {
             terminals_status[r]['total'] = current_room.memory.energy_flow.store_used.terminal
 
             for (store_part in current_room.storage.store) {
-                if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part)) {
+                if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part) || store_part === 'energy') {
                     storage_status_by_mineral[store_part].storage[r] = current_room.storage.store[store_part]
                     storage_status_by_mineral[store_part].storage.total += current_room.storage.store[store_part]
                     storage_status_by_mineral[store_part].total += current_room.storage.store[store_part]
