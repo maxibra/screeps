@@ -863,19 +863,42 @@ var room_helpers = {
             }
         }
     },
-    get_terminals_status: function() {
+    get_minerals_status: function() {
         // Put to memory status of all terminals
         // rooms.global_vars.terminal_status
         terminals_status = {}
+        storage_status_by_mineral = {}
+        for (m in Memory.rooms.global_vars.room_by_mineral.final_produce) {
+            storage_status_by_mineral[Memory.rooms.global_vars.room_by_mineral.final_produce[m]] = {
+                total: 0,
+                terminal: {total: 0},
+                storage: {total: 0}
+            }
+        }
         for (r in Game.rooms) {
             current_room = Game.rooms[r]
             if (!current_room.controller.my) continue   // The room isn't mine
             terminals_status[r] = {}
             for (store_part in current_room.terminal.store) {
+                if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part)) {
+                    storage_status_by_mineral[store_part].terminal[r] = current_room.terminal.store[store_part]
+                    storage_status_by_mineral[store_part].terminal.total += current_room.terminal.store[store_part]
+                    storage_status_by_mineral[store_part].total += current_room.terminal.store[store_part]
+                }
                 terminals_status[r][store_part] = current_room.terminal.store[store_part]
             }
             terminals_status[r]['total'] = current_room.memory.energy_flow.store_used.terminal
+
+            for (store_part in current_room.storage.store) {
+                if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part)) {
+                    storage_status_by_mineral[store_part].storage[r] = current_room.storage.store[store_part]
+                    storage_status_by_mineral[store_part].storage.total += current_room.storage.store[store_part]
+                    storage_status_by_mineral[store_part].total += current_room.storage.store[store_part]
+                }
+            }
         }
+
+        Memory.rooms.global_vars.storage_status_by_mineral = storage_status_by_mineral
         Memory.rooms.global_vars.terminal_status = terminals_status
     }
 };
