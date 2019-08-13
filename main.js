@@ -342,9 +342,9 @@ module.exports.loop = function () {
             // console.log('[INFO] (main): RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             //        room_helpers.get_transfer_target(current_room_name);
             room_helpers.define_room_status(current_room_name);
+
             // dropped_resources = Memory.rooms[current_room_name].find(FIND_DROPPED_RESOURCES)
             // if (dropped_resources.length > 0) Game.notify('We Have Dropped Resources in our area: ' + dropped_resources.length);
-
         }
         // console.log('[DEBUG] (main)[' + current_room_name + '] BUILD')
 
@@ -366,7 +366,6 @@ module.exports.loop = function () {
         
         if (Game.time % 30 === 0 && Game.cpu.bucket > 6000) {
             room_helpers.transfer_mineral(current_room_name);
-            room_helpers.get_minerals_status()
             // Count storage capacity of terminal and storage
             if (my_room.storage &&
                 Memory.rooms[current_room_name].energy_flow.store_used) 
@@ -379,11 +378,16 @@ module.exports.loop = function () {
         }
         
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
+            room_helpers.get_minerals_status()
             room_helpers.upgrade_energy_flow(current_room_name);
             // If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
             room_helpers.update_labs_info(current_room_name, room_by_mineral);
             roleTower.create_towers_list(current_room_name);
         }
+
+        if (Game.time % 1200) // Notify every hour
+            Game.notify('Mineral status (' + Game.cpu.bucket + '): ' +
+                        JSON.stringify(Memory.rooms.global_vars.storage_status_by_mineral, null, 2))
 
     }
 
