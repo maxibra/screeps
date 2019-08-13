@@ -386,8 +386,8 @@ module.exports.loop = function () {
         }
 
         if (Game.time % 1200 === 0) {// Notify every hour
-            object_len = JSON.stringify(Memory.rooms.global_vars.storage_status_by_mineral)
-            object_pretty_len = JSON.stringify(Memory.rooms.global_vars.storage_status_by_mineral, null, 2)
+            object_len = JSON.stringify(Memory.rooms.global_vars.storage_status_by_mineral).length
+            object_pretty_len = JSON.stringify(Memory.rooms.global_vars.storage_status_by_mineral, null, 2).length
             Game.notify('Mineral status (' + Game.cpu.bucket + '): ' + '[' + object_len + '|' + object_pretty_len + ']' +
                         JSON.stringify(Memory.rooms.global_vars.storage_status_by_mineral, null, 2))
         }
