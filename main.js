@@ -385,7 +385,7 @@ module.exports.loop = function () {
             roleTower.create_towers_list(current_room_name);
         }
 
-        if (Game.time % 1200 === 0) {// Notify every hour
+        if (Game.time % 3600 === 0) { // Notify every hour
             for (m in Memory.rooms.global_vars.storage_status_by_mineral) {
                 Game.notify('Mineral status of ' + m + '(' + Game.cpu.bucket + '): ' +
                     JSON.stringify(Memory.rooms.global_vars.storage_status_by_mineral[m], null, 2))
