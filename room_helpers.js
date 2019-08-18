@@ -123,6 +123,7 @@ var room_helpers = {
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
         let destination_rooms = ['E38N47', 'E39N49'];    //
+        let send_amount = 2000;
 
         // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));
 
@@ -142,9 +143,10 @@ var room_helpers = {
             if (destination_terminal && cur_terminal && cur_terminal.cooldown === 0 &&
                 destination_terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage && 
                 cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer && 
-                destination_room.memory.energy_flow.store_used.terminal < destination_room.memory.energy_flow.max_store.terminal) {
+                destination_room.memory.energy_flow.store_used.terminal < destination_room.memory.energy_flow.max_store.terminal &&
+                cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + send_amount)) {
                 
-                let send_out = cur_terminal.send(RESOURCE_ENERGY, 2000, destination_room_name);
+                let send_out = cur_terminal.send(RESOURCE_ENERGY, send_amount, destination_room_name);
                 // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
                 if (send_out === OK) {
                     console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + my_room.memory.energy_flow.store_used.terminal + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
@@ -218,7 +220,7 @@ var room_helpers = {
         let global_vars = Memory.rooms.global_vars;
         let room_mineral = my_room.memory.energy_flow.mineral.type;
 
-        terminal_minerals = Object.keys(my_room.terminal.store)
+        terminal_minerals = Object.keys(cur_room_terminal.store)
         terminal_minerals.push(my_room.memory.energy_flow.mineral.type)
 
         // if(room_name === 'E38N48') console.log('[DEBUG] (room_helpers.transfer_mineral): Room: ' + room_name + ';  Terminal minerals: ' + JSON.stringify(terminal_minerals));
@@ -226,7 +228,13 @@ var room_helpers = {
         min_amount = ['', 0, '']    // [dst_room_name,amount_of_mineral_in_dst_terminal, mineral]
         for (indx in terminal_minerals) {
             room_mineral = terminal_minerals[indx]
-            if (room_mineral === 'total') continue
+            // if (room_mineral === 'XUH2O') console.log('[DEBUG] (room_helpers.transfer_mineral)[' + room_name + '] ' + room_mineral + ': ' + cur_room_terminal.store[room_mineral] +
+            //             '; Limit: ' + (global_vars.minerals.received_room + global_vars.minerals.send_amount) +
+            //             '; Don"t Transfer: ' + (cur_room_terminal.store[room_mineral] < (global_vars.minerals.received_room + global_vars.minerals.send_amount)))
+            if (room_mineral === 'total' ||
+                cur_room_terminal.store[room_mineral] < (global_vars.minerals.received_room + global_vars.minerals.send_amount))// ||
+                // room_mineral === 'XUH2O')
+                continue
             reagent_rooms = (global_vars.room_by_mineral.reagent[room_mineral]) ? global_vars.room_by_mineral.reagent[room_mineral] : []
             // if (room_name === 'E38N48') console.log('WO source: ' + my_rooms_wo_src_room)
             potential_dst_rooms = (room_mineral.length == 5 || room_mineral === 'GH2O') ? my_rooms_wo_src_room : reagent_rooms
@@ -234,7 +242,8 @@ var room_helpers = {
             for (let dst_room_index in potential_dst_rooms) {
                 let dst_room_name = potential_dst_rooms[dst_room_index];
                 let dst_room_terminal = Game.rooms[dst_room_name].terminal
-                if (((room_name === 'E34N47' && room_mineral === 'G') || room_mineral.length == 5 || room_mineral == 'GH2O') && cur_room_terminal.store[room_mineral] > global_vars.minerals.send_amount &&
+                if (((room_name === 'E34N47' && room_mineral === 'G') || room_mineral.length == 5 || room_mineral == 'GH2O') &&
+                    cur_room_terminal.store[room_mineral] > (dst_room_terminal.store[room_mineral] + global_vars.minerals.send_amount) &&
                     (!dst_room_terminal.store[room_mineral] ||
                         dst_room_terminal.store[room_mineral] <= global_vars.minerals.received_room)) {}
                 else if (room_name === dst_room_name || !my_room.controller.my ||
@@ -246,7 +255,7 @@ var room_helpers = {
                         cur_room_terminal.cooldown > 0)
                             continue;
                 // if(room_name === 'E38N48') console.log('[DEBUG] (room_helpers.transfer_mineral) Mineral [' + room_mineral + ']: ' + cur_room_terminal.store[room_mineral] +'/' + global_vars.minerals.send_amount + ' ; DST [' + dst_room_name + ']: ' + dst_room_terminal.store[room_mineral] + '; Min[' + min_amount[0] + ']: ' +min_amount[1])
-                if (!dst_room_terminal.store[room_mineral] || dst_room_terminal.store[room_mineral] < min_amount[1] || min_amount[0] == '')
+                    if (!dst_room_terminal.store[room_mineral] || dst_room_terminal.store[room_mineral] < min_amount[1] || min_amount[0] == '')
                     min_amount = [dst_room_name, dst_room_terminal.store[room_mineral], room_mineral]
                 // if (!dst_room_terminal.store[room_mineral] || dst_room_terminal.store[room_mineral] < min_amount[1] || min_amount[0] == '')
                 //     min_amount = [dst_room_name, dst_room_terminal.store[room_mineral]]
@@ -807,9 +816,9 @@ var room_helpers = {
                 lab_amount = current_lab.mineralAmount
                 // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Lab Type: ' + current_lab.mineralType + '; Amount: ' + lab_amount + '; Greates amount: ' + greatest_amount)
                 if (lab_amount > greatest_amount &&
-                    ((my_room.terminal.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.store_final_produce) ||
+                    ((my_room.terminal.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.storage_final_produce) ||
                         !my_room.terminal.store[current_lab.mineralType])
-                     // my_room.storage.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.store_final_produce)
+                     // my_room.storage.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.storage_final_produce)
                     ) {
                         greatest_mineral_amount = [l_ids[l], current_lab.mineralType]
                         greatest_amount = lab_amount

@@ -44,7 +44,7 @@ if (typeof Memory.rooms.global_vars === "undefined") {
         minerals: {
             send_room: 40000,
             received_room: 1000,
-            store_final_produce: 5000,
+            storage_final_produce: 5000,
             send_amount: 500,
             transfer_batch: 300
         },
@@ -384,14 +384,29 @@ module.exports.loop = function () {
             room_helpers.update_labs_info(current_room_name, room_by_mineral);
             roleTower.create_towers_list(current_room_name);
         }
+    }
 
-        if (Game.time % 3600 === 0) { // Notify every 3 hour (tick is about 3 sec)
-            for (m in Memory.rooms.global_vars.storage_status_by_mineral) {
-                Game.notify('Mineral status of ' + m + '(' + Game.cpu.bucket + '): ' +
-                    JSON.stringify(Memory.rooms.global_vars.storage_status_by_mineral[m], null, 2))
+    if (Game.time % 3600 === 0) { // Notify every 3 hour (tick is about 3 sec)
+        for (m in Memory.rooms.global_vars.storage_status_by_mineral) {
+            string_of_mineral = m + ' (bucket: ' + Game.cpu.bucket + '):\n'
+            for (cur_storage in Memory.rooms.global_vars.storage_status_by_mineral[m]) {
+                if (cur_storage === 'total') {
+                    cur_diff = (Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage] - Memory.rooms.global_vars.prev_storage_status_by_mineral[m][cur_storage])
+                    string_of_mineral += 'total: ' + Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage] + ' (+' + cur_diff + ')\n'
+                    continue
+                }
+                string_of_mineral += cur_storage + '\n'
+                for (cur_room in Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage]) {
+                    cur_diff = (Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage][cur_room] - Memory.rooms.global_vars.prev_storage_status_by_mineral[m][cur_storage][cur_room])
+                    string_of_mineral += '\t' + cur_room + ': ' + Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage][cur_room] +
+                                         ' (+' + cur_diff + ')\n'
+                }
             }
+            Game.notify(string_of_mineral)
+            // Game.notify('Mineral status of ' + m + '(' + Game.cpu.bucket + '): ' +
+            //     JSON.stringify(Memory.rooms.global_vars.storage_status_by_mineral[m], null, 2))
         }
-
+        Memory.rooms.global_vars.prev_storage_status_by_mineral = Memory.rooms.global_vars.storage_status_by_mineral
     }
 
     if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {

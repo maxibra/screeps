@@ -461,7 +461,7 @@ var structCreep = {
                             final_procedure_minerals = Memory.rooms.global_vars.room_by_mineral.final_produce
                             random_mineral = final_procedure_minerals[Math.floor(Math.random()*final_procedure_minerals.length)]
                             // console.log('[DEBUG] (lab_assistent) Random mineral: ' + random_mineral + '; Storage: ' + my_room.storage.store[random_mineral])
-                            if (my_room.storage.store[random_mineral] < Memory.rooms.global_vars.minerals.store_final_produce ||
+                            if (my_room.storage.store[random_mineral] < Memory.rooms.global_vars.minerals.storage_final_produce ||
                                 !my_room.storage.store[random_mineral]) {
                                 creep.memory.target_id = my_room.terminal.id
                                 creep.memory.mineral2withdraw = random_mineral
@@ -470,7 +470,7 @@ var structCreep = {
 
                         // Transfer room's mineral from storage to terminal
                         if (!creep.memory.target_id ) {  // It's still no target was found
-                            if (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] < Memory.rooms.global_vars.minerals.store_final_produce) {
+                            if (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] < Memory.rooms.global_vars.minerals.storage_final_produce) {
                                 creep.memory.target_id = my_room.storage.id
                                 creep.memory.mineral2withdraw = my_room.memory.energy_flow.mineral.type
                             }
