@@ -128,38 +128,38 @@ var room_helpers = {
         // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));
 
         if (destination_rooms.indexOf(room_name) >= 0) return;    // Destination room don't send eneregy
-        
+
+        minimal_energy_terminal = {store: {energy: 500000}}
         for (let r in destination_rooms) {
-            let destination_room_name = destination_rooms[r];
-            let destination_room = Game.rooms[destination_room_name];
-            let destination_terminal = destination_room.terminal;
-            // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Try to transfer to ' + destination_room_name);
-            if (!destination_terminal) {
-                    // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Skip ' + destination_room_name + '; Conditions: ' + (destination_room.controller.level === 8 && destination_room_name !== 'E38N47'));
-                    continue;  
+            let destination_terminal = Game.rooms[destination_rooms[r]].terminal;
+            // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Amount of energy of terminal ' + destination_rooms[r] + ': ' + minimal_energy_terminal.store[RESOURCE_ENERGY]);
+            if (destination_terminal && minimal_energy_terminal.store[RESOURCE_ENERGY] > destination_terminal.store[RESOURCE_ENERGY])
+                minimal_energy_terminal = destination_terminal
+        }
+
+        // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Minimal energy terminal: ' + minimal_energy_terminal.room.name);
+
+        let destination_terminal = minimal_energy_terminal
+        let destination_room_name = destination_terminal.room.name
+        let destination_room = Game.rooms[destination_room_name]
+        if (destination_terminal.room && cur_terminal && cur_terminal.cooldown === 0 &&
+            destination_terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
+            cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer &&
+            destination_room.memory.energy_flow.store_used.terminal < destination_room.memory.energy_flow.max_store.terminal &&
+            cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + send_amount)) {
+
+            let send_out = cur_terminal.send(RESOURCE_ENERGY, send_amount, destination_room_name);
+            // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
+            if (send_out === OK) {
+                console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + destination_terminal.store[RESOURCE_ENERGY] + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
             }
-            // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Try to transfer to ' + destination_room_name + '; Cond: ' + (cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer));
-                
-            if (destination_terminal && cur_terminal && cur_terminal.cooldown === 0 &&
-                destination_terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage && 
-                cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer && 
-                destination_room.memory.energy_flow.store_used.terminal < destination_room.memory.energy_flow.max_store.terminal &&
-                cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + send_amount)) {
-                
-                let send_out = cur_terminal.send(RESOURCE_ENERGY, send_amount, destination_room_name);
-                // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
-                if (send_out === OK) {
-                    console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + my_room.memory.energy_flow.store_used.terminal + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
-                    break;
-                }
-                // let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
-                // let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
-                // if (energy2transfer > 2000) energy2transfer = 2000;
-                // if (energy2transfer > 1000 && cur_terminal.store[RESOURCE_ENERGY] > 100000) {
-                //     cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E32N49');
-                //     // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
-                // }
-            } 
+            // let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
+            // let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
+            // if (energy2transfer > 2000) energy2transfer = 2000;
+            // if (energy2transfer > 1000 && cur_terminal.store[RESOURCE_ENERGY] > 100000) {
+            //     cur_terminal.send(RESOURCE_ENERGY, energy2transfer, 'E32N49');
+            //     // Game.notify(current_room_name + ' Sent ' +  energy2transfer + ' enegry' + ' To E37N48');
+            // }
         }
     },
     is_inside_wall: function(room_name, target) {
