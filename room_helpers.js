@@ -145,7 +145,7 @@ var room_helpers = {
         if (destination_terminal.room && cur_terminal && cur_terminal.cooldown === 0 &&
             destination_terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
             cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer &&
-            destination_room.memory.energy_flow.store_used.terminal < destination_room.memory.energy_flow.max_store.terminal &&
+            destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal &&
             cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + send_amount)) {
 
             let send_out = cur_terminal.send(RESOURCE_ENERGY, send_amount, destination_room_name);
