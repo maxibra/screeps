@@ -392,14 +392,14 @@ module.exports.loop = function () {
             for (cur_storage in Memory.rooms.global_vars.storage_status_by_mineral[m]) {
                 if (cur_storage === 'total') {
                     cur_diff = (Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage] - Memory.rooms.global_vars.prev_storage_status_by_mineral[m][cur_storage])
-                    string_of_mineral += 'total: ' + Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage] + ' (+' + cur_diff + ')\n'
+                    string_of_mineral += 'total: ' + Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage].toLocaleString() + ' (+' + cur_diff.toLocaleString() + ')\n'
                     continue
                 }
                 string_of_mineral += cur_storage + '\n'
                 for (cur_room in Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage]) {
                     cur_diff = (Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage][cur_room] - Memory.rooms.global_vars.prev_storage_status_by_mineral[m][cur_storage][cur_room])
-                    string_of_mineral += '\t' + cur_room + ': ' + Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage][cur_room] +
-                                         ' (+' + cur_diff + ')\n'
+                    string_of_mineral += '\t' + cur_room + ': ' + Memory.rooms.global_vars.storage_status_by_mineral[m][cur_storage][cur_room].toLocaleString() +
+                                         ' (+' + cur_diff.toLocaleString() + ')\n'
                 }
             }
             Game.notify(string_of_mineral)
