@@ -136,7 +136,8 @@ var structCreep = {
         }
 
         let condition2change_role = (iam_general &&
-                                     ((creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
+                                     (my_room.memory.global_vars.status ==='war' ||
+                                      (creep.memory.role === 'harvest' && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) ||
                                       creep.memory.role === 'undefined' ||
                                       (creep.memory.target_id === my_room.controller.id &&
                                         (my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85) ||
