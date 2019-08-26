@@ -270,7 +270,7 @@ var room_helpers = {
             else console.log('[ERROR] (room_helpers.transfer_mineral): FAILED [' + send_out + '] transfer of "' + room_mineral +
                 '" from ' + room_name + ' to ' + min_amount[0]);
         }
-        if (!we_have_minreal2transfer) console.log("[INFO] (room_helpers.transfer_mineral)[" + room_name + "]: It's no minerals to transfer")
+        // if (!we_have_minreal2transfer) console.log("[INFO] (room_helpers.transfer_mineral)[" + room_name + "]: It's no minerals to transfer")
     },
     check_create_miner: function(room_name, spawn_name, units) {
         let my_room = Game.rooms[room_name];
@@ -881,7 +881,11 @@ var room_helpers = {
                 total: 0,
                 terminal: {total: 0},
                 storage: {total: 0}
-            }}
+            },
+            defence: {
+                rooms: {}
+            }
+        }
         for (m in Memory.rooms.global_vars.room_by_mineral.final_produce) {
             storage_status_by_mineral[Memory.rooms.global_vars.room_by_mineral.final_produce[m]] = {
                 total: 0,
@@ -910,6 +914,9 @@ var room_helpers = {
                     storage_status_by_mineral[store_part].total += current_room.storage.store[store_part]
                 }
             }
+            storage_status_by_mineral['defence']['rooms'][r] = current_room.find(FIND_STRUCTURES, {filter: object =>
+                                                                (object.structureType === STRUCTURE_RAMPART)})[0]['hits']
+
         }
 
         Memory.rooms.global_vars.storage_status_by_mineral = storage_status_by_mineral
