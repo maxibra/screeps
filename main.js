@@ -386,7 +386,7 @@ module.exports.loop = function () {
         }
     }
 
-    if (Game.time % 3600 === 0) { // Notify every 3 hour (tick is about 3 sec)
+    if (Game.time % 7200 === 0) { // Notify every 3 hour (tick is about 3 sec)
         for (m in Memory.rooms.global_vars.storage_status_by_mineral) {
             string_of_mineral = m + ' (bucket: ' + Game.cpu.bucket + '):\n'
             for (cur_storage in Memory.rooms.global_vars.storage_status_by_mineral[m]) {
