@@ -876,6 +876,7 @@ var room_helpers = {
         // Put to memory status of all terminals
         // rooms.global_vars.terminal_status
         terminals_status = {}
+        store_types = ['terminal', 'storage']
         storage_status_by_mineral = {
             energy: {
                 total: 0,
@@ -884,6 +885,10 @@ var room_helpers = {
             },
             defence: {
                 rooms: {}
+            },
+            store_status: {
+                terminal: {},
+                storage: {}
             }
         }
         for (m in Memory.rooms.global_vars.room_by_mineral.final_produce) {
@@ -917,6 +922,10 @@ var room_helpers = {
             storage_status_by_mineral['defence']['rooms'][r] = current_room.find(FIND_STRUCTURES, {filter: object =>
                                                                 (object.structureType === STRUCTURE_RAMPART)})[0]['hits']
 
+            for (store_type in store_types) {
+                // console.log('[DEBUG] (room_helpers-get_minerals_status): ' + store_type + ' : ' + JSON.stringify(current_room[store_type]))
+                storage_status_by_mineral['store_status'][store_types[store_type]][r] = _.sum(current_room[store_types[store_type]].store)
+            }
         }
 
         Memory.rooms.global_vars.storage_status_by_mineral = storage_status_by_mineral
