@@ -413,9 +413,9 @@ var structCreep = {
                         mineral = _.remove(Object.keys(creep.carry), function(mineral_type) { return mineral_type != "energy"; })[0];
                         if (mineral) {
                             creep.transfer(target_object, mineral)
-                            creep.memory.mineral2withdra = false
+                            creep.memory.mineral2withdraw = false
                         }
-                        else creep.withdraw(target_object, creep.memory.mineral2withdraw)
+                        else creep.withdraw(target_object, creep.memory.mineral2withdraw, creep.memory.mineral_amount)
                         creep.memory.target_id = false
                     } else creep.moveTo(target_object, global_vars.moveTo_ops);
                 } else {    // target_id doesn't defined
@@ -427,9 +427,10 @@ var structCreep = {
                         //     }
                         // }
                         // Create object of good sources to withdraw {<id>: <mineral>,...}
-                        sources2withdraw = room_helpers.create_sources2withdraw(room_name)
+                        sources2withdraw = room_helpers.create_sources2withdraw(room_name, creep.carryCapacity)
+                        if (room_name == 'E37N48')  console.log('[DEBUG] (structCreep.run)[' + creep.name + '] SOURCES: ' + JSON.stringify(sources2withdraw))
                         lab2withdraw = room_helpers.get_lab2withdraw(room_name)
-                        sources2withdraw[lab2withdraw[0]] = lab2withdraw[1]
+                        sources2withdraw[lab2withdraw[0]] = [lab2withdraw[1], creep.carryCapacity]
                         sources_array = []
                         for (l_id in sources2withdraw) sources_array.push(Game.getObjectById(l_id))
                         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] SOURCES: ' + JSON.stringify(sources_array.length))
@@ -438,13 +439,22 @@ var structCreep = {
                         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] CLOSEST ID: ' + closest_target2withdraw)
                         if (closest_target2withdraw) {
                             creep.memory.target_id = closest_target2withdraw.id
-                            creep.memory.mineral2withdraw = sources2withdraw[closest_target2withdraw.id]
+                            creep.memory.mineral2withdraw = sources2withdraw[closest_target2withdraw.id][0]
+                            // following is right because of creep is totally empty here (total =0)
+                            if (room_name == 'E37N48') console.log('[DEBUG] (lab_assistent) Witdraw Mineral ' + sources2withdraw[closest_target2withdraw.id][0] +
+                                                                                           '; Lab Free space: ' + sources2withdraw[closest_target2withdraw.id][1])
+                            creep.memory.mineral_amount = (sources2withdraw[closest_target2withdraw.id][1] < creep.carryCapacity) ?
+                                                                            sources2withdraw[closest_target2withdraw.id][1] :
+                                                                            creep.carryCapacity
                         } else if (Game.getObjectById(my_room.memory.energy_flow.mineral.id).ticksToRegeneration > 100) {
                             lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[my_room.memory.energy_flow.mineral.type])
                             free_space = lab_of_mineral.mineralCapacity - lab_of_mineral.mineralAmount
-                            if (free_space > 250) {
+                            // if (free_space > 250) {
+                            if (free_space > 0) {
                                 creep.memory.target_id = my_room.storage.id
                                 creep.memory.mineral2withdraw = my_room.memory.energy_flow.mineral.type
+                                // following is right because of creep is totally empty here (total =0)
+                                creep.memory.mineral_amount = (free_space < creep.carryCapacity) ? free_space : creep.carryCapacity
                             }
                         }
 
