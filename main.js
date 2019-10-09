@@ -333,7 +333,7 @@ module.exports.loop = function () {
         }
 
         if (Game.time % 5 === 0 && Game.cpu.bucket > 5000) {
-            room_helpers.run_lab_reactions(current_room_name);
+            // room_helpers.run_lab_reactions(current_room_name);
         }
 
         // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
@@ -365,7 +365,7 @@ module.exports.loop = function () {
         }
         
         if (Game.time % 30 === 0 && Game.cpu.bucket > 6000) {
-            room_helpers.transfer_mineral(current_room_name);
+            // room_helpers.transfer_mineral(current_room_name);
             // Count storage capacity of terminal and storage
             if (my_room.storage &&
                 Memory.rooms[current_room_name].energy_flow.store_used) 
@@ -381,7 +381,7 @@ module.exports.loop = function () {
             room_helpers.get_minerals_status()
             room_helpers.upgrade_energy_flow(current_room_name);
             // If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
-            room_helpers.update_labs_info(current_room_name, room_by_mineral);
+            // room_helpers.update_labs_info(current_room_name, room_by_mineral);
             roleTower.create_towers_list(current_room_name);
         }
     }
@@ -409,10 +409,10 @@ module.exports.loop = function () {
         Memory.rooms.global_vars.prev_storage_status_by_mineral = Memory.rooms.global_vars.storage_status_by_mineral
     }
 
-    if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
-        room_by_mineral['reagent']['G'] = ['E28N48', 'E33N47', 'E37N48', 'E38N48', 'E38N47', 'E39N49']
-        Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
-    }
+    // if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
+    //     room_by_mineral['reagent']['G'] = ['E28N48', 'E33N47', 'E37N48', 'E38N48', 'E38N47', 'E39N49']
+    //     Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
+    // }
 
     if (Game.time % 1000 === 1) {
         room_helpers.clean_memory();

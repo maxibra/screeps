@@ -216,6 +216,17 @@ var structCreep = {
             //     transfer_target = Game.getObjectById('5ad1a3171db6bf2fc4648b26');   // ID of far link in the room E34N47
             //     creep.memory.role = 'transfer';
             // } else 
+            
+            // ************ Start prefer BUILD
+            // if (room_name === 'E28N48') {//&&  
+            //   // my_room.memory.targets.build && units[room_name]['build']/current_workers <= current_creep_types.build) {
+            //         creep.say('building');
+            //         console.log('[DEBUG][' + creep.name + '] Try run to build: ' )
+            //         creep.memory.role = 'build';
+            //         units[room_name].build++; }
+            // else 
+            // ************ finish prefer BUILD
+
             if (transfer_target && !my_room.memory.towers.current[transfer_target.id]) { // && room_enegry_is_good 
                 // *** LOG
                 // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target TOWER: ' + JSON.stringify(transfer_target));

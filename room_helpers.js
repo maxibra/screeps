@@ -843,12 +843,12 @@ var room_helpers = {
                 if (my_room[sources[src]].store[minerals[mineral]] >= 250) {
                     lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[minerals[mineral]])
                     free_space = lab_of_mineral.mineralCapacity - lab_of_mineral.mineralAmount
-                    if (room_name === 'E37N48') console.log('[DEBUG] (room_helpers-create_sources2withdraw)[' + room_name + '] MINERAL: ' +
-                                                                        minerals[mineral] +'; LAB ID: ' + my_room.memory.lab_per_mineral[minerals[mineral]] +
-                                                                        '; Lab Free space: ' + free_space)
+                    // if (room_name === 'E37N48') console.log('[DEBUG] (room_helpers-create_sources2withdraw)[' + room_name + '] MINERAL: ' +
+                    //                                                     minerals[mineral] +'; LAB ID: ' + my_room.memory.lab_per_mineral[minerals[mineral]] +
+                    //                                                     '; Lab Free space: ' + free_space)
 
-                    // if (free_space > 250) {
-                    if (free_space > 0) {
+                    if (free_space > 250) {
+                    // if (free_space > 0) {
                         array2withdraw[my_room[sources[src]].id] = [minerals[mineral], free_space]
                         break
                     }
