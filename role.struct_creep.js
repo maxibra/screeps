@@ -93,6 +93,7 @@ var structCreep = {
         let fill_terminal = (my_room.terminal &&
                              my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
                              my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
+        // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] ROOM: ' + room_name)
         let critical_controller_downgrade = (room_vars.status === 'peace') ? 150000 : 130000
         // It's nothing todo
         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] unemployed role: ' + creep.memory.role + '; full: ' + my_room.memory.global_vars.all_full + 'store_used.terminal: ' + my_room.memory.energy_flow.store_used.terminal + '; max_store.terminal: ' + my_room.memory.energy_flow.max_store.terminal);
@@ -638,14 +639,21 @@ var structCreep = {
                 creep.memory.target_id = (rmt_container_target) ? rmt_container_target.id : false;
                 break;
             case 'remote_claimer':
-                let newRoomPosition = (room_name === 'E32N53') ? new RoomPosition(4, 5, creep.memory.far_target) :
-                                                                 new RoomPosition(25, 25, creep.memory.far_target);
-                // console.log('[DEBUG] (structCreep.run)(remote_claimer) [' + creep.name + ']: Room: ' +  room_name + '; Far Target: ' + creep.memory.far_target );
-                let remote_controller = (room_name == creep.memory.far_target) ? creep.room.controller : newRoomPosition;  
-                
-                if (creep.reserveController(remote_controller) !== OK) creep.moveTo(remote_controller, global_vars.moveTo_ops);
-                if (creep.ticksToLive === 1)
-                    my_room.memory.endReservation = Game.time + my_room.controller.reservation.ticksToEnd;
+                let newRoomPosition = (room_name === 'E32N53' || creep.memory.far_target === 'E28N47') ? 
+                                                        new RoomPosition(4, 5, creep.memory.far_target) :
+                                                        new RoomPosition(25, 25, creep.memory.far_target);
+                let remote_controller = (room_name === creep.memory.far_target) ? creep.room.controller : newRoomPosition;  
+                // console.log('[DEBUG] (structCreep.run)(remote_claimer) [' + creep.name + ']: Cnstrctr: ' +  remote_controller.constructor.name + '; Reservation: ' + JSON.stringify(remote_controller.reservation) );
+                if (remote_controller.constructor.name != 'newRoomPosition' && remote_controller.reservation && remote_controller.reservation.username != 'maxibra') {
+                    attack_out = creep.attackController(remote_controller)
+                    // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Attack controller: ' + attack_out)
+                    if (attack_out !== OK) creep.moveTo(remote_controller, global_vars.moveTo_ops);
+                } else if (creep.reserveController(remote_controller) !== OK) {
+                    // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Reserve controller failed: ')
+                    creep.moveTo(remote_controller, global_vars.moveTo_ops);
+                }
+                if (creep.ticksToLive === 1 && my_room.controller)
+                    my_room.memory.endReservation = Game.time + remote_controller.reservation.ticksToEnd;
                 break;
             case 'remote_harvest':
                 let name4log = 'stam';
@@ -764,13 +772,11 @@ var structCreep = {
                             current_target = Game.getObjectById(creep.memory.target_id);   
                         } else {
                             if (room_name === creep.memory.homeland) {
-                                let extension_target = ((room_name === 'E32N53' && 
-                                                        creep.memory.source_id.indexOf('5b613b019007134cd78dc2dd') >= 0) || 
-                                                        (room_name === 'E28N48' && 
-                                                        creep.memory.source_id.indexOf('5b34d0a3e6e0fa316db08a31') < 0 && 
-                                                        creep.memory.source_id.indexOf('5b45be9f1e189e61e50b576c') < 0)) ? creep.pos.findClosestByPath(FIND_STRUCTURES,
+                                let extension_target = (!transfer_targets.map(function(m) {return my_room.memory.energy_flow.links.sources.includes(m)}).includes(true)) ? 
+                                                                            creep.pos.findClosestByPath(FIND_STRUCTURES,
                                                                                 {filter: object => ((object.structureType === STRUCTURE_EXTENSION || object.structureType === STRUCTURE_SPAWN)
-                                                                                                     && (object.energy < object.energyCapacity))}) : false;
+                                                                                                     && (object.energy < object.energyCapacity))}) :
+                                                                            false;
                                 if (extension_target) {
                                     current_target = extension_target;    
                                 } else {
@@ -1078,10 +1084,13 @@ var structCreep = {
                 if (room_name !== attacked_room) creep.moveTo(new RoomPosition(25,25, attacked_room), global_vars.moveTo_ops);  
                 else {
                     let h = my_room.find(FIND_HOSTILE_CREEPS)   
-                    
+                    let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)})
                     let target2attack = false;
-                    console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ' + Memory.rooms[room_name].global_vars.status + '; Hostile:' + h.length);
-                    if (h.length > 1) { // Created for 2 hostile creeps. one of them is healer
+                    console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ' + Memory.rooms[room_name].global_vars.status + '; Hostile: ' + h.length + '; Core: ' + invader_core.length);
+                    if (invader_core.length > 0) {
+                        target2attack = invader_core[0]
+                    }
+                    else if (h.length > 1) { // Created for 2 hostile creeps. one of them is healer
                         let body_map = h[0].body.map(x => x.type);
                         if (body_map.indexOf('heal') > -1 || body_map.indexOf('ranged_attack') > -1) target2attack = h[0];
                         else target2attack = h[1];
@@ -1097,7 +1106,7 @@ var structCreep = {
                         if (my_creep2heal) {
                             if (creep.heal(my_creep2heal) !== OK) creep.moveTo(my_creep2heal);
                         } else {
-                            // Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] All creeps are healthy on the room. Bye, Bye');
+                            Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] All creeps are healthy on the room. Bye, Bye');
                             creep.suicide();
                         }
                     }

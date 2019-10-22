@@ -82,6 +82,9 @@ var RoleHarvester = {
                     //   (room_name === 'E38N47' && room_full_container && (Game.getObjectById('59f1a59182100e1594f3eb8b').energy === 0 || Game.getObjectById('5ad6d9528fd8b7520976363f').pos.lookFor(LOOK_CREEPS).length > 0))) {
                 target = room_full_container;
                 harvester_type = 'container';
+                // if (my_room.memory.energy_flow.containers.source[target.id]) {
+                //     my_room.memory.energy_flow.containers.source[target.id].screeps_on_way += 1
+                // }
             } else { 
                 let destination_links = (my_room.memory.energy_flow) ? my_room.memory.energy_flow.links.destinations : [];
                 for (let l in destination_links) {
@@ -273,6 +276,9 @@ var RoleHarvester = {
             !(harvester_type === 'go_close' && room_name === 'E38N47')) {
             if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] Changed to false (immediate harvset). Memory: ' + JSON.stringify(creep.memory));
             creep.memory.role = (creep.memory.special) ? creep.memory.special : 'undefined';
+            // if (my_room.memory.energy_flow.containers.source[target.id]) {
+            //         my_room.memory.energy_flow.containers.source[target.id].screeps_on_way -= 1
+            // }
             creep.memory.target_id = false;
             creep.memory.harvester_type = false;
         }

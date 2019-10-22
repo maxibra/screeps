@@ -507,7 +507,8 @@ var room_helpers = {
             links: {near_sources: [], near_controller: false, destinations: [], sources: []}
         }
         // Sort containers
-        // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
+        console.log('[DEBUG] (room_helpers.upgrade_energy_flow)[' + room_name +']')
+        if (room_name === 'E28N47' ) console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
         for (let i = 0; i < all_containers.length; i++) {
             let container_defined = false;
             // if (all_containers[i].pos.getRangeTo(my_room.controller) < 5) {
@@ -581,12 +582,13 @@ var room_helpers = {
         let room_vars = Memory.rooms[room_name].global_vars;
         let global_vars = Memory.rooms.global_vars;
         let my_room = Game.rooms[room_name];
-        let hostile_creeps = (my_room) ? my_room.find(FIND_HOSTILE_CREEPS) : [];
+        let hostile_creeps = (my_room) ? my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (creep_helpers.is_millitary(object))}) : [];
                 // , {filter: object => (object.owner.username !== 'Sergeev' || (object.owner.username === 'Sergeev' && is_millitary(object)))})
+        let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)})
                                         
         let most_danger_hostile;
         // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
-        if (hostile_creeps && hostile_creeps.length > 0 && room_vars.status === 'peace') {
+        if (room_vars.status === 'peace' && ((hostile_creeps && hostile_creeps.length > 0) || (invader_core && invader_core.length > 0))) {
             room_vars.status = 'war';
             let hostile_boosts = {};
             for(let b in hostile_creeps[0].body) {
@@ -652,7 +654,12 @@ var room_helpers = {
             E28N48_avoid = ['5b628bc03df03010c281a64c', '5b628c0d359a5b585b99ca37', '5b628c231e49e63f6cec41e4', '5b628c293081766dddad14a6', '5b628c301407e03f53c353ca',
                             '5b2beba06a39f839fe4b7b43', '5b2beba310a9471b92ac8652', '5b2beba971b3e77e476e344a', '5b2bebaff727462af9e92a2a',
                             '5b703a9eb44c5d078a0851a4', '5b703a9eb44c5d078a0851a4', '5b703aabc866f7408b947fb5', '5b703ab2a122607be3dafe5e'];
-            let avoid_stricts = E39N49_avoid.concat(E38N47_avoid);
+            // E28N48_avoid = ['5d9dbbc016ace500018a2d1f', '5d9dbbb783e1630001168434', '5d9db60b385375000189d6fe', '5d9db60e40c65400014715f5',
+            //                 '5d9db60b385375000189d6ff', '5d9db611a45dbe0001b5ad64', '5d9dbb901ece8c0001231c57', '5d9dbb86e0b4fb0001d04945',
+            //                 '5d9dbb6f05273d00018b0b26', '5d9db62b085de300017d53f5', '5d9dbb62f5fb9800016f8184', '5d9db638bdcc2a0001291619'];
+          
+            let avoid_stricts = E39N49_avoid.concat(E38N47_avoid); //, E28N48_avoid);
+            
 
             targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
                                                                         object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1)});

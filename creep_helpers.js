@@ -2,7 +2,7 @@ var global_vars = Memory.rooms.global_vars;
 
 var creep_body = {
     general: {
-        base: [CARRY,CARRY,MOVE],
+        base: [CARRY,WORK,MOVE],
         add: [CARRY,CARRY,MOVE],
         finalize: [WORK,WORK,MOVE]
     },
@@ -18,8 +18,9 @@ var creep_body = {
         base: [WORK,WORK,WORK,WORK,WORK,MOVE,MOVE]
     },
     build: {
-        base: [WORK,CARRY,MOVE],
-        add: [WORK,CARRY,MOVE]
+        base: [WORK,WORK,MOVE],
+        add: [CARRY,CARRY,MOVE],
+        finalize: [WORK,WORK,MOVE]
     }
 }
 
@@ -77,7 +78,7 @@ function remote_target(room_name) {
     let target = false;
     switch (room_name) {
         case 'E28N48':  
-            target = ['E27N48', 'E27N47']; //, 'E29N48', 'E29N49', 'E28N49'];
+            target = ['E27N48', 'E27N47', 'E28N47']; //, 'E29N48', 'E29N49', 'E28N49'];
             break;
         case 'E33N47':  
             target = ['E32N47']; //, 'E32N49']; //'E32N48', 'E31N48',  'E33N48'];
@@ -97,9 +98,10 @@ function remote_harvester_info(room_name) {
     let info_object = {};
     switch (room_name) {
         case 'E27N47': 
-        case 'E27N48': 
+        case 'E27N48':
+        case 'E28N47':
             info_object = {
-                homeland_destinations: ['5b34d0a3e6e0fa316db08a31',],
+                homeland_destinations: ['5dad7368328c8405870fa2ec',],
                 amount: 1
             }
             break;
@@ -190,7 +192,7 @@ var creep_helpers = {
         
         let avoid_remote = !(room_name === 'E38N48' || 
                              room_name === 'E37N48' || 
-                             room_name === 'E33N47' || 
+                             room_name === 'E33N47' ||
                              room_name === 'E28N48');
         
         let remote_room_in_war = is_remote_room_in_war(room_name)
@@ -200,7 +202,7 @@ var creep_helpers = {
         let special_creeps = {
             attacker_constructions: {
                 body:  [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK],
-                memory: {constructions2attack: ['5a4e91517f68e87c650b4ae8', ]},
+                memory: {constructions2attack: ['5d4bfa1080073413c98ccaf2', ]},
                 name_prefix: 'attacker_const_' + room_name,
                 amount: 0,
                 avoid: !(room_name === 'E28N48')
@@ -237,10 +239,11 @@ var creep_helpers = {
                 memory: {stuck: 0},
                 name_prefix: 'rmt_nrg_mnr' + room_name,
                 rmt_targets: remote_target(room_name),
-                avoid: !(room_name === 'E28N48' || room_name === 'E38N48')
+                avoid: !(room_name === 'E38N48' || room_name === 'E37N48' || room_name === 'E28N48')
             },
             remote_harvest: {
-                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750, Harvest: 16/T; Cost: 2,150
+                body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 800, Harvest: 6/T; Build: 15/T; Cost: 1,600
+                    // [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 750, Harvest: 16/T; Cost: 2,150
                     // [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 1500, Harvest: 6/T; Cost: 2.650K
                     // ((my_room.energyCapacityAvailable >= 1550) ? [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY] : // Carry: 750
                     //                                     [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]),    // Carry: 600
@@ -256,8 +259,8 @@ var creep_helpers = {
                 name_prefix: 'rmt_claimer_' + room_name,
                 amount: 1,
                 rmt_targets: remote_target(room_name),
-                avoid: avoid_remote ,
-                remote_avoid: ['E28N49',]
+                avoid: avoid_remote,
+                remote_avoid: ['E27N49']
             },
             lab_assistent: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 800
@@ -331,19 +334,18 @@ var creep_helpers = {
 
                 // Check condition to avoid the current type
                 if (current_obj.avoid || current_obj.amount === 0) {
-                    // if (room_name === 'E33N47') console.log('(create_creep) [' + room_name + '] Avoid unit ' + creep_type + '; Avoid condition: ' + current_obj.avoid + '; Expected amount: ' + current_obj.amount);
+                    // if (room_name === 'E28N48') console.log('(create_creep) [' + room_name + '] Avoid unit ' + creep_type + '; Avoid condition: ' + current_obj.avoid + '; Expected amount: ' + current_obj.amount);
                     continue;
                 }
                 let cur_remote_target = remote_target(room_name); 
 
-                // if (creep_type === 'remote_harvest') console.log('(create_creep_[' + room_name + '] Remote: ' + JSON.stringify(cur_remote_target));//.map(x => Memory.rooms[x])));
                 // for (let d in cur_remote_target)
                 //     console.log('(create_creep)[' + cur_remote_target[d] + '] Memory: ' + JSON.stringify(Memory.rooms[cur_remote_target[d]]));
 
-                if ((creep_type === 'remote_harvest' || creep_type === 'remote_claimer' || creep_type === 'remote_energy_miner') && cur_remote_target && (cur_remote_target.map(x => (Memory.rooms[x] && Memory.rooms[x].global_vars && Memory.rooms[x].global_vars.status)).indexOf('war') > -1)) {
-                    console.log('(create_creep) [' + room_name + '] Remote rooms in WAR. Stop creating of remote_harvester and remote_claimer in the room: ' + cur_remote_target.map(x => Memory.rooms[x].global_vars.status));
-                    continue;
-                }
+                // if ((creep_type === 'remote_harvest' || creep_type === 'remote_claimer' || creep_type === 'remote_energy_miner') && cur_remote_target && (cur_remote_target.map(x => (Memory.rooms[x] && Memory.rooms[x].global_vars && Memory.rooms[x].global_vars.status)).indexOf('war') > -1)) {
+                //     console.log('(create_creep) [' + room_name + '] Remote rooms in WAR. Stop creating of remote_harvester and remote_claimer in the room: ' + cur_remote_target.map(x => Memory.rooms[x].global_vars.status));
+                //     continue;
+                // }
                 
                 // if (room_name === 'E34N47' ) console.log('(create_creep) [' + room_name + '] Creep type: ' +creep_type);
                 const add = (a, b) => a + b;
@@ -360,6 +362,7 @@ var creep_helpers = {
                     let remote_room = rmt_targets[t];
                     let creeps_amount;
                     if (creep_type === 'remote_claimer' && current_obj.remote_avoid.indexOf(remote_room) >= 0 ) {
+                        console.log('[DEBUG] (create_creep.claimer): Remote avoid room ' +  remote_room)
                         continue;
                     } else if (creep_type === 'remote_energy_miner') {
                         creeps_amount = (Memory.rooms[remote_room] && Memory.rooms[remote_room].energy_flow) ? Object.keys(Memory.rooms[remote_room].energy_flow.containers.source).length : 0;
@@ -377,8 +380,8 @@ var creep_helpers = {
 
                     for (let i=1; i<=creeps_amount; i++) {
                         // console.log('(create_creep)[' + room_name + '] FROM TARGETS: ' + JSON.stringify(rmt_targets));
-                        if (remote_room && creep_type === 'remote_claimer' && ((Memory.rooms[remote_room] && Memory.rooms[remote_room].endReservation - Game.time) > 4000)) {
-                            console.log('(create_creep)[' + room_name + '] Controller reservation longer than 4000. skipped');
+                        if (remote_room && creep_type === 'remote_claimer' && ((Memory.rooms[remote_room] && Memory.rooms[remote_room].endReservation - Game.time) > 4400)) {
+                            console.log('(create_creep)[' + room_name + '] Controller reservation longer than 4400. skipped');
                             continue;
                         }
                         
