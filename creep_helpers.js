@@ -1,4 +1,4 @@
-var global_vars = Memory.rooms.global_vars;
+//var global_vars = Memory.rooms.global_vars;
 
 var creep_body = {
     general: {
@@ -201,10 +201,11 @@ var creep_helpers = {
         // !!!! Order of special_creeps is an order of creep's creation. Upper will be created first 
         let special_creeps = {
             attacker_constructions: {
-                body:  [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK],
-                memory: {constructions2attack: ['5d4bfa1080073413c98ccaf2', ]},
+                // body:  [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], # # move plain=2, attack=180/T
+                body: [TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], // move plain=1, attack=180/T
+                memory: {constructions2attack: ['5b2a0f54c57d970cc45da851', ]},
                 name_prefix: 'attacker_const_' + room_name,
-                amount: 0,
+                amount: 2,
                 avoid: !(room_name === 'E28N48')
             },
             guard: {
@@ -522,7 +523,7 @@ var creep_helpers = {
                 if (my_room.memory.towers && my_room.memory.towers.current[target.id] === creep.id) my_room.memory.towers.current[target.id] = false;
                 break;
             case ERR_NOT_IN_RANGE:
-                creep.moveTo(target, global_vars.moveTo_ops);
+                creep.moveTo(target, Memory.rooms.global_vars.moveTo_ops);
                 creep.memory.target_id = target.id;
                 break;
             case ERR_FULL:

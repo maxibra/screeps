@@ -94,7 +94,7 @@ var structCreep = {
                              my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
                              my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] ROOM: ' + room_name)
-        let critical_controller_downgrade = (room_vars.status === 'peace') ? 150000 : 130000
+        let critical_controller_downgrade = (room_vars && room_vars.status === 'peace') ? 150000 : 130000
         // It's nothing todo
         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] unemployed role: ' + creep.memory.role + '; full: ' + my_room.memory.global_vars.all_full + 'store_used.terminal: ' + my_room.memory.energy_flow.store_used.terminal + '; max_store.terminal: ' + my_room.memory.energy_flow.max_store.terminal);
 
@@ -1062,6 +1062,7 @@ var structCreep = {
                 break;
             case 'attacker_constructions':
                 for (let s in creep.memory.constructions2attack) {
+                    Game.getObjectById('5b70485de11abe3f9e3f231d').observeRoom('E29N47')
                     let current_construction = Game.getObjectById(creep.memory.constructions2attack[s]);
                     if (current_construction){
                         console.log('[DEBUG] (structCreep.attacker_constructions)[' + creep.name + '] Const: ' + current_construction.id);
