@@ -51,7 +51,7 @@ function link_transfer(source_link, destination_link) {
     let energy_sent = false;
     let dst_missing = destination_link.store.getCapacity(RESOURCE_ENERGY) - destination_link.store[RESOURCE_ENERGY];
     
-    if (source_link.id === '5dad7368328c8405870fa2ec') console.log('[DEBUG](room.helpers-link_transfer): Destination (' + destination_link.id + ') missing energy: ' +  dst_missing + '; Source (' + source_link.id + '): ' + source_link.store[RESOURCE_ENERGY]);
+    // if (source_link.id === '5dad7368328c8405870fa2ec') console.log('[DEBUG](room.helpers-link_transfer): Destination (' + destination_link.id + ') missing energy: ' +  dst_missing + '; Source (' + source_link.id + '): ' + source_link.store[RESOURCE_ENERGY]);
     
     if (source_link.cooldown === 0 && destination_link && dst_missing >= source_link.store[RESOURCE_ENERGY]) {
             source_link.transferEnergy(destination_link, source_link.store[RESOURCE_ENERGY]);
