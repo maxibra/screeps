@@ -49,12 +49,12 @@ function is_millitary(creep_obj) {
 function link_transfer(source_link, destination_link) {
     // console.log('[DEBUG](room.helpers-link_transfer): Destination link: ' + destination_link)
     let energy_sent = false;
-    let dst_missing = destination_link.energyCapacity - destination_link.energy;
+    let dst_missing = destination_link.store.getCapacity(RESOURCE_ENERGY) - destination_link.store[RESOURCE_ENERGY];
     
-    // if (source_link.id === '5ac80cb1efc817037dc137dd') console.log('[DEBUG](room.helpers-link_transfer): Destination (' + destination_link.id + ') missing energy: ' +  dst_missing + '; Source (' + source_link.id + '): ' + source_link.energy);
+    // if (source_link.id === '5ac80cb1efc817037dc137dd') console.log('[DEBUG](room.helpers-link_transfer): Destination (' + destination_link.id + ') missing energy: ' +  dst_missing + '; Source (' + source_link.id + '): ' + source_link.store[RESOURCE_ENERGY]);
     
-    if (source_link.cooldown === 0 && destination_link && dst_missing >= source_link.energy) {
-            source_link.transferEnergy(destination_link, source_link.energy);
+    if (source_link.cooldown === 0 && destination_link && dst_missing >= source_link.store[RESOURCE_ENERGY]) {
+            source_link.transferEnergy(destination_link, source_link.store[RESOURCE_ENERGY]);
             energy_sent = true;
     }
     return energy_sent;
@@ -319,7 +319,7 @@ var room_helpers = {
         if (my_room && src_links && src_links.length > 0) {
             for (let l in src_links) {
                 let current_link = Game.getObjectById(src_links[l]);
-                if (current_link && current_link.energy/current_link.energyCapacity < 0.9) {
+                if (current_link && current_link.store[RESOURCE_ENERGY]/current_link.store.getCapacity(RESOURCE_ENERGY) < 0.9) {
                     // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: LINK: ' + src_links[l] + ' is empty');
                     all_links_full = false;
                     break;
@@ -332,7 +332,7 @@ var room_helpers = {
         for (let t in all_towers) {
             let current_tower = Game.getObjectById(all_towers[t]);
             // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] Tower: ' + current_tower.id + '; All towers: ' + JSON.stringify(all_towers));
-            if (current_tower && current_tower.energy < 600) {
+            if (current_tower && current_tower.store[RESOURCE_ENERGY] < 600) {
                 all_towers_full = false;
                 break;
             }     
@@ -356,7 +356,7 @@ var room_helpers = {
         for (let l_src in source_links) {
             let current_link_sent = false;
             let source_link = Game.getObjectById(source_links[l_src]);
-            if (!(source_link && (source_link.energy > 100))) continue;
+            if (!(source_link && (source_link.store[RESOURCE_ENERGY] > 100))) continue;
             let destination_links = (my_room.memory.energy_flow.links.near_controller) ? [my_room.memory.energy_flow.links.near_controller,] : [];    // First link to get energy is near controller
             destination_links = destination_links.concat(Object.keys(my_room.memory.energy_flow.links.destinations));
             
@@ -373,7 +373,7 @@ var room_helpers = {
         
         for (let near_src in my_room.memory.energy_flow.links.near_sources) {    // link near source transfer to controller ONLY!!
             let near_source_link = Game.getObjectById(my_room.memory.energy_flow.links.near_sources[near_src]);
-            if (!(near_source_link && (near_source_link.energy > 100))) continue;
+            if (!(near_source_link && (near_source_link.store[RESOURCE_ENERGY] > 100))) continue;
             // console.log('[ERROR] (room_helpers.transfer_link2link)[' + room_name  +'] Destination link:' + Game.getObjectById(my_room.memory.energy_flow.links.near_controller))
             let dst_link = Game.getObjectById(my_room.memory.energy_flow.links.near_controller);
             if (near_source_link && my_room.memory.energy_flow.links.near_controller && dst_link)
@@ -607,14 +607,14 @@ var room_helpers = {
         }
     },
     get_energy_source_target: function(room_name) {
-        let targets = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.storeCapacity) > 0.3)});
+        let targets = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store/object.store.getCapacity()) > 0.3)});
 
         //targets.contact()
     },
     get_transfer_target: function(room_name) {
-//        let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (structureType: STRUCTURE_TOWER && object.energy < object.energyCapacity)});
+//        let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (structureType: STRUCTURE_TOWER && object.store[RESOURCE_ENERGY] < object.store.getCapacity(RESOURCE_ENERGY))});
         let my_room = Game.rooms[room_name];
-        let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.energy < object.energyCapacity)});
+        let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.store[RESOURCE_ENERGY] < object.store.getCapacity())});
         //targets.sort((a,b) => a.hits - b.hits);
         // targets.push(my_spawn);
         //if (targets[0]) console.log('[DEBUG] (room_helpers-get_transfer_target): Transfer target type: ' + targets[0].structureType);
@@ -813,7 +813,7 @@ var room_helpers = {
             l_ids = Object.keys(my_room.memory.labs[lab_stages[current_stage]])
             for (l in l_ids){
                 current_lab = Game.getObjectById(l_ids[l])
-                lab_amount = current_lab.mineralAmount
+                lab_amount = current_lab.store[current_lab.mineralType]
                 // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Lab Type: ' + current_lab.mineralType + '; Amount: ' + lab_amount + '; Greates amount: ' + greatest_amount)
                 if (lab_amount > greatest_amount &&
                     ((my_room.terminal.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.storage_final_produce) ||
@@ -842,7 +842,7 @@ var room_helpers = {
             for (mineral in minerals) {
                 if (my_room[sources[src]].store[minerals[mineral]] >= 250) {
                     lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[minerals[mineral]])
-                    free_space = lab_of_mineral.mineralCapacity - lab_of_mineral.mineralAmount
+                    free_space = lab_of_mineral.store.getCapacity(lab_of_mineral.mineralType) - lab_of_mineral.store[lab_of_mineral.mineralType]
                     // if (room_name === 'E37N48') console.log('[DEBUG] (room_helpers-create_sources2withdraw)[' + room_name + '] MINERAL: ' +
                     //                                                     minerals[mineral] +'; LAB ID: ' + my_room.memory.lab_per_mineral[minerals[mineral]] +
                     //                                                     '; Lab Free space: ' + free_space)
@@ -867,7 +867,7 @@ var room_helpers = {
             lab_ids_of_stage = my_room.memory.labs[reactions_labs[lab_stage]]
             for (lab_id in lab_ids_of_stage){
                 current_lab = Game.getObjectById(lab_id)
-                if (current_lab.cooldown === 0 && current_lab.mineralAmount <= (current_lab.mineralCapacity - 5)) {
+                if (current_lab.cooldown === 0 && current_lab.store[current_lab.mineralType] <= (current_lab.store.getCapacity(current_lab.mineralType) - 5)) {
                     src_lab1 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[0])
                     src_lab2 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[1])
                     current_lab.runReaction(src_lab1, src_lab2)

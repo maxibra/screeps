@@ -2048,7 +2048,7 @@
       "targets": [
         {
           "refId": "A",
-          "target": "screeps.maxibra.roomSummary.$Room.ground_resources.energy"
+          "target": "screeps.maxibra.roomSummary.$Room.ground_resources.store[RESOURCE_ENERGY]"
         }
       ],
       "thresholds": [],

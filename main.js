@@ -204,7 +204,7 @@ module.exports.loop = function () {
             creeps_amount = creeps_amount + 1;
             
             // cur_creeps[creep_name].memory.stuck = 0;
-            let creep_carry = Object.keys(cur_creeps[creep_name].carry);
+            let creep_carry = Object.keys(cur_creeps[creep_name].store);
             splited_name = creep_name.split('-');
             let room_name = cur_creeps[creep_name].room.name;
             if (run_on_roooms.indexOf(room_name) < 0) continue;
@@ -246,7 +246,7 @@ module.exports.loop = function () {
     // frst_src =  Game.getObjectById('5afd6e3e17ef266afcaf8a41');
     // scnd_src =  Game.getObjectById('5afe7e3f7d58336918d464a1');
     
-    // if (dst_lab.mineralAmount < 0.9*dst_lab.mineralCapacity && frst_src.mineralAmount > 0 && scnd_src.mineralAmount > 0) dst_lab.runReaction(frst_src, scnd_src);
+    // if (dst_lab.store[dst_lab.mineralType] < 0.9*dst_lab.store.getCapacity(dst_lab.mineralType  && frst_src.store[frst_src.mineralType] > 0 && scnd_src.store[scnd_src.mineralType] > 0) dst_lab.runReaction(frst_src, scnd_src);
 
     // Creeps
     for(var name in Game.creeps) {
@@ -264,7 +264,7 @@ module.exports.loop = function () {
         var creep_role = creep.memory.role
         roleStructCreep.run(creep, units);
         // console.log('[INFO] (main)[' + creep.name +'] After  CPU Used: ' + Game.cpu.getUsed().toFixed(2))
-        if (Game.time % 25 === 0 && Object.keys(creep.carry).length === 1) creep.memory.has_minerals = false;
+        if (Game.time % 25 === 0 && Object.keys(creep.store).length === 1) creep.memory.has_minerals = false;
     }
     console.log('[INFO] (main)[After CREEPS RUN] CPU Used: ' + Game.cpu.getUsed().toFixed(2) + '; Creeps: ' + Object.keys(Game.creeps).length + '; Ticket Limit: ' + Game.cpu.tickLimit)
 

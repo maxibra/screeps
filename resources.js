@@ -73,7 +73,7 @@ function summarize_room_internal(room) {
 
     const links = room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_LINK && s.my });
     const num_links = links == null ? 0 : links.length;
-    const link_energy = _.sum(links, l => l.energy);
+    const link_energy = _.sum(links, l => l.store[RESOURCE_ENERGY]);
 
     const minerals = room.find(FIND_MINERALS);
     const mineral = minerals && minerals.length > 0 ? minerals[0] : null;
@@ -82,7 +82,7 @@ function summarize_room_internal(room) {
 
     const creeps = _.filter(Game.creeps, c => c.pos.roomName == room.name && c.my);
     const num_creeps = creeps ? creeps.length : 0;
-    const creep_energy = _.sum(Game.creeps, c => c.pos.roomName == room.name ? c.carry.energy : 0);
+    const creep_energy = _.sum(Game.creeps, c => c.pos.roomName == room.name ? c.store.energy : 0);
     const creep_counts = _.countBy(creeps, c => c.memory.role);
 
     const enemy_creeps = room.find(FIND_HOSTILE_CREEPS);
@@ -94,7 +94,7 @@ function summarize_room_internal(room) {
 
     const towers = room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_TOWER && s.my });
     const num_towers = towers ? towers.length : 0;
-    const tower_energy = _.sum(towers, t => t.energy);
+    const tower_energy = _.sum(towers, t => t.store[RESOURCE_ENERGY]);
 
     const const_sites = room.find(FIND_CONSTRUCTION_SITES);
     const num_construction_sites = const_sites.length;
@@ -107,7 +107,7 @@ function summarize_room_internal(room) {
 
     const sources = room.find(FIND_SOURCES);
     const num_sources = sources == null ? 0 : sources.length;
-    const source_energy = _.sum(sources, s => s.energy);
+    const source_energy = _.sum(sources, s => s.store[RESOURCE_ENERGY]);
 
     const has_terminal = room.terminal != null;
     const controller_level = room.controller.level;

@@ -292,7 +292,7 @@ var creep_helpers = {
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 name_prefix: 'mnrl_mnr_' + room_name,
                 amount: 1,
-                avoid: ((my_room.storage && ((my_room.memory.energy_flow.store_used.storage > (my_room.storage.storeCapacity * 0.93)) ||
+                avoid: ((my_room.storage && ((my_room.memory.energy_flow.store_used.storage > (my_room.storage.store.getCapacity() * 0.93)) ||
                                              (my_room.storage.store['energy'] < Memory.rooms.global_vars.storage_emergency_ration))) ||
                         !(my_room.memory.energy_flow.mineral.extractor && Game.getObjectById(my_room.memory.energy_flow.mineral.id).mineralAmount > 0))
                         // (my_room.terminal && (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] > 50000))))
@@ -352,7 +352,7 @@ var creep_helpers = {
                 const add = (a, b) => a + b;
                 // console.log('[DEBUG] (create_creep) [' + room_name + '] CONTAINERS: ' + JSON.stringify(my_room.memory.energy_flow.containers))
                 if (creep_type === 'energy_miner' && 
-                    (Object.keys(my_room.memory.energy_flow.containers.source).map(x => Game.getObjectById(x)       .store.energy).reduce(add)) > (Object.keys(my_room.memory.energy_flow.containers.source).length * 1000))
+                    (Object.keys(my_room.memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store[RESOURCE_ENERGY]).reduce(add)) > (Object.keys(my_room.memory.energy_flow.containers.source).length * 1000))
                     continue;
 
                 let rmt_targets = (current_obj.rmt_targets) ? current_obj.rmt_targets : [false,];    // false is for moke of intra room special creeps
@@ -512,7 +512,7 @@ var creep_helpers = {
         if (creep.memory.role == 'dropper') {
 
         } else {
-            //closest_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] < object.storeCapacity)});
+            //closest_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && object.store[RESOURCE_ENERGY] < object.getCapacity())});
 
 //            creep.memory.target_id = closest_containers.id;
 //            creep.memory.role = 'dropper';
@@ -537,8 +537,8 @@ var creep_helpers = {
                 if (my_room.memory.towers.current[target.id] === creep.id) my_room.memory.towers.current[target.id] = false;
             default:
 //                console.log('[WARN] (most_creep_action_results)[' + creep.name + ']: ' + creep_role + ': NO action for result ' + action_res)
-//                 if (creep.memory.role == 'transfer' && creep.memory.target_id != my_spawn.id && my_spawn.energy < my_spawn.energyCapacity) {
-//                     targets = my_room.find(FIND_STRUCTURES, {filter: object => object.energy < object.energyCapacity});
+//                 if (creep.memory.role == 'transfer' && creep.memory.target_id != my_spawn.id && my_spawn.store[RESOURCE_ENERGY] < my_spawn.store.getCapacity(RESOURCE_ENERGY)) {
+//                     targets = my_room.find(FIND_STRUCTURES, {filter: object => object.store[RESOURCE_ENERGY] < object.store.getCapacity(RESOURCE_ENERGY)});
 // //                    console.log('[DEBUG] (most_creep_action_results)[' + creep.name + ']: ' + 'Target is changed');
 //                     if (targets[0]) creep.memory.target_id = targets[0].id;
 //                 } else {

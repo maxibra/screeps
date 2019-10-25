@@ -29,7 +29,7 @@ var StructTower = {
         if(!Game.creeps[tower_creep] || (Game.creeps[tower_creep] && Game.creeps[tower_creep].memory.target_id !== current_tower_id))
             my_room.memory.towers.current[current_tower_id] = false;
         
-        tower_energy_proc = current_tower.energy/current_tower.energyCapacity;
+        tower_energy_proc = current_tower.store[RESOURCE_ENERGY]/current_tower.store.getCapacity(RESOURCE_ENERGY);
         // console.log('[DEBUG] (StructTower.run) [' + room_name + '] ENERGY PROC: ' + tower_energy_proc)
 
         if (room_vars.status == 'war') {
@@ -102,7 +102,7 @@ var StructTower = {
             }
         }
 
-        return (current_tower.energyCapacity - current_tower.energy);
+        return (current_tower.store.getCapacity(RESOURCE_ENERGY) - current_tower.store[RESOURCE_ENERGY]);
     },
     create_towers_list: function (room_name) {
         let towers_list = [];
