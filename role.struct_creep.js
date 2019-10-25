@@ -121,11 +121,11 @@ var structCreep = {
                 return;
         }
 
-        if(creep.name.slice(-2) === "gn" && creep.store['energy'] === 0 && creep.ticksToLive < 20) {
-            console.log('[DEBUG] (structCreep.run)[' + creep.name + '] A few live to do something. Suicide')
-            creep.suicide();
-            return;
-        }
+        // if(creep.name.slice(-2) === "gn" && creep.store['energy'] === 0 && creep.ticksToLive < 20) {
+        //     console.log('[DEBUG] (structCreep.run)[' + creep.name + '] A few live to do something. Suicide')
+        //     creep.suicide();
+        //     return;
+        // }
 
         // Suicide of energy miners if both of containers near sources are full.
         const add = (a, b) => a + b;
@@ -138,7 +138,7 @@ var structCreep = {
 
         let condition2change_role = (iam_general &&
                                      (my_room.memory.global_vars.status ==='war' ||
-                                      (creep.memory.role === 'harvest' && creep.store.getCapacity([RESOURCE_ENERGY]) == creep.store.getCapacity()) ||
+                                      (creep.memory.role === 'harvest' && creep.store.getUsedCapacity([RESOURCE_ENERGY]) == creep.store.getCapacity()) ||
                                       creep.memory.role === 'undefined' ||
                                       (creep.memory.target_id === my_room.controller.id &&
                                         (my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85) ||
@@ -146,6 +146,7 @@ var structCreep = {
                                          fill_terminal)))));
 
         if (condition2change_role) creep.memory.target_id = false;
+        // if (creep.name === 'E28N48-2-gn') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] creep.store.getCapacity([RESOURCE_ENERGY]): ' + creep.store.getCapacity([RESOURCE_ENERGY]) + '; creep.store.getCapacity: ' + creep.store.getCapacity() +  '; condition2change_role: ' + condition2change_role +'; creep.memory: ' + JSON.stringify(creep.memory))
         // *** LOG
         // if (creep.name === log_name) 
         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Time: ' + Game.time + '; Controller: ' + JSON.stringify(controller_position) + '; Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);

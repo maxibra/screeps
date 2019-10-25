@@ -37,9 +37,26 @@ var RoleHarvester = {
         if (creep.memory.role !== 'harvest') creep.say('harvesting');
 
         if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] STUCK: ' + creep.memory.stuck +'; Target ID: ' + creep.memory.target_id + '; TYPE: ' + creep.memory.harvester_type);
-        if (creep.memory.target_id) {
-            target = Game.getObjectById(creep.memory.target_id);
+
+        let creep_target_id = creep.memory.target_id
+        if (creep_target_id) {
+            target = Game.getObjectById(creep_target_id);
             harvester_type = creep.memory.harvester_type;
+            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep.name +']: Target ID: ' + target.structureType + '; harvester_type: ' + harvester_type);
+            if (creep.ticksToLive < global_vars.age_to_drop_and_die) {  // Clean booking container or link
+                if (target.structureType === 'container') {
+                    if (my_room.memory.energy_flow.containers.source[creep_target_id]) {
+                        let index = my_room.memory.energy_flow.containers.source[creep_target_id].creeps_moving2me.indexOf(creep.id);
+                        if (index > -1) my_room.memory.energy_flow.containers.source[creep_target_id].creeps_moving2me.splice(index, 1);
+                    } else {
+                        let index = my_room.memory.energy_flow.containers.other[creep_target_id].creeps_moving2me.indexOf(creep.id);
+                        if (index > -1) my_room.memory.energy_flow.containers.other[creep_target_id].creeps_moving2me.splice(index, 1);
+                    }
+                } else if (target.structureType === 'link')
+                    my_room.memory.energy_flow.links.destinations[creep_target_id] = false
+                creep.say('Going2die');
+                creep.suicide();     // Go to die to Cemetery (a far place)
+            }
         } else if (creep.pos.isNearTo(far_source)) {
             target = far_source;
             harvester_type = 'source';
@@ -68,8 +85,14 @@ var RoleHarvester = {
             let full_containers = [];
             for (let c in room_containers) {
                 let current_container = Game.getObjectById(room_containers[c]);
+                let current_length = 0
+                if (current_container)
+                    current_length = (my_room.memory.energy_flow.containers.source[current_container.id]) ? my_room.memory.energy_flow.containers.source[current_container.id].creeps_moving2me.length
+                                                                                                          : my_room.memory.energy_flow.containers.other[current_container.id].creeps_moving2me.length
+
+                let current_container_free_energy = current_container.store[RESOURCE_ENERGY] - (current_length * creep.store.getCapacity())
                 if (current_container && 
-                    (current_container.store[RESOURCE_ENERGY] >= (creep.store.getCapacity()*0.92) ||
+                    (current_container_free_energy >= (creep.store.getCapacity()*0.86) ||
                      (current_container.store[RESOURCE_ENERGY] > 50 && creep.pos.isNearTo(current_container))))
                     full_containers.push(current_container);
             }
@@ -81,6 +104,11 @@ var RoleHarvester = {
                     //   (room_name === 'E38N47' && room_full_container && (Game.getObjectById('59f1a59182100e1594f3eb8b').store[RESOURCE_ENERGY] === 0 || Game.getObjectById('5ad6d9528fd8b7520976363f').pos.lookFor(LOOK_CREEPS).length > 0))) {
                 target = room_full_container;
                 harvester_type = 'container';
+                if ( my_room.memory.energy_flow.containers.source[room_full_container.id] ) {
+                    my_room.memory.energy_flow.containers.source[room_full_container.id].creeps_moving2me.push(creep.id)
+                } else {
+                    my_room.memory.energy_flow.containers.other[room_full_container.id].creeps_moving2me.push(creep.id)
+                }
                 // if (my_room.memory.energy_flow.containers.source[target.id]) {
                 //     my_room.memory.energy_flow.containers.source[target.id].screeps_on_way += 1
                 // }
@@ -112,12 +140,12 @@ var RoleHarvester = {
                         //                                                                           Object.keys(object.store).length === 1)}); //|| creep.pos.getRangeTo(object, 2)});
 
                         let min_terminal_storage = Memory.rooms.global_vars.terminal_emergency_ration;
-                        storage_target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_STORAGE && (my_room.memory.global_vars.status === 'war' ||
-                                                                                                                                                            (object.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.storage_emergency_ration &&
-                                                                                                                                                             !my_room.memory.global_vars.all_full))) ||
-                                                                                                            (object.structureType === STRUCTURE_TERMINAL && (my_room.memory.global_vars.status === 'war' ||
-                                                                                                                                                             object.store[RESOURCE_ENERGY] > min_terminal_storage && 
-                                                                                                                                                             !my_room.memory.global_vars.all_full))) });
+                        let storage_target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_STORAGE && (my_room.memory.global_vars.status === 'war' ||
+                                                                                                                                                              (object.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.storage_emergency_ration &&
+                                                                                                                                                              !my_room.memory.global_vars.all_full))) ||
+                                                                                                              (object.structureType === STRUCTURE_TERMINAL && (my_room.memory.global_vars.status === 'war' ||
+                                                                                                                                                               object.store[RESOURCE_ENERGY] > min_terminal_storage &&
+                                                                                                                                                               !my_room.memory.global_vars.all_full))) });
                                                                                                                                                 
                         // if (target && creep.memory.special !== 'upgrader' && my_room.memory.global_vars.status === 'peace' &&
                         //     room_helpers.is_inside_wall(room_name, target)) {
@@ -169,6 +197,18 @@ var RoleHarvester = {
             case 'link':
             case 'storage':
                 action_out = creep.withdraw(target, RESOURCE_ENERGY);
+                if (action_out === OK) {
+                    if (harvester_type === 'container') {
+                        if (my_room.memory.energy_flow.containers.source[creep_target_id]) {
+                            let index = my_room.memory.energy_flow.containers.source[creep_target_id].creeps_moving2me.indexOf(creep.id);
+                            if (index > -1) my_room.memory.energy_flow.containers.source[creep_target_id].creeps_moving2me.splice(index, 1);
+                        } else {
+                            let index = my_room.memory.energy_flow.containers.other[creep_target_id].creeps_moving2me.indexOf(creep.id);
+                            if (index > -1) my_room.memory.energy_flow.containers.other[creep_target_id].creeps_moving2me.splice(index, 1);
+                        }
+                    } else if (target.structureType === 'link')
+                        my_room.memory.energy_flow.links.destinations[creep_target_id] = false
+                }
                 // creep.memory.role = 'undefined';
                 // creep.memory.target_id = false;
                 // creep.memory.harvester_type = false;

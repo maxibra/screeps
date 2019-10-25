@@ -246,7 +246,7 @@ module.exports.loop = function () {
     // frst_src =  Game.getObjectById('5afd6e3e17ef266afcaf8a41');
     // scnd_src =  Game.getObjectById('5afe7e3f7d58336918d464a1');
     
-    // if (dst_lab.store[dst_lab.mineralType] < 0.9*dst_lab.store.getCapacity(dst_lab.mineralType  && frst_src.store[frst_src.mineralType] > 0 && scnd_src.store[scnd_src.mineralType] > 0) dst_lab.runReaction(frst_src, scnd_src);
+    // if (dst_lab.store[dst_lab.mineralType] < 0.9*dst_lab.store.getCapacity(dst_lab.mineralType)  && frst_src.store[frst_src.mineralType] > 0 && scnd_src.store[scnd_src.mineralType] > 0) dst_lab.runReaction(frst_src, scnd_src);
 
     // Creeps
     for(var name in Game.creeps) {
