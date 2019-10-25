@@ -49,9 +49,9 @@ function is_millitary(creep_obj) {
 function link_transfer(source_link, destination_link) {
     // console.log('[DEBUG](room.helpers-link_transfer): Destination link: ' + destination_link)
     let energy_sent = false;
-    let dst_missing = destination_link.store.getCapacity() - destination_link.store[RESOURCE_ENERGY];
+    let dst_missing = destination_link.store.getCapacity(RESOURCE_ENERGY) - destination_link.store[RESOURCE_ENERGY];
     
-    // if (source_link.id === '5ac80cb1efc817037dc137dd') console.log('[DEBUG](room.helpers-link_transfer): Destination (' + destination_link.id + ') missing energy: ' +  dst_missing + '; Source (' + source_link.id + '): ' + source_link.store[RESOURCE_ENERGY]);
+    if (source_link.id === '5dad7368328c8405870fa2ec') console.log('[DEBUG](room.helpers-link_transfer): Destination (' + destination_link.id + ') missing energy: ' +  dst_missing + '; Source (' + source_link.id + '): ' + source_link.store[RESOURCE_ENERGY]);
     
     if (source_link.cooldown === 0 && destination_link && dst_missing >= source_link.store[RESOURCE_ENERGY]) {
             source_link.transferEnergy(destination_link, source_link.store[RESOURCE_ENERGY]);
@@ -319,7 +319,7 @@ var room_helpers = {
         if (my_room && src_links && src_links.length > 0) {
             for (let l in src_links) {
                 let current_link = Game.getObjectById(src_links[l]);
-                if (current_link && current_link.store[RESOURCE_ENERGY]/current_link.store.getCapacity() < 0.9) {
+                if (current_link && current_link.store[RESOURCE_ENERGY]/current_link.store.getCapacity(RESOURCE_ENERGY) < 0.9) {
                     // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: LINK: ' + src_links[l] + ' is empty');
                     all_links_full = false;
                     break;
@@ -607,14 +607,14 @@ var room_helpers = {
         }
     },
     get_energy_source_target: function(room_name) {
-        let targets = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store[RESOURCE_ENERGY]/object.store.getCapacity()) > 0.3)});
+        let targets = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store[RESOURCE_ENERGY]/object.store.getCapacity(RESOURCE_ENERGY)) > 0.3)});
 
         //targets.contact()
     },
     get_transfer_target: function(room_name) {
-//        let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (structureType: STRUCTURE_TOWER && object.store[RESOURCE_ENERGY] < object.store.getCapacity())});
+//        let towers = my_room.find(FIND_MY_STRUCTURES, {filter: object => (structureType: STRUCTURE_TOWER && object.store[RESOURCE_ENERGY] < object.store.getCapacity(RESOURCE_ENERGY))});
         let my_room = Game.rooms[room_name];
-        let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.store[RESOURCE_ENERGY] < object.store.getCapacity())});
+        let targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType != STRUCTURE_SPAWN && object.store[RESOURCE_ENERGY] < object.store.getCapacity(RESOURCE_ENERGY))});
         //targets.sort((a,b) => a.hits - b.hits);
         // targets.push(my_spawn);
         //if (targets[0]) console.log('[DEBUG] (room_helpers-get_transfer_target): Transfer target type: ' + targets[0].structureType);
