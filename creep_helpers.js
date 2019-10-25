@@ -205,7 +205,7 @@ var creep_helpers = {
                 body: [TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], // move plain=1, attack=180/T
                 memory: {constructions2attack: ['5b2a0f54c57d970cc45da851', ]},
                 name_prefix: 'attacker_const_' + room_name,
-                amount: 2,
+                amount: 0,
                 avoid: !(room_name === 'E28N48')
             },
             guard: {
@@ -476,13 +476,17 @@ var creep_helpers = {
         if (finalize_body) current_body = current_body.concat(finalize_body);
         let current_body_cost = body_cost(current_body);
 
-        
         // if (room_name === 'E32N49' ) console.log('[DEBUG] (create_creep): [' + spawn_name + '] Creep: ' + creep_name +'; body cost: ' +  current_body_cost + '; Body: ' + JSON.stringify(current_body));
 
         if (current_body_cost > Game.rooms[room_name].energyAvailable) {
             console.log('[DEBUG] (create_creep): [' + spawn_name + '] WAITing to create creep ' + creep_name + ': ' +  Game.rooms[room_name].energyAvailable + '/' + current_body_cost);
             return;
         }
+
+        // if (creep_name.includes('-gn')) {
+        //     let carru_parts = current_body.filter(i => i === CARRY).length
+        //     creep_memory['carry_capacity'] = carru_parts * CARRY_CAPACITY
+        // }
 
         let exit_code = Game.spawns[spawn_name].spawnCreep(current_body, creep_name, {memory: creep_memory});
         // console.log('[DEBUG] (create_creep): Type: ' + my_spawn.memory.general.creeps_max_amount + '; Max amount: ' + JSON.stringify(room_vars.screeps_max_amount)); //room_vars.screeps_max_amount[my_spawn.memory.general.creeps_max_amount]);
