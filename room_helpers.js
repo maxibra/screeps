@@ -314,16 +314,8 @@ var room_helpers = {
 
         if (!my_room) return; // The room contains no controller
         
-        // LINKS
-        // dstn_links = my_room.memory.energy_flow.links.destinations;
-        // dstn_links = dstn_links.concat(my_room.memory.energy_flow.links.near_controller);
-        // if (my_room && dstn_links && dstn_links.length > 0) {
-            // for (let l in dstn_links) {
-            //     let current_link = Game.getObjectById(dstn_links[l]);
-            //     if (current_link && current_link.energy/current_link.energyCapacity < 0.9) {
-            //         console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: LINK: ' + dstn_links[l] + ' is empty');
-                    
-        src_links = my_room.memory.energy_flow.links.near_sources;
+
+        let src_links = my_room.memory.energy_flow.links.near_sources;
         if (my_room && src_links && src_links.length > 0) {
             for (let l in src_links) {
                 let current_link = Game.getObjectById(src_links[l]);
@@ -363,10 +355,10 @@ var room_helpers = {
         source_links = source_links.concat(my_room.memory.energy_flow.links.sources)
         for (let l_src in source_links) {
             let current_link_sent = false;
-            source_link = Game.getObjectById(source_links[l_src]);
+            let source_link = Game.getObjectById(source_links[l_src]);
             if (!(source_link && (source_link.energy > 100))) continue;
             let destination_links = (my_room.memory.energy_flow.links.near_controller) ? [my_room.memory.energy_flow.links.near_controller,] : [];    // First link to get energy is near controller
-            destination_links = destination_links.concat(my_room.memory.energy_flow.links.destinations);
+            destination_links = destination_links.concat(Object.keys(my_room.memory.energy_flow.links.destinations));
             
             // if ( room_name === 'E32N49') console.log('[ERROR] (room_helpers.transfer_link2link)[' + room_name  +'] Destination Links: ' + JSON.stringify(destination_links));
             
@@ -504,7 +496,7 @@ var room_helpers = {
             max_store: my_room.memory.energy_flow.max_store,
             mineral: cur_mineral,
             containers: {source :{}, other: {}}, 
-            links: {near_sources: [], near_controller: false, destinations: [], sources: []}
+            links: {near_sources: [], near_controller: false, destinations: {}, sources: []}
         }
         // Sort containers
         console.log('[DEBUG] (room_helpers.upgrade_energy_flow)[' + room_name +']')
@@ -520,6 +512,7 @@ var room_helpers = {
                     
                     local_energy_flow_obj.containers.source[all_containers[i].id] = {
                         source_id: all_sources[j],
+                        creeps_moving2me: [],
                         miner_id: (my_room.memory.energy_flow.containers.source[all_containers[i].id]) ? my_room.memory.energy_flow.containers.source[all_containers[i].id].miner_id : false
                     };
                     container_defined = true;
@@ -559,7 +552,7 @@ var room_helpers = {
             } else if (all_links[l].pos.getRangeTo(my_room.controller) < 6)
                 local_energy_flow_obj.links.near_controller = all_links[l].id;
             else
-                local_energy_flow_obj.links.destinations.push(all_links[l].id);
+                local_energy_flow_obj.links.destinations[all_links[l].id] = false;
         }
         // if (room_name == 'E38N48') console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: DST LINKS iD: ' + JSON.stringify(local_energy_flow_obj.links.destinations));
             

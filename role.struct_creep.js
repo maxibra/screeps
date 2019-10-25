@@ -754,8 +754,8 @@ var structCreep = {
                     case 'transfer':
                         // if (creep.memory.target_id) transfer_target = Game.getObjectById(creep.memory.target_id);
                         // else if (room_name === creep.memory.homeland) {
-                        //     for (let l in my_room.memory.energy_flow.links.destinations) {
-                        //         cur_target = Game.getObjectById(my_room.memory.energy_flow.links.destinations[l]);
+                        //     for (let l_id in my_room.memory.energy_flow.links.destinations) {
+                        //         cur_target = Game.getObjectById(l_id);
                         //         if (cur_target && creep.pos.getRangeTo(cur_target) < 4)
                         //             transfer_target = cur_target;
                         //     }
@@ -891,9 +891,9 @@ var structCreep = {
             case 'upgrader':
                 // let closer_link_id = creep.memory.target_id;
                 // if (!closer_link_id)
-                //     for (let l_dst in my_room.memory.energy_flow.links.destinations) {
-                //         if (Game.getObjectById(my_room.memory.energy_flow.links.destinations[l_dst]).pos.getRangeTo(my_room.controller) < 6) {
-                //             closer_link_id = my_room.memory.energy_flow.links.destinations[l_dst];
+                //     for (let l_id in my_room.memory.energy_flow.links.destinations) {
+                //         if (Game.getObjectById(l_id).pos.getRangeTo(my_room.controller) < 6) {
+                //             closer_link_id = l_id;
                 //             creep.memory.target_id = closer_link_id;
                 //             break;
                 //         }

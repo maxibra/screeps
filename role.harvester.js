@@ -77,8 +77,7 @@ var RoleHarvester = {
             let room_full_container = creep.pos.findClosestByRange(full_containers);
             // *****************       
             
-            // destination_links.push(my_room.memory.energy_flow.links.near_controller);
-            if (creep.memory.special !== 'upgrader' && room_full_container) { // ||  
+            if (creep.memory.special !== 'upgrader' && room_full_container) { // ||
                     //   (room_name === 'E38N47' && room_full_container && (Game.getObjectById('59f1a59182100e1594f3eb8b').energy === 0 || Game.getObjectById('5ad6d9528fd8b7520976363f').pos.lookFor(LOOK_CREEPS).length > 0))) {
                 target = room_full_container;
                 harvester_type = 'container';
@@ -86,9 +85,9 @@ var RoleHarvester = {
                 //     my_room.memory.energy_flow.containers.source[target.id].screeps_on_way += 1
                 // }
             } else { 
-                let destination_links = (my_room.memory.energy_flow) ? my_room.memory.energy_flow.links.destinations : [];
-                for (let l in destination_links) {
-                    cur_target = Game.getObjectById(destination_links[l]);
+                let destination_links = (my_room.memory.energy_flow) ? my_room.memory.energy_flow.links.destinations : {};
+                for (let l_id in destination_links) {
+                    let cur_target = Game.getObjectById(l_id);
                     if (cur_target && creep.pos.getRangeTo(cur_target) <= range2link && cur_target.energy > 0) {
                         target =  cur_target;
                         break;
