@@ -198,6 +198,7 @@ var RoleHarvester = {
             case 'storage':
                 action_out = creep.withdraw(target, RESOURCE_ENERGY);
                 if (action_out === OK) {
+                    creep_target_id = target.id
                     if (harvester_type === 'container') {
                         if (my_room.memory.energy_flow.containers.source[creep_target_id]) {
                             let index = my_room.memory.energy_flow.containers.source[creep_target_id].creeps_moving2me.indexOf(creep.id);
