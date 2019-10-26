@@ -664,7 +664,7 @@ var structCreep = {
                 //     return;
                 // }
                 // if (creep.name === name4log) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mem: ' + JSON.stringify(creep.memory));
-                if (creep.store[RESOURCE_ENERGY] === 0 || creep.memory.role === 'harvest') {
+                if (creep.store[RESOURCE_ENERGY]/creep.store.getCapacity() < 0.7 || creep.memory.role === 'harvest') {
                     let transfer_target = creep.pos.findClosestByRange(FIND_TOMBSTONES,{filter: object => (object.store[RESOURCE_ENERGY] > 200 && 
                                                                                                            !room_helpers.is_inside_wall(room_name, object))});
                     if (!transfer_target) {
