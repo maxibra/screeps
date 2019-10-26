@@ -934,6 +934,19 @@ var room_helpers = {
 
         Memory.rooms.global_vars.storage_status_by_mineral = storage_status_by_mineral
         Memory.rooms.global_vars.terminal_status = terminals_status
+    },
+    verify_gn_age_difference_and_kill: function(room_name) {
+        let general_creeps = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => object.name.includes('-gn')})
+        for (let i = 0; i < general_creeps.length-1; i++) {
+            let first_age = general_creeps[i].ticksToLive;
+            let second_age = general_creeps[i+1].ticksToLive;
+            let age_diff = first_age - second_age;
+            if (Math.abs(age_diff) < 400) {
+                let youngest_id = (first_age < second_age) ? general_creeps[i].id : general_creeps[i+1].id;
+                Game.getObjectById(youngest_id).suicide();
+                break;
+            }
+        }
     }
 };
 

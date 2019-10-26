@@ -376,8 +376,9 @@ module.exports.loop = function () {
             if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.defence_level = 40554000
             else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.defence_level = 20554000
         }
-        
+
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
+            room_helpers.verify_gn_age_difference_and_kill(current_room_name)
             room_helpers.get_minerals_status()
             // console.log('[INFO] (main) [' + current_room_name + '] upgrade_energy')
             // the upgrade doesn't work on not my rooms 
