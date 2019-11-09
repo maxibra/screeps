@@ -664,8 +664,9 @@ var structCreep = {
                 //     return;
                 // }
                 // if (creep.name === name4log) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mem: ' + JSON.stringify(creep.memory));
-                // if (creep.store[RESOURCE_ENERGY]/creep.store.getCapacity() < 0.7 || creep.memory.role === 'harvest') {
-                if (creep.memory.role === 'harvest') {
+                console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mem: ' + JSON.stringify(creep.memory));
+                if (creep.store[RESOURCE_ENERGY]/creep.store.getCapacity() === 0 || creep.memory.role === 'harvest') {
+                // if (creep.memory.role === 'harvest') {
                     let transfer_target = creep.pos.findClosestByRange(FIND_TOMBSTONES,{filter: object => (object.store[RESOURCE_ENERGY] > 200 &&
                                                                                                            !room_helpers.is_inside_wall(room_name, object))});
                     if (!transfer_target) {
@@ -785,8 +786,9 @@ var structCreep = {
                                 if (extension_target) {
                                     current_target = extension_target;    
                                 } else {
+                                    // current_target = false
                                     for (let t in transfer_targets) {
-                                        // if (creep.name === 'rmt_hrvst_E32N49_E31N49-1-sp') 
+                                        // if (creep.name === 'rmt_hrvst_E32N49_E31N49-1-sp')
                                         // console.log('[DEBUG][' + creep.name + '] : ROOM: ' + room_name + '; target: ' + transfer_targets[t]);
                                         current_target = Game.getObjectById(transfer_targets[t])
                                         if (((current_target.structureType === 'container' && current_target.store['energy'] < current_target.getCapacity()) ||
