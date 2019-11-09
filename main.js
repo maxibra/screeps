@@ -363,7 +363,7 @@ module.exports.loop = function () {
             // console.log('[INFO] (main) [' + current_room_name + ']: RUN  "transfer_energy" ' + current_mod + '. Time: ' + Game.time);
             room_helpers.transfer_energy(current_room_name);
         }
-        
+
         if (Game.time % 30 === 0 && Game.cpu.bucket > 6000) {
             // room_helpers.transfer_mineral(current_room_name);
             // Count storage capacity of terminal and storage
@@ -378,7 +378,7 @@ module.exports.loop = function () {
         }
 
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
-            room_helpers.verify_gn_age_difference_and_kill(current_room_name)
+            // room_helpers.verify_gn_age_difference_and_kill(current_room_name)
             room_helpers.get_minerals_status()
             // console.log('[INFO] (main) [' + current_room_name + '] upgrade_energy')
             // the upgrade doesn't work on not my rooms 

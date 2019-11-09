@@ -477,8 +477,14 @@ var room_helpers = {
     upgrade_energy_flow: function(room_name) {
         // Containers
         let my_room = Game.rooms[room_name];
-        if (!my_room || !my_room.controller.my) return;
-        
+        // if (room_name === 'E38N49' ) console.log('[DEBUG] (room_helpers.upgrade_energy_flow): My Room: ' + !my_room +
+        //                                          '; Reservation: ' +  (my_room.controller.reservation && my_room.controller.reservation.username != 'maxibra') +
+        //                                           '; My controller: ' + my_room.controller.my +
+        //                                           '; My controller or reservation: ' + !(my_room.controller.my ||
+        //                                                                                  (my_room.controller.reservation && my_room.controller.reservation.username != 'maxibra')))
+        if (!my_room || !(my_room.controller.my ||
+                          (my_room.controller.reservation && my_room.controller.reservation.username === 'maxibra'))) return;
+
         let all_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
         let all_continers_ids = all_containers.map(x => x.id);
         let all_links = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
@@ -490,8 +496,8 @@ var room_helpers = {
             long_harvest: my_room.memory.energy_flow.long_harvest,
             sources: my_room.memory.energy_flow.sources,
             store_used: {
-                storage: _.sum(my_room.storage.store),
-                terminal: _.sum(my_room.terminal.store)
+                storage: (my_room.storage) ? _.sum(my_room.storage.store) : 0,
+                terminal: (my_room.terminal) ? _.sum(my_room.terminal.store) : 0
             },
             max_store: my_room.memory.energy_flow.max_store,
             mineral: cur_mineral,
@@ -500,7 +506,7 @@ var room_helpers = {
         }
         // Sort containers
         console.log('[DEBUG] (room_helpers.upgrade_energy_flow)[' + room_name +']')
-        if (room_name === 'E28N47' ) console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
+        // if (room_name === 'E28N47' ) console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
         for (let i = 0; i < all_containers.length; i++) {
             let container_defined = false;
             // if (all_containers[i].pos.getRangeTo(my_room.controller) < 5) {
@@ -523,7 +529,7 @@ var room_helpers = {
             // console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Container: ' + all_containers[i].id + ' is Defined: ' + container_defined);
             if (!container_defined) local_energy_flow_obj.containers.other[all_containers[i].id] = {creeps_moving2me: []};
         }
-
+        // console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + '] Containers: ' + JSON.stringify(local_energy_flow_obj.containers))
         // Links
         // *** LOG
         // console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: All links: ' + all_links.length + 'Local obj:' + JSON.stringify(local_energy_flow_obj));

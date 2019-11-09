@@ -236,11 +236,11 @@ var creep_helpers = {
             },
             remote_energy_miner: {
                 // body: [MOVE,MOVE,WORK,WORK,WORK],
-                body: [MOVE,MOVE,WORK,WORK,WORK,WORK,WORK],
+                body: [MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK], // Cost: 350; harvest: 10/T; plain=2,2; road=1,1 
                 memory: {stuck: 0},
                 name_prefix: 'rmt_nrg_mnr' + room_name,
                 rmt_targets: remote_target(room_name),
-                avoid: !(room_name === 'E38N48' || room_name === 'E37N48' || room_name === 'E28N48')
+                avoid: !(room_name === 'E38N48' || room_name === 'E37N48' || room_name === 'E28N48' || room_name === 'E33N47')
             },
             remote_harvest: {
                 body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // Carry: 800, Harvest: 6/T; Build: 15/T; Cost: 1,600
@@ -351,7 +351,7 @@ var creep_helpers = {
                 // if (room_name === 'E34N47' ) console.log('(create_creep) [' + room_name + '] Creep type: ' +creep_type);
                 const add = (a, b) => a + b;
                 // console.log('[DEBUG] (create_creep) [' + room_name + '] CONTAINERS: ' + JSON.stringify(my_room.memory.energy_flow.containers))
-                if (creep_type === 'energy_miner' && 
+                if (creep_type === 'energy_miner' && my_room.memory.energy_flow.containers.source &&
                     (Object.keys(my_room.memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store[RESOURCE_ENERGY]).reduce(add)) > (Object.keys(my_room.memory.energy_flow.containers.source).length * 1000))
                     continue;
 
