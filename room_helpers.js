@@ -505,7 +505,7 @@ var room_helpers = {
             links: {near_sources: [], near_controller: false, destinations: {}, sources: []}
         }
         // Sort containers
-        console.log('[DEBUG] (room_helpers.upgrade_energy_flow)[' + room_name +']')
+        // console.log('[DEBUG] (room_helpers.upgrade_energy_flow)[' + room_name +']')
         // if (room_name === 'E28N47' ) console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
         for (let i = 0; i < all_containers.length; i++) {
             let container_defined = false;

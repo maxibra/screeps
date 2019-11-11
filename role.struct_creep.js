@@ -664,7 +664,7 @@ var structCreep = {
                 //     return;
                 // }
                 // if (creep.name === name4log) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mem: ' + JSON.stringify(creep.memory));
-                console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mem: ' + JSON.stringify(creep.memory));
+                // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Mem: ' + JSON.stringify(creep.memory));
                 if (creep.store[RESOURCE_ENERGY]/creep.store.getCapacity() === 0 || creep.memory.role === 'harvest') {
                 // if (creep.memory.role === 'harvest') {
                     let transfer_target = creep.pos.findClosestByRange(FIND_TOMBSTONES,{filter: object => (object.store[RESOURCE_ENERGY] > 200 &&
@@ -791,7 +791,7 @@ var structCreep = {
                                         // if (creep.name === 'rmt_hrvst_E32N49_E31N49-1-sp')
                                         // console.log('[DEBUG][' + creep.name + '] : ROOM: ' + room_name + '; target: ' + transfer_targets[t]);
                                         current_target = Game.getObjectById(transfer_targets[t])
-                                        if (((current_target.structureType === 'container' && current_target.store['energy'] < current_target.getCapacity()) ||
+                                        if (((current_target.structureType === 'container' && current_target.store['energy'] < current_target.store.getCapacity()) ||
                                             ((current_target.structureType === 'link') && current_target.store[RESOURCE_ENERGY] < (current_target.store.getCapacity(RESOURCE_ENERGY) * 0.8))) &&
                                             (creep.pos.getRangeTo(current_target) < 20)) {
                                                 // if (creep.name === 'rmt_hrvst_E37N48_E37N49-2-sp') console.log('[DEBUG](struct.creep-remote_harvest)[' + creep.name + ']: BREAK FOR target: ' + transfer_targets[t] + '; Distance: ' +  creep.pos.getRangeTo(current_target));
