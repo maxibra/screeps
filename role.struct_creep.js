@@ -795,6 +795,10 @@ var structCreep = {
                                         // if (creep.name === 'rmt_hrvst_E32N49_E31N49-1-sp')
                                         // console.log('[DEBUG][' + creep.name + '] : ROOM: ' + room_name + '; target: ' + transfer_targets[t]);
                                         current_target = Game.getObjectById(transfer_targets[t])
+                                        if (!current_target) {
+                                            console.log('[DEBUG][' + creep.name + '] Missing Target ih Homeland ROOM: ' + room_name + '; target: ' + transfer_targets[t]);
+                                            continue
+                                        }
                                         if (((current_target.structureType === 'container' && current_target.store['energy'] < current_target.store.getCapacity()) ||
                                             ((current_target.structureType === 'link') && current_target.store[RESOURCE_ENERGY] < (current_target.store.getCapacity(RESOURCE_ENERGY) * 0.8))) &&
                                             (creep.pos.getRangeTo(current_target) < 20)) {
