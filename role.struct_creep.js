@@ -91,9 +91,11 @@ var structCreep = {
         let range2upgrade = (room_name === 'E38N47') ? 6 : 4;
         // console.log('[DEBUG] (structCreep.run)[' + room_name + ']');
         let fill_terminal = (my_room.terminal &&
-                             my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
-                             my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
-        // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] ROOM: ' + room_name)
+                             my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage); // &&
+                             // my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
+        // if (room_name === 'E38N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Terminal Store: ' + my_room.terminal.store[RESOURCE_ENERGY] + '; MAX: ' + Memory.rooms.global_vars.terminal_max_energy_storage+ '; USED: ' + my_room.memory.energy_flow.store_used.terminal + '; MAX: ' + my_room.memory.energy_flow.max_store.terminal);
+
+       // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] ROOM: ' + room_name)
         let critical_controller_downgrade = (room_vars && room_vars.status === 'peace') ? 150000 : 130000
         // It's nothing todo
         // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] unemployed role: ' + creep.memory.role + '; full: ' + my_room.memory.global_vars.all_full + 'store_used.terminal: ' + my_room.memory.energy_flow.store_used.terminal + '; max_store.terminal: ' + my_room.memory.energy_flow.max_store.terminal);
@@ -144,12 +146,13 @@ var structCreep = {
                                         (my_room.energyAvailable < (my_room.energyCapacityAvailable*0.85) ||
                                         (my_room.controller.ticksToDowngrade > 145000 &&
                                          fill_terminal)))));
+        // if (room_name === 'E38N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Condition to change role: ' + condition2change_role + '; Fill terminal: ' + fill_terminal);
 
         if (condition2change_role) creep.memory.target_id = false;
         // if (creep.name === 'E28N48-2-gn') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] creep.store.getCapacity([RESOURCE_ENERGY]): ' + creep.store.getCapacity([RESOURCE_ENERGY]) + '; creep.store.getCapacity: ' + creep.store.getCapacity() +  '; condition2change_role: ' + condition2change_role +'; creep.memory: ' + JSON.stringify(creep.memory))
         // *** LOG
         // if (creep.name === log_name) 
-        // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Time: ' + Game.time + '; Controller: ' + JSON.stringify(controller_position) + '; Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
+        // if (room_name === 'E38N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Time: ' + Game.time + '; Controller: ' + JSON.stringify(controller_position) + '; Condition to change role: ' + condition2change_role + '; General: ' + iam_general +'; Role: ' + creep.memory.role);
         // ********
         // *** UNIT LOG
         // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Start Creep mem: ' + JSON.stringify(creep.memory));
@@ -260,7 +263,8 @@ var structCreep = {
                         break;
                     }
                 }
-                // if (room_name === 'E34N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target LINK: ' + JSON.stringify(transfer_target));
+
+                if (room_name === 'E38N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target LINK: ' + JSON.stringify(transfer_target));
                 if (!(transfer_target)) { // transfer to extensions or spawn // && room_enegry_is_good
                     transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES,
                         {filter: object => ((object.structureType === STRUCTURE_EXTENSION || object.structureType === STRUCTURE_SPAWN)

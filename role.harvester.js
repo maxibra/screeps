@@ -84,12 +84,14 @@ var RoleHarvester = {
     
             let full_containers = [];
             for (let c in room_containers) {
+                // console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] Container: ' + c + ';Room Containers : ' + JSON.stringify(room_containers[c]));
                 let current_container = Game.getObjectById(room_containers[c]);
                 let current_length = 0
                 if (current_container)
                     current_length = (my_room.memory.energy_flow.containers.source[current_container.id]) ? my_room.memory.energy_flow.containers.source[current_container.id].creeps_moving2me.length
                                                                                                           : my_room.memory.energy_flow.containers.other[current_container.id].creeps_moving2me.length
 
+                // console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] Current Container : ' + JSON.stringify(current_container));
                 let current_container_free_energy = current_container.store[RESOURCE_ENERGY] - (current_length * creep.store.getCapacity())
                 if (current_container && 
                     (current_container_free_energy >= (creep.store.getCapacity()*0.86) ||

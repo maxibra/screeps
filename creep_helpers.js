@@ -178,7 +178,7 @@ var creep_helpers = {
             // || my_room.controller.ticksToDowngrade < 140300 
             // || my_room.terminal.store['energy'] < 15000)) {
             // || units[room_name]['energy_miner'] < my_room.memory.energy_flow.sources.length) {
-            console.log('[DEBUG] (creep_helpers.create_creep) [' + room_name + '] Get Builder body');
+            // console.log('[DEBUG] (creep_helpers.create_creep) [' + room_name + '] Get Builder body');
             current_body = creep_body.build.base;
             add_body = creep_body.build.add;
             finalize_body = creep_body.build.finalize;
@@ -351,6 +351,7 @@ var creep_helpers = {
                 // if (room_name === 'E34N47' ) console.log('(create_creep) [' + room_name + '] Creep type: ' +creep_type);
                 const add = (a, b) => a + b;
                 // console.log('[DEBUG] (create_creep) [' + room_name + '] CONTAINERS: ' + JSON.stringify(my_room.memory.energy_flow.containers))
+                // console.log('[DEBUG] (create_creep) [' + room_name + '] SOURCE CONTAINERS: ' + JSON.stringify(Object.keys(my_room.memory.energy_flow.containers.source)))
                 if (creep_type === 'energy_miner' && my_room.memory.energy_flow.containers.source &&
                     (Object.keys(my_room.memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store[RESOURCE_ENERGY]).reduce(add)) > (Object.keys(my_room.memory.energy_flow.containers.source).length * 1000))
                     continue;

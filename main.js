@@ -68,7 +68,7 @@ for(var current_spawn_name in Game.spawns) {
     }
 }
 
-let init_avoid_rooms = ['E29N47', 'E29N49'];
+let init_avoid_rooms = ['E29N47', 'E29N49', 'E26N47'];
 for(var current_room_name in Memory.rooms) {
     // Initialie the room memory
     if (current_room_name === 'global_vars' ||
@@ -173,7 +173,8 @@ module.exports.loop = function () {
     let avoid_rooms = ['global_vars', 'E26N40', 'E26N43', 'E26N44', 'E26N46', 'E27N40', 'E29N47', 'E30N48', 'E31N53', 'E34N46', 'E39N50', 'E40N49'];
 
     let run_on_roooms = (only_rooms.length > 0) ? only_rooms : Object.keys(Memory.rooms);
-    
+    let rare_time_range = 300;  // 15 minutes
+
     // console.log('[INFO] (main)[Before CREEP ---] Creeps: ' + Object.keys(Game.creeps))
     // console.log('[INFO] (main)[Before CREEP ---] Creeps: ' + Object.keys(Game.creeps).length + '; CPU Used: ' + Game.cpu.getUsed().toFixed(2) + '; Ticket Limit: ' + Game.cpu.tickLimit)
 
@@ -198,6 +199,14 @@ module.exports.loop = function () {
                 'energy_miner': 0,
                 'sp_total': 0,
             };
+            // console.log('[INFO] (main) [' + current_room_name + '] upgrade_energy')
+            // the upgrade doesn't work on not my rooms
+            if (Game.time % rare_time_range === 0) {
+                room_helpers.upgrade_energy_flow(current_room_name);
+            }
+            // Clean dirty memory
+            // Memory.rooms[current_room_name].energy_flow.containers.source = {}
+
         }
         let creeps_amount = 0
         for (let creep_name in cur_creeps) {
@@ -281,7 +290,6 @@ module.exports.loop = function () {
         produce: {},
         final_produce: []
     };
-    let rare_time_range = 300;  // 15 minutes
     for(var room_index in run_on_roooms) {
         let current_room_name = run_on_roooms[room_index];
         let my_room = Game.rooms[current_room_name];
@@ -293,7 +301,7 @@ module.exports.loop = function () {
             continue
         }
         // delete Memory.rooms[current_room_name].energy_flow.energy_flow.storage
-        
+
         // Memory.rooms[current_room_name].energy_flow.store_used = {};
         // delete Memory.rooms[current_room_name].energy_flow.max_used;
         // Memory.rooms[current_room_name].energy_flow.max_store = {storage: 800000, terminal: 270000}
@@ -380,9 +388,6 @@ module.exports.loop = function () {
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
             // room_helpers.verify_gn_age_difference_and_kill(current_room_name)
             room_helpers.get_minerals_status()
-            // console.log('[INFO] (main) [' + current_room_name + '] upgrade_energy')
-            // the upgrade doesn't work on not my rooms 
-            room_helpers.upgrade_energy_flow(current_room_name);
             // If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
             // room_helpers.update_labs_info(current_room_name, room_by_mineral);
             roleTower.create_towers_list(current_room_name);
