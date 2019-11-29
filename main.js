@@ -68,7 +68,7 @@ for(var current_spawn_name in Game.spawns) {
     }
 }
 
-let init_avoid_rooms = ['E29N47', 'E29N49', 'E26N47'];
+let init_avoid_rooms = ['E29N47'];
 for(var current_room_name in Memory.rooms) {
     // Initialie the room memory
     if (current_room_name === 'global_vars' ||

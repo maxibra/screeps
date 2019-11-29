@@ -107,7 +107,7 @@ function remote_harvester_info(room_name) {
             break;
         case 'E32N47': 
             info_object = {
-                homeland_destinations: ['5bc93291594e063956202344', '5b0152f1ff0838345ccf8ae0', '5be4f60e92dbe1251cd139fd', '5afeea7935a4236af6a130d7'],
+                homeland_destinations: ['5bc93291594e063956202344', '5b0152f1ff0838345ccf8ae0', '5afeea7935a4236af6a130d7'],
                 amount: 1
             }
             break;
