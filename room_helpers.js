@@ -119,6 +119,7 @@ var room_helpers = {
     },
     transfer_energy: function(room_name) {
         let my_room = Game.rooms[room_name];
+        if (!Memory.rooms[room_name].energy_flow) return;
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
@@ -312,11 +313,12 @@ var room_helpers = {
         let is_no_constructions = true;
         let my_room = Game.rooms[room_name];
 
-        if (!my_room) return; // The room contains no controller
+        if (!(my_room && my_room.memory.energy_flow)) return; // The room contains no controller
         
         // let fill_terminal = (my_room.terminal &&
         //                      my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
         //                      my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
+        // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']');
         let src_links = my_room.memory.energy_flow.links.near_sources;
         if (my_room && src_links && src_links.length > 0) {
             for (let l in src_links) {
@@ -352,7 +354,7 @@ var room_helpers = {
     transfer_link2link: function(room_name) {
         let my_room = Game.rooms[room_name];
         if (!my_room) return; // The room contains no controller
-
+        // console.log('[DEBUG] (room_helpers.transfer_link2link)[' + room_name  +']')
         let source_links = my_room.memory.energy_flow.links.near_sources;
         source_links = source_links.concat(my_room.memory.energy_flow.links.sources)
         for (let l_src in source_links) {
@@ -485,14 +487,12 @@ var room_helpers = {
         //                                           '; My controller or reservation: ' + !(my_room.controller.my ||
         //                                                                                  (my_room.controller.reservation && my_room.controller.reservation.username != 'maxibra')))
         if (!my_room || !(my_room.controller.my ||
-                          (my_room.controller.reservation && my_room.controller.reservation.username === 'maxibra'))) return;
+                          (my_room.controller.reservation && my_room.controller.reservation.username === 'maxibra')) ||
+            !my_room.memory.energy_flow) return;
 
         let all_containers = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_CONTAINER)});
-        let all_continers_ids = all_containers.map(x => x.id);
         let all_links = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
-        let all_links_ids = all_links.map(x => x.id);
         let all_sources = my_room.memory.energy_flow.sources;
-        let energy_flow_obj = my_room.memory.energy_flow;
         let cur_mineral = (my_room.memory.energy_flow.mineral) ? my_room.memory.energy_flow.mineral : {};
         let local_energy_flow_obj = {
             long_harvest: my_room.memory.energy_flow.long_harvest,

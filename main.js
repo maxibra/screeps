@@ -7,75 +7,85 @@ var screepsplus = require('screepsplus');
 // Game.creeps['max_new-1'].moveTo(Game.getObjectById('5ad024eac27319698ef58448'))
 // Game.spawns['E37N48'].spawnCreep([CLAIM,MOVE,MOVE,MOVE], 'its_my', {memory: {role: 'its_my'; target_pos: {x: 39, y:30, roomName: 'E38N47'}}});
 
-if (typeof Memory.rooms.global_vars === "undefined") {
-    Memory.rooms.global_vars = {
-        min_tower_enrg2repair: 0.6,
-        defence_level: 40554000,
-        terminal_max_energy_storage: 150000,
-        terminal_min2transfer: 70000,
-        terminal_emergency_ration: 80000,
-        storage_emergency_ration: 200000,
-        update_period: {
-            towers: 1000,
-            after_war: 20
-        },
-        age_to_drop_and_die: 10,
-        moveTo_ops: {
-            reusePath: 15,           // default: 5
-            //serializeMemory: false, // default: true
-            //noPathFinding: true, // default: false
-            visualizePathStyle: {
-                fill: 'transparent',
-                stroke: '#fff',
-                lineStyle: 'dashed',
-                strokeWidth: .15,
-                opacity: .1
-            }
-        },
-        update_period: {
-            after_war: 150,
-            towers: 1000
-        },
-        room_by_mineral: {
-            reagent: {},
-            produce: {},
-            final_produce: {}
-        },
-        minerals: {
-            send_room: 40000,
-            received_room: 1000,
-            storage_final_produce: 5000,
-            send_amount: 500,
-            transfer_batch: 300
-        },
-        units: {},
-        towers: {
-            current: {},
-            next_update: 10332455
-        },
-        targets: {}
+function initiate_rooms_global_vars() {
+    if (typeof Memory.rooms.global_vars === "undefined") {
+        Memory.rooms.global_vars = {
+            min_tower_enrg2repair: 0.6,
+            defence_level: 40554000,
+            terminal_max_energy_storage: 150000,
+            terminal_min2transfer: 70000,
+            terminal_emergency_ration: 80000,
+            storage_emergency_ration: 200000,
+            update_period: {
+                towers: 1000,
+                after_war: 20
+            },
+            age_to_drop_and_die: 10,
+            moveTo_ops: {
+                reusePath: 15,           // default: 5
+                //serializeMemory: false, // default: true
+                //noPathFinding: true, // default: false
+                visualizePathStyle: {
+                    fill: 'transparent',
+                    stroke: '#fff',
+                    lineStyle: 'dashed',
+                    strokeWidth: .15,
+                    opacity: .1
+                }
+            },
+            update_period: {
+                after_war: 150,
+                towers: 1000
+            },
+            room_by_mineral: {
+                reagent: {},
+                produce: {},
+                final_produce: {}
+            },
+            minerals: {
+                send_room: 40000,
+                received_room: 1000,
+                storage_final_produce: 5000,
+                send_amount: 500,
+                transfer_batch: 300
+            },
+            units: {},
+            towers: {
+                current: {},
+                next_update: 10332455
+            },
+            targets: {}
+        }
     }
 }
-for(var current_spawn_name in Game.spawns) {
-    // console.log('[DEBUG] (main)[' + current_spawn_name + ': INITIAL: ' + JSON.stringify(Game.spawns[current_spawn_name].memory.general));
-    if (typeof Game.spawns[current_spawn_name].memory.general === "undefined") {
-        Game.spawns[current_spawn_name].memory.general = {
-            gen: 0,
-            index: 0,
-            status: 'peace',
-            extensions: 0
-        };
+function initiate_spawn() {
+    for (var current_spawn_name in Game.spawns) {
+        // console.log('[DEBUG] (main)[' + current_spawn_name + ': INITIAL: ' + JSON.stringify(Game.spawns[current_spawn_name].memory.general));
+        if (typeof Game.spawns[current_spawn_name].memory.general === "undefined") {
+            Game.spawns[current_spawn_name].memory.general = {
+                gen: 0,
+                index: 0,
+                status: 'peace',
+                extensions: 0
+            };
+        }
     }
 }
 
-let init_avoid_rooms = ['E29N47'];
-for(var current_room_name in Memory.rooms) {
+let init_avoid_rooms = [];
+// let only_rooms = ['E27N47', 'E27N48', 'E28N47', 'E28N48', 'E32N47', 'E33N47', 'E34N47', 'E37N48', 'E37N49', 'E38N47', 'E38N48', 'E38N49', 'E39N49']; //, 'E32N49'];
+let only_rooms = ['E27N48'];
+
+// for(var current_room_name in only_rooms) {
+function initiate_room_memory(current_room_name) {
+    console.log('[DEBUG] (main)[' + current_room_name + ': INITIAL Global')
     // Initialie the room memory
     if (current_room_name === 'global_vars' ||
-        init_avoid_rooms.indexOf(current_room_name) >= 0) continue;
-    // console.log('[DEBUG] (main)[' + current_room_name + ': INITIAL Global: ' + JSON.stringify(Memory.rooms[current_room_name]));
+        init_avoid_rooms.indexOf(current_room_name) >= 0) return;
+    console.log('[DEBUG] (main)[' + current_room_name + ': INITIAL Global: ' + JSON.stringify(Memory.rooms[current_room_name]));
 
     if (Memory.rooms[current_room_name] && typeof Memory.rooms[current_room_name].towers === "undefined") {
+        console.log('[DEBUG] (main)[' + current_room_name + ': INITIAL TOWERS')
         Memory.rooms[current_room_name].towers = {
             current: {},
             next_update: Game.time,
@@ -86,7 +96,8 @@ for(var current_room_name in Memory.rooms) {
         Memory.rooms[current_room_name].targets = {};
     }
 
-    if (Memory.rooms[current_room_name] && typeof Memory.rooms[current_room_name].energy_flow === "undefined") {
+    if (Game.rooms[current_room_name] && Memory.rooms[current_room_name] &&
+        typeof Memory.rooms[current_room_name].energy_flow === "undefined") {
         console.log('[DEBUG] (main)[' + current_room_name + '] INIT energy_flow');
         Memory.rooms[current_room_name].energy_flow = {
             sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
@@ -106,6 +117,7 @@ for(var current_room_name in Memory.rooms) {
         }
     };
 
+    // if(current_room_name === 'E27N47') console.log('[DEBUG] (main)[' + current_room_name + ': INITIAL Global: ' + JSON.stringify(Memory.rooms[current_room_name]));
     if (Memory.rooms[current_room_name] && typeof Memory.rooms[current_room_name].global_vars === "undefined") {
         Memory.rooms[current_room_name].global_vars = {
             status: 'peace',
@@ -169,7 +181,8 @@ module.exports.loop = function () {
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
     var cur_creeps = Game.creeps ? Game.creeps : {};
 
-    let only_rooms = ['E28N48', 'E33N47', 'E34N47', 'E37N48', 'E38N47', 'E38N48', 'E39N49', 'E38N49', 'E37N49', 'E32N47', 'E27N48', 'E27N47', 'E28N47']; //, 'E32N49'];
+    let only_rooms = ['E27N47', 'E27N48', 'E28N47', 'E28N48', 'E32N47', 'E33N47', 'E34N47', 'E37N48', 'E37N49', 'E38N47', 'E38N48', 'E38N49', 'E39N49']; //, 'E32N49'];
+    // let only_rooms = []
     let avoid_rooms = ['global_vars', 'E26N40', 'E26N43', 'E26N44', 'E26N46', 'E27N40', 'E29N47', 'E30N48', 'E31N53', 'E34N46', 'E39N50', 'E40N49'];
 
     let run_on_roooms = (only_rooms.length > 0) ? only_rooms : Object.keys(Memory.rooms);
@@ -183,6 +196,7 @@ module.exports.loop = function () {
         units['total'] = 0;
         for(let room_index in run_on_roooms) {
             let current_room_name = run_on_roooms[room_index]
+            if (current_room_name === 'global_vars') continue
             units[current_room_name] = {
                 'total': 0,
                 'transfer': 0,
@@ -199,10 +213,19 @@ module.exports.loop = function () {
                 'energy_miner': 0,
                 'sp_total': 0,
             };
-            // console.log('[INFO] (main) [' + current_room_name + '] upgrade_energy')
             // the upgrade doesn't work on not my rooms
             if (Game.time % rare_time_range === 0) {
+                // console.log('[INFO] (main) [' + current_room_name + '] upgrade_energy')
                 room_helpers.upgrade_energy_flow(current_room_name);
+                initiate_room_memory(current_room_name);
+                // my_room = Game.rooms[current_room_name]
+                // if (!(my_room && my_room.controller &&
+                //         (my_room.controller.my || (my_room.controller.reservation &&
+                //                                 my_room.controller.reservation.username === 'maxibra')))) {
+                //     console.log('[INFO] (main) [' + current_room_name + '] DELETE')
+                //     delete Memory.rooms[current_room_name]
+                // }
+
             }
             // Clean dirty memory
             // Memory.rooms[current_room_name].energy_flow.containers.source = {}
@@ -290,16 +313,19 @@ module.exports.loop = function () {
         produce: {},
         final_produce: []
     };
+    // console.log('[DEBUG] ROOM: ' + run_on_roooms)
+
     for(var room_index in run_on_roooms) {
         let current_room_name = run_on_roooms[room_index];
         let my_room = Game.rooms[current_room_name];
-        
-        if(avoid_rooms.indexOf(current_room_name) > -1 || 
-           only_rooms.indexOf(current_room_name) < 0 ||
-           !my_room) {
-            // console.log('[DEBUG] (main)[' + current_room_name + '] Skip the room')
-            continue
-        }
+
+        if(current_room_name === 'global_vars' || !my_room) continue
+        // if(avoid_rooms.indexOf(current_room_name) > -1 ||
+        //    only_rooms.indexOf(current_room_name) < 0 ||
+        //    !my_room) {
+        //     console.log('[DEBUG] (main)[' + current_room_name + '] Skip the room')
+        //     continue
+        // }
         // delete Memory.rooms[current_room_name].energy_flow.energy_flow.storage
 
         // Memory.rooms[current_room_name].energy_flow.store_used = {};
@@ -331,13 +357,13 @@ module.exports.loop = function () {
             }
     
         if (Game.time % 2 === 0) {
-            room_helpers.transfer_link2link(current_room_name);
         }
             
         if (Game.time % 5 === 0) {
             // console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
             // room_helpers.check_create_miner(current_room_name, global_vars.spawn_name, units);
             room_helpers.verify_all_full(current_room_name);
+            room_helpers.transfer_link2link(current_room_name);
         }
 
         if (Game.time % 5 === 0 && Game.cpu.bucket > 5000) {

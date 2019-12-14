@@ -140,7 +140,7 @@ function is_remote_room_in_war(room_name) {
     return its_war;
 }
 
-//  Game.spawns['max_E38N48-2'].spawnCreep([MOVE,MOVE,MOVE,CLAIM], 'its_my', {role: 'its_my', claim_room: 'E38N47'})
+//  Game.spawns['max-E38N48-2'].spawnCreep([MOVE,MOVE,MOVE,CLAIM], 'its_my', {role: 'its_my', claim_room: 'E38N47'})
 var creep_helpers = {
     create_creep: function(spawn_name, units) {
         let my_spawn = Game.spawns[spawn_name];
@@ -164,7 +164,7 @@ var creep_helpers = {
         let current_creeps = Game.creeps;
         let creeps_names = Object.keys(current_creeps);
         let creep_memory = {role: 'harvest', target_id: false, stuck: 0};
-        let current_creep_types = room_vars.creep_types[room_vars.status];
+        // let current_creep_types = room_vars.creep_types[room_vars.status];
         let name_special = 'gn';
         let universal_creeps = units[room_name]['total'] - units[room_name]['sp_total'];
         let current_body = creep_body.general.base;
@@ -348,11 +348,11 @@ var creep_helpers = {
                 //     continue;
                 // }
                 
-                // if (room_name === 'E34N47' ) console.log('(create_creep) [' + room_name + '] Creep type: ' +creep_type);
+                // console.log('(create_creep) [' + room_name + '] Creep type: ' +creep_type);
                 const add = (a, b) => a + b;
                 // console.log('[DEBUG] (create_creep) [' + room_name + '] CONTAINERS: ' + JSON.stringify(my_room.memory.energy_flow.containers))
                 // console.log('[DEBUG] (create_creep) [' + room_name + '] SOURCE CONTAINERS: ' + JSON.stringify(Object.keys(my_room.memory.energy_flow.containers.source)))
-                if (creep_type === 'energy_miner' && my_room.memory.energy_flow.containers.source &&
+                if (creep_type === 'energy_miner' && my_room.memory.energy_flow.containers.source && my_room.memory.energy_flow.containers.source &&
                     (Object.keys(my_room.memory.energy_flow.containers.source).map(x => Game.getObjectById(x).store[RESOURCE_ENERGY]).reduce(add)) > (Object.keys(my_room.memory.energy_flow.containers.source).length * 1000))
                     continue;
 
@@ -383,7 +383,7 @@ var creep_helpers = {
                     for (let i=1; i<=creeps_amount; i++) {
                         // console.log('(create_creep)[' + room_name + '] FROM TARGETS: ' + JSON.stringify(rmt_targets));
                         if (remote_room && creep_type === 'remote_claimer' && ((Memory.rooms[remote_room] && Memory.rooms[remote_room].endReservation - Game.time) > 4400)) {
-                            console.log('(create_creep)[' + room_name + '] Controller reservation longer than 4400. skipped');
+                            console.log('(create_creep)[' + room_name + '][' + remote_room + '] Controller reservation longer than 4400. skipped');
                             continue;
                         }
                         

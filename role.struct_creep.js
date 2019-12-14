@@ -115,7 +115,7 @@ var structCreep = {
         //     return
         // }
 
-        if (my_room.memory.global_vars.all_full && creep.memory.role === 'undefined' &&
+        if (my_room.memory.global_vars && my_room.memory.global_vars.all_full && creep.memory.role === 'undefined' &&
             units[room_name]['upgrader'] > 0 && (Game.time % 10) !== 0 &&
             (my_room.memory.energy_flow.store_used.terminal > my_room.memory.energy_flow.max_store.terminal ||
              my_room.terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_max_energy_storage)) {
@@ -602,6 +602,8 @@ var structCreep = {
                 }
                 break;
             case 'remote_energy_miner':
+                if (!Memory.rooms[creep.memory.far_target].energy_flow) return;
+                // console.log('[DEBUG] (structCreep.run-remote_energy_miner)[' + creep.name + ']: Far Target: ' +  creep.memory.far_target)
                 let room_containers_id = Object.keys(Memory.rooms[creep.memory.far_target].energy_flow.containers.source);
                 let first_container_id = room_containers_id[0];
                 let rmt_container_target = (creep.memory.target_id) ? Game.getObjectById(creep.memory.target_id) : 
@@ -932,14 +934,14 @@ var structCreep = {
                 break;
             case 'its_my':
                 // let my_new_room = creep.memory.claim_room;
-                let my_new_room = 'E34N47';
+                let my_new_room = 'E29N47';
                 let claim_target = new RoomPosition(44, 31, my_new_room);
                 console.log('****   CLAIME TARGET: ' + JSON.stringify(claim_target));
                 if (creep.pos.isNearTo(claim_target)) {
                     let action_out = creep.claimController(Game.rooms[my_new_room].controller);
                     console.log('****   CLAIME: ' + action_out);
                 } else creep.moveTo(claim_target, global_vars.moveTo_ops);
-                if (Game.rooms[my_new_room].controller.my) creep.signController(claim_target, "Stay away from unnecessary conflicts :)");
+                if (Game.rooms[my_new_room] && Game.rooms[my_new_room].controller.my) creep.signController(claim_target, "Stay away from unnecessary conflicts :)");
                 break;
             case 'energy_helper':
                 // let source_target = Game.getObjectById('5acc524f6bec176d808adb71'); // E36N48
@@ -1096,20 +1098,30 @@ var structCreep = {
                 // t = Game.getObjectById('5b31d6a07cac973a8f2efb60');
                 // if ( creep.attack(t) !== OK ) creep.moveTo(t, global_vars.moveTo_ops); 
                 // return
-                
+
+
                 if (room_name !== attacked_room) creep.moveTo(new RoomPosition(25,25, attacked_room), global_vars.moveTo_ops);  
                 else {
                     let h = my_room.find(FIND_HOSTILE_CREEPS)   
                     let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)})
                     let target2attack = false;
-                    console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ' + Memory.rooms[room_name].global_vars.status + '; Hostile: ' + h.length + '; Core: ' + invader_core.length);
+                    console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ');
+                    // console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ' + Memory.rooms[room_name].global_vars.status + '; Hostile: ' + h.length + '; Core: ' + invader_core.length);
                     if (invader_core.length > 0) {
                         target2attack = invader_core[0]
                     }
                     else if (h.length > 1) { // Created for 2 hostile creeps. one of them is healer
-                        let body_map = h[0].body.map(x => x.type);
-                        if (body_map.indexOf('heal') > -1 || body_map.indexOf('ranged_attack') > -1) target2attack = h[0];
-                        else target2attack = h[1];
+                        let current_target = false
+                        for (let h_creep_index in h) {
+                            let h_creep = h[h_creep_index]
+                            let body_map = h_creep.body.map(x => x.type);
+                            if (body_map.indexOf('heal') > -1) {
+                                current_target = h_creep;
+                                break
+                            }
+                        }
+                        if (current_target) target2attack = current_target
+                        else target2attack = h[0]
                     } else if (h.length === 1) target2attack = h[0]
                     else if (creep.hits < creep.hitsMax) {
                         creep.heal(creep);
