@@ -78,7 +78,6 @@ let only_rooms = ['E27N48'];
 
 // for(var current_room_name in only_rooms) {
 function initiate_room_memory(current_room_name) {
-    console.log('[DEBUG] (main)[' + current_room_name + ': INITIAL Global')
     // Initialie the room memory
     if (current_room_name === 'global_vars' ||
         init_avoid_rooms.indexOf(current_room_name) >= 0) return;
@@ -181,7 +180,7 @@ module.exports.loop = function () {
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
     var cur_creeps = Game.creeps ? Game.creeps : {};
 
-    let only_rooms = ['E27N47', 'E27N48', 'E28N47', 'E28N48', 'E32N47', 'E33N47', 'E34N47', 'E37N48', 'E37N49', 'E38N47', 'E38N48', 'E38N49', 'E39N49']; //, 'E32N49'];
+    let only_rooms = ['E27N47', 'E27N48', 'E28N47', 'E28N48', 'E29N47', 'E32N47', 'E33N47', 'E34N47', 'E37N48', 'E37N49', 'E38N47', 'E38N48', 'E38N49', 'E39N49']; //, 'E32N49'];
     // let only_rooms = []
     let avoid_rooms = ['global_vars', 'E26N40', 'E26N43', 'E26N44', 'E26N46', 'E27N40', 'E29N47', 'E30N48', 'E31N53', 'E34N46', 'E39N50', 'E40N49'];
 
@@ -217,7 +216,11 @@ module.exports.loop = function () {
             if (Game.time % rare_time_range === 0) {
                 // console.log('[INFO] (main) [' + current_room_name + '] upgrade_energy')
                 room_helpers.upgrade_energy_flow(current_room_name);
-                initiate_room_memory(current_room_name);
+
+                // Uncomment if you have a new room
+                // initiate_room_memory(current_room_name);
+                // initiate_spawn()
+
                 // my_room = Game.rooms[current_room_name]
                 // if (!(my_room && my_room.controller &&
                 //         (my_room.controller.my || (my_room.controller.reservation &&
@@ -303,7 +306,7 @@ module.exports.loop = function () {
     if (Game.time % 8 === 0) {
         for(var current_spawn_name in Game.spawns) {
             if (run_on_roooms.indexOf(Game.spawns[current_spawn_name].room.name) < 0) continue;
-            // console.log('[DEBUG](main)[' + current_spawn_name +']: Trying to create creep'); 
+            // console.log('[DEBUG](main)[' + current_spawn_name +']: Trying to create creep');
             creep_helpers.create_creep(current_spawn_name, units);
         }
     }

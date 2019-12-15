@@ -138,7 +138,7 @@ var structCreep = {
             return;
         }
 
-        let condition2change_role = (iam_general &&
+        let condition2change_role = (iam_general && my_room.memory.global_vars &&
                                      (my_room.memory.global_vars.status ==='war' ||
                                       (creep.memory.role === 'harvest' && creep.store.getUsedCapacity([RESOURCE_ENERGY]) == creep.store.getCapacity()) ||
                                       creep.memory.role === 'undefined' ||
@@ -935,7 +935,7 @@ var structCreep = {
             case 'its_my':
                 // let my_new_room = creep.memory.claim_room;
                 let my_new_room = 'E29N47';
-                let claim_target = new RoomPosition(44, 31, my_new_room);
+                let claim_target = new RoomPosition(33, 11, my_new_room);
                 console.log('****   CLAIME TARGET: ' + JSON.stringify(claim_target));
                 if (creep.pos.isNearTo(claim_target)) {
                     let action_out = creep.claimController(Game.rooms[my_new_room].controller);

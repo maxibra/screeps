@@ -142,6 +142,7 @@ var RoleHarvester = {
                         //                                                                           Object.keys(object.store).length === 1)}); //|| creep.pos.getRangeTo(object, 2)});
 
                         let min_terminal_storage = Memory.rooms.global_vars.terminal_emergency_ration;
+                        if (!my_room.memory.global_vars) return
                         let storage_target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_STORAGE && (my_room.memory.global_vars.status === 'war' ||
                                                                                                                                                               (object.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.storage_emergency_ration &&
                                                                                                                                                               !my_room.memory.global_vars.all_full))) ||

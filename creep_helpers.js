@@ -4,7 +4,7 @@ var creep_body = {
     general: {
         base: [CARRY,WORK,MOVE],
         add: [CARRY,CARRY,MOVE],
-        finalize: [WORK,WORK,MOVE]
+        finalize: [WORK,WORK,MOVE]  // Cost: 250
     },
     special_carry: {
         base: [CARRY,CARRY,MOVE],
@@ -157,6 +157,9 @@ var creep_helpers = {
             },
             'E33N47': {
                 'E34N47': 0
+            },
+            'E28N48': {
+                'E29N47': 0
             }
         }
         let create_special = false;
@@ -470,8 +473,9 @@ var creep_helpers = {
             // if (room_name === 'E38N48') console.log('[DEBUG] (create_creep): [' + spawn_name + '] ' + i + ' Current body: ' + JSON.stringify(current_body));
             possible_body = possible_body.concat(add_body);
             if (i%2 === 0 && creep_name.substring(0,6) !== room_name) possible_body.push(MOVE);
-            possible_body_cost = body_cost(possible_body);
-            if (possible_body_cost > max_body_cost || possible_body.length > 50) break;
+            possible_body_cost = body_cost(possible_body) + 250;    // 250 is cost of finalize
+            if (possible_body_cost > max_body_cost || possible_body.length > 50 ||
+                possible_body_cost > Game.rooms[room_name].energyCapacityAvailable) break;
         }
         
         if (finalize_body) current_body = current_body.concat(finalize_body);
