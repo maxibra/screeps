@@ -172,7 +172,7 @@ var creep_helpers = {
         let universal_creeps = units[room_name]['total'] - units[room_name]['sp_total'];
         let current_body = creep_body.general.base;
         let add_body = (room_name === 'E29N47') ? [CARRY,WORK,MOVE] : creep_body.general.add;
-        let finalize_body = (room_name === 'E29N47') ? [CARRY,CARRY,MOVE] : creep_body.general.finalize;
+        let finalize_body = (room_name === 'E29N47') ? [CARRY,WORK,MOVE] : creep_body.general.finalize;
         let creep_name = '';
 
         // console.log('[DEBUG] (create_creep)['+ spawn_name + ' basic Body: ' + JSON.stringify(current_body));
