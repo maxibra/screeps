@@ -949,20 +949,21 @@ var structCreep = {
                 let cur_destination;
                 
                 if (!creep.memory.target_id) {
-                    if(room_name === 'E38N48' || room_name === 'E38N47') {   // help E38N48 to E38N47
-                    // if(room_name === 'E28N48' || room_name === 'E26N48') {   // help E28N48 to E26N48
+                    // if(room_name === 'E38N48' || room_name === 'E38N47') {   // help E38N48 to E38N47
+                    if(room_name === 'E28N48' || room_name === 'E29N47') {   // help E28N48 to E29N47
                     // if(room_name === 'E37N48' || room_name === 'E38N47') {   // help E38N48 to E38N47
                     // if(room_name === 'E37N48' || room_name === 'E36N48') {    // help E36N48 to E37N48
                     // if(room_name === 'E38N48' || room_name === 'E36N48') {    // help E36N48 to E38N48
                         if (creep.store[RESOURCE_ENERGY] === 0) {
                             // creep.memory.target_id = '5b2cc739f727462af9e9828a';    // Storage E28N48
                             // creep.memory.target_id = '5afd3bd34337e90a8c6d9253';    // Storage E37N48
-                            creep.memory.target_id = '5ad024eac27319698ef58448';    // Terminal E38N48
+                            creep.memory.target_id = '5b363c9fc4e9c15e2b1c6ea5';    // Terminal E38N48
                             // creep.memory.target_id = '5afd6ab8f686ff54854efc5a';    // Storage E38N48
                             // creep.memory.target_id = '5afd9b372c5d4f7e24b2bf4c';    // Storage E36N48
                         } else {
                             // let dst_targets = ['5b8af7829a49221b47f8ac05', ]; // Containers E26N48
-                            let dst_targets = ['5b11bf4882c1ef67174cd56e', ]; // Links and storage E38N47
+                            // let dst_targets = ['5b11bf4882c1ef67174cd56e', ]; // Links and storage E38N47
+                            let dst_targets = ['5df5db14e2c8ff169f1a8a2f', '5df52c309a7beeffdb7070f1']; // Links and storage E29N47
                             // let dst_targets = ['5abfed40aafade1bd3be494f', '5b0c860fc8820666c2e70371', '5acc524f6bec176d808adb71']; // Links and terminal E37N48
                             // let dst_targets = ['5ac6ac8f8f27a14b942a5be4', '5ad024eac27319698ef58448']; // Links and terminal E38N48
                             for (let t in dst_targets) {

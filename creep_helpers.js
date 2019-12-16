@@ -171,11 +171,11 @@ var creep_helpers = {
         let name_special = 'gn';
         let universal_creeps = units[room_name]['total'] - units[room_name]['sp_total'];
         let current_body = creep_body.general.base;
-        let add_body = creep_body.general.add;
-        let finalize_body = creep_body.general.finalize;
+        let add_body = (room_name === 'E29N47') ? [CARRY,WORK,MOVE] : creep_body.general.add;
+        let finalize_body = (room_name === 'E29N47') ? [CARRY,CARRY,MOVE] : creep_body.general.finalize;
         let creep_name = '';
 
-        // // console.log('[DEBUG] (create_creep)['+ spawn_name + ' basic Body: ' + JSON.stringify(current_body));
+        // console.log('[DEBUG] (create_creep)['+ spawn_name + ' basic Body: ' + JSON.stringify(current_body));
         if (my_room.energyAvailable > 400 && 
             my_room.memory.targets.build.length > 0) {
             // || my_room.controller.ticksToDowngrade < 140300 
@@ -280,8 +280,8 @@ var creep_helpers = {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry:1500
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 2K
                 name_prefix: 'energy_helper_' + room_name,
-                amount: 0,
-                avoid: !(room_name === 'E38N48')
+                amount: 1,
+                avoid: !(room_name === 'E28N48')
             },
             // transfer: {
             //     body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
