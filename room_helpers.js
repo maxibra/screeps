@@ -123,7 +123,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E28N48', 'E38N47', 'E39N49']; //, 'E34N47'];
+        let destination_rooms = ['E28N48']; //, 'E38N47', 'E39N49']; //, 'E34N47'];
         let send_amount = 2000;
 
         // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));
@@ -912,7 +912,7 @@ var room_helpers = {
         }
         for (r in Game.rooms) {
             current_room = Game.rooms[r]
-            if (!current_room.controller.my) continue   // The room isn't mine
+            if (!(current_room.controller.my && current_room.terminal)) continue   // The room isn't mine
             terminals_status[r] = {}
             for (store_part in current_room.terminal.store) {
                 if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part) || store_part === 'energy') {

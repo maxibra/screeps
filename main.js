@@ -112,7 +112,11 @@ function initiate_room_memory(current_room_name) {
                 source: {},
                 other: {}
             },
-            store_used: {}
+            store_used: {},
+            max_store: {
+                storage: 1000,
+                terminal: 1000
+            }
         }
     };
 
