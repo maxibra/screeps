@@ -204,6 +204,7 @@ var structCreep = {
             let transfer_procent = units[room_name]['transfer']/current_workers;
             let extensions_first = my_room.memory.energy_flow.extension_first;
 
+            // console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Extension first: ' + extensions_first)
             // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: BUILD structures: ' + (my_room.memory.targets.build.length)) // && units[room_name]['build']/current_workers < current_creep_types.build));
 
             // *** UNIT LOG
@@ -257,7 +258,7 @@ var structCreep = {
 
                 for (let l in link_sources) { // try transfer to link
                     cur_transfer_target = Game.getObjectById(link_sources[l]);
-                    if (cur_transfer_target && 
+                    if (cur_transfer_target &&
                         Memory.rooms[room_name].global_vars.status === 'peace' && !extensions_first &&
                         ((cur_transfer_target.store[RESOURCE_ENERGY]/cur_transfer_target.store.getCapacity(RESOURCE_ENERGY) < 0.7) && (creep.pos.getRangeTo(cur_transfer_target) < range2link) ||
                         (creep.pos.isNearTo(cur_transfer_target) && cur_transfer_target.store[RESOURCE_ENERGY] < cur_transfer_target.store.getCapacity(RESOURCE_ENERGY)))) {
@@ -275,7 +276,7 @@ var structCreep = {
                 
                 // if (room_name === 'E38N47' && transfer_target) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target (EXTENSIONS?): ' + transfer_target.structureType + '; ID: ' + transfer_target.id + '; transfer_procent: ' + transfer_procent + '; condition: ' + (transfer_target && (transfer_procent <= current_creep_types.transfer)));
                 let booster_lab_id = (my_room.memory.labs) ? Object.keys(my_room.memory.labs.booster)[0] : false;
-                if (!transfer_target && booster_lab_id) {    
+                if (!extensions_first && !transfer_target && booster_lab_id) {
                     let booster_lab = Game.getObjectById(booster_lab_id);
                     if (room_name === 'E38N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Booster lab: ' + booster_lab)
                     if (booster_lab && booster_lab.store[RESOURCE_ENERGY] < booster_lab.store.getCapacity(RESOURCE_ENERGY)) transfer_target = booster_lab;
@@ -292,7 +293,7 @@ var structCreep = {
                 // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Terminal cond: ' + (my_room.memory.global_vars.all_full))
                 // if (creep.name === log_name) console.log('[DEBUG][' + creep.name + '] BUILD condition. my_room.memory.targets.build:' + my_room.memory.targets.build + 'units[room_name][build]: ' + (units[room_name]['build']/current_workers) + 'current_creep_types.build: ' + current_creep_types.build);
 
-                if(transfer_target && (transfer_procent <= current_creep_types.transfer)) {
+                if(transfer_target && (extensions_first || transfer_procent <= current_creep_types.transfer)) {
                     creep.say('transfering');
                     creep.memory.role = 'transfer';
     
@@ -310,7 +311,7 @@ var structCreep = {
                     console.log('[DEBUG][' + creep.name + '] Try run to build: ' )
                     creep.memory.role = 'build';
                     units[room_name].build++;
-                } else if (my_room.controller.level < 6 && my_room.memory.targets.repair_defence && units[room_name]['repair_defence']/current_workers <= current_creep_types.repair_defence) {
+                } else if (my_room.controller.level < 8 && my_room.memory.targets.repair_defence && units[room_name]['repair_defence']/current_workers <= current_creep_types.repair_defence) {
     
                     // *** GLOBAL LOG
                     console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units[room_name]['repair_defence'] + ' / ' + current_workers + '=' + units[room_name]['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')

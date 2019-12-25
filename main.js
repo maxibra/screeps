@@ -335,7 +335,7 @@ module.exports.loop = function () {
         // }
         // delete Memory.rooms[current_room_name].energy_flow.energy_flow.storage
 
-        // Memory.rooms[current_room_name].energy_flow.store_used = {};
+        // if (current_room_name === 'E29N47') Memory.rooms[current_room_name].energy_flow.containers.other = {};
         // delete Memory.rooms[current_room_name].energy_flow.max_used;
         // Memory.rooms[current_room_name].energy_flow.max_store = {storage: 800000, terminal: 270000}
 
@@ -415,7 +415,7 @@ module.exports.loop = function () {
             room_helpers.define_extension_first(current_room_name);
 
             if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.defence_level = 40554000
-            else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.defence_level = 20554000
+            else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.defence_level = 29554000
         }
 
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
