@@ -109,7 +109,7 @@ function remote_harvester_info(room_name) {
     switch (room_name) {
         case 'E28N47':
             info_object = {
-                homeland_destinations: ['5df52c309a7beeffdb7070f1',],
+                homeland_destinations: ['5dfe9e60c8186d1f7359e49e', '5dfba7a0a4a113ba61e26341','5df52c309a7beeffdb7070f1'],
                 amount: 1
             }
             break;
@@ -137,6 +137,7 @@ function remote_harvester_info(room_name) {
                 homeland_destinations: ['5ae4db5bcb5e3209ac04979b', '5affb81b83717b6924fc5d49'],
                 amount: 2
             }
+            break;
     }
     return info_object;
 }

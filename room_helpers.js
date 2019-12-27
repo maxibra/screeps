@@ -124,7 +124,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E29N47', ]  //, 'E38N47', 'E39N49']; //, 'E34N47'];
+        let destination_rooms = ['E29N47', 'E38N47']  //, 'E38N47', 'E39N49']; //, 'E34N47'];
         let send_amount = 2000;
 
         // if (room_name === 'E29N47') console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));

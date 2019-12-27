@@ -256,6 +256,7 @@ var structCreep = {
 
                 // if (room_name === 'E32N49') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LINKS: ' + link_sources + '; ENgry_FLow: ' + JSON.stringify(my_room.memory.energy_flow.links));
 
+                // if (room_name === 'E29N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LINKS: ' + link_sources);
                 for (let l in link_sources) { // try transfer to link
                     cur_transfer_target = Game.getObjectById(link_sources[l]);
                     if (cur_transfer_target &&
