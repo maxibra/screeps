@@ -65,7 +65,7 @@ function upgrader_body(room_name) {
         case 2040:  // upgrade = 20/T(6K/300T) carry = 400 (cost: 2,600 [level:7])
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY];
             break;
-        case 2550:  // upgrade = 25/T(6K/300T) carry = 500 road=2,2 (cost: 3.5K [level:7])
+        case 2550:  // upgrade = 25/T(7.5K/300T) carry = 500 road=2,2 (cost: 3.5K [level:7])
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY];
             break;
         default:
