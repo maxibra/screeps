@@ -34,7 +34,7 @@ function upgrader_body(room_name) {
     let room_level = 1;
     // let room_level = Game.rooms[room_name].controller.level;
     if (Game.rooms[room_name].controller.level === 6) room_level = 1725;
-    else if (Game.rooms[room_name].controller.level === 7) room_level = 2040;
+    else if (Game.rooms[room_name].controller.level === 7) room_level = 2550;
     else if (Game.rooms[room_name].controller.level === 5) room_level = 5;
 
     switch (room_level) {
@@ -64,6 +64,9 @@ function upgrader_body(room_name) {
             break;
         case 2040:  // upgrade = 20/T(6K/300T) carry = 400 (cost: 2,600 [level:7])
             body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY];
+            break;
+        case 2550:  // upgrade = 25/T(6K/300T) carry = 500 road=2,2 (cost: 3.5K [level:7])
+            body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY];
             break;
         default:
             body = [MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY];
