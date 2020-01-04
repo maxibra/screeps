@@ -290,7 +290,7 @@ module.exports.loop = function () {
     // Creeps
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
-        
+
         // console.log('ROOM: ' + creep.room.name)
         // if (creep.room.name === 'E28N48') creep.memory.source_id = ['5b2fd3f9c656780b1fee6911',];
 
@@ -393,10 +393,13 @@ module.exports.loop = function () {
         if (Game.time % 10 === current_mod) {  // run every 10 ticks
             // console.log('[INFO] (main) [' + current_room_name + ']: RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             room_helpers.get_build_targets(current_room_name);
-            room_helpers.get_repair_defence_target(current_room_name);
             // if (current_room_name === 'E38N47') room_helpers.get_repair_civilianl_target(current_room_name);
         }
 
+        if (Game.time % 30 === 0 && (Memory.rooms[current_room_name].global_vars.status === 'war' ||
+                                     Memory.rooms.global_vars.disable_repearing_by_towers === false)) {
+            room_helpers.get_repair_defence_target(current_room_name);
+        }
 
         current_mod = current_mod + tick_between_hard_actions;
         if (Game.time % 10 === current_mod) {
@@ -414,8 +417,8 @@ module.exports.loop = function () {
             if (my_room.terminal) Memory.rooms[current_room_name].energy_flow.store_used.terminal = _.sum(my_room.terminal.store)
             room_helpers.define_extension_first(current_room_name);
 
-            if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.defence_level = 40554000
-            else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.defence_level = 29554000
+            if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.disable_repearing_by_towers = false // 40554000
+            else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.disable_repearing_by_towers = true
         }
 
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {

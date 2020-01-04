@@ -124,7 +124,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E29N47', 'E38N47']  //, 'E38N47', 'E39N49']; //, 'E34N47'];
+        let destination_rooms = ['E29N47', 'E38N47', 'E39N49']; //, 'E34N47'];
         let send_amount = 2000;
 
         // if (room_name === 'E29N47') console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));
@@ -668,8 +668,10 @@ var room_helpers = {
         }
         // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
-//        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets));
-        my_room.memory.targets.repair_defence = targets[0] ? targets[0].id : false;
+//        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets))
+        if (Memory.rooms.global_vars.disable_repearing_by_towers === false) {
+            my_room.memory.targets.repair_defence = targets[0] ? targets[0].id : false;
+        } else my_room.memory.targets.repair_defence = false;
     },
     get_repair_civilianl_target: function(room_name) {
         let my_room = Game.rooms[room_name];

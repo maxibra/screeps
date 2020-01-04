@@ -91,6 +91,7 @@ var structCreep = {
         let range2upgrade = (room_name === 'E38N47') ? 6 : 4;
         // console.log('[DEBUG] (structCreep.run)[' + room_name + ']');
         let fill_terminal = (my_room.terminal &&
+                             my_room.terminal.store.getFreeCapacity() > 1000 &&
                              my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage); // &&
                              // my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
         // if (room_name === 'E38N47') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Terminal Store: ' + my_room.terminal.store[RESOURCE_ENERGY] + '; MAX: ' + Memory.rooms.global_vars.terminal_max_energy_storage+ '; USED: ' + my_room.memory.energy_flow.store_used.terminal + '; MAX: ' + my_room.memory.energy_flow.max_store.terminal);
@@ -708,7 +709,7 @@ var structCreep = {
                     if (creep.name === 'worker_E38N48_E38N47-2' ) console.log('[DEBUG][' + creep.name + ']: Build?  avoid_rooms: ' + avoid_rooms + '; my_room.memory.targets.build: ' + my_room.memory.targets.build)
                     if (avoid_rooms && my_room.memory.targets && my_room.memory.targets.build) creep.memory.role = 'build';
                     else {
-                        let repair_procent = 0.9;
+                        let repair_procent = 0.6;
                         let memory_target = (creep.memory.target_id) ? Game.getObjectById(creep.memory.target_id) : false;
                         let avoid_repair = ['5b6299b65abaee4cd13cefa7',];
                         //object.room.name !== creep.homeland
