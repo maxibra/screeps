@@ -288,6 +288,18 @@ module.exports.loop = function () {
     // if (dst_lab.store[dst_lab.mineralType] < 0.9*dst_lab.store.getCapacity(dst_lab.mineralType)  && frst_src.store[frst_src.mineralType] > 0 && scnd_src.store[scnd_src.mineralType] > 0) dst_lab.runReaction(frst_src, scnd_src);
 
     // Creeps
+    prev_CPU = Game.cpu.getUsed()
+    creeps_cpu_used = {
+        'max': {
+            'value': 0,
+            'name': ''
+        },
+        'min': {
+            'value': 10,
+            'name': ''
+        },
+        'creeps': {}
+    }
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         
@@ -302,9 +314,23 @@ module.exports.loop = function () {
 
         var creep_role = creep.memory.role
         roleStructCreep.run(creep, units);
-        // console.log('[INFO] (main)[' + creep.name +'] After  CPU Used: ' + Game.cpu.getUsed().toFixed(2))
+        cur_CPU = Game.cpu.getUsed()
+        diff_cpu = cur_CPU - prev_CPU
+        prev_CPU = cur_CPU
+        creeps_cpu_used['creeps'][creep.name] = diff_cpu
+        if (creeps_cpu_used['max']['value'] < diff_cpu) {
+            creeps_cpu_used['max']['value'] = diff_cpu
+            creeps_cpu_used['max']['name'] = creep.name
+        }
+        if (creeps_cpu_used['min']['value'] > diff_cpu) {
+            creeps_cpu_used['min']['value'] = diff_cpu
+            creeps_cpu_used['min']['name'] = creep.name
+        }
         if (Game.time % 25 === 0 && Object.keys(creep.store).length === 1) creep.memory.has_minerals = false;
     }
+    console.log('[INFO] (main) CPU Max: ' + JSON.stringify(creeps_cpu_used['max'], null, 2))
+    console.log('[INFO] (main) CPU Min: ' + JSON.stringify(creeps_cpu_used['min'], null, 2))
+    // console.log('[INFO] (main)[' + creep.name +'] CPU Used: ' + JSON.stringify(creeps_cpu_used, null, 2))
     console.log('[INFO] (main)[After CREEPS RUN] CPU Used: ' + Game.cpu.getUsed().toFixed(2) + '; Creeps: ' + Object.keys(Game.creeps).length + '; Ticket Limit: ' + Game.cpu.tickLimit)
 
     if (Game.time % 8 === 0) {
@@ -393,7 +419,6 @@ module.exports.loop = function () {
         if (Game.time % 10 === current_mod) {  // run every 10 ticks
             // console.log('[INFO] (main) [' + current_room_name + ']: RUN 10 tickets functions + ' + current_mod + '. Time: ' + Game.time);
             room_helpers.get_build_targets(current_room_name);
-            room_helpers.get_repair_defence_target(current_room_name);
             // if (current_room_name === 'E38N47') room_helpers.get_repair_civilianl_target(current_room_name);
         }
 
@@ -404,6 +429,10 @@ module.exports.loop = function () {
             // console.log('[INFO] (main) [' + current_room_name + ']: RUN  "transfer_energy" ' + current_mod + '. Time: ' + Game.time);
             room_helpers.transfer_energy(current_room_name);
         }
+        
+        if (Game.time % 30 === 0) {
+            room_helpers.get_repair_defence_target(current_room_name);
+        }
 
         if (Game.time % 30 === 0 && Game.cpu.bucket > 6000) {
             // room_helpers.transfer_mineral(current_room_name);
@@ -413,9 +442,8 @@ module.exports.loop = function () {
                     Memory.rooms[current_room_name].energy_flow.store_used.storage = _.sum(my_room.storage.store)
             if (my_room.terminal) Memory.rooms[current_room_name].energy_flow.store_used.terminal = _.sum(my_room.terminal.store)
             room_helpers.define_extension_first(current_room_name);
-
-            if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.defence_level = 40554000
-            else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.defence_level = 29554000
+            if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.disable_repearing_by_towers = false // 40554000
+            else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.disable_repearing_by_towers = true
         }
 
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {

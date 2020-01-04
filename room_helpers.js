@@ -124,7 +124,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E29N47', 'E38N47']  //, 'E38N47', 'E39N49']; //, 'E34N47'];
+        let destination_rooms = ['E29N47', 'E38N47', 'E39N49']  //, 'E39N49']; //, 'E34N47'];
         let send_amount = 2000;
 
         // if (room_name === 'E29N47') console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));
@@ -662,14 +662,29 @@ var room_helpers = {
           
             let avoid_stricts = E39N49_avoid.concat(E38N47_avoid); //, E28N48_avoid);
             
+            E39N49_avoid_creeps = ['5c33bb99b830a52f9ef35da0', '5c33bb9f8d9c2a5155f9a850', '5c33bba5a3d0015137fdfc4d', '5c33bbabda65842d91489e25',
+                                    '5a47f1ff6673566b55112cc4', '5a47f213d4b012351f84169a', '5a47f419269aa0511bdf24d5', '5a47efcc14a0ce50eed24951',
+                                    '5a47ef4dce75e44548b7cf04']
+            E38N47_avoid_creeps = ['5add09ec658a0144fa44a4cd', '5add09e6658a0144fa44a4c2', '5add09e14b2e636d7fef8803', '5add09d4b260d40d64a01750',
+                                   '5add09d6585af82d0d3d13ac', '5ae4c398fad40139450c92d3', '5bf10dcc73fbfb60d1a5ae28', '5b8bfa624602265638d860c9',
+                                   '5b8bfa624602265638d860c9', '5b8bfa58bf46e11b78855368', '5b8bfa5cf9ee417bc43d895c', '5b8bfa5f9815df3d8457bf0f',
+                                   '5b8bfa624602265638d860ca', '5bf10db6c943e8302df22c72', '5b8bf9fa127ab96b4f6ac966', '5b8bf9f05a28eb5655c36669',
+                                   '5b8bf9f48a1e7f6a3aa61bf4', '5add081a7b6fc20d640a6956', '5b8bf9ecaba5a56a610f17ac', '5add08249ecea92cf9737208',
+                                   '5add08277d270c6b88229812', '5add081f763b160d99edec33']
+            let avoid_stricts_creeps = E39N49_avoid.concat(E39N49_avoid_creeps); //, E28N48_avoid);
 
-            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) &&
                                                                         object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1)});
+            targets_creeps = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) &&
+                                                                        object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts_creeps.indexOf(object.id) === -1)});
         }
         // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
-//        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets));
-        my_room.memory.targets.repair_defence = targets[0] ? targets[0].id : false;
+        // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: TARGETS: ' + JSON.stringify(targets));
+        if (Memory.rooms.global_vars.disable_repearing_by_towers === false) {
+            my_room.memory.targets.repair_defence = targets[0] ? targets[0].id : false;
+        } else my_room.memory.targets.repair_defence = false;
+        my_room.memory.targets.creep_repair_defence = targets_creeps[0] ? targets_creeps[0].id : false;
     },
     get_repair_civilianl_target: function(room_name) {
         let my_room = Game.rooms[room_name];
