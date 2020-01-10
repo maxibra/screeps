@@ -294,6 +294,7 @@ var structCreep = {
                 // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Transfer Target: ' + JSON.stringify(transfer_target));
                 // if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Terminal cond: ' + (my_room.memory.global_vars.all_full))
                 // if (creep.name === log_name) console.log('[DEBUG][' + creep.name + '] BUILD condition. my_room.memory.targets.build:' + my_room.memory.targets.build + 'units[room_name][build]: ' + (units[room_name]['build']/current_workers) + 'current_creep_types.build: ' + current_creep_types.build);
+                if (creep.name === 'E29N47-2-gn') console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Defence Tar: ' + my_room.memory.targets.repair_defence +'; Repaire_DEFENCE: ' + current_creep_types.repair_defence);
 
                 if(transfer_target && (extensions_first || transfer_procent <= current_creep_types.transfer)) {
                     creep.say('transfering');
@@ -313,7 +314,7 @@ var structCreep = {
                     console.log('[DEBUG][' + creep.name + '] Try run to build: ' )
                     creep.memory.role = 'build';
                     units[room_name].build++;
-                } else if (my_room.controller.level < 8 && my_room.memory.targets.repair_defence && units[room_name]['repair_defence']/current_workers <= current_creep_types.repair_defence) {
+                } else if (my_room.controller.level < 8 && my_room.memory.targets.creep_repair_defence && units[room_name]['repair_defence']/current_workers <= current_creep_types.repair_defence) {
     
                     // *** GLOBAL LOG
                     console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: Changed ' + creep.memory.role + ' to repair_defence: ' + units[room_name]['repair_defence'] + ' / ' + current_workers + '=' + units[room_name]['repair_defence']/current_workers + '[' + current_creep_types.repair_defence +']')
@@ -1031,7 +1032,7 @@ var structCreep = {
                 }
                 break;
             case 'repair_defence':
-                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.repair_defence));
+                var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : Game.getObjectById(my_room.memory.targets.creep_repair_defence));
                 if (target && target.hits < target.hitsMax) {
                     creep_helpers.most_creep_action_results(creep, target, creep.repair(target), creep_role);
                 } else creep.memory.role = 'undefined';

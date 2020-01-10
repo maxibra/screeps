@@ -418,7 +418,10 @@ module.exports.loop = function () {
             room_helpers.define_extension_first(current_room_name);
 
             if (Game.cpu.bucket === 10000) Memory.rooms.global_vars.disable_repearing_by_towers = false // 40554000
-            else if (Game.cpu.bucket < 8000) Memory.rooms.global_vars.disable_repearing_by_towers = true
+            else if (Game.cpu.bucket < 8000) {
+                my_room.memory.targets.repair_defence = false
+                Memory.rooms.global_vars.disable_repearing_by_towers = true
+            }
         }
 
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
