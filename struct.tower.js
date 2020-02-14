@@ -10,7 +10,7 @@ var StructTower = {
         let current_tower = Game.getObjectById(current_tower_id);
 
         if (!current_tower) {
-            console.log('[ERROR] (StructTower.run)[ + current_tower.room.name + ] Tower: ' + current_tower_id + ' doesnt exist');
+            console.log('[ERROR] (StructTower.run)[' + current_tower.room.name + '] Tower: ' + current_tower_id + ' doesnt exist');
             return;
         }
         

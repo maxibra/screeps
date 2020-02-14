@@ -124,7 +124,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E29N47', 'E39N49']; //, 'E38N47', 'E34N47'];
+        let destination_rooms = ['E29N47', 'E39N49', 'E38N47']; //, 'E29N47', 'E34N47'];
         let send_amount = 2000;
 
         // if (room_name === 'E29N47') console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));
@@ -213,7 +213,7 @@ var room_helpers = {
         return is_inside;
     },
     transfer_mineral: function(room_name) {
-        let all_my_rooms = ['E28N48', 'E33N47', 'E34N47', 'E37N48', 'E38N47', 'E38N48', 'E39N49'];
+        let all_my_rooms = ['E28N48','E29N47', 'E33N47', 'E34N47', 'E37N48', 'E38N47', 'E38N48', 'E39N49'];
         let my_rooms_wo_src_room = _.remove(all_my_rooms, function(n) {return n != room_name});
 
         // if (room_name === 'E33N47') console.log('My Rooms: "' + all_my_rooms + '"')
@@ -593,9 +593,14 @@ var room_helpers = {
                                         
         let most_danger_hostile;
         // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
-        if (room_vars.status === 'peace' && ((hostile_creeps && hostile_creeps.length > 0) || (invader_core && invader_core.length > 0))) {
+        if (invader_core && invader_core.length > 0) {
+            room_vars.status = 'war';
+            Game.notify(room_name + ' is attacked by INVADER_CORE')
+        }
+        if (room_vars.status === 'peace' && hostile_creeps && hostile_creeps.length > 0) {
             room_vars.status = 'war';
             let hostile_boosts = {};
+            console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostil[0]: ' + hostile_creeps.length);
             for(let b in hostile_creeps[0].body) {
                 let cur_boost = hostile_creeps[0].body[b].boost;
                 if(!hostile_boosts[cur_boost]) hostile_boosts[cur_boost] = 1;
@@ -674,6 +679,7 @@ var room_helpers = {
 //        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets))
         if (Memory.rooms.global_vars.disable_repearing_by_towers === false) {
             my_room.memory.targets.repair_defence = targets[0] ? targets[0].id : false;
+            my_room.memory.targets.creep_repair_defence = my_room.memory.targets.repair_defence
         } else my_room.memory.targets.repair_defence = false;
     },
     get_repair_civilianl_target: function(room_name) {
