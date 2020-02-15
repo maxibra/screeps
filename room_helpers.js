@@ -124,7 +124,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E29N47', 'E39N49', 'E38N47']; //, 'E29N47', 'E34N47'];
+        let destination_rooms = ['E27N48', 'E37N48', 'E39N49', 'E38N47']; //, 'E29N47', 'E34N47'];
         let send_amount = 2000;
 
         // if (room_name === 'E29N47') console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));
@@ -353,7 +353,9 @@ var room_helpers = {
         // Build constaructions
         if (my_room.memory.targets.build && my_room.memory.targets.build.length > 0) is_no_constructions = false;
         
-        my_room.memory.global_vars.all_full = (!(!all_extensions_full || !all_links_full || !all_towers_full || !is_no_constructions));
+        my_room.memory.global_vars.all_full = (!(!all_extensions_full || !all_links_full ||
+                                                 !all_towers_full || !is_no_constructions) &&
+                                                !my_room.memory.targets.repair_defence);
     },
     transfer_link2link: function(room_name) {
         let my_room = Game.rooms[room_name];
@@ -579,7 +581,7 @@ var room_helpers = {
              
         // check TERMINAL in the room
         let terminal_targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TERMINAL)});
-        local_energy_flow_obj.terminal = (terminal_targets.length > 0  && terminal_targets.length > 0) ? terminal_targets[0].id : false;
+        local_energy_flow_obj.terminal = (terminal_targets.length > 0) ? terminal_targets[0].id : false;
   
         my_room.memory.energy_flow = local_energy_flow_obj;
     },
@@ -708,7 +710,7 @@ var room_helpers = {
         for (let i in targets) targets_id.push(targets[i].id);
         // my_room.memory.targets.build = (targets.length > 0) ? targets[0].id : false;
         // if (room_name === 'E33N47') console.log('[DEBUG] (room_helpers.get_build_targets)[: ' + room_name + '] ; TARGETS length: ' + targets_id.length + '; TARGETS: ' + JSON.stringify(targets_id));
-        my_room.memory.targets.build = (targets_id.length > 0) ? targets_id : false;
+        my_room.memory.targets.build = (targets_id.length > 0) ? targets_id : [];
     },
     clean_memory: function() {
         // Clean died creeps
@@ -862,9 +864,10 @@ var room_helpers = {
             for (mineral in minerals) {
                 if (my_room[sources[src]].store[minerals[mineral]] >= 250) {
                     lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[minerals[mineral]])
-                    free_space = lab_of_mineral.store.getCapacity(lab_of_mineral.mineralType) - lab_of_mineral.store[lab_of_mineral.mineralType]
-                    // if (room_name === 'E37N48') console.log('[DEBUG] (room_helpers-create_sources2withdraw)[' + room_name + '] MINERAL: ' +
-                    //                                                     minerals[mineral] +'; LAB ID: ' + my_room.memory.lab_per_mineral[minerals[mineral]] +
+                    // free_space = lab_of_mineral.store.getCapacity(lab_of_mineral.mineralType) - lab_of_mineral.store[lab_of_mineral.mineralType]
+                    free_space = lab_of_mineral.store.getFreeCapacity([minerals[mineral]])
+                    // if (room_name === 'E33N47') console.log('[DEBUG] (room_helpers-create_sources2withdraw)[' + room_name + '] MINERAL: ' +
+                    //                                                     minerals[mineral] +'; LAB ID: ' + lab_of_mineral.id +
                     //                                                     '; Lab Free space: ' + free_space)
 
                     if (free_space > 250) {
@@ -881,8 +884,9 @@ var room_helpers = {
         // Start possible reactions
         // console.log('[' + room_name + '] Trying run reactions on Labs ')
         let my_room = Game.rooms[room_name];
+        if (!my_room.memory.labs) return
         reactions_labs = ['process', 'produce']
-        // if (room_name === 'E34N47') console.log('[DEBUG] (room_helpers-run_lab_reactions): LAB room ' + room_name)
+        // console.log('[DEBUG] (room_helpers-run_lab_reactions): LAB room ' + room_name)
         for (lab_stage in reactions_labs) {
             lab_ids_of_stage = my_room.memory.labs[reactions_labs[lab_stage]]
             for (lab_id in lab_ids_of_stage){

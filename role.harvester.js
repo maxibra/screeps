@@ -11,12 +11,12 @@ var RoleHarvester = {
         let my_room = Game.rooms[room_name];
         let action_out;
         let harvester_type = false;     // needed to use saved id
-        let creep_name4log ='stam';
+        let creep_name4log ='worker_E28N48_E27N48-1';
         let far_source = Game.getObjectById('59f1a54882100e1594f3e357');
         let close_source = Game.getObjectById('59f1a54882100e1594f3e356');
 
         // let bad_condition = (creep_name == '')
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +']: ' + JSON.stringify(creep.memory));
+        // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +']: ' + JSON.stringify(creep.memory));
         
         if (creep.store[RESOURCE_ENERGY] === creep.store.getCapacity()) {
             creep.memory.role = (creep.memory.special) ? creep.memory.special : 'undefined';
@@ -26,7 +26,7 @@ var RoleHarvester = {
             return;
         }
 
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +']: ' + JSON.stringify(creep.memory));
+        // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +'] Memory:  ' + JSON.stringify(creep.memory));
 
         // Here with zero energy. If no enough time to work then die
         // if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
@@ -42,7 +42,7 @@ var RoleHarvester = {
         if (creep_target_id) {
             target = Game.getObjectById(creep_target_id);
             harvester_type = creep.memory.harvester_type;
-            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep.name +']: Target ID: ' + target.structureType + '; harvester_type: ' + harvester_type);
+            // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep.name +']: Target ID: ' + target.structureType + '; harvester_type: ' + harvester_type);
             if (creep.ticksToLive < global_vars.age_to_drop_and_die) {  // Clean booking container or link
                 if (target.structureType === 'container') {
                     if (my_room.memory.energy_flow.containers.source[creep_target_id]) {
@@ -141,22 +141,24 @@ var RoleHarvester = {
                         //                                                                           object.store[RESOURCE_ENERGY] > 200 ||
                         //                                                                           Object.keys(object.store).length === 1)}); //|| creep.pos.getRangeTo(object, 2)});
 
-                        let min_terminal_storage = Memory.rooms.global_vars.terminal_emergency_ration;
+                        let min_terminal_storage = (my_room.memory.global_vars.status === 'war') ? 0 : Memory.rooms.global_vars.terminal_emergency_ration;
+                        let min_storage_storage = (my_room.memory.global_vars.status === 'war') ? 0 : Memory.rooms.global_vars.storage_emergency_ration;
                         if (!my_room.memory.global_vars) return
-                        let storage_target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_STORAGE && (my_room.memory.global_vars.status === 'war' ||
-                                                                                                                                                              (object.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.storage_emergency_ration &&
-                                                                                                                                                              !my_room.memory.global_vars.all_full))) ||
-                                                                                                              (object.structureType === STRUCTURE_TERMINAL && (my_room.memory.global_vars.status === 'war' ||
-                                                                                                                                                               object.store[RESOURCE_ENERGY] > min_terminal_storage &&
-                                                                                                                                                               !my_room.memory.global_vars.all_full))) });
-                                                                                                                                                
+                        storage_target = null
+                        if (!my_room.memory.global_vars.all_full)
+                            storage_target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_STORAGE && (object.store[RESOURCE_ENERGY] > min_storage_storage)) ||
+                                                                                                               (object.structureType === STRUCTURE_TERMINAL && (object.store[RESOURCE_ENERGY] > min_terminal_storage)))});
+                        // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] STORAGE TARGET: ' + storage_target.structureType);
+
                         // if (target && creep.memory.special !== 'upgrader' && my_room.memory.global_vars.status === 'peace' &&
                         //     room_helpers.is_inside_wall(room_name, target)) {
                         //     console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] TOMBSTONE : ' + target.id);
                         //     harvester_type = 'tombstone';
                         //     // my_room.memory.energy_flow.tombstone[target.id] = creep.name
                         // } else 
-                        if (my_room.memory.energy_flow.storage && creep.memory.special !== 'upgrader' && storage_target) {
+                        if (storage_target && my_room.memory.energy_flow[storage_target.structureType] && creep.memory.special !== 'upgrader') {
+                            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] Define harvest from ' + storage_target.structureType);
+
                             harvester_type = 'storage';
                             target = storage_target;
                         } else if (creep.memory.special !== 'upgrader') {
@@ -259,7 +261,7 @@ var RoleHarvester = {
         else if (action_out === ERR_NOT_IN_RANGE) {
             if (creep.pos.getRangeTo(target) <= 3) creep.memory.stuck++;
             creep.moveTo(target, global_vars.moveTo_ops);
-            if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: ERR_NOT_IN_RANGE TARGET; STUCk: ' +  creep.memory.stuck + '; Memory: ' + JSON.stringify(creep.memory));
+            // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: ERR_NOT_IN_RANGE TARGET; STUCk: ' +  creep.memory.stuck + '; Memory: ' + JSON.stringify(creep.memory));
             if (creep.memory.stuck > 5 && !(room_name === 'E34N47' && creep.pos.getRangeTo(Game.getObjectById(close_source)) < 4)) {
                 let room_sources = my_room.memory.energy_flow.sources;
                 let room_source_containers = my_room.memory.energy_flow.containers.source;
@@ -331,7 +333,7 @@ var RoleHarvester = {
         //     creep.memory.target_id = false;
         //     creep.memory.harvester_type = false;
         // }
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: LAST TARGET: ' + JSON.stringify(creep.memory));
+        // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: LAST TARGET: ' + JSON.stringify(creep.memory));
     }
 }
 

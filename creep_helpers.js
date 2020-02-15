@@ -180,12 +180,15 @@ var creep_helpers = {
                 'E38N47': 0,
                 'E39N49': 0
             },
+            'E37N48': {
+                'E36N48': 2
+            },
             'E33N47': {
                 'E34N47': 0
             },
             'E28N48': {
                 'E29N47': 0,
-                'E27N48': 2
+                'E27N48': 1
             }
         }
         let create_special = false;
@@ -300,9 +303,8 @@ var creep_helpers = {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 800
                 body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY], // carry: 200
                 // body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
-                amount: 1,
-                avoid: (Game.cpu.bucket < 6000)
-                // avoid: !(room_name === 'E38N48')
+                amount: 0,
+                avoid: (Game.cpu.bucket < 9000 || room_name === 'E27N48')
             },   
             energy_helper: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 500
@@ -310,8 +312,8 @@ var creep_helpers = {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry:1500
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 2K
                 name_prefix: 'energy_helper_' + room_name,
-                amount: 2,
-                avoid: !(room_name === 'E29N47')
+                amount: 0,
+                avoid: !(room_name === 'E37N48')
             },
             // transfer: {
             //     body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
@@ -449,7 +451,13 @@ var creep_helpers = {
         // Remote workers
         for (let worker_creator_room in worker_rooms) {
             if (room_name === worker_creator_room && Memory.rooms[worker_creator_room].global_vars.status === 'peace' && universal_creeps >= my_room.memory.global_vars.screeps_max_amount.peace) {
-                let new_memory = {role: 'worker'};
+                let new_memory = {
+                    role: 'worker',
+                    "target_id": false,
+                    "harvester_type": false,
+                    "stuck": 0,
+                    "has_minerals": false
+                };
                 for (let worker_room in worker_rooms[worker_creator_room]) {
                     // console.log('[DEBUG] (create_creep.workers): Worker room: ' + worker_room + '; Amount: ' + worker_rooms[worker_creator_room][worker_room]);
                     for (let i=1; i<=worker_rooms[worker_creator_room][worker_room]; i++) {
