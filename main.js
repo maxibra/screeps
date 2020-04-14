@@ -223,7 +223,7 @@ module.exports.loop = function () {
 
                 // Uncomment if you have a new room
                 // initiate_room_memory(current_room_name);
-                // initiate_spawn()
+                initiate_spawn()
 
                 // my_room = Game.rooms[current_room_name]
                 // if (!(my_room && my_room.controller &&
@@ -333,7 +333,7 @@ module.exports.loop = function () {
         //     console.log('[DEBUG] (main)[' + current_room_name + '] Skip the room')
         //     continue
         // }
-        // delete Memory.rooms[current_room_name].energy_flow.energy_flow.storage
+        // if (current_room_name === 'E27N48') Memory.rooms[current_room_name].towers.current = {}
 
         // if (current_room_name === 'E29N47') Memory.rooms[current_room_name].energy_flow.containers.other = {};
         // delete Memory.rooms[current_room_name].energy_flow.max_used;
@@ -359,7 +359,7 @@ module.exports.loop = function () {
         // console.log('[DEBUG] (main)[' + current_room_name + ']: TOWERS: ' + JSON.stringify(towers_list));
         if ((units[current_room_name] && units[current_room_name].total >= 1) || Memory.rooms[current_room_name].global_vars.status === 'war')
             for (let i=0;i<towers_list.length;i++) {
-                // console.log('[DEBUG] (main): TOWER[' + i + ']' + ' ID: ' + towers_list[i]);
+                // console.log('[DEBUG] (main)[' +current_room_name+': TOWER[' + i + ']' + ' ID: ' + towers_list[i]);
                 roleTower.run(towers_list[i], units[current_room_name].total-units[current_room_name].sp_total);
             }
     
@@ -369,12 +369,14 @@ module.exports.loop = function () {
         if (Game.time % 5 === 0) {
             // console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
             // room_helpers.check_create_miner(current_room_name, global_vars.spawn_name, units);
+            room_helpers.verify_energy_miner_is_needed(current_room_name);
             room_helpers.verify_all_full(current_room_name);
             room_helpers.transfer_link2link(current_room_name);
         }
 
-        if (Game.time % 5 === 0 && Game.cpu.bucket > 9000) {
-            // room_helpers.run_lab_reactions(current_room_name);
+        if (Game.time % 5 === 0 && Game.cpu.bucket > 8000) {
+            if (current_room_name === 'E39N49') console.log('[INFO] (main)[' +current_room_name + ']: Starting Lab reaction');
+            room_helpers.run_lab_reactions(current_room_name);
         }
 
         // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
@@ -398,6 +400,7 @@ module.exports.loop = function () {
 
         if (Game.time % 30 === 0 && (Memory.rooms[current_room_name].global_vars.status === 'war' ||
                                      Memory.rooms.global_vars.disable_repearing_by_towers === false)) {
+                                     // !(Memory.rooms.global_vars.disable_repearing_by_towers === true && my_room.controller.level === 8))) {
             room_helpers.get_repair_defence_target(current_room_name);
         }
 
@@ -406,6 +409,8 @@ module.exports.loop = function () {
         // if (current_room_name === 'E39N49' && Game.time % 2 === 0) {
             // console.log('[INFO] (main) [' + current_room_name + ']: RUN  "transfer_energy" ' + current_mod + '. Time: ' + Game.time);
             room_helpers.transfer_energy(current_room_name);
+            if (Game.cpu.bucket < 5000) Game.notify('LOW Bucket level: ' + Game.cpu.bucket);
+
         }
 
         if (Game.time % 30 === 0 && Game.cpu.bucket > 6000) {
@@ -422,6 +427,12 @@ module.exports.loop = function () {
                 my_room.memory.targets.repair_defence = false
                 Memory.rooms.global_vars.disable_repearing_by_towers = true
             }
+        }
+ 
+        if (current_room_name === 'E39N49') console.log('[INFO] (main) [' + current_room_name + '] mod 59: ' + (Game.time % 59))
+        if (Game.time % 59 === 0) {
+            room_helpers.update_room_min_ticksToLive(current_room_name)
+            room_helpers.verify_lab_assistent_is_needed(current_room_name)
         }
 
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
@@ -457,7 +468,7 @@ module.exports.loop = function () {
     }
 
     if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
-        room_by_mineral['reagent']['G'] = ['E28N48', 'E29N47', 'E33N47', 'E37N48', 'E38N48', 'E38N47', 'E39N49']
+        room_by_mineral['reagent']['G'] = ['E27N48', 'E28N48', 'E29N47', 'E33N47', 'E34N47', 'E36N48', 'E37N48', 'E38N48', 'E38N47', 'E39N49']
         Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
     }
 

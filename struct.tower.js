@@ -10,7 +10,7 @@ var StructTower = {
         let current_tower = Game.getObjectById(current_tower_id);
 
         if (!current_tower) {
-            console.log('[ERROR] (StructTower.run)[' + current_tower.room.name + '] Tower: ' + current_tower_id + ' doesnt exist');
+            console.log('[ERROR] (StructTower.run) Tower: ' + current_tower_id + ' doesnt exist');
             return;
         }
         
@@ -49,12 +49,14 @@ var StructTower = {
                     target2attack = all_hostile[0];
                 }
 
+                // First terminated heal creep
                 let heal_is_found = false;
                 for (let h in all_hostile) {
                     for(let b in all_hostile[h].body) {
                         // console.log('[INFO] (StructTower.run) [' + room_name + ']Search fr Healer. Type: ' + all_hostile[h].body[b].type);
                         if (all_hostile[h].body[b].type === 'heal' && current_tower.pos.getRangeTo(all_hostile[0]) < 38) {
                             target2attack = all_hostile[h];
+                            heal_is_found = true;
                             // console.log('[INFO] (StructTower.run) [' + room_name + '] Enemy healer is found');
                             break;
                         }
