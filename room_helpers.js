@@ -891,7 +891,7 @@ var room_helpers = {
         // Start possible reactions
         // console.log('[' + room_name + '] Trying run reactions on Labs ')
         let my_room = Game.rooms[room_name];
-        let log_room = 'E39N49'
+        let log_room = 'E27N48'
         if (!my_room.memory.labs) return
         reactions_labs = ['process', 'produce']
         // console.log('[DEBUG] (room_helpers-run_lab_reactions): LAB room ' + room_name)
@@ -997,7 +997,7 @@ var room_helpers = {
     verify_lab_assistent_is_needed: function(room_name) {
         let my_room = Game.rooms[room_name]
         let mem_global_vars = Memory.rooms.global_vars
-        let log_room = 'E39N49'
+        let log_room = 'E28N48'
         
         if (!my_room.terminal) return;
         
@@ -1031,8 +1031,13 @@ var room_helpers = {
             produce_labs_status[mineral_type] = (produce_labs_status[mineral_type]) ? produce_labs_status[mineral_type] : 0
             produce_labs_status[mineral_type] += Game.getObjectById(lab_id).store.getUsedCapacity(mineral_type)
         }
+        // if (room_name === log_room) console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name +'] produce LABs: ' + JSON.stringify(produce_labs_status, null, 2))
         for (let mineral_type in produce_labs_status) {
             let missing_type_in_terminal = mem_global_vars.minerals.storage_final_produce - my_room.terminal.store.getUsedCapacity(mineral_type)
+            // if (room_name === log_room) console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name +'] Mineral: ' + mineral_type +
+            //                                             '; missing_type_in_terminal: ' + missing_type_in_terminal +
+            //                                             '; final_produce: ' + mem_global_vars.minerals.storage_final_produce +
+            //                                             '; lab status: ' + produce_labs_status[mineral_type])
             if (missing_type_in_terminal > (0.2 * mem_global_vars.minerals.storage_final_produce) &&
                 missing_type_in_terminal < produce_labs_status[mineral_type]) terminal_amount_missing_minerals++
         }

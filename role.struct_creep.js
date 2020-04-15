@@ -422,7 +422,7 @@ var structCreep = {
                 // Game.creeps['lab_assistent_E39N49-1-sp'].transfer(Game.getObjectById('5ac6205ba6cd8147a71e01d5'), 'K')
                 // creep.memory.target_id = false;
                 // break
-                let log_if_room = 'E33N47';
+                let log_if_room = 'E34N47';
                 
                 // if (room_name == log_if_room) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] LAB_Assistent_Needed: ' + my_room.memory.global_vars.screeps_max_amount.lab_assistent_needed)
 
@@ -449,8 +449,9 @@ var structCreep = {
                         }
                         
                         // if (room_name == log_if_room) {
-                        //     creep.memory.target_id = '5afff958ff9d380d22e3634a'
-                        //     creep.memory.mineral2withdraw = 'Z'
+                        //     creep.memory.target_id = '5adea2c316b2ab2a2a2b472f'
+                        //     creep.memory.mineral_amount = 117
+                        //     creep.memory.mineral2withdraw = 'GHO2'
                         //     return
                         // }
                         // else if (room_name == 'E34N47') {
@@ -560,7 +561,7 @@ var structCreep = {
                         } else
                             creep.memory.target_id = my_room.terminal.id
                         
-                        // if (room_name == log_if_room) creep.memory.target_id = '5ac6205ba6cd8147a71e01d5'
+                        // if (room_name == log_if_room) creep.memory.target_id = '5b3a8e4d008bbf77da394b74'
                         // else if (room_name == 'E34N47') creep.memory.target_id = '5adea2c316b2ab2a2a2b472f'
 
                         // // Define target drain labs to terminal
