@@ -1195,7 +1195,7 @@ var structCreep = {
                     let h = my_room.find(FIND_HOSTILE_CREEPS)   
                     let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)})
                     let target2attack = false;
-                    console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ');
+                    // console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ');
                     // console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ' + Memory.rooms[room_name].global_vars.status + '; Hostile: ' + h.length + '; Core: ' + invader_core.length);
                     if (invader_core.length > 0) {
                         target2attack = invader_core[0]

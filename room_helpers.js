@@ -598,14 +598,15 @@ var room_helpers = {
         let hostile_creeps = (my_room) ? my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (creep_helpers.is_millitary(object))}) : [];
                 // , {filter: object => (object.owner.username !== 'Sergeev' || (object.owner.username === 'Sergeev' && is_millitary(object)))})
         let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)})
-                                        
-        let most_danger_hostile;
+        let avoid_hostiles = ['Invader', ]; //'rogersnape63', 'Kraetzin'];
+
         // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
-        if (invader_core && invader_core.length > 0) {
+        if (my_room.controller.level === 0 && invader_core && invader_core.length > 0) {
             room_vars.status = 'war';
             Game.notify(room_name + ' is attacked by INVADER_CORE')
         }
-        if (room_vars.status === 'peace' && hostile_creeps && hostile_creeps.length > 0) {
+        if (room_vars.status === 'peace' && hostile_creeps && hostile_creeps.length > 0 &&
+            avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0) {
             room_vars.status = 'war';
             let hostile_boosts = {};
             console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostil[0]: ' + hostile_creeps.length);
@@ -614,9 +615,10 @@ var room_helpers = {
                 if(!hostile_boosts[cur_boost]) hostile_boosts[cur_boost] = 1;
                 else hostile_boosts[cur_boost]++;
             }
-            avoid_hostiles = ['Invader', ]; //'rogersnape63', 'Kraetzin'];
+
             let millitary_body = creep_helpers.is_millitary(hostile_creeps[0]);
-            if (avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0 && millitary_body) Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y + '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(millitary_body));
+            Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y +
+                                        '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(millitary_body));
         } else if (room_vars.finish_war && room_vars.finish_war < Game.time && room_vars.status === 'war') {
             room_vars.status = 'peace';
             room_vars.finish_war = false;

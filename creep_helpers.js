@@ -577,6 +577,7 @@ var creep_helpers = {
     },
     most_creep_action_results: function(creep, target, action_res, creep_role) {
         let my_room = Game.rooms[creep.room.name];
+        let creep_name4log = 'worker_E36N48_E36N49-1'
 
         switch(action_res) {
             case OK:
@@ -588,6 +589,7 @@ var creep_helpers = {
                 creep.memory.target_id = target.id;
                 break;
             case ERR_FULL:
+                if (creep.name === creep_name4log) console.log('[DEBUG] (CreeHelpers)[' + creep.name +'] (ERR_FULL) target_id is Changed to false');
                 creep.memory.target_id = false;
                 creep.memory.harvester_type = false;
                 creep.memory.role = 'undefined';
@@ -599,6 +601,7 @@ var creep_helpers = {
 // //                    console.log('[DEBUG] (most_creep_action_results)[' + creep.name + ']: ' + 'Target is changed');
 //                     if (targets[0]) creep.memory.target_id = targets[0].id;
 //                 } else {
+                if (creep.name === creep_name4log) console.log('[DEBUG] (creepHelpers)[' + creep.name +'] (Default) target_id is Changed to false');
                 creep.memory.target_id = false;
                 creep.memory.role = 'undefined';
             // }
