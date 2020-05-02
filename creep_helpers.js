@@ -35,7 +35,7 @@ function upgrader_body(room_name) {
     // let room_level = Game.rooms[room_name].controller.level;
     if (Game.rooms[room_name].controller.level === 6) room_level = 1725;
     else if (Game.rooms[room_name].controller.level === 7) room_level = 2550;
-    else if (Game.rooms[room_name].controller.level === 5) room_level = 710;
+    else if (Game.rooms[room_name].controller.level === 5) room_level = 5;
 
     switch (room_level) {
         case 1: 
@@ -85,7 +85,9 @@ function upgraders_amount(room_name) {
     let upgraders = 0;
     if (room_name === 'E38N47' ||
         room_name === 'E39N49' ||
-        room_name === 'E29N47') upgraders = 1;
+        room_name === 'E29N47' ||
+        room_name === 'E36N49') upgraders = 1;
+    // else if (room_name === 'E36N49') upgraders = 2;
     return upgraders;
 }
 function remote_target(room_name) {
@@ -176,6 +178,9 @@ var creep_helpers = {
         let room_vars = Game.rooms[room_name].memory.global_vars;
         let my_room = Game.rooms[room_name];
         let worker_rooms = {        // {<creator_room>: {<room_of_worker>: <workers_amount>}}
+            'E36N48': {
+                'E36N49': 1
+            },
             'E38N48': {
                 'E37N48': 0,
                 'E38N47': 0,
@@ -239,10 +244,16 @@ var creep_helpers = {
             attacker_constructions: {
                 // body:  [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], # # move plain=2, attack=180/T
                 body: [TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], // move plain=1, attack=180/T
-                memory: {constructions2attack: ['5dec19e2cda27f6e4a9cd293', ]},
+                memory: {constructions2attack: ['5b0781b4907d7b6fdbb953ec', '5b07703655d24e5c1fb56566', '5b07f346cba50b6fa48bde0e', '5b0756106d41df6fee7945ff',
+                                                '5ada3b205918a62fa524502a', '5aeb8dc24390a242a4bf1726', '5ada3a82221f114b7f0fd424', '5b0805eb907d7b6fdbb98d14',
+                                                '5b0737950131b30148263118', '5b076bd78ca64d2ce352c78a', '5b075140692a936fdc98d6d9', '5ada3a82221f114b7f0fd424',
+                                                '5b07b7275c32205bf2d01712', '5ada34f0b8f8db5203edcae1', '5ada332323774a6d4aa63b0f', '5ada33cbc0037f40373e7b4e',
+                                                '5ac39572ce03634b9a5bbf47', '5accb4920deb0d30a3128f27', '5b1f22c282fb82056e1910e0', '5b1faffde65319287dc4b4a3', 
+                                                '5b078bc7187fe614ff0d08db', '5ac32cf9f36c474bccc1f964', '5b081aa5f9e1a866b61d67d9', '5b07fe3549d5240153fe32f3',
+                                                '5aefd17f59326e11abaa2a71']},
                 name_prefix: 'attacker_const_' + room_name,
                 amount: 0,
-                avoid: !(room_name === 'E28N48')
+                avoid: !(room_name === 'E36N48')
             },
             guard: {
                 body: [TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL,HEAL],
@@ -329,7 +340,7 @@ var creep_helpers = {
                 name_prefix: 'mnrl_mnr_' + room_name,
                 amount: 1,
                 avoid: ((my_room.storage && ((my_room.memory.energy_flow.store_used.storage > (my_room.storage.store.getCapacity() * 0.93)) ||
-                                             (my_room.storage.store['energy'] < Memory.rooms.global_vars.storage_emergency_ration))) ||
+                                             (my_room.storage.store[my_room.memory.energy_flow.mineral.type] < (950000-Memory.rooms.global_vars.storage_emergency_ration)))) ||
                         !(my_room.memory.energy_flow.mineral.extractor && Game.getObjectById(my_room.memory.energy_flow.mineral.id).mineralAmount > 0))
                         // (my_room.terminal && (my_room.terminal.store[my_room.memory.energy_flow.mineral.type] > 50000))))
             },
