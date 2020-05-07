@@ -125,9 +125,10 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E36N48', 'E27N48', 'E38N47', 'E39N49']; //, 'E29N47', 'E34N47'];
+        let destination_rooms = ['E36N49', 'E36N48', 'E27N48', 'E38N47', 'E39N49']; //, 'E29N47', 'E34N47'];
         let send_amount = 2000;
 
+        // if (room_name !== 'E37N48') return   // Recomment if you want transfer from specific rooms only
         // if (room_name === 'E29N47') console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Destinations rooms: ' + JSON.stringify(destination_rooms));
 
         // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] :' + destination_rooms.indexOf(room_name) + '; destination_rooms: ' + destination_rooms)
@@ -151,11 +152,17 @@ var room_helpers = {
             destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal &&
             cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + send_amount))
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Transfer energy: ' + condition_to_transfer);
+        // if (room_name === 'E37N48') console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Condition transfer energy: ' +
+        //             (destination_terminal.room && cur_terminal && cur_terminal.cooldown === 0 &&
+        //     destination_terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
+        //     cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer &&
+        //     destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal &&
+        //     cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + send_amount)));
 
 
         if (condition_to_transfer) {
             let send_out = cur_terminal.send(RESOURCE_ENERGY, send_amount, destination_room_name);
-            console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
+            // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
             if (send_out === OK) {
                 console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + destination_terminal.store[RESOURCE_ENERGY] + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
             }
@@ -605,8 +612,8 @@ var room_helpers = {
             room_vars.status = 'war';
             Game.notify(room_name + ' is attacked by INVADER_CORE')
         }
-        if (room_vars.status === 'peace' && hostile_creeps && hostile_creeps.length > 0 &&
-            avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0) {
+        if (room_vars.status === 'peace' && hostile_creeps && hostile_creeps.length > 0 ) { //&&
+            // avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0) {
             room_vars.status = 'war';
             let hostile_boosts = {};
             console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostil[0]: ' + hostile_creeps.length);

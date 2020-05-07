@@ -217,7 +217,7 @@ module.exports.loop = function () {
                 'sp_total': 0,
             };
             // the upgrade doesn't work on not my rooms
-            if (Game.time % 5 === 0) {
+            if (Game.time % rare_time_range === 0) {
                 // console.log('[INFO] (main) [' + current_room_name + '] upgrade_energy')
                 room_helpers.upgrade_energy_flow(current_room_name);
 
@@ -251,7 +251,7 @@ module.exports.loop = function () {
             // console.log('[INFO] (main)[' + creep_name + '] Room: ' + room_name + '; Units: ' + JSON.stringify(units))
             units[room_name][cur_creeps[creep_name].memory.role]++;
             units[room_name]['total']++;
-            if (cur_creeps[creep_name].memory.special) units[room_name]['sp_total']++;
+            if (cur_creeps[creep_name].memory.special) {units[room_name]['sp_total']++;}
             units['total']++;
             
             // console.log('[INFO] (main)[After CREEP ' + creep_name + '] CPU Used: ' + Game.cpu.getUsed().toFixed(2) + '; Ticket Limit: ' + Game.cpu.tickLimit)
@@ -374,10 +374,10 @@ module.exports.loop = function () {
             room_helpers.transfer_link2link(current_room_name);
         }
 
-        if (Game.time % 5 === 0 && Game.cpu.bucket > 8000) {
-            if (current_room_name === 'E39N49') console.log('[INFO] (main)[' +current_room_name + ']: Starting Lab reaction');
-            room_helpers.run_lab_reactions(current_room_name);
-        }
+        // if (Game.time % 5 === 0 && Game.cpu.bucket > 8000) {
+        //     if (current_room_name === 'E39N49') console.log('[INFO] (main)[' +current_room_name + ']: Starting Lab reaction');
+        //     room_helpers.run_lab_reactions(current_room_name);
+        // }
 
         // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
         let current_mod = 0;
@@ -428,7 +428,7 @@ module.exports.loop = function () {
         }
         
         let t_range = 59
-        if (current_room_name === 'E39N49') console.log('[INFO] (main) [' + current_room_name + '] mod ' + t_range + ': ' + (Game.time % t_range))
+        // if (current_room_name === 'E39N49') console.log('[INFO] (main) [' + current_room_name + '] mod ' + t_range + ': ' + (Game.time % t_range))
         if (Game.time % t_range === 0) {
             room_helpers.update_room_min_ticksToLive(current_room_name)
             room_helpers.verify_lab_assistent_is_needed(current_room_name)

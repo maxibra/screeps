@@ -86,7 +86,8 @@ function upgraders_amount(room_name) {
     if (room_name === 'E38N47' ||
         room_name === 'E39N49' ||
         room_name === 'E29N47' ||
-        room_name === 'E36N49') upgraders = 1;
+        room_name === 'E36N49')
+        upgraders = 1;
     // else if (room_name === 'E36N49') upgraders = 2;
     return upgraders;
 }
@@ -179,7 +180,7 @@ var creep_helpers = {
         let my_room = Game.rooms[room_name];
         let worker_rooms = {        // {<creator_room>: {<room_of_worker>: <workers_amount>}}
             'E36N48': {
-                'E36N49': 1
+                'E36N49': 2
             },
             'E38N48': {
                 'E37N48': 0,
@@ -316,7 +317,7 @@ var creep_helpers = {
                 body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY], // carry: 200
                 // body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
                 amount: 1,
-                avoid: (Game.cpu.bucket < 9000 || !my_room.memory.global_vars.screeps_max_amount.lab_assistent_needed)
+                avoid: (room_name === 'E36N49' || Game.cpu.bucket < 9000 || !my_room.memory.global_vars.screeps_max_amount.lab_assistent_needed)
             },   
             energy_helper: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 500
@@ -512,25 +513,28 @@ var creep_helpers = {
         }
         if (creep_name === '' ) return;   // there is no need to create a creep
              
-        
-        let max_body_cost = ((universal_creeps === 0 || !add_body) && (my_room.energyAvailable < room_vars.max_body_cost)) ? my_room.energyAvailable : room_vars.max_body_cost;
-        let possible_body = current_body;
-        let possible_body_cost = body_cost(possible_body);
-        let body_finalize_cost = (finalize_body) ? body_cost(finalize_body) : 0;
-        max_body_cost = max_body_cost - body_finalize_cost;
-        if (room_name === 'E27N48' ) console.log('[DEBUG] (create_creep): [' + spawn_name + '] Universal: ' + universal_creeps + '; Max:' + room_vars.screeps_max_amount[room_vars.status] + '; Add body: ' + add_body + '; Max body cost: ' + max_body_cost + '; Current body:' + current_body)
+        if (room_name === 'E36N49' && creep_name.includes('-gn')) {
+            current_body = [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY];  // // Carry: 650, Harvest: 20/T; Build: S:50/T, W:1K/T; Upgrade: 10/T; Cost: 2,250
+        } else {
+            let max_body_cost = ((universal_creeps === 0 || !add_body) && (my_room.energyAvailable < room_vars.max_body_cost)) ? my_room.energyAvailable : room_vars.max_body_cost;
+            let possible_body = current_body;
+            let possible_body_cost = body_cost(possible_body);
+            let body_finalize_cost = (finalize_body) ? body_cost(finalize_body) : 0;
+            max_body_cost = max_body_cost - body_finalize_cost;
+            if (room_name === 'E27N48') console.log('[DEBUG] (create_creep): [' + spawn_name + '] Universal: ' + universal_creeps + '; Max:' + room_vars.screeps_max_amount[room_vars.status] + '; Add body: ' + add_body + '; Max body cost: ' + max_body_cost + '; Current body:' + current_body)
 
-        for (i=2;possible_body_cost <= Game.rooms[room_name].energyCapacityAvailable;i++) {
-            current_body = possible_body;
-            // if (room_name === 'E38N48') console.log('[DEBUG] (create_creep): [' + spawn_name + '] ' + i + ' Current body: ' + JSON.stringify(current_body));
-            possible_body = possible_body.concat(add_body);
-            if (i%2 === 0 && creep_name.substring(0,6) !== room_name) possible_body.push(MOVE);
-            possible_body_cost = body_cost(possible_body) + 250;    // 250 is cost of finalize
-            if (possible_body_cost > max_body_cost || possible_body.length > 50 ||
-                possible_body_cost > Game.rooms[room_name].energyCapacityAvailable) break;
+            for (let i=2; possible_body_cost <= Game.rooms[room_name].energyCapacityAvailable; i++) {
+                current_body = possible_body;
+                // if (room_name === 'E38N48') console.log('[DEBUG] (create_creep): [' + spawn_name + '] ' + i + ' Current body: ' + JSON.stringify(current_body));
+                possible_body = possible_body.concat(add_body);
+                if (i % 2 === 0 && creep_name.substring(0, 6) !== room_name) possible_body.push(MOVE);
+                possible_body_cost = body_cost(possible_body) + 250;    // 250 is cost of finalize
+                if (possible_body_cost > max_body_cost || possible_body.length > 50 ||
+                    possible_body_cost > Game.rooms[room_name].energyCapacityAvailable) break;
+            }
+            if (finalize_body) current_body = current_body.concat(finalize_body);
         }
-        
-        if (finalize_body) current_body = current_body.concat(finalize_body);
+
         let current_body_cost = body_cost(current_body);
 
         // if (room_name === 'E32N49' ) console.log('[DEBUG] (create_creep): [' + spawn_name + '] Creep: ' + creep_name +'; body cost: ' +  current_body_cost + '; Body: ' + JSON.stringify(current_body));
@@ -592,7 +596,7 @@ var creep_helpers = {
                 if (creep.name === creep_name4log) console.log('[DEBUG] (CreeHelpers)[' + creep.name +'] (ERR_FULL) target_id is Changed to false');
                 creep.memory.target_id = false;
                 creep.memory.harvester_type = false;
-                creep.memory.role = 'undefined';
+                creep.memory.role = false;
                 if (my_room.memory.towers.current[target.id] === creep.id) my_room.memory.towers.current[target.id] = false;
             default:
 //                console.log('[WARN] (most_creep_action_results)[' + creep.name + ']: ' + creep_role + ': NO action for result ' + action_res)
@@ -603,7 +607,7 @@ var creep_helpers = {
 //                 } else {
                 if (creep.name === creep_name4log) console.log('[DEBUG] (creepHelpers)[' + creep.name +'] (Default) target_id is Changed to false');
                 creep.memory.target_id = false;
-                creep.memory.role = 'undefined';
+                creep.memory.role = false;
             // }
         }
     }
