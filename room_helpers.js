@@ -624,8 +624,8 @@ var room_helpers = {
             }
 
             let millitary_body = creep_helpers.is_millitary(hostile_creeps[0]);
-            Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y +
-                                        '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(millitary_body));
+            if (avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0 && millitary_body) Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y +
+                                                                                                            '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(millitary_body));
         } else if (room_vars.finish_war && room_vars.finish_war < Game.time && room_vars.status === 'war') {
             room_vars.status = 'peace';
             room_vars.finish_war = false;
