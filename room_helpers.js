@@ -53,7 +53,7 @@ function link_transfer(source_link, destination_link) {
     
     // if (source_link.id === '5dad7368328c8405870fa2ec') console.log('[DEBUG](room.helpers-dst_free_capacity): Destination (' + destination_link.id + ') missing energy: ' +  dst_free_capacity + '; Source (' + source_link.id + '): ' + source_link.store[RESOURCE_ENERGY]);
     
-    src_used_capacity = source_link.store.getUsedCapacity(RESOURCE_ENERGY)
+    src_used_capacity = source_link.store.getUsedCapacity(RESOURCE_ENERGY);
     if (source_link.cooldown === 0 && src_used_capacity > 0 && destination_link && dst_free_capacity >= src_used_capacity) {
             source_link.transferEnergy(destination_link, source_link.store.getUsedCapacity(RESOURCE_ENERGY));
             energy_sent = true;
@@ -133,7 +133,7 @@ var room_helpers = {
 
         // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] :' + destination_rooms.indexOf(room_name) + '; destination_rooms: ' + destination_rooms)
         if (destination_rooms.indexOf(room_name) >= 0) return;    // Destination room don't send eneregy
-        minimal_energy_terminal = {store: {energy: 500000}}
+        minimal_energy_terminal = {store: {energy: 500000}};
         for (let r in destination_rooms) {
             let destination_terminal = Game.rooms[destination_rooms[r]].terminal;
             // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Amount of energy of terminal ' + destination_rooms[r] + ': ' + minimal_energy_terminal.store[RESOURCE_ENERGY]);
@@ -143,14 +143,14 @@ var room_helpers = {
 
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Minimal energy terminal: ' + minimal_energy_terminal.room.name);
 
-        let destination_terminal = minimal_energy_terminal
-        let destination_room_name = destination_terminal.room.name
-        let destination_room = Game.rooms[destination_room_name]
+        let destination_terminal = minimal_energy_terminal;
+        let destination_room_name = destination_terminal.room.name;
+        let destination_room = Game.rooms[destination_room_name];
         let condition_to_transfer = (destination_terminal.room && cur_terminal && cur_terminal.cooldown === 0 &&
             destination_terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
             cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer &&
             destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal &&
-            cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + send_amount))
+            cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + send_amount));
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Transfer energy: ' + condition_to_transfer);
         // if (room_name === 'E37N48') console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Condition transfer energy: ' +
         //             (destination_terminal.room && cur_terminal && cur_terminal.cooldown === 0 &&
@@ -239,28 +239,28 @@ var room_helpers = {
         let global_vars = Memory.rooms.global_vars;
         let room_mineral = my_room.memory.energy_flow.mineral.type;
 
-        terminal_minerals = Object.keys(cur_room_terminal.store)
-        terminal_minerals.push(my_room.memory.energy_flow.mineral.type)
+        terminal_minerals = Object.keys(cur_room_terminal.store);
+        terminal_minerals.push(my_room.memory.energy_flow.mineral.type);
 
         // if(room_name === 'E38N48') console.log('[DEBUG] (room_helpers.transfer_mineral): Room: ' + room_name + ';  Terminal minerals: ' + JSON.stringify(terminal_minerals));
-        we_have_minreal2transfer = false
-        min_amount = ['', 0, '']    // [dst_room_name,amount_of_mineral_in_dst_terminal, mineral]
+        we_have_minreal2transfer = false;
+        min_amount = ['', 0, ''];    // [dst_room_name,amount_of_mineral_in_dst_terminal, mineral]
         for (indx in terminal_minerals) {
-            room_mineral = terminal_minerals[indx]
+            room_mineral = terminal_minerals[indx];
             // if (room_mineral === 'XUH2O') console.log('[DEBUG] (room_helpers.transfer_mineral)[' + room_name + '] ' + room_mineral + ': ' + cur_room_terminal.store[room_mineral] +
             //             '; Limit: ' + (global_vars.minerals.received_room + global_vars.minerals.send_amount) +
             //             '; Don"t Transfer: ' + (cur_room_terminal.store[room_mineral] < (global_vars.minerals.received_room + global_vars.minerals.send_amount)))
             if (room_mineral === 'total' ||
                 cur_room_terminal.store[room_mineral] < (global_vars.minerals.received_room + global_vars.minerals.send_amount))// ||
                 // room_mineral === 'XUH2O')
-                continue
-            reagent_rooms = (global_vars.room_by_mineral.reagent[room_mineral]) ? global_vars.room_by_mineral.reagent[room_mineral] : []
+                continue;
+            reagent_rooms = (global_vars.room_by_mineral.reagent[room_mineral]) ? global_vars.room_by_mineral.reagent[room_mineral] : [];
             // if (room_name === 'E38N48') console.log('WO source: ' + my_rooms_wo_src_room)
-            potential_dst_rooms = (room_mineral.length == 5 || room_mineral === 'G') ? my_rooms_wo_src_room : reagent_rooms
+            potential_dst_rooms = (room_mineral.length == 5 || room_mineral === 'G') ? my_rooms_wo_src_room : reagent_rooms;
             // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers.transfer_mineral): Current room: ' + room_name + '; Mineral: ' + room_mineral + '; Poten Rooms' + JSON.stringify(potential_dst_rooms)) // + '; Index: ' + dst_room_index)
             for (let dst_room_index in potential_dst_rooms) {
                 let dst_room_name = potential_dst_rooms[dst_room_index];
-                let dst_room_terminal = Game.rooms[dst_room_name].terminal
+                let dst_room_terminal = Game.rooms[dst_room_name].terminal;
                 if (((room_name === 'E34N47' && room_mineral === 'G') || room_mineral.length == 5 || room_mineral == 'GH2O') &&
                     cur_room_terminal.store[room_mineral] > (dst_room_terminal.store[room_mineral] + global_vars.minerals.send_amount) &&
                     (!dst_room_terminal.store[room_mineral] ||
@@ -282,7 +282,7 @@ var room_helpers = {
         }
         // console.log('[DEBUG] (room_helpers.transfer_mineral) Minimum Mineral: ' + JSON.stringify(min_amount))
         if (min_amount[0] != '') {
-            we_have_minreal2transfer = true
+            we_have_minreal2transfer = true;
             let send_out = cur_room_terminal.send(min_amount[2], global_vars.minerals.send_amount, min_amount[0]);
             if (send_out === OK) console.log('[INFO] (room_helpers.transfer_mineral): Sent ' + global_vars.minerals.send_amount +
                 ' of ' + min_amount[2] + ' from ' + room_name + ' to ' + min_amount[0]);
@@ -376,7 +376,7 @@ var room_helpers = {
         if (!my_room) return; // The room contains no controller
         // console.log('[DEBUG] (room_helpers.transfer_link2link)[' + room_name  +']')
         let source_links = my_room.memory.energy_flow.links.near_sources;
-        source_links = source_links.concat(my_room.memory.energy_flow.links.sources)
+        source_links = source_links.concat(my_room.memory.energy_flow.links.sources);
         for (let l_src in source_links) {
             let current_link_sent = false;
             let source_link = Game.getObjectById(source_links[l_src]);
@@ -433,7 +433,7 @@ var room_helpers = {
         let lab_process_positions = {};
         let labs_id_by_mineral = {};
         let mineral_by_lab = {};
-        let lab_per_mineral = {}
+        let lab_per_mineral = {};
 
         for (let f in all_lab_flags) {
             let flag_pos_str = all_lab_flags[f].pos.x +'-' + all_lab_flags[f].pos.y;
@@ -456,21 +456,21 @@ var room_helpers = {
         for (let l in all_labs) {
             let lab_pos_str = all_labs[l].pos.x + '-' + all_labs[l].pos.y;
             if (Object.keys(lab_reagent_positions).indexOf(lab_pos_str) >= 0 ) {
-                labs_info.minerals.reagent.push(lab_reagent_positions[lab_pos_str])
+                labs_info.minerals.reagent.push(lab_reagent_positions[lab_pos_str]);
                 labs_info.reagent[all_labs[l].id] = {type: lab_reagent_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_reagent_positions[lab_pos_str]] = all_labs[l].id;
                 mineral_by_lab[all_labs[l].id] = lab_reagent_positions[lab_pos_str];
-                lab_per_mineral[lab_reagent_positions[lab_pos_str]] = all_labs[l].id
+                lab_per_mineral[lab_reagent_positions[lab_pos_str]] = all_labs[l].id;
                 add_room_mineral2memory(room_by_mineral, room_name, lab_reagent_positions[lab_pos_str], 'reagent');
             } else if (Object.keys(lab_produce_positions).indexOf(lab_pos_str) >= 0 ) {
-                labs_info.minerals.produce.push(lab_produce_positions[lab_pos_str])
+                labs_info.minerals.produce.push(lab_produce_positions[lab_pos_str]);
                 labs_info.produce[all_labs[l].id] = {type: lab_produce_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id;
                 mineral_by_lab[all_labs[l].id] = lab_produce_positions[lab_pos_str];
-                lab_per_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id
+                lab_per_mineral[lab_produce_positions[lab_pos_str]] = all_labs[l].id;
                 add_room_mineral2memory(room_by_mineral, room_name, lab_produce_positions[lab_pos_str], 'produce');
             } else if (Object.keys(lab_process_positions).indexOf(lab_pos_str) >= 0 ) {
-                labs_info.minerals.process.push(lab_process_positions[lab_pos_str])
+                labs_info.minerals.process.push(lab_process_positions[lab_pos_str]);
                 labs_info.process[all_labs[l].id] = {type: lab_process_positions[lab_pos_str]};
                 labs_id_by_mineral[lab_process_positions[lab_pos_str]] = all_labs[l].id;
                 mineral_by_lab[all_labs[l].id] = lab_process_positions[lab_pos_str];
@@ -527,7 +527,7 @@ var room_helpers = {
             mineral: cur_mineral,
             containers: {source :{}, other: {}}, 
             links: {near_sources: [], near_controller: false, destinations: {}, sources: []}
-        }
+        };
         // Sort containers
         // console.log('[DEBUG] (room_helpers.upgrade_energy_flow)[' + room_name +']')
         // if (room_name === 'E28N47' ) console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
@@ -607,7 +607,7 @@ var room_helpers = {
         let my_room = Game.rooms[room_name];
         let hostile_creeps = (my_room) ? my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (creep_helpers.is_millitary(object))}) : [];
                 // , {filter: object => (object.owner.username !== 'Sergeev' || (object.owner.username === 'Sergeev' && is_millitary(object)))})
-        let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)})
+        let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)});
         let avoid_hostiles = ['Invader', ]; //'rogersnape63', 'Kraetzin'];
 
         // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
@@ -668,18 +668,18 @@ var room_helpers = {
 
         repair_only = {
             'E38N49': ['5ae294df600f8573214e7d09', '5ae2f6c68416ac191f939153'], // containers
-        }
+        };
         // *** LOG
         // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Repair_only: ' +  repair_only[room_name]);
 
         if (repair_only[room_name]) {
             for(let id in repair_only[room_name]) {
-                cur_target = Game.getObjectById(repair_only[room_name][id])
+                cur_target = Game.getObjectById(repair_only[room_name][id]);
                 // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Current: ' +  repair_only[room_name][id]);
                 if (cur_target && cur_target.hits < min_hits && cur_target.hits < cur_target.hitsMax) targets.push(cur_target)
             }
         } else {
-            E39N49_avoid = []
+            E39N49_avoid = [];
             E38N47_avoid = ['5bf10cb261ef99031f97d884', '5bf10cc8166f13033947d85e', '5bf10cec9be909030411c9f3', '5bf10d03b1f81602f362b550'];
             E28N48_avoid = ['5b628bc03df03010c281a64c', '5b628c0d359a5b585b99ca37', '5b628c231e49e63f6cec41e4', '5b628c293081766dddad14a6', '5b628c301407e03f53c353ca',
                             '5b2beba06a39f839fe4b7b43', '5b2beba310a9471b92ac8652', '5b2beba971b3e77e476e344a', '5b2bebaff727462af9e92a2a',
@@ -698,7 +698,7 @@ var room_helpers = {
         targets.sort((a,b) => a.hits - b.hits);
 //        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets))
         potential_target = targets[0] ? targets[0].id : false;
-        my_room.memory.targets.creep_repair_defence = potential_target
+        my_room.memory.targets.creep_repair_defence = potential_target;
         if (Memory.rooms.global_vars.disable_repearing_by_towers === false) {
             my_room.memory.targets.repair_defence = potential_target
         } else my_room.memory.targets.repair_defence = false;
@@ -751,7 +751,7 @@ var room_helpers = {
 
         if (extensions2add == 0) return;    // it's no extension to create
 
-        console.log('[INFO] (create_extensions): Start to create a new ' + extensions2add + ' extensions')
+        console.log('[INFO] (create_extensions): Start to create a new ' + extensions2add + ' extensions');
         let sx = 0;
         let sy = 0;
         let extensions_rows = 1;
@@ -847,21 +847,21 @@ var room_helpers = {
         // If the amount of greates lab is less than greatest_mineral_amount, then EMPTY string will be returned
         // [ID, mineral]
         let my_room = Game.rooms[room_name];
-        greatest_mineral_amount = ['', '']
-        greatest_amount = 250
-        lab_stages = ['produce'] //, 'process']
+        greatest_mineral_amount = ['', ''];
+        greatest_amount = 250;
+        lab_stages = ['produce']; //, 'process']
         for (current_stage in lab_stages) {
-            l_ids = Object.keys(my_room.memory.labs[lab_stages[current_stage]])
+            l_ids = Object.keys(my_room.memory.labs[lab_stages[current_stage]]);
             for (l in l_ids){
-                current_lab = Game.getObjectById(l_ids[l])
-                lab_amount = current_lab.store[current_lab.mineralType]
+                current_lab = Game.getObjectById(l_ids[l]);
+                lab_amount = current_lab.store[current_lab.mineralType];
                 // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Lab Type: ' + current_lab.mineralType + '; Amount: ' + lab_amount + '; Greates amount: ' + greatest_amount)
                 if (lab_amount > greatest_amount &&
                     ((my_room.terminal.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.storage_final_produce) ||
                         !my_room.terminal.store[current_lab.mineralType])
                      // my_room.storage.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.storage_final_produce)
                     ) {
-                        greatest_mineral_amount = [l_ids[l], current_lab.mineralType]
+                        greatest_mineral_amount = [l_ids[l], current_lab.mineralType];
                         greatest_amount = lab_amount
                         // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Possible transfer: ' + current_lab.mineralType + ' from ' + l_ids[l])
                 }
@@ -874,24 +874,24 @@ var room_helpers = {
         // If source doesn't have enough resources it missing from the array
         // {<id>: <mineral>, ...}
         let my_room = Game.rooms[room_name];
-        array2withdraw = {}
-        sources = ['terminal'] // , 'storage']
+        array2withdraw = {};
+        sources = ['terminal']; // , 'storage']
         for (src in sources) {
-            minerals = my_room.memory.labs.minerals.reagent
-            minerals = shuffle(minerals)    // Randomize an order of the minerals
+            minerals = my_room.memory.labs.minerals.reagent;
+            minerals = shuffle(minerals);    // Randomize an order of the minerals
 
             for (mineral in minerals) {
                 if (my_room[sources[src]].store[minerals[mineral]] >= 200) {
-                    lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[minerals[mineral]])
+                    lab_of_mineral = Game.getObjectById(my_room.memory.lab_per_mineral[minerals[mineral]]);
                     // free_space = lab_of_mineral.store.getCapacity(lab_of_mineral.mineralType) - lab_of_mineral.store[lab_of_mineral.mineralType]
-                    free_space = lab_of_mineral.store.getFreeCapacity([minerals[mineral]])
+                    free_space = lab_of_mineral.store.getFreeCapacity([minerals[mineral]]);
                     // if (room_name === 'E33N47') console.log('[DEBUG] (room_helpers-create_sources2withdraw)[' + room_name + '] MINERAL: ' +
                     //                                                     minerals[mineral] +'; LAB ID: ' + lab_of_mineral.id +
                     //                                                     '; Lab Free space: ' + free_space)
 
                     if (free_space >= 200) {
                     // if (free_space > 0) {
-                        array2withdraw[my_room[sources[src]].id] = [minerals[mineral], free_space]
+                        array2withdraw[my_room[sources[src]].id] = [minerals[mineral], free_space];
                         break
                     }
                 }
@@ -903,20 +903,20 @@ var room_helpers = {
         // Start possible reactions
         // console.log('[' + room_name + '] Trying run reactions on Labs ')
         let my_room = Game.rooms[room_name];
-        let log_room = 'E27N48'
-        if (!my_room.memory.labs) return
-        reactions_labs = ['process', 'produce']
+        let log_room = 'E27N48';
+        if (!my_room.memory.labs) return;
+        reactions_labs = ['process', 'produce'];
         // console.log('[DEBUG] (room_helpers-run_lab_reactions): LAB room ' + room_name)
         for (lab_stage in reactions_labs) {
-            lab_ids_of_stage = my_room.memory.labs[reactions_labs[lab_stage]]
+            lab_ids_of_stage = my_room.memory.labs[reactions_labs[lab_stage]];
             for (lab_id in lab_ids_of_stage){
-                current_lab = Game.getObjectById(lab_id)
-                current_lab_mineralType = (current_lab.mineralType) ? current_lab.mineralType : lab_ids_of_stage[lab_id].type
-                if (room_name === log_room) console.log('[DEBUG] (room_helpers-run_lab_reactions)[' + room_name + ']: LAB [' + reactions_labs[lab_stage] + '] ID: ' + lab_id + '; Store [' + current_lab_mineralType +']: ' + current_lab.store[current_lab_mineralType] + ' / ' + current_lab.store.getCapacity(current_lab_mineralType))
+                current_lab = Game.getObjectById(lab_id);
+                current_lab_mineralType = (current_lab.mineralType) ? current_lab.mineralType : lab_ids_of_stage[lab_id].type;
+                if (room_name === log_room) console.log('[DEBUG] (room_helpers-run_lab_reactions)[' + room_name + ']: LAB [' + reactions_labs[lab_stage] + '] ID: ' + lab_id + '; Store [' + current_lab_mineralType +']: ' + current_lab.store[current_lab_mineralType] + ' / ' + current_lab.store.getCapacity(current_lab_mineralType));
                 if (current_lab.cooldown === 0 && current_lab.store[current_lab_mineralType] <= (current_lab.store.getCapacity(current_lab_mineralType) - 5)) {
-                    src_lab1 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[0])
-                    src_lab2 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[1])
-                    reaction_out = current_lab.runReaction(src_lab1, src_lab2)
+                    src_lab1 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[0]);
+                    src_lab2 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[1]);
+                    reaction_out = current_lab.runReaction(src_lab1, src_lab2);
                     if (room_name === log_room) console.log('[DEBUG] (room_helpers-run_lab_reactions)[' + room_name + '] React out: ' + reaction_out + '; TO LAB[' + lab_id + ']: ' + current_lab.mineralType + '; SRS1[' + src_lab1.id + ']: ' + src_lab1.mineralType + '; SRS2[' + src_lab2.id + ']: ' + src_lab2.mineralType)
                 }
                 // else console.log('[' + room_name + '] Lab: ' + lab_id +'; Couldown: ' + current_lab.cooldown)
@@ -926,8 +926,8 @@ var room_helpers = {
     get_minerals_status: function() {
         // Put to memory status of all terminals
         // rooms.global_vars.terminal_status
-        terminals_status = {}
-        store_types = ['terminal', 'storage']
+        terminals_status = {};
+        store_types = ['terminal', 'storage'];
         storage_status_by_mineral = {
             energy: {
                 total: 0,
@@ -941,7 +941,7 @@ var room_helpers = {
                 terminal: {},
                 storage: {}
             }
-        }
+        };
         for (m in Memory.rooms.global_vars.room_by_mineral.final_produce) {
             storage_status_by_mineral[Memory.rooms.global_vars.room_by_mineral.final_produce[m]] = {
                 total: 0,
@@ -950,28 +950,28 @@ var room_helpers = {
             }
         }
         for (r in Game.rooms) {
-            current_room = Game.rooms[r]
-            if (!(current_room.controller.my && current_room.terminal)) continue   // The room isn't mine
-            terminals_status[r] = {}
+            current_room = Game.rooms[r];
+            if (!(current_room.controller.my && current_room.terminal)) continue;   // The room isn't mine
+            terminals_status[r] = {};
             for (store_part in current_room.terminal.store) {
                 if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part) || store_part === 'energy') {
-                    storage_status_by_mineral[store_part].terminal[r] = current_room.terminal.store[store_part]
-                    storage_status_by_mineral[store_part].terminal.total += current_room.terminal.store[store_part]
+                    storage_status_by_mineral[store_part].terminal[r] = current_room.terminal.store[store_part];
+                    storage_status_by_mineral[store_part].terminal.total += current_room.terminal.store[store_part];
                     storage_status_by_mineral[store_part].total += current_room.terminal.store[store_part]
                 }
                 terminals_status[r][store_part] = current_room.terminal.store[store_part]
             }
-            terminals_status[r]['total'] = current_room.memory.energy_flow.store_used.terminal
+            terminals_status[r]['total'] = current_room.memory.energy_flow.store_used.terminal;
 
             for (store_part in current_room.storage.store) {
                 if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part) || store_part === 'energy') {
-                    storage_status_by_mineral[store_part].storage[r] = current_room.storage.store[store_part]
-                    storage_status_by_mineral[store_part].storage.total += current_room.storage.store[store_part]
+                    storage_status_by_mineral[store_part].storage[r] = current_room.storage.store[store_part];
+                    storage_status_by_mineral[store_part].storage.total += current_room.storage.store[store_part];
                     storage_status_by_mineral[store_part].total += current_room.storage.store[store_part]
                 }
             }
             storage_status_by_mineral['defence']['rooms'][r] = current_room.find(FIND_STRUCTURES, {filter: object =>
-                                                                (object.structureType === STRUCTURE_RAMPART)})[0]['hits']
+                                                                (object.structureType === STRUCTURE_RAMPART)})[0]['hits'];
 
             for (store_type in store_types) {
                 // console.log('[DEBUG] (room_helpers-get_minerals_status): ' + store_type + ' : ' + JSON.stringify(current_room[store_type]))
@@ -979,11 +979,11 @@ var room_helpers = {
             }
         }
 
-        Memory.rooms.global_vars.storage_status_by_mineral = storage_status_by_mineral
+        Memory.rooms.global_vars.storage_status_by_mineral = storage_status_by_mineral;
         Memory.rooms.global_vars.terminal_status = terminals_status
     },
     verify_gn_age_difference_and_kill: function(room_name) {
-        let general_creeps = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => object.name.includes('-gn')})
+        let general_creeps = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => object.name.includes('-gn')});
         for (let i = 0; i < general_creeps.length-1; i++) {
             let first_age = general_creeps[i].ticksToLive;
             let second_age = general_creeps[i+1].ticksToLive;
@@ -996,9 +996,9 @@ var room_helpers = {
         }
     },
     update_room_min_ticksToLive: function(room_name) {
-        let all_my_creeps=Game.creeps
-        let max_ticks = 2000
-        let room_min_ticksToLive = max_ticks
+        let all_my_creeps=Game.creeps;
+        let max_ticks = 2000;
+        let room_min_ticksToLive = max_ticks;
         for (let key in all_my_creeps) { 
             // console.log('[DEBUG] (room_helpers-update_room_min_ticksToLive)[' + room_name + ' room_min_ticksToLive: ' + room_min_ticksToLive + ' creep: ' + all_my_creeps[key].ticksToLive)
             if (key.startsWith(room_name) && all_my_creeps[key].ticksToLive < room_min_ticksToLive) 
@@ -1007,45 +1007,45 @@ var room_helpers = {
         Game.rooms[room_name].memory.global_vars.room_min_ticksToLive = (room_min_ticksToLive === max_ticks) ? 0 : room_min_ticksToLive;
     },
     verify_lab_assistent_is_needed: function(room_name) {
-        let my_room = Game.rooms[room_name]
-        let mem_global_vars = Memory.rooms.global_vars
-        let log_room = 'E28N48'
+        let my_room = Game.rooms[room_name];
+        let mem_global_vars = Memory.rooms.global_vars;
+        let log_room = 'E28N48';
         
         if (!my_room.terminal) return;
         
         // LABS
-        let labs_amount_missing_minerals = 0
-        let reagent_labs = my_room.memory.labs.reagent
-        let reagent_labs_full = true
+        let labs_amount_missing_minerals = 0;
+        let reagent_labs = my_room.memory.labs.reagent;
+        let reagent_labs_full = true;
         for (let lab_id in reagent_labs) {
-            let mineral_type = reagent_labs[lab_id].type
-            let current_lab = Game.getObjectById(lab_id)
+            let mineral_type = reagent_labs[lab_id].type;
+            let current_lab = Game.getObjectById(lab_id);
             if (current_lab.store.getFreeCapacity(mineral_type) > 2000 &&
-                my_room.terminal.store.getUsedCapacity(mineral_type) > 0) labs_amount_missing_minerals++
+                my_room.terminal.store.getUsedCapacity(mineral_type) > 0) labs_amount_missing_minerals++;
             if (current_lab.store.getFreeCapacity(mineral_type) > 200) reagent_labs_full = false
         }
-        my_room.memory.labs.reagent_labs_full = reagent_labs_full
+        my_room.memory.labs.reagent_labs_full = reagent_labs_full;
         
         if (room_name === log_room) // || 
             // room_name === 'E34N47') 
-            labs_amount_missing_minerals = 9
+            labs_amount_missing_minerals = 9;
         // console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name +'] LABS' + JSON.stringify(all_labs, null,2))
 
         
         // TERMINAL
-        let terminal_stored_minerals = my_room.terminal.store
-        let terminal_amount_missing_minerals = 0
+        let terminal_stored_minerals = my_room.terminal.store;
+        let terminal_amount_missing_minerals = 0;
         // Check status of PRODUCE labs
-        let produce_labs = my_room.memory.labs.produce
-        let produce_labs_status = {}
+        let produce_labs = my_room.memory.labs.produce;
+        let produce_labs_status = {};
         for (let lab_id in produce_labs) {
-            let mineral_type = produce_labs[lab_id].type
-            produce_labs_status[mineral_type] = (produce_labs_status[mineral_type]) ? produce_labs_status[mineral_type] : 0
+            let mineral_type = produce_labs[lab_id].type;
+            produce_labs_status[mineral_type] = (produce_labs_status[mineral_type]) ? produce_labs_status[mineral_type] : 0;
             produce_labs_status[mineral_type] += Game.getObjectById(lab_id).store.getUsedCapacity(mineral_type)
         }
         // if (room_name === log_room) console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name +'] produce LABs: ' + JSON.stringify(produce_labs_status, null, 2))
         for (let mineral_type in produce_labs_status) {
-            let missing_type_in_terminal = mem_global_vars.minerals.storage_final_produce - my_room.terminal.store.getUsedCapacity(mineral_type)
+            let missing_type_in_terminal = mem_global_vars.minerals.storage_final_produce - my_room.terminal.store.getUsedCapacity(mineral_type);
             // if (room_name === log_room) console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name +'] Mineral: ' + mineral_type +
             //                                             '; missing_type_in_terminal: ' + missing_type_in_terminal +
             //                                             '; final_produce: ' + mem_global_vars.minerals.storage_final_produce +
@@ -1056,38 +1056,38 @@ var room_helpers = {
         
         // verify room mineral is enought in the terminal
         if (my_room.terminal.store.getUsedCapacity(my_room.memory.energy_flow.mineral.type) < mem_global_vars.minerals.send_room)
-            terminal_amount_missing_minerals++
+            terminal_amount_missing_minerals++;
         
         //  STORAGE
-        let storage_stored_minerals = my_room.storage.store
-        let storage_amount_missing_minerals = 0
+        let storage_stored_minerals = my_room.storage.store;
+        let storage_amount_missing_minerals = 0;
         for (let i in storage_stored_minerals) { 
-            if ( i.length < 5) continue
+            if ( i.length < 5) continue;
             if (storage_stored_minerals[i] < (mem_global_vars.minerals.storage_final_produce-400)) storage_amount_missing_minerals++       
         }
         
         // NUKER
         nuker_missing_ghodium = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_NUKER)
-                                                                                    && (object.store.getFreeCapacity('G') > 0))})[0]
+                                                                                    && (object.store.getFreeCapacity('G') > 0))})[0];
         
-        let is_needed = (labs_amount_missing_minerals > 0 || terminal_amount_missing_minerals > 0 || 
-                     storage_amount_missing_minerals > 2 || nuker_missing_ghodium) ? true: false
+        let is_needed = !!(labs_amount_missing_minerals > 0 || terminal_amount_missing_minerals > 0 ||
+                            storage_amount_missing_minerals > 2 || nuker_missing_ghodium);
         if (room_name === log_room) console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name + 
                                                     '] Assistenst is NEEDED: ' + is_needed + 
                                                     '; Missing Minerals. Labs: ' + labs_amount_missing_minerals + 
                                                     '; Reagent labs are full: ' + reagent_labs_full + 
                                                     '; Terminal: ' + terminal_amount_missing_minerals + 
                                                     '; STORAGE: ' + storage_amount_missing_minerals +
-                                                    '; NUKE: ' + nuker_missing_ghodium)
+                                                    '; NUKE: ' + nuker_missing_ghodium);
         my_room.memory.global_vars.screeps_max_amount.lab_assistent_needed = is_needed
         
     },
     verify_energy_miner_is_needed: function(room_name) {
-        let miner_is_needed = true
-        my_room = Game.rooms[room_name]
+        let miner_is_needed = true;
+        my_room = Game.rooms[room_name];
         for (let cc in my_room.memory.energy_flow.containers.source) {
             if (Game.getObjectById(cc).store.getFreeCapacity('energy') === 0 &&
-                my_room.memory.energy_flow.containers.source[cc].creeps_moving2me.length == 0)
+                my_room.memory.energy_flow.containers.source[cc].creeps_moving2me.length === 0)
                 miner_is_needed = false
         }
         my_room.memory.energy_flow.containers.miner_is_needed = miner_is_needed
