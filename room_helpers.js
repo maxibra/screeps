@@ -166,7 +166,7 @@ var room_helpers = {
             if (send_out === OK) {
                 console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + destination_terminal.store[RESOURCE_ENERGY] + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
             }
-            // let storage_emergency_ration = Memory.rooms.global_vars.storage_emergency_ration;
+            // let storage_emergency_ration = Memory.rooms.global_vars.storage_max_energy;
             // let energy2transfer = cur_terminal.store[RESOURCE_ENERGY] - storage_emergency_ration;
             // if (energy2transfer > 2000) energy2transfer = 2000;
             // if (energy2transfer > 1000 && cur_terminal.store[RESOURCE_ENERGY] > 100000) {
@@ -188,7 +188,7 @@ var room_helpers = {
                 if (target.pos.x < 2 || target.pos.x > 30 || target.pos.y > 36 || target.pos.y < 4) is_inside = false;
                 break;  
             case 'E27N48':
-                if (target.pos.x < 10 || target.pos.y < 22) is_inside = false;
+                if (target.pos.x < 10 || target.pos.y < 21) is_inside = false;
                 break;  
             case 'E28N48':
                 if (target.pos.y < 8 || target.pos.y > 38 || target.pos.x < 21) is_inside = false;
@@ -207,6 +207,9 @@ var room_helpers = {
                 break;
             case 'E36N48':
                 if (target.pos.x < 23 || target.pos.y < 11 || target.pos.y > 34) is_inside = false;
+                break;
+            case 'E36N49':
+                if (target.pos.x < 2 || target.pos.x > 18 || target.pos.y < 14 || target.pos.y > 42) is_inside = false;
                 break;
             case 'E37N48':
                 if (target.pos.x < 12 || target.pos.y < 10) is_inside = false;

@@ -342,7 +342,7 @@ var structCreep = {
                 } else if ((my_room.controller.level === 8 || units[room_name]['upgrader'] > 0) &&
                            my_room.memory.energy_flow.storage &&
                         //   my_room.memory.global_vars.all_full &&
-                           my_room.storage.store.getUsedCapacity('energy') < Memory.rooms.global_vars.storage_emergency_ration &&
+                           my_room.storage.store.getUsedCapacity('energy') < Memory.rooms.global_vars.storage_max_energy &&
                            my_room.memory.energy_flow.store_used.storage < my_room.memory.energy_flow.max_store.storage) {
                     creep.say('to_storage');
                     creep_role = 'transfer';

@@ -15,7 +15,8 @@ function initiate_rooms_global_vars() {
             terminal_max_energy_storage: 150000,
             terminal_min2transfer: 70000,
             terminal_emergency_ration: 80000,
-            storage_emergency_ration: 200000,
+            storage_max_energy: 400000,
+            storage_emergency_ration: 80000,
             update_period: {
                 towers: 1000,
                 after_war: 20
