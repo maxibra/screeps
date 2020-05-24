@@ -1025,10 +1025,11 @@ var room_helpers = {
             if (current_lab.store.getFreeCapacity(mineral_type) > 200) reagent_labs_full = false
         }
         my_room.memory.labs.reagent_labs_full = reagent_labs_full;
-        
-        if (room_name === log_room) // || 
-            // room_name === 'E34N47') 
-            labs_amount_missing_minerals = 9;
+
+        // Force creating lab_assistant
+        // if (room_name === log_room) // ||
+            // room_name === 'E34N47')
+            // labs_amount_missing_minerals = 9;
         // console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name +'] LABS' + JSON.stringify(all_labs, null,2))
 
         
