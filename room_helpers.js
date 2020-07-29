@@ -1148,6 +1148,7 @@ var room_helpers = {
         }
     }, 
     find_hostile: function(room_name) {
+        console.log('[ERROR](room.find_hostile)[' +  room_name + ']');
         let h = my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (object.body.length > 2 && object.pos.x > 0 && object.pos.x < 50 && object.pos.y > 0 && object.pos.y < 50)});
         let hostile_types = {
             'heal': [],
