@@ -131,7 +131,7 @@ function find_hostile(room_name) {
         for (let h_creep of h) {
             hostile_amount += 1;
             let body_map = h_creep.body.map(x => x.type);
-            for (let body_part of h_creep.body) {
+            for (let body_part of body_map) {
                 if (body_part === 'attack' || body_part === 'ranged_attack') {
                     hostile_types['attack'].push(h_creep.id);
                     millitary_hostile.push(h_creep);
