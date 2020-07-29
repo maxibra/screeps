@@ -370,7 +370,7 @@ module.exports.loop = function () {
         if (Game.time % 5 === 0) {
             // console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
             // room_helpers.check_create_miner(current_room_name, global_vars.spawn_name, units);
-            room_helpers.find_hostile(current_room_name);
+            if (current_room_name.memory.target) room_helpers.find_hostile(current_room_name);
             room_helpers.verify_all_full(current_room_name);
             room_helpers.transfer_link2link(current_room_name);
         }
