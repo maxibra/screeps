@@ -100,11 +100,8 @@ var StructTower = {
             // current_creep_types.repair_civilian = 0;
             // current_creep_types.repair_defence = 0;
             // current_creep_types.transfer = 0.5;
-        } else {
-            my_heal = my_room.find(FIND_MY_CREEPS, {filter: object => (object.hits < object.hitsMax)})
-            if (my_heal.length > 0) {
-                current_tower.heal(my_heal[0]);
-            }
+        } else if (my_room.memory.targets.my2heal.length > 0) {
+            current_tower.heal(Game.getObjectById(my_room.memory.targets.my2heal[0]));
         }
 
         return (current_tower.store.getCapacity(RESOURCE_ENERGY) - current_tower.store[RESOURCE_ENERGY]);

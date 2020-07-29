@@ -1238,6 +1238,7 @@ var structCreep = {
                 break;
             case 'attacker':
                 let attacked_room = creep.memory.room_in_war;
+                let hostile_creeps_ids = [];
                 
                 // let t = Game.getObjectById('5b4b2d0d364bfc2d1ef2bd6d');
                 // if ( creep.heal(t) !== OK) creep.moveTo(t, global_vars.moveTo_ops); 
@@ -1247,73 +1248,36 @@ var structCreep = {
 
 
                 if (room_name !== attacked_room || creep.pos.x < 1 || creep.pos.x > 49 || creep.pos.y < 1 || creep.pos.y > 49) creep.moveTo(new RoomPosition(25,25, attacked_room), global_vars.moveTo_ops);  
-                else {
-                    let h = my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (object.body.length > 2 && object.pos.x > 0 && object.pos.x < 50 && object.pos.y > 0 && object.pos.y < 50)});
-                    let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)});
-                    let target2attack = false;
-                    let hostile_types = {
-                        'heal': [],
-                        'attack': [],
-                        'claim': []
-                    }
-                    // if (h.length > 0) {
-                    //     for (let h_creep of h) {
-                    //         let body_map = h_creep.body.map(x => x.type);
-                    //         for (let body_part of h_creep.body) {
-                    //             if (body_part === 'attack' || (body_part === 'ranged_attack') {
-                    //                 hostile_types['attack'].push(h_creep);
-                    //                 break;  // Very important to prevent duplication of creeps in the list
-                    //             } else if (body_part === 'heal') {
-                    //                 hostile_types['heal'] = h_creep;
-                    //                 break;  // Very important to prevent duplication of creeps in the list
-                    //             } else if ((body_part === 'claim') && h_creep.pos.getRangeTo(my_room.controller) < 5) {
-                    //                 hostile_types['claim'] = h_creep;
-                    //                 break;  // Very important to prevent duplication of creeps in the list
-                    //             }
-                    //         }
-                    //     }
-                    // }
-                    // console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ');
-                    // console.log('[DEBUG] (structCreep-attacker)('+ room_name + ') Room STATUS: ' + Memory.rooms[room_name].global_vars.status + '; Hostile: ' + h.length + '; Core: ' + invader_core.length);
+                else if (my_room.memory.targets.hostile_amount > 0 ) {
+                    if (my_room.memory.targets.hostile.heal.length > 0) hostile_creeps_ids = my_room.memory.targets.hostile.heal;
+                    else if (my_room.memory.targets.hostile.attack.length > 0) hostile_creeps_ids = my_room.memory.targets.hostile.attack;
+                    else if (my_room.memory.targets.hostile.invader_core.length > 0) hostile_creeps_ids = my_room.memory.targets.hostile.invader_core;
+                    else if (my_room.memory.targets.hostile.claim.length > 0) hostile_creeps_ids = my_room.memory.targets.hostile.claim;
+                    else hostile_creeps_ids = my_room.memory.targets.hostile.work;
                     
-                    if (invader_core.length > 0) {
-                        target2attack = invader_core[0]
+                    let hostile_creeps = []
+                    for (let i of hostile_creeps_ids) {
+                        hostile_creeps.push(Game.getObjectById(i))
                     }
-                    else if (h.length > 1) { // Created for 2 hostile creeps. one of them is healer
-                        let current_target = false;
-                        for (let h_creep_index in h) {
-                            let h_creep = h[h_creep_index];
-                            let body_map = h_creep.body.map(x => x.type);
-                            if (body_map.indexOf('heal') > -1) {
-                                current_target = h_creep;
-                                break
-                            } else if (body_map.indexOf('claim') > -1 && my_room.controller.pos.findInRange(FIND_HOSTILE_CREEPS, 4).length > 0) {
-                                current_target = h_creep;
-                                break
-                            }
-                        }
-                        if (current_target) target2attack = current_target;
-                        else target2attack = creep.pos.findClosestByRange(h)
-                    } else if (h.length === 1) target2attack = h[0];
-                    else if (creep.hits < creep.hitsMax) {
-                        creep.heal(creep);
-                    } else if (Memory.rooms[room_name].global_vars.status ==='war') {
-                        Memory.rooms[room_name].global_vars.status = 'peace';
-                        // Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] We won on claimed area');
-                    } else {
-                        let my_creep2heal = creep.pos.findClosestByRange(FIND_MY_CREEPS, {filter: object => (object.hits < object.hitsMax)});
-                        // console.log('[DEBUG] (structCreep-attacker): Creep to heal: ' + (my_creep2heal?my_creep2heal.id:0)); 
-                        if (my_creep2heal) {
-                            if (creep.heal(my_creep2heal) !== OK) creep.moveTo(my_creep2heal);
-                        } else {
-                            // // Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] All creeps are healthy on the room. Bye, Bye');
-                            // creep.suicide();
-                            // return
-                        }
-                    }
+
+                    target2attack = creep.pos.findClosestByRange(hostile_creeps);
                     if (creep.rangedAttack(target2attack) !== OK || creep.attack(target2attack) !== OK) creep.moveTo(target2attack);
                     // console.log('[DEBUG] (structCreep-attacker)[' + creep.name + '] After: ' + target2attack.hits)
+                } else if (Memory.rooms[room_name].global_vars.status ==='war') {
+                        Memory.rooms[room_name].global_vars.status = 'peace';
+                        // Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] We won on claimed area');
+                } 
+
+                if (creep.hits < creep.hitsMax) creep.heal(creep);
+                else if (my_room.memory.targets.my2heal.length > 0) {
+                    my_creep2heal = creep.pos.findClosestByRange(my_room.memory.targets.my2heal);
+                    if (creep.heal(my_creep2heal) !== OK) creep.moveTo(my_creep2heal);
+                } else {
+                    // // Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] All creeps are healthy on the room. Bye, Bye');
+                    // creep.suicide();
+                    // return
                 }
+
                 if (creep.room.name === 'E38N49') creep.memory.role = false;
                 break;                
             case 'go_close':

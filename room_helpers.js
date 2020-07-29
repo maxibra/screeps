@@ -112,6 +112,49 @@ function shuffle(arra1) {
     return arra1;
 }
 
+function find_hostile(room_name) {
+    let my_room = Game.rooms[room_name]
+    let h = my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (object.body.length > 2 && object.pos.x > 0 && object.pos.x < 50 && object.pos.y > 0 && object.pos.y < 50)});
+                                                // , {filter: object => (object.owner.username !== 'Sergeev' || (object.owner.username === 'Sergeev' && is_millitary(object)))})
+    let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)})
+    let millitary_hostile = [];
+    
+    let hostile_types = {
+        'heal': [],
+        'attack': [],
+        'claim': [],
+        'work': []
+    }
+    hostile_types['invader_core'] = (invader_core.length > 0) ? [invader_core[0].id] : [];
+    let hostile_amount = hostile_types.invader_core.length;
+    if (h.length > 0) {
+        for (let h_creep of h) {
+            let_hostile_amount += 1;
+            let body_map = h_creep.body.map(x => x.type);
+            for (let body_part of h_creep.body) {
+                if (body_part === 'attack' || body_part === 'ranged_attack') {
+                    hostile_types['attack'].push(h_creep.id);
+                    millitary_hostile.push(h_creep);
+                    break;  // Very important to prevent duplication of creeps in the list
+                } else if (body_part === 'heal') {
+                    hostile_types['heal'].push(h_creep.id);
+                    millitary_hostile.push(h_creep);
+                    break;  // Very important to prevent duplication of creeps in the list
+                } else if ((body_part === 'claim') && h_creep.pos.getRangeTo(my_room.controller) < 5) {
+                    hostile_types['claim'].push(h_creep.id);
+                    break;  // Very important to prevent duplication of creeps in the list
+                } else if (body_part === 'work') {
+                    hostile_types['work'].push(h_creep.id);
+                    break;  // Very important to prevent duplication of creeps in the list
+                }
+            }
+        }
+    }
+    my_room.memory.targets['hostile'] = hostile_types;
+    my_room.memory.targets['hostile_amount'] = hostile_amount;
+    return [invader_core, millitary_hostile];
+}
+
 
 var room_helpers = {
     define_extension_first: function(room_name) {
@@ -612,9 +655,12 @@ var room_helpers = {
         let room_vars = Memory.rooms[room_name].global_vars;
         let global_vars = Memory.rooms.global_vars;
         let my_room = Game.rooms[room_name];
-        let hostile_creeps = (my_room) ? my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (creep_helpers.is_millitary(object))}) : [];
-                // , {filter: object => (object.owner.username !== 'Sergeev' || (object.owner.username === 'Sergeev' && is_millitary(object)))})
-        let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)});
+        if (!my_room) return; 
+
+        let enemy_creeps = find_hostile(room_name);
+        let invader_core = enemy_creeps[0];
+        let hostile_creeps = enemy_creeps[1];
+                
         let avoid_hostiles = ['Invader', ]; //'rogersnape63', 'Kraetzin'];
 
         // if (room_name === 'E27N48') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
@@ -1146,38 +1192,10 @@ var room_helpers = {
         } else {
             console.log('[ERROR](room.transfer_energy)[' +  source_room_name + '] ERROR Code: ' + send_out + ' destination (' + destination_room_name + ') Element:' + element_to_transfer + '; Amount: ' + transfer_amount);
         }
-    }, 
-    find_hostile: function(room_name) {
-        let my_room = Game.rooms[room_name]
-        let h = my_room.find(FIND_HOSTILE_CREEPS, {filter: object => (object.body.length > 2 && object.pos.x > 0 && object.pos.x < 50 && object.pos.y > 0 && object.pos.y < 50)});
-        let hostile_types = {
-            'heal': [],
-            'attack': [],
-            'claim': [],
-            'work': [],
-            'invader_core': my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)})
-        }
-        if (h.length > 0) {
-            for (let h_creep of h) {
-                let body_map = h_creep.body.map(x => x.type);
-                for (let body_part of h_creep.body) {
-                    if (body_part === 'attack' || body_part === 'ranged_attack') {
-                        hostile_types['attack'].push(h_creep);
-                        break;  // Very important to prevent duplication of creeps in the list
-                    } else if (body_part === 'heal') {
-                        hostile_types['heal'].push(h_creep);
-                        break;  // Very important to prevent duplication of creeps in the list
-                    } else if ((body_part === 'claim') && h_creep.pos.getRangeTo(my_room.controller) < 5) {
-                        hostile_types['claim'].push(h_creep);
-                        break;  // Very important to prevent duplication of creeps in the list
-                    } else if (body_part === 'work') {
-                        hostile_types['work'].push(h_creep);
-                        break;  // Very important to prevent duplication of creeps in the list
-                    }
-                }
-            }
-        }
-        my_room.memory.target['hostile'] = hostile_types
+    },
+    find_mycreeps_to_heal(room_name) {
+        let my2heal = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => (object.hits < object.hitsMax)})
+        my_room.memory.targets['my2heal'] = (my2heal.length > 0) ? _.map(my2heal,'id') : []; 
     }
 };
 
