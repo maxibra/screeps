@@ -140,7 +140,7 @@ function find_hostile(room_name) {
                     hostile_types['heal'].push(h_creep.id);
                     millitary_hostile.push(h_creep);
                     break;  // Very important to prevent duplication of creeps in the list
-                } else if ((body_part === 'claim') && h_creep.pos.getRangeTo(my_room.controller) < 5) {
+                } else if ((body_part === 'claim') && h_creep.pos.getRangeTo(my_room.controller) < 9) {
                     hostile_types['claim'].push(h_creep.id);
                     break;  // Very important to prevent duplication of creeps in the list
                 } else if (body_part === 'work' || body_part === 'carry') {
