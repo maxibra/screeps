@@ -123,7 +123,7 @@ function find_hostile(room_name) {
         'heal': [],
         'attack': [],
         'claim': [],
-        'work': []
+        'other': []
     }
     hostile_types['invader_core'] = (invader_core.length > 0) ? [invader_core[0].id] : [];
     let hostile_amount = hostile_types.invader_core.length;
@@ -143,8 +143,8 @@ function find_hostile(room_name) {
                 } else if ((body_part === 'claim') && h_creep.pos.getRangeTo(my_room.controller) < 5) {
                     hostile_types['claim'].push(h_creep.id);
                     break;  // Very important to prevent duplication of creeps in the list
-                } else if (body_part === 'work') {
-                    hostile_types['work'].push(h_creep.id);
+                } else if (body_part === 'work' || body_part === 'carry') {
+                    hostile_types['other'].push(h_creep.id);
                     break;  // Very important to prevent duplication of creeps in the list
                 }
             }

@@ -1253,7 +1253,7 @@ var structCreep = {
                     else if (my_room.memory.targets.hostile.attack.length > 0) hostile_creeps_ids = my_room.memory.targets.hostile.attack;
                     else if (my_room.memory.targets.hostile.invader_core.length > 0) hostile_creeps_ids = my_room.memory.targets.hostile.invader_core;
                     else if (my_room.memory.targets.hostile.claim.length > 0) hostile_creeps_ids = my_room.memory.targets.hostile.claim;
-                    else hostile_creeps_ids = my_room.memory.targets.hostile.work;
+                    // else hostile_creeps_ids = my_room.memory.targets.hostile.work;
                     
                     let hostile_creeps = []
                     for (let i of hostile_creeps_ids) {
