@@ -1270,7 +1270,9 @@ var structCreep = {
 
                 if (creep.hits < creep.hitsMax) creep.heal(creep);
                 else if (my_room.memory.targets.my2heal.length > 0) {
-                    my_creep2heal = creep.pos.findClosestByRange(my_room.memory.targets.my2heal);
+                    let my_creeps2heal = [];
+                    for (let i of my_room.memory.targets.my2heal) my_creeps2heal.push(Game.getObjectById(i));
+                    my_creep2heal = creep.pos.findClosestByRange(my_creeps2heal);
                     if (creep.heal(my_creep2heal) !== OK) creep.moveTo(my_creep2heal);
                 } else {
                     // // Game.notify('[INFO] (structCreep-attacker)[' + room_name + '][' + creep.name + '] All creeps are healthy on the room. Bye, Bye');
