@@ -21,6 +21,8 @@ var StructTower = {
         let target2heal;
         let target2attack;
         // TODO: Optimize road target (save it)
+        
+        //  console.log('[ERROR] (StructTower.run)[' + room_name +']  Tower?: ' + current_tower.structureType + ' ; ID: ' + current_tower.id);
 
         // if (room_name === 'E28N48') console.log('[DEBUG] (StructTower.run)[' + room_name + '][ ' + current_tower.id + '] Creeps: ' + creeps_amount);
 
@@ -93,6 +95,7 @@ var StructTower = {
             // current_creep_types.repair_civilian = 0.4;
             // current_creep_types.repair_defence = 0.1;
         } else if (target2repair) {
+            // console.log('[DEBUG] (StructTower.run)[' + room_name +'][' + current_tower_id + '] Target to Repair: ' + target2repair.id)
             current_tower.repair(target2repair);
             // current_creep_types.repair_civilian = 0;
             // current_creep_types.repair_defence = 0;

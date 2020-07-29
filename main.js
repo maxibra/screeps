@@ -100,7 +100,7 @@ function initiate_room_memory(current_room_name) {
         typeof Memory.rooms[current_room_name].energy_flow === "undefined") {
         console.log('[DEBUG] (main)[' + current_room_name + '] INIT energy_flow');
         Memory.rooms[current_room_name].energy_flow = {
-            sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id),
+            sources: Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id).reduce((a,b)=> (a[b]=[],a),{}),
             mineral: {
                 id: Game.rooms[current_room_name].find(FIND_MINERALS).map(x => x.id)[0],
                 type: Game.rooms[current_room_name].find(FIND_MINERALS).map(x => x.mineralType)[0],
@@ -185,7 +185,7 @@ module.exports.loop = function () {
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
     var cur_creeps = Game.creeps ? Game.creeps : {};
 
-    let only_rooms = ['E27N47', 'E27N48', 'E28N47', 'E28N48', 'E29N47', 'E32N47', 'E33N47', 'E34N47', 'E36N48', 'E36N49', 'E37N48', 'E37N49', 'E38N47', 'E38N48', 'E38N49', 'E39N49']; //, 'E32N49'];
+    let only_rooms = ['E27N47', 'E27N48', 'E27N49', 'E28N47', 'E28N48', 'E29N47', 'E32N47', 'E33N47', 'E34N47', 'E36N48', 'E36N49', 'E37N48', 'E37N49', 'E38N47', 'E38N48', 'E38N49', 'E39N49']; //, 'E32N49'];
     // let only_rooms = []
     let avoid_rooms = ['global_vars', 'E26N40', 'E26N43', 'E26N44', 'E26N46', 'E27N40', 'E29N47', 'E30N48', 'E31N53', 'E34N46', 'E39N50', 'E40N49'];
 
@@ -218,13 +218,14 @@ module.exports.loop = function () {
                 'sp_total': 0,
             };
             // the upgrade doesn't work on not my rooms
+
             if (Game.time % rare_time_range === 0) {
                 // console.log('[INFO] (main) [' + current_room_name + '] upgrade_energy')
                 room_helpers.upgrade_energy_flow(current_room_name);
 
-                // Uncomment if you have a new room
+                // Uncomment if you have a new room or build a new spawn
                 // initiate_room_memory(current_room_name);
-                initiate_spawn()
+                // initiate_spawn()
 
                 // my_room = Game.rooms[current_room_name]
                 // if (!(my_room && my_room.controller &&
@@ -335,7 +336,8 @@ module.exports.loop = function () {
         //     continue
         // }
         // if (current_room_name === 'E27N48') Memory.rooms[current_room_name].towers.current = {}
-
+        // Memory.rooms[current_room_name].global_vars.max_body_cost = 2000
+        
         // if (current_room_name === 'E29N47') Memory.rooms[current_room_name].energy_flow.containers.other = {};
         // delete Memory.rooms[current_room_name].energy_flow.max_used;
         // if (current_room_name === 'E27N48') Memory.rooms[current_room_name].energy_flow.max_store = {storage: 800000, terminal: 270000}
@@ -348,8 +350,6 @@ module.exports.loop = function () {
         //     }     
         // }
         
-        // Memory.rooms[current_room_name].energy_flow.sources= Game.rooms[current_room_name].find(FIND_SOURCES).map(x => x.id)
-
         // Towers
         if (!Memory.rooms[current_room_name].global_vars) {
             console.log('[WARN][' + current_room_name +']: global_vars doesnt defined for the room. Skip the room');
@@ -370,7 +370,6 @@ module.exports.loop = function () {
         if (Game.time % 5 === 0) {
             // console.log('[INFO] (main): RUN 5 tickets functions. Time: ' + Game.time);
             // room_helpers.check_create_miner(current_room_name, global_vars.spawn_name, units);
-            room_helpers.verify_energy_miner_is_needed(current_room_name);
             room_helpers.verify_all_full(current_room_name);
             room_helpers.transfer_link2link(current_room_name);
         }
@@ -404,16 +403,22 @@ module.exports.loop = function () {
                                      // !(Memory.rooms.global_vars.disable_repearing_by_towers === true && my_room.controller.level === 8))) {
             room_helpers.get_repair_defence_target(current_room_name);
         }
+       
+        if (Game.time % 30 === 0) {
+            room_helpers.get_creep_repair_defence(current_room_name);
+        }
 
         current_mod = current_mod + tick_between_hard_actions;
         if (Game.time % 10 === current_mod) {
-        // if (current_room_name === 'E39N49' && Game.time % 2 === 0) {
-            // console.log('[INFO] (main) [' + current_room_name + ']: RUN  "transfer_energy" ' + current_mod + '. Time: ' + Game.time);
+            // if (current_room_name === 'E36N49') {
+            //     room_helpers.empty_terminal(current_room_name, 'E36N48', false, false);
+            // }
+            room_helpers.verify_energy_miner_is_needed(current_room_name);
             room_helpers.transfer_energy(current_room_name);
         }
 
         if (Game.time % 30 === 0 && Game.cpu.bucket > 6000) {
-            room_helpers.transfer_mineral(current_room_name);
+            // room_helpers.transfer_mineral(current_room_name);
             // Count storage capacity of terminal and storage
             if (my_room.storage &&
                 Memory.rooms[current_room_name].energy_flow.store_used) 
@@ -442,7 +447,7 @@ module.exports.loop = function () {
             room_helpers.get_minerals_status()
             // If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
             room_helpers.update_labs_info(current_room_name, room_by_mineral);
-            roleTower.create_towers_list(current_room_name);
+            // roleTower.create_towers_list(current_room_name);
         }
     }
 
