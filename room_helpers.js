@@ -1194,7 +1194,8 @@ var room_helpers = {
         }
     },
     find_mycreeps_to_heal(room_name) {
-        let my2heal = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => (object.hits < object.hitsMax)})
+        let my_room = Game.rooms[room_name]
+        let my2heal = my_room.find(FIND_MY_CREEPS, {filter: object => (object.hits < object.hitsMax)})
         my_room.memory.targets['my2heal'] = (my2heal.length > 0) ? _.map(my2heal,'id') : []; 
     }
 };
