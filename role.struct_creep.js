@@ -1256,6 +1256,7 @@ var structCreep = {
                     // else hostile_creeps_ids = my_room.memory.targets.hostile.work;
                     
                     let hostile_creeps = []
+                    console.log('[DEBUG] (structCreep.attacker)[' + creep.name + '] hostile_creeps_ids: ' + hostile_creeps_ids);
                     for (let i of hostile_creeps_ids) {
                         hostile_creeps.push(Game.getObjectById(i))
                     }
