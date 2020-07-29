@@ -1260,7 +1260,7 @@ var structCreep = {
                         hostile_creeps.push(Game.getObjectById(i))
                     }
 
-                    target2attack = creep.pos.findClosestByRange(hostile_creeps);
+                    let target2attack = creep.pos.findClosestByRange(hostile_creeps);
                     if (creep.rangedAttack(target2attack) !== OK || creep.attack(target2attack) !== OK) creep.moveTo(target2attack);
                     // console.log('[DEBUG] (structCreep-attacker)[' + creep.name + '] After: ' + target2attack.hits)
                 } else if (Memory.rooms[room_name].global_vars.status ==='war') {

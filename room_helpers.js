@@ -129,7 +129,7 @@ function find_hostile(room_name) {
     let hostile_amount = hostile_types.invader_core.length;
     if (h.length > 0) {
         for (let h_creep of h) {
-            let_hostile_amount += 1;
+            hostile_amount += 1;
             let body_map = h_creep.body.map(x => x.type);
             for (let body_part of h_creep.body) {
                 if (body_part === 'attack' || body_part === 'ranged_attack') {
