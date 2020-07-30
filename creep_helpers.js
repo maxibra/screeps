@@ -174,7 +174,7 @@ function is_remote_room_in_war(room_name) {
 
             its_war = r;
             break;
-        }
+        } else  Memory.rooms[room_name].targets['remote_force_attack'] = false;
     }
     return its_war;
 }
