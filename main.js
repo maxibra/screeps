@@ -4,7 +4,7 @@ var room_helpers = require('room_helpers');
 var roleTower = require('struct.tower');
 var screepsplus = require('screepsplus');
 
-// VER 1.11
+// VER 1.12
 
 
 // Game.creeps['max_new-1'].moveTo(Game.getObjectById('5ad024eac27319698ef58448'))
