@@ -267,13 +267,20 @@ var creep_helpers = {
             attacker_constructions: {
                 // body:  [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], # # move plain=2, attack=180/T
                 body: [TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], // move plain=1, attack=180/T
-                memory: {constructions2attack: ['5f21445f5923807adc215e75', '5f21456c8328412f80653586', '5f21ddd1bc3600a468ddadb8',
-                                                '5f21de5f67452ed3275be9b9', '5f21ded708588eaf28267567', '5f2207ef788bc53af2562d44', 
-                                                '5f220cb47226b003f537748a', '5f220ec26c34395e8936b9e1', '5f2224945babd9bd3b9dfea7', 
-                                                '5f2224a650756b0424ccefc3', '5f22261d80d192e3671b2408', '5f222850f2af2e18c919b9a7', 
-                                                '5f222cab8007e44cfc6871f7', '5f22596350756b0abbcd06ba', '5f2224d53cbba681268a5b75',
-                                                '5f2213c9d5c15f523f1da81a', '5f22263d5fd0c87560046c42', '5f22284450756b3bf0ccf171',
-                                                '5f224e9850756b1a2bcd01f9', '5f22577881fb111b54dd8453']},
+                memory: {constructions2attack: ['5f22dec638640f8b1fc0b176', '5f22decd3310ad528042c23c', '5f22debe44d47835b381a147',
+                                                '5f22deab8007e4483d68badb', '5f2309353547e874fc68a8e5', '5f22de6bb5790b795a840da9', 
+                                                '5f22de581769ae03231389a6', '5f22aa436c3439662136f9c3', '5f22aa3150756b0463cd28f6', 
+                                                '5f22aa1daea82c080411ec60', '5f22a9ecf2af2e0f6019ee43', '5f22a9d8c44ebf0d7e3e1915', 
+                                                '5f22b8d58007e457dc68ab30', '5f22a4b708588edfb826c4a9', '5f22a4ca50756bbeedcd26c2',
+                                                '5f22a51d5fd0c825c804a121', '5f22a52c80a97651fa657f11', '5f22a48280a9760149657ec8',
+                                                '5f22a46f067c6fe6e5216880', '5f22a45d8007e401fc68a2d6', '5f22a413b77129ec2ea991e7',
+                                                '5f22a400dd4d74866b0a2a5c', '5f229fcb3310ad659842a8e2', '5f230b398520289be2207a45',
+                                                '5f229fa69883e5cf81f2acda', '5f229e0a00c71810219143be', '5f229df850756b7abccd23d2',
+                                                '5f230d809883e540d1f2d951', '5f22988a237a1f6f44549f80', '5f22988a237a1f6f44549f80',
+                                                '5f230b398520286004207a47', '5f229828237a1f6549549f54', '5f2295f55fd0c88cea049a9b', 
+                                                '5f2295e2ee969e5a7a99eb8a', '5f22957c461901d0e6b90e3b', '5f22943767452e15505c3410', 
+                                                '5f2294241956da69c38133d3', '5f229416d7312a4759fec48b', '5f2292f5690d7905908fbb2e', 
+                                                '5f2292e667452e26045c337b']},
                 name_prefix: 'attacker_const_' + room_name,
                 amount: 1,
                 avoid: !(room_name === 'E27N48')
