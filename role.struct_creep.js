@@ -1269,7 +1269,7 @@ var structCreep = {
                 } 
 
                 if (creep.hits < creep.hitsMax) creep.heal(creep);
-                else if (my_room.memory.targets.my2heal.length > 0) {
+                else if (my_room.memory.targets && my_room.memory.targets.my2heal.length > 0) {
                     let my_creeps2heal = [];
                     for (let i of my_room.memory.targets.my2heal) my_creeps2heal.push(Game.getObjectById(i));
                     my_creep2heal = creep.pos.findClosestByRange(my_creeps2heal);
