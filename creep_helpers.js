@@ -91,7 +91,7 @@ function upgraders_amount(room_name) {
 }
 function remote_target(room_name) {
     // Object of rooms with remote targets
-    let target = false;
+    let target = [];
     switch (room_name) {
          case 'E27N48':
             target = ['E27N47']; //, 'E27N49'];
