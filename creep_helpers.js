@@ -164,11 +164,14 @@ function is_remote_room_in_war(room_name) {
     let its_war = false;
     
     // console.log('(creep_helpers.is_remote_room_in_war) [' + room_name + '] Remote rooms' + JSON.stringify(remote_rooms));
-    for (let r in remote_rooms) {
-        if (Memory.rooms[remote_rooms[r]] && Memory.rooms[remote_rooms[r]].global_vars && Memory.rooms[remote_rooms[r]].global_vars.status === 'war') {
-            its_war = remote_rooms[r];
-            break;
-        } 
+    for (let r of remote_rooms) {
+        remote_roome_obj = Game.rooms[r]
+        if (remote_roome_obj.memory && remote_roome_obj.memory.global_vars && remote_roome_obj.memory.global_vars.status === 'war')
+            Memory.rooms[room_name].targets['remote_force_attack'] = true;
+        else Memory.rooms[room_name].targets['remote_force_attack'] = false;
+
+        its_war = remote_rooms[r];
+        break;
     }
     return its_war;
 }
@@ -280,15 +283,15 @@ var creep_helpers = {
                 avoid: !(room_name === 'E38N48')
             },
             attacker: {
-                body:  [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.660K
+                // body:  [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.660K
                 // body: [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST: 3.090K
-                // body: ((my_room.memory.targets.hostile.attack.length > 0) || (my_room.memory.targets.hostile.invader_core > 0)) ? 
-                //         [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL] :  // COST: 3.090K
-                //         [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.660K
+                body: (remote_force_attack) ? 
+                        [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL] :  // COST: 3.090K
+                        [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.660K
                 memory: {room_in_war: remote_room_in_war},
                 name_prefix: 'attacker_' + room_name,
-                amount: 2,
-                // amount: (my_room.memory.targets.hostile.invader_core > 0) ? 4 : 2,
+                // amount: 2,
+                amount: (remote_force_attack) ? 4 : 2,
                 avoid: !(remote_room_in_war)
             },
             energy_miner: {
