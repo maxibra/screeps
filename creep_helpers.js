@@ -261,10 +261,15 @@ var creep_helpers = {
             attacker_constructions: {
                 // body:  [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], # # move plain=2, attack=180/T
                 body: [TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], // move plain=1, attack=180/T
-                memory: {constructions2attack: ['5f19005f805de1980bc45751', '5f190141d60e58b6fbdb39b0', '5f190135f8a7b210d1f95791',
-                                                '5f1907cc736bbd087d67fd90', '5f1907df827907ee1c855656', '5f190906ba37efd483ec5097', '5f1909190f8ca47bd56ee9b6']},
+                memory: {constructions2attack: ['5f21445f5923807adc215e75', '5f21456c8328412f80653586', '5f21ddd1bc3600a468ddadb8',
+                                                '5f21de5f67452ed3275be9b9', '5f21ded708588eaf28267567', '5f2207ef788bc53af2562d44', 
+                                                '5f220cb47226b003f537748a', '5f220ec26c34395e8936b9e1', '5f2224945babd9bd3b9dfea7', 
+                                                '5f2224a650756b0424ccefc3', '5f22261d80d192e3671b2408', '5f222850f2af2e18c919b9a7', 
+                                                '5f222cab8007e44cfc6871f7', '5f22596350756b0abbcd06ba', '5f2224d53cbba681268a5b75',
+                                                '5f2213c9d5c15f523f1da81a', '5f22263d5fd0c87560046c42', '5f22284450756b3bf0ccf171',
+                                                '5f224e9850756b1a2bcd01f9', '5f22577881fb111b54dd8453']},
                 name_prefix: 'attacker_const_' + room_name,
-                amount: 0,
+                amount: 1,
                 avoid: !(room_name === 'E27N48')
             },
             guard: {
@@ -275,14 +280,14 @@ var creep_helpers = {
                 avoid: !(room_name === 'E38N48')
             },
             attacker: {
-                // body:  [MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,HEAL], // COST: 820
-                body: [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST: 3.090K
+                body:  [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.660K
+                // body: [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST: 3.090K
                 // body: ((my_room.memory.targets.hostile.attack.length > 0) || (my_room.memory.targets.hostile.invader_core > 0)) ? 
                 //         [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL] :  // COST: 3.090K
                 //         [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.660K
                 memory: {room_in_war: remote_room_in_war},
                 name_prefix: 'attacker_' + room_name,
-                amount: 4,
+                amount: 2,
                 // amount: (my_room.memory.targets.hostile.invader_core > 0) ? 4 : 2,
                 avoid: !(remote_room_in_war)
             },
