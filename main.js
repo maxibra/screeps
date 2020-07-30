@@ -4,7 +4,7 @@ var room_helpers = require('room_helpers');
 var roleTower = require('struct.tower');
 var screepsplus = require('screepsplus');
 
-// VER 1.17
+// VER 1.18
 
 // Game.creeps['max_new-1'].moveTo(Game.getObjectById('5ad024eac27319698ef58448'))
 // Game.spawns['E37N48'].spawnCreep([CLAIM,MOVE,MOVE,MOVE], 'its_my', {memory: {role: 'its_my'; target_pos: {x: 39, y:30, roomName: 'E38N47'}}});
