@@ -1193,7 +1193,7 @@ var room_helpers = {
             console.log('[ERROR](room.transfer_energy)[' +  source_room_name + '] ERROR Code: ' + send_out + ' destination (' + destination_room_name + ') Element:' + element_to_transfer + '; Amount: ' + transfer_amount);
         }
     },
-    find_mycreeps_to_heal(room_name) {
+    find_mycreeps_to_heal: function(room_name) {
         let my_room = Game.rooms[room_name]
         let my2heal = my_room.find(FIND_MY_CREEPS, {filter: object => (object.hits < object.hitsMax)})
         my_room.memory.targets['my2heal'] = (my2heal.length > 0) ? _.map(my2heal,'id') : []; 
