@@ -167,7 +167,7 @@ function is_remote_room_in_war(room_name) {
     for (let r of remote_rooms) {
         remote_roome_obj = Game.rooms[r];
         console.log('[DEBUG] (creep_helpers.is_remote_room_in_war) [' + room_name + '] Remote: ' + r + '; OBJ: ' + JSON.stringify(remote_roome_obj))
-        if (remote_roome_obj.memory && remote_roome_obj.memory.global_vars && remote_roome_obj.memory.global_vars.status === 'war')
+        if (remote_roome_obj && remote_roome_obj.memory && remote_roome_obj.memory.global_vars && remote_roome_obj.memory.global_vars.status === 'war')
             Memory.rooms[room_name].targets['remote_force_attack'] = true;
         else Memory.rooms[room_name].targets['remote_force_attack'] = false;
 
