@@ -260,7 +260,7 @@ var creep_helpers = {
                              room_name === 'E27N48');
         
         let remote_room_in_war = is_remote_room_in_war(room_name)
-        // if (room_name === 'E28N48') console.log('(creep_helpers.create_creep) [' + room_name + '] In WAR: ' + remote_room_in_war[0]);
+        if (room_name === 'E28N48') console.log('(creep_helpers.create_creep) [' + room_name + '] In WAR: ' + remote_room_in_war[0] + '; Force attack: ' + remote_room_in_war[1]);
 
         // !!!! Order of special_creeps is an order of creep's creation. Upper will be created first 
         let special_creeps = {
