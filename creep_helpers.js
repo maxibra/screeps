@@ -169,10 +169,10 @@ function is_remote_room_in_war(room_name) {
         remote_room_obj = Game.rooms[r];
         // console.log('[DEBUG] (creep_helpers.is_remote_room_in_war) [' + room_name + '] Remote: ' + r + '; OBJ: ' + JSON.stringify(remote_room_obj))
         if (remote_room_obj && remote_room_obj.memory && remote_room_obj.memory.global_vars && remote_room_obj.memory.global_vars.status === 'war') {
-            if(remote_room_obj.memory.targets.hostile.invader_core.length >= 0 || remote_room_obj.memory.targets.hostile.attack.length > 1)
-                Memory.rooms[room_name].targets['remote_force_attack'] = true;
-
             its_war = r;
+            if(remote_room_obj.memory.targets.hostile.invader_core.length >= 0 || remote_room_obj.memory.targets.hostile.attack.length > 1)
+                remote_force_attack = true;
+
             break;
         } 
     }
