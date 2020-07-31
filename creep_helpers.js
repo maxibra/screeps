@@ -170,7 +170,7 @@ function is_remote_room_in_war(room_name) {
         // console.log('[DEBUG] (creep_helpers.is_remote_room_in_war) [' + room_name + '] Remote: ' + r + '; OBJ: ' + JSON.stringify(remote_room_obj))
         if (remote_room_obj && remote_room_obj.memory && remote_room_obj.memory.global_vars && remote_room_obj.memory.global_vars.status === 'war') {
             its_war = r;
-            if(remote_room_obj.memory.targets.hostile.invader_core.length >= 0 || remote_room_obj.memory.targets.hostile.attack.length > 1)
+            if(remote_room_obj.memory.targets.hostile.invader_core.length > 0 || remote_room_obj.memory.targets.hostile.attack.length > 1)
                 remote_force_attack = true;
 
             break;
@@ -260,7 +260,7 @@ var creep_helpers = {
                              room_name === 'E27N48');
         
         let remote_room_in_war = is_remote_room_in_war(room_name)
-        if (room_name === 'E28N48') console.log('(creep_helpers.create_creep) [' + room_name + '] In WAR: ' + remote_room_in_war[0] + '; Force attack: ' + remote_room_in_war[1]);
+        // if (room_name === 'E28N48') console.log('(creep_helpers.create_creep) [' + room_name + '] In WAR: ' + remote_room_in_war[0] + '; Force attack: ' + remote_room_in_war[1]);
 
         // !!!! Order of special_creeps is an order of creep's creation. Upper will be created first 
         let special_creeps = {
@@ -282,7 +282,7 @@ var creep_helpers = {
                                                 '5f2294241956da69c38133d3', '5f229416d7312a4759fec48b', '5f2292f5690d7905908fbb2e', 
                                                 '5f2292e667452e26045c337b']},
                 name_prefix: 'attacker_const_' + room_name,
-                amount: 1,
+                amount: 0,
                 avoid: !(room_name === 'E27N48')
             },
             guard: {
@@ -298,7 +298,7 @@ var creep_helpers = {
                 body: (remote_room_in_war[1]) ? 
                         [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL] :  // COST: 3.090K
                         [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.660K
-                memory: {room_in_war: [remote_room_in_war[0]]},
+                memory: {room_in_war: remote_room_in_war[0]},
                 name_prefix: 'attacker_' + room_name,
                 // amount: 2,
                 amount: (remote_room_in_war[1]) ? 4 : 2,
