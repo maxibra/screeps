@@ -168,7 +168,7 @@ function is_remote_room_in_war(room_name) {
     for (let r of remote_rooms) {
         remote_room_obj = Game.rooms[r];
         // console.log('[DEBUG] (creep_helpers.is_remote_room_in_war) [' + room_name + '] Remote: ' + r + '; OBJ: ' + JSON.stringify(remote_room_obj))
-        if (remote_room_obj && remote_room_obj.memory && remote_room_obj.memory.global_vars && remote_room_obj.memory.global_vars.status === 'war') {
+        if (remote_room_obj && remote_room_obj.memory && remote_room_obj.memory.global_vars && remote_room_obj.memory.targets.hostile_amount > 0) {
             its_war = r;
             if(remote_room_obj.memory.targets.hostile.invader_core.length > 0 || remote_room_obj.memory.targets.hostile.attack.length > 1)
                 remote_force_attack = true;
@@ -267,24 +267,23 @@ var creep_helpers = {
             attacker_constructions: {
                 // body:  [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], # # move plain=2, attack=180/T
                 body: [TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], // move plain=1, attack=180/T
-                memory: {constructions2attack: ['5f23888cbc3600074dde5d3f', '5f238871d5c15f4e401e4209', '5f23886225e07e6c14e4bce4',
-                                                '5f238856b5790b772784520d', '5f238847d811a52514b73ade', '5f2388386c343946bc3755c2', 
-                                                '5f23830081fb11406ade055a', '5f2382dbdd4d74023a0a8400', '5f2382c885133d82bb0c6bb0', 
-                                                '5f2382b6c44ebf396a3e6fa0', '5f23829f50756bb604cd855c', '5f23828dd5c15f62ce1e3f8f', 
-                                                '5f23827bf2af2e0d271a4693', '5f23826980d19257741bbb58', '5f23823e00c71872f991a15a',
-                                                '5f237cd581fb110710de02b0', '5f23798d6b7664734b075be5', '5f237cbfbc36008693de58b3',
-                                                '5f237c9e6c3439c99a37513f', '5f237c8c237a1fe5a154fb47', '5f237c7adbd3836714709f21',
-                                                '5f229fb8fc578a09ba035ddb', '5f237c4a477f91f2c5466e7d', '5f237c351956da7f2a8193ad',
-                                                '5f237c26aca020ecee5e6f16', '5f22989c630ceee1d4f47134', '5f237c11067c6f5d1e21c065',
-                                                '5f2298772d74d87426c3f68e', '5f22983a80d192abd11b5546', '5f23484c81fb110474ddeb95',
-                                                '5f23483900c718a9e091894f', '5f23482a31b70f288dd15243', '5f2348185fd0c846bb04e3a0', 
-                                                '5f2348084619016b42b95626', '5f2347fd6c343970ed373b30', '5f2347ee44d478036681caeb', 
-                                                '5f2347816c343950a3373aff', '5f234771bbc9cb47170ebe86', '5f2298d864b96b77ca171081', 
-                                                '5f2298e731b70ffa66d10b55', '5f2299e8237a1f253254a002', '5f2299f33310ad569042a6b2',
-                                                '5f229eb067452ecd105c3861', '5f229ec334059812286d2940', '5f229fe585133d70c10c0fb9',
-                                                '5f229ff831b70f56f2d10e6d']},
+                memory: {constructions2attack: ['5f249e02699b8b6f7e42a72a', '5f249def7226b0348b3883f5', '5f249ddd3cbba639158b6648',
+                                                '5f249bcdfc578a4201043607', '5f249bbad811a558c9b7a7d5', '5f249ba844d478642e825195', 
+                                                '5f24997cdbd3830c77711413', '5f249969ee969ee5af9abff7', '5f247ed4237a1f281d556279', 
+                                                '5f247afc34059804916df714', '5f2486c0bc36001471dec5fa', '5f247aaed7312a485bff8b89', 
+                                                '5f2476928007e44bb269616f', '5f24767fb5790bdace84b223', '5f24766d4981434c588ae94d',
+                                                '5f2475eaaea82c40ab12abd4', '5f2475d7fe8cab2716805fe7', '5f24719650756bff33cdebd4',
+                                                '5f247183b7712950beaa4969', '5f24717138640f7d04c15591', '5f246a473310ad1f744362c8',
+                                                '5f246fc8a3895a0157eb02ed', '5f2461963310ade962435f0e', '5f2453c8b351a4ba5351643e',
+                                                '5f2453b9d5c15f78111e95ab', '5f2453a73cbba671b78b465c', '5f2453594619013348b9c119',
+                                                '5f2453476b766436f407b5b1', '5f244dcf38640f4ae2c1470c', '5f244db9b5790b754d84a150',
+                                                '5f244daa6c343942bb37a7c7', '5f244d9faca020a9c55ec4df', '5f244d90bc3600db87deae0f', 
+                                                '5f244d8167452e63d25ce8fe', '5f251326f2af2e57661ae976', '5f244d2d630cee160bf52454', 
+                                                '5f244d1f699b8b334a428601', '5f2454b2630cee33ccf52739', '5f245cda5c9b0a4462c4b466', 
+                                                '5f245f1e9883e57aacf35fe3', '5f246fe94981432f5b8ae6b5', '5f246ffba3895a1d25eb0306',
+                                                '5f24711b461901ac2db9ccc8', '5f24712e44d47820c08241c0']},
                 name_prefix: 'attacker_const_' + room_name,
-                amount: 1,
+                amount: 0,
                 avoid: !(room_name === 'E27N48')
             },
             guard: {
