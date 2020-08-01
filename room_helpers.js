@@ -766,7 +766,7 @@ var room_helpers = {
         my_room = Game.rooms[room_name];
         let min_hits = Memory.rooms.global_vars.defence_level;
         // console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + ']: ' + (!my_room.controller || !my_room.controller.owner))
-        if (!my_room.controller || !my_room.controller.owner || my_room.find(FIND_CREEPS, {filter: object => (object.name.includes('attacker_const'))}).length > 0) return;
+        if (!my_room.controller || !my_room.controller.owner) return;
         targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_RAMPART) && //  || object.structureType == STRUCTURE_CONTAINER) && 
                                                                     object.hits < min_hits && object.hits < (object.hitsMax * 0.95))});
         targets.sort((a,b) => a.hits - b.hits);
@@ -775,6 +775,7 @@ var room_helpers = {
     },
     get_repair_civilianl_target: function(room_name) {
         let my_room = Game.rooms[room_name];
+        if (my_room.find(FIND_CREEPS, {filter: object => (object.name.includes('attacker_const'))}).length > 0) return;
         let targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
         targets.sort((a,b) => a.hits - b.hits);
         my_room.memory.targets.repair_civilian = targets[0] ? targets[0].id : false;
