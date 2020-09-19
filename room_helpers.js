@@ -140,7 +140,7 @@ function find_hostile(room_name) {
                     hostile_types['heal'].push(h_creep.id);
                     millitary_hostile.push(h_creep);
                     break;  // Very important to prevent duplication of creeps in the list
-                } else if ((body_part === 'claim') && h_creep.pos.getRangeTo(my_room.controller) < 9) {
+                } else if ((body_part === 'claim') && h_creep.pos.getRangeTo(my_room.controller) < 15) {
                     hostile_types['claim'].push(h_creep.id);
                     break;  // Very important to prevent duplication of creeps in the list
                 } else if (body_part === 'work' || body_part === 'carry') {
@@ -168,7 +168,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E27N48', 'E38N47', 'E36N49', 'E36N48']; //, 'E29N47', 'E34N47', 'E36N49', 'E39N49'];
+        let destination_rooms = ['E27N48', 'E38N47']; // 'E28N48', 'E29N47', 'E34N47', 'E36N48', 'E36N49', 'E39N49'];
         let send_amount = 2000;
 
         // if (room_name !== 'E37N48') return   // Recomment if you want transfer from specific rooms only
@@ -230,11 +230,14 @@ var room_helpers = {
             case 'E27N45':
                 if (target.pos.x < 2 || target.pos.x > 30 || target.pos.y > 36 || target.pos.y < 4) is_inside = false;
                 break;  
+            case 'E27N47':
+                if (target.pos.x < 36 && target.pos.y < 41) is_inside = false;
+                break;  
             case 'E27N48':
                 if (target.pos.x < 10 || target.pos.y < 21) is_inside = false;
                 break;  
             case 'E28N48':
-                if (target.pos.y < 8 || target.pos.y > 38 || target.pos.x < 21) is_inside = false;
+                if (target.pos.y < 8 || target.pos.y > 38 || target.pos.x < 21 || target.pos.x > 44) is_inside = false;
                 break;
             case 'E32N49':
                 if (target.pos.x < 2 || target.pos.x > 46) is_inside = false;
@@ -716,7 +719,8 @@ var room_helpers = {
     get_repair_defence_target: function(room_name) {
         let my_room = Game.rooms[room_name];
         let targets = [];
-
+        
+        
         if (!my_room || my_room.controller.reservation) return; // The room contains no controller
 
         let min_hits = Memory.rooms.global_vars.defence_level;
@@ -754,11 +758,11 @@ var room_helpers = {
             targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
                                                                         object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1)});
         }
-        // console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
+        // if (room_name === 'E27N47') console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
 //        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets))
         potential_target = targets[0] ? targets[0].id : false;
-        if (Memory.rooms.global_vars.disable_repearing_by_towers === false) {
+        if (!Memory.rooms.global_vars.disable_repearing_by_towers) {
             my_room.memory.targets.repair_defence = potential_target
         } else my_room.memory.targets.repair_defence = false;
     },
@@ -767,8 +771,12 @@ var room_helpers = {
         let min_hits = Memory.rooms.global_vars.defence_level;
         // console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + ']: ' + (!my_room.controller || !my_room.controller.owner))
         if (!my_room.controller || !my_room.controller.owner) return;
-        targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_RAMPART) && //  || object.structureType == STRUCTURE_CONTAINER) && 
-                                                                    object.hits < min_hits && object.hits < (object.hitsMax * 0.95))});
+        if (my_room.controller.level < 3)
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
+                                                                        object.hits < min_hits && object.hits < (object.hitsMax * 0.95))});            
+        else
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_RAMPART) && //  || object.structureType == STRUCTURE_CONTAINER) && 
+                                                                        object.hits < min_hits && object.hits < (object.hitsMax * 0.95))});
         targets.sort((a,b) => a.hits - b.hits);
         // console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + '] First Target: ' + JSON.stringify(targets[0],null,2))
         my_room.memory.targets.creep_repair_defence = targets[0] ? targets[0].id : false
@@ -779,7 +787,7 @@ var room_helpers = {
             my_room.memory.targets.repair_civilian = false
             return;
         }
-        let targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits < object.hitsMax});
+        let targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits/object.hitsMax < 0.65});
         targets.sort((a,b) => a.hits - b.hits);
         my_room.memory.targets.repair_civilian = targets[0] ? targets[0].id : false;
     },
@@ -1159,16 +1167,26 @@ var room_helpers = {
     },
     verify_energy_miner_is_needed: function(room_name) {
         let miner_is_needed = true;
+        let total_source_counteiners_capacity = 0
         let free_capacity = 1300;
         my_room = Game.rooms[room_name];
         if (room_name === 'E37N49') return;
         // console.log('[DEBUG](room.verify_energy_miner_is_needed)[' +  room_name + ']')
         for (let cc in my_room.memory.energy_flow.containers.source) {
-            if (Game.getObjectById(cc).store.getFreeCapacity('energy') <= free_capacity &&
-                my_room.memory.energy_flow.containers.source[cc].creeps_moving2me.length === 0)
-                miner_is_needed = false
+            // let miner_is_needed = true;
+            cc_object = Game.getObjectById(cc)
+            cc_capacity = cc_object.store.getFreeCapacity('energy')
+            if (cc_object) {
+                total_source_counteiners_capacity += cc_capacity
+                if (cc_object.store.getFreeCapacity('energy') <= free_capacity &&
+                    my_room.memory.energy_flow.containers.source[cc].creeps_moving2me.length === 0)
+                    miner_is_needed = false;
+            }
+            // my_room.memory.energy_flow.containers.source[cc].miner_is_needed = miner_is_needed   
         }
-        my_room.memory.energy_flow.containers.miner_is_needed = miner_is_needed
+        if (total_source_counteiners_capacity < my_room.memory.energy_flow.containers.source.length*2000*0.6)
+            miner_is_needed = true;
+        my_room.memory.energy_flow.containers.miner_is_needed = miner_is_needed   
     },
     empty_terminal: function(source_room_name, destination_room_name, transfer_energy, transfer_room_mineral) {
         let my_room = Game.rooms[source_room_name]

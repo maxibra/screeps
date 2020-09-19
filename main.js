@@ -6,6 +6,9 @@ var screepsplus = require('screepsplus');
 
 // VER 1.29
 
+// for (r of ['E27N47', 'E27N49', 'E28N47', 'E32N47']) { console.log(r + ': ' + _.map(Game.rooms[r].find(FIND_STRUCTURES, {filter: object => object.structureType === STRUCTURE_WALL}), 'hits').sort(function(a, b){return a - b;}))}
+// Game.getObjectById('5f643a04f804ec60fd95b9d7').moveTo( Game.getObjectById('5f64033e8ef676155e3751b5'))
+
 // Game.creeps['max_new-1'].moveTo(Game.getObjectById('5ad024eac27319698ef58448'))
 // Game.spawns['E37N48'].spawnCreep([CLAIM,MOVE,MOVE,MOVE], 'its_my', {memory: {role: 'its_my'; target_pos: {x: 39, y:30, roomName: 'E38N47'}}});
 
@@ -110,7 +113,7 @@ function initiate_room_memory(current_room_name) {
             },
             dropped: {},
             tombstone: {},
-            links: {near_sources: [], near_controller: [], sources: [], destinations: []},
+           BUCKET: {near_sources: [], near_controller: [], sources: [], destinations: []},
             containers: {
                 source: {},
                 other: {}
@@ -266,8 +269,9 @@ module.exports.loop = function () {
     }
     // console.log('[INFO] (main)[After UNITS ----] CPU Used: ' + Game.cpu.getUsed().toFixed(2) + '; Ticket Limit: ' + Game.cpu.tickLimit)
 
+    console.log('[INFO] (main): ******** TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket + '  **************');
+
     if (Game.time % 5 === 0) {
-        console.log('[INFO] (main): ******** TIME: ' + Game.time + '; BUCKET: ' + Game.cpu.bucket + '  **************');
         for (let cur_room in Game.rooms) {
             // console.log('[INFO] (main) ROOM: ' +  cur_room);
             if (!(Memory.rooms[cur_room] && Memory.rooms[cur_room].global_vars)) continue;
@@ -401,13 +405,13 @@ module.exports.loop = function () {
             if (my_room.controller.level < 6) room_helpers.get_repair_civilianl_target(current_room_name);
         }
 
-        if (Game.time % 30 === 0 && (Memory.rooms[current_room_name].global_vars.status === 'war' ||
-                                     Memory.rooms.global_vars.disable_repearing_by_towers === false)) {
+        if (Game.time % 30 === 0 ) {//&& (Memory.rooms[current_room_name].global_vars.status === 'war' ||
+                                     //Memory.rooms.global_vars.disable_repearing_by_towers === false)) {
                                      // !(Memory.rooms.global_vars.disable_repearing_by_towers === true && my_room.controller.level === 8))) {
             room_helpers.get_repair_defence_target(current_room_name);
         }
        
-        if (Game.time % 30 === 0) {
+        if (Game.time % 3 === 0) {
             room_helpers.get_creep_repair_defence(current_room_name);
         }
 
