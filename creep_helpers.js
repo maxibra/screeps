@@ -276,10 +276,10 @@ var creep_helpers = {
             attacker_constructions: {
                 // body:  [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK], # # move plain=2, attack=180/T
                 body: [TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK], // move plain=1, attack=180/T
-                memory: { constructions2attack: ['5f5fbbc5d82f0806293b0fec', '5f5fd779957150789c016c1f'] },
+                memory: { constructions2attack: ['5a94db2fec4e0630bb43be4d'] },
                 name_prefix: 'attacker_const_' + room_name,
                 amount: 0,
-                avoid: !(room_name === 'E27N48')
+                avoid: !(room_name === 'E37N48')
             },
             guard: {
                 body: [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL, HEAL],
@@ -334,7 +334,7 @@ var creep_helpers = {
                 amount: 1,
                 rmt_targets: remote_target(room_name),
                 remote_avoid: [],
-                avoid: (avoid_remote) // || (room_name === 'E27N48')   //|| (room_name === 'E29N47') 
+                avoid: (avoid_remote)//  || (room_name === 'E33N47') || (room_name === 'E29N47') || (room_name === 'E27N48')   //
             },
             lab_assistent: {
                 // body: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 800

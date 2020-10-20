@@ -616,6 +616,7 @@ var room_helpers = {
             else link_dst_positions.push(all_flags[f].pos.x +'-' + all_flags[f].pos.y);
 
         let range2near_source = 2;
+        if (room_name == 'E34N47') range2near_source = 3;
         for (let l in all_links) {
             // if (room_name == 'E39N49') console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: LINK: ' + all_links[l].id);
             let link_pos_str = all_links[l].pos.x + '-' + all_links[l].pos.y;
@@ -743,7 +744,7 @@ var room_helpers = {
                             '5ac90776a248b85083647f9c', '5ac90773f866b113e0024902', '5ae6094571f07c3170377bc9', '5ae609488a126e099a691e45',
                             '5a47f1ff6673566b55112cc4', '5a47f213d4b012351f84169a', '5a47f419269aa0511bdf24d5', '5b032ddc6d41df6fee77775c',
                             '5a45672a7039475e533bf817', '5a45675893df715e3f1e313c', '5c33bd55a3d0015137fdfcec'];
-            E38N47_avoid = ['5bf10cb261ef99031f97d884', '5bf10cc8166f13033947d85e', '5bf10cec9be909030411c9f3', '5bf10d03b1f81602f362b550'];
+            E38N47_avoid = []; // '5bf10cb261ef99031f97d884', '5bf10cc8166f13033947d85e', '5bf10cec9be909030411c9f3', '5bf10d03b1f81602f362b550'];
             E28N48_avoid = [];
             E27N48_avoid = ['5e3a63be35d19eb16d83ba85', '5e3a6af5b39ae580a5537f34', '5e8d88533a405e6a2cc3c0f8', '5e8d8a1158081d88eeb2f056',
                             '5e3a6374f7a6dcc9f3fc9d1b', '5e3a5631f4624b981941b585', '5e3a5626a4a1134b8dfa191e'];
@@ -751,8 +752,8 @@ var room_helpers = {
             //                 '5d9db60b385375000189d6ff', '5d9db611a45dbe0001b5ad64', '5d9dbb901ece8c0001231c57', '5d9dbb86e0b4fb0001d04945',
             //                 '5d9dbb6f05273d00018b0b26', '5d9db62b085de300017d53f5', '5d9dbb62f5fb9800016f8184', '5d9db638bdcc2a0001291619'];
           
-            let avoid_stricts = E39N49_avoid.concat(E38N47_avoid); //, E28N48_avoid);
-            avoid_stricts = avoid_stricts.concat(E27N48_avoid);
+            let avoid_stricts = E39N49_avoid.concat(E27N48_avoid) // E38N47_avoid); //, E28N48_avoid);
+            // avoid_stricts = avoid_stricts.concat(E27N48_avoid);
             
 
             targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
@@ -1184,7 +1185,8 @@ var room_helpers = {
             }
             // my_room.memory.energy_flow.containers.source[cc].miner_is_needed = miner_is_needed   
         }
-        if (total_source_counteiners_capacity < my_room.memory.energy_flow.containers.source.length*2000*0.6)
+        // console.log('[DEBUG](room.verify_energy_miner_is_needed)[' +  room_name + '] Total room: ' +  total_source_counteiners_capacity)
+        if (total_source_counteiners_capacity > 2300)
             miner_is_needed = true;
         my_room.memory.energy_flow.containers.miner_is_needed = miner_is_needed   
     },
