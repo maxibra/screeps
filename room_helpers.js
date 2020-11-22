@@ -168,7 +168,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E27N48', 'E38N47']; // 'E28N48', 'E29N47', 'E34N47', 'E36N48', 'E36N49', 'E39N49'];
+        let destination_rooms = ['E38N47']; // 'E27N48', 'E28N48', 'E29N47', 'E34N47', 'E36N48', 'E36N49', 'E39N49'];
         let send_amount = 2000;
 
         // if (room_name !== 'E37N48') return   // Recomment if you want transfer from specific rooms only
@@ -412,8 +412,9 @@ var room_helpers = {
 
         // Build constaructions
         if (my_room.memory.targets.build && my_room.memory.targets.build.length > 0) is_no_constructions = false;
-        // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: All Full: ' + !(!all_extensions_full || !all_links_full || !all_towers_full) + 
-        //             '; Ext: ' + all_extensions_full + '; Links: ' + all_links_full + '; Towers: ' + all_towers_full + '; Construvtions: ' + is_no_constructions);
+        if (room_name === 'E37N47') 
+            console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: All Full: ' + !(!all_extensions_full || !all_links_full || !all_towers_full) + 
+                        '; Ext: ' + all_extensions_full + '; Links: ' + all_links_full + '; Towers: ' + all_towers_full + '; Construvtions: ' + is_no_constructions);
        
         my_room.memory.global_vars.all_full = (!(!all_extensions_full || // !all_links_full ||
                                                  !all_towers_full || !is_no_constructions)) // &&
@@ -421,8 +422,8 @@ var room_helpers = {
     },
     transfer_link2link: function(room_name) {
         let my_room = Game.rooms[room_name];
-        if (!my_room) return; // The room contains no controller
-        // console.log('[DEBUG] (room_helpers.transfer_link2link)[' + room_name  +']')
+        // console.log('[DEBUG] (room_helpers.transfer_link2link)[' + room_name  +'] My: ' + my_room.controller.my)
+        if (!(my_room.controller.my)) return; // The room contains no controller
         let source_links = my_room.memory.energy_flow.links.near_sources;
         source_links = source_links.concat(my_room.memory.energy_flow.links.sources);
         for (let l_src in source_links) {
@@ -1165,6 +1166,16 @@ var room_helpers = {
                                                     '; NUKE: ' + nuker_missing_ghodium);
         my_room.memory.global_vars.screeps_max_amount.lab_assistent_needed = is_needed
         
+    },
+    verify_worker_is_needed: function(room_name) {
+        let my_room = Game.rooms[source_room_name];
+        // let units = Memory.rooms.global_vars.units;
+        workers_obj = creep_helpers.get_workers(room_name)
+        if (!workers_obj) return false;
+        
+        for (let rmt_room in workers_obj) {
+            // if (workers_obj[rmt_room] > 0) 
+        }
     },
     verify_energy_miner_is_needed: function(room_name) {
         let miner_is_needed = true;

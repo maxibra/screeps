@@ -151,9 +151,9 @@
     "transfer_batch": 300
   },
   "units": {
-    "total": 55,
+    "total": 44,
     "E27N47": {
-      "total": 4,
+      "total": 3,
       "transfer": 0,
       "build": 0,
       "upgrade": 0,
@@ -166,14 +166,14 @@
       "claimer": 0,
       "mineral_miner": 0,
       "energy_miner": 0,
-      "sp_total": 4,
+      "sp_total": 3,
+      "remote_harvest": null,
       "remote_energy_miner": null,
-      "remote_claimer": null,
-      "attacker": null
+      "remote_claimer": null
     },
     "E27N48": {
       "total": 3,
-      "transfer": 1,
+      "transfer": 0,
       "build": 0,
       "upgrade": 0,
       "upgrader": 0,
@@ -185,7 +185,8 @@
       "claimer": 0,
       "mineral_miner": 0,
       "energy_miner": 1,
-      "sp_total": 1
+      "sp_total": 1,
+      "false": null
     },
     "E27N49": {
       "total": 4,
@@ -202,12 +203,12 @@
       "mineral_miner": 0,
       "energy_miner": 0,
       "sp_total": 4,
+      "remote_harvest": null,
       "remote_energy_miner": null,
-      "remote_claimer": null,
-      "remote_harvest": null
+      "remote_claimer": null
     },
     "E28N47": {
-      "total": 3,
+      "total": 1,
       "transfer": 0,
       "build": 0,
       "upgrade": 0,
@@ -220,12 +221,11 @@
       "claimer": 0,
       "mineral_miner": 0,
       "energy_miner": 0,
-      "sp_total": 3,
-      "remote_harvest": null,
-      "remote_claimer": null
+      "sp_total": 1,
+      "remote_energy_miner": null
     },
-    "E28N48": {
-      "total": 3,
+    "E28N49": {
+      "total": 1,
       "transfer": 0,
       "build": 0,
       "upgrade": 0,
@@ -237,16 +237,16 @@
       "long_harvest": 0,
       "claimer": 0,
       "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
+      "energy_miner": 0,
+      "sp_total": 0
     },
-    "E29N47": {
-      "total": 4,
-      "transfer": 1,
+    "E28N48": {
+      "total": 3,
+      "transfer": 0,
       "build": 0,
       "upgrade": 0,
       "upgrader": 0,
-      "repair_defence": 0,
+      "repair_defence": 1,
       "repair_civilian": 0,
       "harvest": 0,
       "undefined": 0,
@@ -254,8 +254,40 @@
       "claimer": 0,
       "mineral_miner": 0,
       "energy_miner": 2,
-      "sp_total": 3,
-      "remote_energy_miner": null
+      "sp_total": 2
+    },
+    "E29N47": {
+      "total": 2,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 1,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 1,
+      "remote_harvest": null
+    },
+    "E29N49": {
+      "total": 1,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 1,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
     },
     "E32N47": {
       "total": 2,
@@ -272,11 +304,11 @@
       "mineral_miner": 0,
       "energy_miner": 0,
       "sp_total": 2,
-      "remote_harvest": null,
-      "remote_energy_miner": null
+      "remote_energy_miner": null,
+      "remote_harvest": null
     },
     "E33N47": {
-      "total": 4,
+      "total": 2,
       "transfer": 1,
       "build": 0,
       "upgrade": 0,
@@ -288,8 +320,8 @@
       "long_harvest": 0,
       "claimer": 0,
       "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
+      "energy_miner": 0,
+      "sp_total": 0
     },
     "E34N47": {
       "total": 3,
@@ -309,38 +341,6 @@
     },
     "E36N48": {
       "total": 4,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 2,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
-    },
-    "E36N49": {
-      "total": 3,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 1,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
-    },
-    "E37N48": {
-      "total": 4,
       "transfer": 1,
       "build": 0,
       "upgrade": 0,
@@ -355,8 +355,40 @@
       "energy_miner": 2,
       "sp_total": 2
     },
+    "E36N49": {
+      "total": 1,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 1,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
+    "E37N48": {
+      "total": 2,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 2,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
     "E37N49": {
-      "total": 3,
+      "total": 2,
       "transfer": 0,
       "build": 0,
       "upgrade": 0,
@@ -369,16 +401,15 @@
       "claimer": 0,
       "mineral_miner": 0,
       "energy_miner": 0,
-      "sp_total": 3,
-      "remote_harvest": null,
+      "sp_total": 2,
       "remote_energy_miner": null,
-      "remote_claimer": null
+      "remote_harvest": null
     },
     "E38N47": {
-      "total": 2,
-      "transfer": 1,
+      "total": 1,
+      "transfer": 0,
       "build": 0,
-      "upgrade": 0,
+      "upgrade": 1,
       "upgrader": 0,
       "repair_defence": 0,
       "repair_civilian": 0,
@@ -387,8 +418,8 @@
       "long_harvest": 0,
       "claimer": 0,
       "mineral_miner": 0,
-      "energy_miner": 1,
-      "sp_total": 1
+      "energy_miner": 0,
+      "sp_total": 0
     },
     "E38N48": {
       "total": 4,
@@ -398,15 +429,14 @@
       "upgrader": 0,
       "repair_defence": 0,
       "repair_civilian": 0,
-      "harvest": 0,
+      "harvest": 1,
       "undefined": 0,
       "long_harvest": 0,
       "claimer": 0,
       "mineral_miner": 0,
       "energy_miner": 2,
       "sp_total": 3,
-      "false": null,
-      "remote_energy_miner": null
+      "remote_harvest": null
     },
     "E38N49": {
       "total": 2,
@@ -423,18 +453,18 @@
       "mineral_miner": 0,
       "energy_miner": 0,
       "sp_total": 2,
-      "remote_harvest": null,
+      "remote_energy_miner": null,
       "remote_claimer": null
     },
     "E39N49": {
       "total": 3,
-      "transfer": 0,
+      "transfer": 1,
       "build": 0,
       "upgrade": 0,
       "upgrader": 0,
       "repair_defence": 0,
       "repair_civilian": 0,
-      "harvest": 1,
+      "harvest": 0,
       "undefined": 0,
       "long_harvest": 0,
       "claimer": 0,
@@ -450,7 +480,7 @@
   "targets": {},
   "terminal_status": {
     "E27N48": {
-      "energy": 172183,
+      "energy": 181410,
       "XGHO2": 1300,
       "XZHO2": 5100,
       "XUH2O": 1300,
@@ -462,10 +492,10 @@
       "X": 1460,
       "OH": 1930,
       "O": 1005,
-      "total": 280813
+      "total": 290040
     },
     "E28N48": {
-      "energy": 170473,
+      "energy": 170699,
       "O": 1083,
       "U": 4855,
       "L": 43591,
@@ -480,10 +510,10 @@
       "K": 1100,
       "Z": 31100,
       "GO": 5000,
-      "total": 287789
+      "total": 288015
     },
     "E29N47": {
-      "energy": 169269,
+      "energy": 170243,
       "XGHO2": 3080,
       "XZHO2": 1500,
       "XLHO2": 3950,
@@ -497,10 +527,10 @@
       "O": 1300,
       "OH": 1242,
       "KO": 9594,
-      "total": 287148
+      "total": 288122
     },
     "E33N47": {
-      "energy": 170541,
+      "energy": 173363,
       "H": 1119,
       "U": 40114,
       "X": 1479,
@@ -514,10 +544,10 @@
       "XZHO2": 1300,
       "XGHO2": 2500,
       "UH": 47,
-      "total": 270566
+      "total": 273388
     },
     "E34N47": {
-      "energy": 170761,
+      "energy": 170009,
       "X": 40193,
       "G": 8241,
       "GO": 24456,
@@ -528,10 +558,10 @@
       "XZHO2": 1100,
       "XGHO2": 5140,
       "OH": 3300,
-      "total": 263685
+      "total": 262933
     },
     "E36N48": {
-      "energy": 170064,
+      "energy": 170546,
       "L": 61523,
       "XGHO2": 3000,
       "XZHO2": 1500,
@@ -544,16 +574,16 @@
       "LHO2": 2184,
       "LO": 6070,
       "X": 1073,
-      "total": 259714
+      "total": 260196
     },
     "E36N49": {
-      "energy": 170192,
+      "energy": 170429,
       "U": 40250,
       "Z": 40127,
-      "total": 250569
+      "total": 250806
     },
     "E37N48": {
-      "energy": 170235,
+      "energy": 170568,
       "H": 40157,
       "O": 1094,
       "G": 2000,
@@ -564,10 +594,10 @@
       "XLHO2": 1196,
       "XZHO2": 1500,
       "XGHO2": 1300,
-      "total": 227193
+      "total": 227526
     },
     "E38N47": {
-      "energy": 172559,
+      "energy": 173172,
       "O": 1151,
       "K": 1402,
       "Z": 88672,
@@ -581,10 +611,10 @@
       "XZHO2": 2092,
       "XGHO2": 1300,
       "H": 1025,
-      "total": 280782
+      "total": 281395
     },
     "E38N48": {
-      "energy": 170345,
+      "energy": 170099,
       "H": 1480,
       "O": 40208,
       "G": 5239,
@@ -595,10 +625,10 @@
       "XZHO2": 1300,
       "XGHO2": 1500,
       "OH": 5100,
-      "total": 230551
+      "total": 230305
     },
     "E39N49": {
-      "energy": 170120,
+      "energy": 170075,
       "H": 1435,
       "K": 40122,
       "Z": 49500,
@@ -611,25 +641,25 @@
       "XZHO2": 1100,
       "XGHO2": 1500,
       "OH": 2425,
-      "total": 278129
+      "total": 278084
     }
   },
   "storage_status_by_mineral": {
     "energy": {
-      "total": 5358221,
+      "total": 5372092,
       "terminal": {
-        "total": 1876742,
-        "E27N48": 172183,
-        "E28N48": 170473,
-        "E29N47": 169269,
-        "E33N47": 170541,
-        "E34N47": 170761,
-        "E36N48": 170064,
-        "E36N49": 170192,
-        "E37N48": 170235,
-        "E38N47": 172559,
-        "E38N48": 170345,
-        "E39N49": 170120
+        "total": 1890613,
+        "E27N48": 181410,
+        "E28N48": 170699,
+        "E29N47": 170243,
+        "E33N47": 173363,
+        "E34N47": 170009,
+        "E36N48": 170546,
+        "E36N49": 170429,
+        "E37N48": 170568,
+        "E38N47": 173172,
+        "E38N48": 170099,
+        "E39N49": 170075
       },
       "storage": {
         "total": 3481479,
@@ -648,32 +678,32 @@
     },
     "defence": {
       "rooms": {
-        "E27N48": 24279921,
-        "E28N48": 40495541,
-        "E29N47": 40195241,
-        "E33N47": 40569791,
-        "E34N47": 40598201,
-        "E36N48": 33941541,
-        "E36N49": 24635910,
-        "E37N48": 40583941,
-        "E38N47": 39523861,
-        "E38N48": 40565161,
-        "E39N49": 38501981
+        "E27N48": 34008021,
+        "E28N48": 37177241,
+        "E29N47": 39475241,
+        "E33N47": 40557291,
+        "E34N47": 39307001,
+        "E36N48": 40311741,
+        "E36N49": 29258110,
+        "E37N48": 40615541,
+        "E38N47": 40583021,
+        "E38N48": 39519961,
+        "E39N49": 40012821
       }
     },
     "store_status": {
       "terminal": {
-        "E27N48": 280813,
-        "E28N48": 287789,
-        "E29N47": 287148,
-        "E33N47": 270566,
-        "E34N47": 263685,
-        "E36N48": 259714,
-        "E36N49": 250569,
-        "E37N48": 227193,
-        "E38N47": 280782,
-        "E38N48": 230551,
-        "E39N49": 278129
+        "E27N48": 290040,
+        "E28N48": 288015,
+        "E29N47": 288122,
+        "E33N47": 273388,
+        "E34N47": 262933,
+        "E36N48": 260196,
+        "E36N49": 250806,
+        "E37N48": 227526,
+        "E38N47": 281395,
+        "E38N48": 230305,
+        "E39N49": 278084
       },
       "storage": {
         "E27N48": 883251,
@@ -866,20 +896,20 @@
   },
   "prev_storage_status_by_mineral": {
     "energy": {
-      "total": 5296416,
+      "total": 5372092,
       "terminal": {
-        "total": 1814937,
-        "E27N48": 178541,
-        "E28N48": 156033,
-        "E29N47": 173038,
-        "E33N47": 172467,
-        "E34N47": 112112,
-        "E36N48": 170677,
-        "E36N49": 170366,
-        "E37N48": 170114,
-        "E38N47": 170159,
-        "E38N48": 170698,
-        "E39N49": 170732
+        "total": 1890613,
+        "E27N48": 181410,
+        "E28N48": 170699,
+        "E29N47": 170243,
+        "E33N47": 173363,
+        "E34N47": 170009,
+        "E36N48": 170546,
+        "E36N49": 170429,
+        "E37N48": 170568,
+        "E38N47": 173172,
+        "E38N48": 170099,
+        "E39N49": 170075
       },
       "storage": {
         "total": 3481479,
@@ -898,32 +928,32 @@
     },
     "defence": {
       "rooms": {
-        "E27N48": 24167621,
-        "E28N48": 40515341,
-        "E29N47": 40215341,
-        "E33N47": 40563491,
-        "E34N47": 40557901,
-        "E36N48": 33947241,
-        "E36N49": 24576010,
-        "E37N48": 40604041,
-        "E38N47": 39543661,
-        "E38N48": 40585261,
-        "E39N49": 38521781
+        "E27N48": 34008021,
+        "E28N48": 37177241,
+        "E29N47": 39475241,
+        "E33N47": 40557291,
+        "E34N47": 39307001,
+        "E36N48": 40311741,
+        "E36N49": 29258110,
+        "E37N48": 40615541,
+        "E38N47": 40583021,
+        "E38N48": 39519961,
+        "E39N49": 40012821
       }
     },
     "store_status": {
       "terminal": {
-        "E27N48": 287171,
-        "E28N48": 273349,
-        "E29N47": 290917,
-        "E33N47": 272492,
-        "E34N47": 205036,
-        "E36N48": 260327,
-        "E36N49": 250743,
-        "E37N48": 227072,
-        "E38N47": 278382,
-        "E38N48": 230904,
-        "E39N49": 278741
+        "E27N48": 290040,
+        "E28N48": 288015,
+        "E29N47": 288122,
+        "E33N47": 273388,
+        "E34N47": 262933,
+        "E36N48": 260196,
+        "E36N49": 250806,
+        "E37N48": 227526,
+        "E38N47": 281395,
+        "E38N48": 230305,
+        "E39N49": 278084
       },
       "storage": {
         "E27N48": 883251,
@@ -1114,5 +1144,5 @@
       }
     }
   },
-  "disable_repearing_by_towers": false
+  "disable_repearing_by_towers": true
 }

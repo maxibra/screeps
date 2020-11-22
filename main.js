@@ -190,7 +190,7 @@ module.exports.loop = function () {
     //console.log('[DEBUG] (main): MAX Creeps: ' + JSON.stringify(Game.rooms[global_vars.room_name].memory.global_vars.screeps_max_amount));
     var cur_creeps = Game.creeps ? Game.creeps : {};
 
-    let only_rooms = ['E27N47', 'E27N48', 'E27N49', 'E28N47', 'E28N48', 'E29N47', 'E32N47', 'E33N47', 'E34N47', 'E36N48', 'E36N49', 'E37N48', 'E37N49', 'E38N47', 'E38N48', 'E38N49', 'E39N49']; //, 'E32N49'];
+    let only_rooms = ['E27N47', 'E27N48', 'E27N49', 'E28N47', 'E28N49', 'E28N48', 'E29N47', 'E29N49', 'E32N47', 'E33N47', 'E34N47', 'E36N48', 'E36N49', 'E37N47', 'E37N48', 'E37N49', 'E38N47', 'E38N48', 'E38N49', 'E39N49']; //, 'E32N49'];
     // let only_rooms = []
     let avoid_rooms = ['global_vars', 'E26N40', 'E26N43', 'E26N44', 'E26N46', 'E27N40', 'E29N47', 'E30N48', 'E31N53', 'E34N46', 'E39N50', 'E40N49'];
 
@@ -314,7 +314,7 @@ module.exports.loop = function () {
         if (Game.time % 25 === 0 && Object.keys(creep.store).length === 1) creep.memory.has_minerals = false;
     }
     console.log('[INFO] (main)[After CREEPS RUN] CPU Used: ' + Game.cpu.getUsed().toFixed(2) + '; Creeps: ' + Object.keys(Game.creeps).length + '; Ticket Limit: ' + Game.cpu.tickLimit)
-
+    
     if (Game.time % 8 === 0) {
         for(var current_spawn_name in Game.spawns) {
             if (run_on_roooms.indexOf(Game.spawns[current_spawn_name].room.name) < 0) continue;
