@@ -168,7 +168,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         // let destination_rooms = Object.keys(Memory.rooms);
-        let destination_rooms = ['E38N47']; // 'E27N48', 'E28N48', 'E29N47', 'E34N47', 'E36N48', 'E36N49', 'E39N49'];
+        let destination_rooms = ['E38N47', 'E27N48']; //  'E28N48', 'E29N47', 'E34N47', 'E36N48', 'E36N49', 'E39N49'];
         let send_amount = 2000;
 
         // if (room_name !== 'E37N48') return   // Recomment if you want transfer from specific rooms only
