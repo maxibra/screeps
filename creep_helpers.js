@@ -454,9 +454,9 @@ var creep_helpers = {
                 for (let t in rmt_targets) {
                     let remote_room = rmt_targets[t];
                     let creeps_amount;
-                    // if (creep_type === 'remote_claimer') 
-                    // console.log('[DEBUG] (create_creep.claimer)[' + room_name + '] Remote room ' + remote_room + '; Creep: ' + creep_type) //  + '; Avoid: ' + (current_obj.remote_avoid.indexOf(remote_room)))
-                    if (creep_type === 'remote_claimer' && current_obj.remote_avoid.indexOf(remote_room) >= 0) {
+                    // if (room_name === 'E27N48' && remote_room === 'E27N49') 
+                    //     console.log('[DEBUG] (create_creep.claimer)[' + room_name + '] Remote room ' + remote_room + '; Creep: ' + creep_type + '; Controller.my: ' + JSON.stringify(Game.rooms[remote_room].controller.my)) //  + '; Avoid: ' + (current_obj.remote_avoid.indexOf(remote_room)))
+                    if (creep_type === 'remote_claimer' && (current_obj.remote_avoid.indexOf(remote_room) >= 0 || (Game.rooms[remote_room] && Game.rooms[remote_room].controller.my))) {
                         console.log('[DEBUG] (create_creep.claimer): Remote avoid room ' + remote_room)
                         continue;
                     } else if (creep_type === 'remote_energy_miner') {
