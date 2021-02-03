@@ -255,9 +255,10 @@ var creep_helpers = {
         let add_body = creep_body.general.add;
         let finalize_body = creep_body.general.finalize;
         let creep_name = '';
+        let log_room_name = 'stam'
         let current_room_status = (room_vars.status === 'peace' || room_vars.invader) ? 'peace' : 'war';
         // let current_creep_types = room_vars.creep_types[current_room_status];
-        if (room_name == 'E39N49') console.log('[DEBUG] (create_creep)[' + spawn_name + ' Room status: ' + current_room_status);
+        if (room_name == log_room_name) console.log('[DEBUG] (create_creep)[' + spawn_name + ' Room status: ' + current_room_status);
 
         // console.log('[DEBUG] (create_creep)['+ spawn_name + ' basic Body: ' + JSON.stringify(current_body));
         if (my_room.energyAvailable > 800 &&
@@ -418,7 +419,7 @@ var creep_helpers = {
             // console.log('(create_creep) [' + room_name + '] Energy miners: ' + units[room_name]['energy_miner'] + '; Source containers: ' + Object.keys(my_room.memory.energy_flow.containers.source).length);
             let need2cretae_creep_type = false;
             for (let creep_type in cur_special_creeps) {
-                // if (room_name === 'E27N48') console.log('(creep_helpers.create_creep) [' + room_name + '] CREEP Type: ' + creep_type);
+                if (room_name === log_room_name) console.log('[DEBUG] (creep_helpers.create_creep) [' + room_name + '] Start for of creeps CREEP Type: ' + creep_type);
                 current_obj = cur_special_creeps[creep_type];
                 current_name_prefix = (current_obj.name_prefix) ? current_obj.name_prefix : (creep_type + '_' + room_name);
 
@@ -454,7 +455,6 @@ var creep_helpers = {
                 for (let t in rmt_targets) {
                     let remote_room = rmt_targets[t];
                     let remote_room_obj = Game.rooms[remote_room];
-                    if (!remote_room || !remote_room_obj) continue;
                     // console.log('(create_creep)[' + room_name + '] Remote Name: ' + remote_room + '; Remote: ' + JSON.stringify(remote_room_obj))
                     let creeps_amount;
                     // if (room_name === 'E27N48' && remote_room === 'E27N49') 
@@ -475,7 +475,7 @@ var creep_helpers = {
                             homeland: room_name
                         }
                     } else if (creep_type === 'attacker') {
-                        if (typeof remote_rooms_in_war[remote_room] === "undefined" && Object.keys(remote_room_obj.memory.towers.current).length > 0) continue;
+                        if (typeof remote_rooms_in_war[remote_room] === "undefined" && remote_room_obj && Object.keys(remote_room_obj.memory.towers.current).length > 0) continue;
                         console.log('(create_creep)[' + room_name + '][' + remote_room + '] War: ' + remote_rooms_in_war[remote_room] + '; Amount: ' + current_obj.amount);
 
                         current_creep_memory = { room_in_war: remote_room };
@@ -562,7 +562,7 @@ var creep_helpers = {
         // **** LOG
         // console.log('[DEBUG] (create_creep)[' + spawn_name + ']: Creeps: ' +  universal_creeps + '; Must Be: ' + room_vars.screeps_max_amount[current_room_status] + '; SPAWING: ' + my_spawn.spawning + '; no needed a New: ' + (creep_name === ''));
         // ********
-        // if (room_name === 'E27N48') console.log('(create_creep) [' + room_name + '] creep name: ' + creep_name);
+        if (room_name === log_room_name) console.log('[DEBUG] (create_creep) [' + room_name + '] creep name: ' + creep_name);
 
         if (creep_name === '' && (current_room_status === 'war' || room_vars.room_min_ticksToLive < 1450)) {  // Difference to the youngest creep in about 200 ticks
             let room_creeps_amount = //(my_room.controller.ticksToDowngrade < 130000) ? room_vars.screeps_max_amount[current_room_status] * 2 :
