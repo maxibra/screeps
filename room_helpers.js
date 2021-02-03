@@ -160,7 +160,9 @@ var room_helpers = {
     define_extension_first: function(room_name) {
         let my_room = Game.rooms[room_name];
         // my_room.memory.energy_flow.extension_first = ((my_room.energyCapacityAvailable*0.5) > my_room.energyAvailable);
-        my_room.memory.energy_flow.extension_first = (my_room.memory.global_vars.max_body_cost > my_room.energyAvailable);
+        let ext_first = (my_room.energyCapacityAvailable > 0 && ((my_room.memory.global_vars.max_body_cost * 4) > my_room.energyAvailable))
+        // console.log('[DEBUG](room.define_extension_first)[' +  room_name + '] Extention first:' + ext_first + '; BODY_Cost:' + (my_room.memory.global_vars.max_body_cost * 3) + '; Energy Available: ' + my_room.energyAvailable)
+        my_room.memory.energy_flow.extension_first = ext_first;
     },
     transfer_energy: function(room_name) {
         let my_room = Game.rooms[room_name];
@@ -239,7 +241,9 @@ var room_helpers = {
             case 'E28N48':
                 if (target.pos.y < 8 || target.pos.y > 38 || target.pos.x < 21 || target.pos.x > 44) is_inside = false;
                 break;
-            case 'E32N49':
+            case 'E32N47':
+                if (target.pos.y < 2) is_inside = false;
+                break;            case 'E32N49':
                 if (target.pos.x < 2 || target.pos.x > 46) is_inside = false;
                 break;
             case 'E32N53':

@@ -139,8 +139,8 @@ function get_workers(room_name) {
             'E29N47': 0
         },
         'E33N47': {
-            'E34N47': 1,
-            'E32N47': 0
+            'E34N47': 0,
+            'E32N47': 2
         },
         'E34N47': {
             'E33N47': 0,
@@ -341,7 +341,7 @@ var creep_helpers = {
                 // body: [MOVE,WORK,CARRY],
                 name_prefix: 'rmt_hrvst_' + room_name,
                 rmt_targets: remote_target(room_name),
-                avoid: (avoid_remote) // || (room_name === 'E27N48')
+                avoid: (avoid_remote) || (room_name === 'E33N47')// || (room_name === 'E27N48')
                 // }
             },
             remote_claimer: {
@@ -453,10 +453,13 @@ var creep_helpers = {
                 // console.log('[INFO] (create_creep)[' + room_name + ']: Remote TARGETS: ' + JSON.stringify(rmt_targets))
                 for (let t in rmt_targets) {
                     let remote_room = rmt_targets[t];
+                    let remote_room_obj = Game.rooms[remote_room];
+                    if (!remote_room || !remote_room_obj) continue;
+                    // console.log('(create_creep)[' + room_name + '] Remote Name: ' + remote_room + '; Remote: ' + JSON.stringify(remote_room_obj))
                     let creeps_amount;
                     // if (room_name === 'E27N48' && remote_room === 'E27N49') 
                     //     console.log('[DEBUG] (create_creep.claimer)[' + room_name + '] Remote room ' + remote_room + '; Creep: ' + creep_type + '; Controller.my: ' + JSON.stringify(Game.rooms[remote_room].controller.my)) //  + '; Avoid: ' + (current_obj.remote_avoid.indexOf(remote_room)))
-                    if (creep_type === 'remote_claimer' && (current_obj.remote_avoid.indexOf(remote_room) >= 0 || (Game.rooms[remote_room] && Game.rooms[remote_room].controller.my))) {
+                    if (creep_type === 'remote_claimer' && (current_obj.remote_avoid.indexOf(remote_room) >= 0 || (remote_room_obj && remote_room_obj.controller.my))) {
                         console.log('[DEBUG] (create_creep.claimer): Remote avoid room ' + remote_room)
                         continue;
                     } else if (creep_type === 'remote_energy_miner') {
@@ -472,7 +475,7 @@ var creep_helpers = {
                             homeland: room_name
                         }
                     } else if (creep_type === 'attacker') {
-                        if (typeof remote_rooms_in_war[remote_room] === "undefined") continue;
+                        if (typeof remote_rooms_in_war[remote_room] === "undefined" && Object.keys(remote_room_obj.memory.towers.current).length > 0) continue;
                         console.log('(create_creep)[' + room_name + '][' + remote_room + '] War: ' + remote_rooms_in_war[remote_room] + '; Amount: ' + current_obj.amount);
 
                         current_creep_memory = { room_in_war: remote_room };

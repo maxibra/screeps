@@ -1214,7 +1214,7 @@ var structCreep = {
                 break;
             case 'upgrade':
                 var target = (creep.memory.target_id ? Game.getObjectById(creep.memory.target_id) : creep.room.controller);
-                if (target && my_room.memory.global_vars.all_full || my_room.controller.level < 3) {
+                if (target && my_room.memory.global_vars.all_full || my_room.controller.level < 5) {
                     let act_out =  creep.upgradeController(target)
                     // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Act out: ' + act_out + '; Controler: ' + JSON.stringify(target, null, 2))
                     creep_helpers.most_creep_action_results(creep, target, act_out, creep_role);
