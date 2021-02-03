@@ -17,8 +17,7 @@ var RoleHarvester = {
         let creep_role = creep.memory.role
 
         // let bad_condition = (creep_name == '')
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +']: ' + JSON.stringify(creep.memory), null, 2);
-        
+
         if (creep.store[RESOURCE_ENERGY] === creep.store.getCapacity()) {
             creep.memory.role = (creep.memory.special) ? creep.memory.special : false;
             creep.memory.harvester_type = false;
@@ -27,7 +26,7 @@ var RoleHarvester = {
             return;
         }
 
-        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +'] Memory:  ' + JSON.stringify(creep.memory));
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +'] Memory:  ' + JSON.stringify(creep.memory, null, 2));
 
         // Here with zero energy. If no enough time to work then die
         // if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
@@ -67,10 +66,10 @@ var RoleHarvester = {
                 creep.say('Going2die');
                 creep.suicide();     // Go to die to Cemetery (a far place)
             }
-        } else if (room_name === 'E37N47') {
-            target = creep.pos.findClosestByRange(FIND_RUINS, {filter: object => object.store.energy > 0});
-            harvester_type = 'ruin';
-            creep.memory.harvester_type = harvester_type;
+        // } else if (room_name === 'E37N47') {
+        //     target = creep.pos.findClosestByRange(FIND_RUINS, {filter: object => object.store.energy > 0});
+        //     harvester_type = 'ruin';
+        //     creep.memory.harvester_type = harvester_type;
         } else if (creep.pos.isNearTo(far_source)) {
             target = far_source;
             harvester_type = 'source';
@@ -239,7 +238,7 @@ var RoleHarvester = {
             }
         }
 
-        // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +'; Target: ' + JSON.stringify(target) + '; AFTER TARGET: ' + JSON.stringify(creep.memory));
+        if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester)[' + creep_name4log +']: HARVESTER Type: ' + harvester_type +'; Target: ' + JSON.stringify(target) + '; AFTER TARGET: ' + JSON.stringify(creep.memory));
 
         // ACTION
         switch(harvester_type) {
