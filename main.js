@@ -329,6 +329,11 @@ module.exports.loop = function () {
         final_produce: []
     };
     // console.log('[DEBUG] ROOM: ' + run_on_roooms)
+    
+    // Global config builders
+    if (Game.time % 10 === 0) {
+        room_helpers.find_terminal_min_energy();
+    }
 
     for(var room_index in run_on_roooms) {
         let current_room_name = run_on_roooms[room_index];
