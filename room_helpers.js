@@ -194,7 +194,7 @@ var room_helpers = {
         let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
         let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
         let send_amount = 2000;
-        let energy_delta = send_amount*6
+        let energy_delta = send_amount*4
 
         minimal_energy_terminal = {store: {energy: TERMINAL_CAPACITY}};
 
@@ -226,7 +226,7 @@ var room_helpers = {
             let send_out = cur_terminal.send(RESOURCE_ENERGY, send_amount, destination_room_name);
             // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
             if (send_out === OK) {
-                console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room + '): ' + destination_terminal.store[RESOURCE_ENERGY] + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
+                console.log('[ERROR](room.transfer_energy)[' +  room_name + '] destination (' + destination_room_name + '): ' + destination_terminal.store[RESOURCE_ENERGY] + '; source: ' +  cur_terminal.store[RESOURCE_ENERGY]);
             }
         }
     },
