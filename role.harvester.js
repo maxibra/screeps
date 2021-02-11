@@ -11,7 +11,7 @@ var RoleHarvester = {
         let my_room = Game.rooms[room_name];
         let action_out;
         let harvester_type = false;     // needed to use saved id
-        let creep_name4log = 'stam'; //'E37N48-1-gn';
+        let creep_name4log = 'stam-1'; //'E37N48-1-gn';
         let far_source = Game.getObjectById('59f1a54882100e1594f3e357');
         let close_source = Game.getObjectById('59f1a54882100e1594f3e356');
         let creep_role = creep.memory.role
@@ -77,15 +77,16 @@ var RoleHarvester = {
             target = false;
             let range2link;
             switch (room_name) {
+                case 'E27N49':
                 case 'E28N48':
+                case 'E28N47':
+                case 'E32N47':
                 case 'E36N49':
+                case 'E33N47':
+                case 'E38N48':
+                case 'E37N48':
                     range2link = 10;
                     break;                
-                case 'E33N47':
-                case 'E37N48':
-                case 'E38N48':
-                    range2link = 20;
-                    break;
                 case 'E34N47':
                     range2link = 4;
                     break;                    
@@ -122,7 +123,7 @@ var RoleHarvester = {
             if (my_room.controller.level === 8) destination_links[my_room.memory.energy_flow.links.near_controller] = false
             for (let l_id in destination_links) {
                 let cur_target = Game.getObjectById(l_id);
-                if (cur_target && creep.pos.getRangeTo(cur_target) <= 3 && cur_target.store[RESOURCE_ENERGY] > 0) {
+                if (cur_target && creep.pos.getRangeTo(cur_target) <= range2link && cur_target.store[RESOURCE_ENERGY] > 0) {
                     target =  cur_target;
                     break;
                 }
