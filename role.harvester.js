@@ -81,12 +81,15 @@ var RoleHarvester = {
                 case 'E28N48':
                 case 'E28N47':
                 case 'E32N47':
-                case 'E36N49':
                 case 'E33N47':
-                case 'E38N48':
+                case 'E36N49':
                 case 'E37N48':
+                case 'E38N48':
                     range2link = 10;
                     break;                
+                case 'E27N48':
+                    range2link = 15;
+                    break;   
                 case 'E34N47':
                     range2link = 4;
                     break;                    
