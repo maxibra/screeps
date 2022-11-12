@@ -466,7 +466,7 @@ var room_helpers = {
         my_room.memory.global_vars.all_full = (all_extensions_full && all_towers_full && terminal_full && is_no_constructions) // ||
                                                 //  !all_creep_repair_defence_full)) //
                                                 // !my_room.memory.targets.repair_defence);
-        if (!my_room.memory.global_vars.all_full) console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] Ext: ' +  all_extensions_full + '; Towers: ' + all_towers_full + '; Terminal: ' + terminal_full + ' (my_room.terminal.store[RESOURCE_ENERGY])' + '/' + my_room.memory.energy_flow.max_store.terminal + '; No Build: ' + is_no_constructions);
+        if (!my_room.memory.global_vars.all_full) console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] Ext: ' +  all_extensions_full + '; Towers: ' + all_towers_full + '; Terminal: ' + terminal_full + ' (' + my_room.terminal.store[RESOURCE_ENERGY] + ' / ' + my_room.memory.energy_flow.max_store.terminal + '); No Build: ' + is_no_constructions);
     },
     transfer_link2link: function(room_name) {
         let my_room = Game.rooms[room_name];
