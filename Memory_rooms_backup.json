@@ -1,0 +1,1148 @@
+// JSON.stringify(Memory.rooms.global_vars,null,2)
+// JSON.stringify(Memory.rooms.global_vars,null,2)
+{
+  "min_tower_enrg2repair": 0.6,
+  "defence_level_remote": 1300000,
+  "defence_level": 40554000,
+  "terminal_max_energy_storage": 170000,
+  "terminal_min2transfer": 70000,
+  "terminal_emergency_ration": 80000,
+  "storage_max_energy": 400000,
+  "storage_emergency_ration": 200000,
+  "update_period": {
+    "towers": 1000,
+    "after_war": 20
+  },
+  "age_to_drop_and_die": 8,
+  "moveTo_ops": {
+    "visualizePathStyle": {
+      "stroke": "#fff",
+      "lineStyle": "dashed",
+      "opacity": 0.1,
+      "strokeWidth": 0.15,
+      "fill": "transparent"
+    },
+    "reusePath": 15
+  },
+  "room_by_mineral": {
+    "reagent": {
+      "OH": [
+        "E27N48",
+        "E29N47",
+        "E33N47",
+        "E34N47",
+        "E36N48",
+        "E39N49"
+      ],
+      "X": [
+        "E27N48",
+        "E29N47",
+        "E33N47",
+        "E34N47",
+        "E36N48",
+        "E39N49"
+      ],
+      "O": [
+        "E27N48",
+        "E28N48",
+        "E29N47",
+        "E36N48",
+        "E37N48",
+        "E38N47",
+        "E38N48"
+      ],
+      "Z": [
+        "E27N48",
+        "E28N48"
+      ],
+      "U": [
+        "E28N48",
+        "E33N47"
+      ],
+      "L": [
+        "E28N48",
+        "E36N48"
+      ],
+      "K": [
+        "E28N48",
+        "E29N47",
+        "E39N49"
+      ],
+      "UL": [
+        "E28N48"
+      ],
+      "KO": [
+        "E29N47"
+      ],
+      "H": [
+        "E33N47",
+        "E37N48",
+        "E38N47",
+        "E38N48",
+        "E39N49"
+      ],
+      "GO": [
+        "E34N47"
+      ],
+      "LHO2": [
+        "E36N48"
+      ],
+      "LO": [
+        "E36N48"
+      ],
+      "G": [
+        "E27N48",
+        "E28N48",
+        "E29N47",
+        "E33N47",
+        "E34N47",
+        "E36N48",
+        "E37N48",
+        "E38N48",
+        "E38N47",
+        "E39N49"
+      ]
+    },
+    "produce": {
+      "XZHO2": [
+        "E27N48"
+      ],
+      "GO": [
+        "E28N48"
+      ],
+      "G": [
+        "E28N48"
+      ],
+      "XKHO2": [
+        "E29N47"
+      ],
+      "XUH2O": [
+        "E33N47"
+      ],
+      "XGHO2": [
+        "E34N47"
+      ],
+      "XLHO2": [
+        "E36N48"
+      ],
+      "OH": [
+        "E37N48",
+        "E38N47",
+        "E38N48"
+      ],
+      "XKH2O": [
+        "E39N49"
+      ]
+    },
+    "final_produce": [
+      "XZHO2",
+      "XKHO2",
+      "XUH2O",
+      "XGHO2",
+      "XLHO2",
+      "XKH2O"
+    ]
+  },
+  "minerals": {
+    "send_room": 40000,
+    "received_room": 1000,
+    "storage_final_produce": 5000,
+    "send_amount": 500,
+    "transfer_batch": 300
+  },
+  "units": {
+    "total": 44,
+    "E27N47": {
+      "total": 3,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 3,
+      "remote_harvest": null,
+      "remote_energy_miner": null,
+      "remote_claimer": null
+    },
+    "E27N48": {
+      "total": 3,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 1,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 1,
+      "sp_total": 1,
+      "false": null
+    },
+    "E27N49": {
+      "total": 4,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 4,
+      "remote_harvest": null,
+      "remote_energy_miner": null,
+      "remote_claimer": null
+    },
+    "E28N47": {
+      "total": 1,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 1,
+      "remote_energy_miner": null
+    },
+    "E28N49": {
+      "total": 1,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 1,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
+    "E28N48": {
+      "total": 3,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 1,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 2,
+      "sp_total": 2
+    },
+    "E29N47": {
+      "total": 2,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 1,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 1,
+      "remote_harvest": null
+    },
+    "E29N49": {
+      "total": 1,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 1,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
+    "E32N47": {
+      "total": 2,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 2,
+      "remote_energy_miner": null,
+      "remote_harvest": null
+    },
+    "E33N47": {
+      "total": 2,
+      "transfer": 1,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 1,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
+    "E34N47": {
+      "total": 3,
+      "transfer": 1,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 2,
+      "sp_total": 2
+    },
+    "E36N48": {
+      "total": 4,
+      "transfer": 1,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 1,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 2,
+      "sp_total": 2
+    },
+    "E36N49": {
+      "total": 1,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 1,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
+    "E37N48": {
+      "total": 2,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 2,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
+    "E37N49": {
+      "total": 2,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 2,
+      "remote_energy_miner": null,
+      "remote_harvest": null
+    },
+    "E38N47": {
+      "total": 1,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 1,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
+    "E38N48": {
+      "total": 4,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 1,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 2,
+      "sp_total": 3,
+      "remote_harvest": null
+    },
+    "E38N49": {
+      "total": 2,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 2,
+      "remote_energy_miner": null,
+      "remote_claimer": null
+    },
+    "E39N49": {
+      "total": 3,
+      "transfer": 1,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 2,
+      "sp_total": 2
+    }
+  },
+  "towers": {
+    "current": {},
+    "next_update": 10332455
+  },
+  "targets": {},
+  "terminal_status": {
+    "E27N48": {
+      "energy": 181410,
+      "XGHO2": 1300,
+      "XZHO2": 5100,
+      "XUH2O": 1300,
+      "Z": 88595,
+      "XKH2O": 1500,
+      "XKHO2": 2940,
+      "XLHO2": 1500,
+      "G": 2000,
+      "X": 1460,
+      "OH": 1930,
+      "O": 1005,
+      "total": 290040
+    },
+    "E28N48": {
+      "energy": 170699,
+      "O": 1083,
+      "U": 4855,
+      "L": 43591,
+      "G": 5000,
+      "UL": 11534,
+      "XUH2O": 1100,
+      "XKH2O": 1300,
+      "XKHO2": 1300,
+      "XLHO2": 7553,
+      "XZHO2": 1300,
+      "XGHO2": 1500,
+      "K": 1100,
+      "Z": 31100,
+      "GO": 5000,
+      "total": 288015
+    },
+    "E29N47": {
+      "energy": 170243,
+      "XGHO2": 3080,
+      "XZHO2": 1500,
+      "XLHO2": 3950,
+      "XKHO2": 5100,
+      "XKH2O": 1100,
+      "XUH2O": 3060,
+      "G": 1300,
+      "Z": 82200,
+      "X": 1353,
+      "K": 3100,
+      "O": 1300,
+      "OH": 1242,
+      "KO": 9594,
+      "total": 288122
+    },
+    "E33N47": {
+      "energy": 173363,
+      "H": 1119,
+      "U": 40114,
+      "X": 1479,
+      "G": 1100,
+      "OH": 1843,
+      "UL": 41708,
+      "XUH2O": 5171,
+      "XKH2O": 1300,
+      "XKHO2": 1100,
+      "XLHO2": 1244,
+      "XZHO2": 1300,
+      "XGHO2": 2500,
+      "UH": 47,
+      "total": 273388
+    },
+    "E34N47": {
+      "energy": 170009,
+      "X": 40193,
+      "G": 8241,
+      "GO": 24456,
+      "XUH2O": 1300,
+      "XKH2O": 1300,
+      "XKHO2": 1100,
+      "XLHO2": 6794,
+      "XZHO2": 1100,
+      "XGHO2": 5140,
+      "OH": 3300,
+      "total": 262933
+    },
+    "E36N48": {
+      "energy": 170546,
+      "L": 61523,
+      "XGHO2": 3000,
+      "XZHO2": 1500,
+      "XUH2O": 1500,
+      "XKH2O": 1500,
+      "XKHO2": 1500,
+      "XLHO2": 5000,
+      "G": 3300,
+      "O": 1500,
+      "LHO2": 2184,
+      "LO": 6070,
+      "X": 1073,
+      "total": 260196
+    },
+    "E36N49": {
+      "energy": 170429,
+      "U": 40250,
+      "Z": 40127,
+      "total": 250806
+    },
+    "E37N48": {
+      "energy": 170568,
+      "H": 40157,
+      "O": 1094,
+      "G": 2000,
+      "OH": 5127,
+      "XUH2O": 1100,
+      "XKH2O": 1500,
+      "XKHO2": 1984,
+      "XLHO2": 1196,
+      "XZHO2": 1500,
+      "XGHO2": 1300,
+      "total": 227526
+    },
+    "E38N47": {
+      "energy": 173172,
+      "O": 1151,
+      "K": 1402,
+      "Z": 88672,
+      "X": 1250,
+      "G": 1500,
+      "OH": 4662,
+      "XUH2O": 1300,
+      "XKH2O": 1300,
+      "XKHO2": 1300,
+      "XLHO2": 1269,
+      "XZHO2": 2092,
+      "XGHO2": 1300,
+      "H": 1025,
+      "total": 281395
+    },
+    "E38N48": {
+      "energy": 170099,
+      "H": 1480,
+      "O": 40208,
+      "G": 5239,
+      "XUH2O": 1300,
+      "XKH2O": 1300,
+      "XKHO2": 1500,
+      "XLHO2": 1279,
+      "XZHO2": 1300,
+      "XGHO2": 1500,
+      "OH": 5100,
+      "total": 230305
+    },
+    "E39N49": {
+      "energy": 170075,
+      "H": 1435,
+      "K": 40122,
+      "Z": 49500,
+      "X": 1374,
+      "G": 1466,
+      "XUH2O": 1500,
+      "XKH2O": 5076,
+      "XKHO2": 1057,
+      "XLHO2": 1454,
+      "XZHO2": 1100,
+      "XGHO2": 1500,
+      "OH": 2425,
+      "total": 278084
+    }
+  },
+  "storage_status_by_mineral": {
+    "energy": {
+      "total": 5372092,
+      "terminal": {
+        "total": 1890613,
+        "E27N48": 181410,
+        "E28N48": 170699,
+        "E29N47": 170243,
+        "E33N47": 173363,
+        "E34N47": 170009,
+        "E36N48": 170546,
+        "E36N49": 170429,
+        "E37N48": 170568,
+        "E38N47": 173172,
+        "E38N48": 170099,
+        "E39N49": 170075
+      },
+      "storage": {
+        "total": 3481479,
+        "E27N48": 401958,
+        "E28N48": 203397,
+        "E29N47": 391468,
+        "E33N47": 198646,
+        "E34N47": 200717,
+        "E36N48": 401033,
+        "E36N49": 400634,
+        "E37N48": 441295,
+        "E38N47": 19840,
+        "E38N48": 520491,
+        "E39N49": 302000
+      }
+    },
+    "defence": {
+      "rooms": {
+        "E27N48": 34008021,
+        "E28N48": 37177241,
+        "E29N47": 39475241,
+        "E33N47": 40557291,
+        "E34N47": 39307001,
+        "E36N48": 40311741,
+        "E36N49": 29258110,
+        "E37N48": 40615541,
+        "E38N47": 40583021,
+        "E38N48": 39519961,
+        "E39N49": 40012821
+      }
+    },
+    "store_status": {
+      "terminal": {
+        "E27N48": 290040,
+        "E28N48": 288015,
+        "E29N47": 288122,
+        "E33N47": 273388,
+        "E34N47": 262933,
+        "E36N48": 260196,
+        "E36N49": 250806,
+        "E37N48": 227526,
+        "E38N47": 281395,
+        "E38N48": 230305,
+        "E39N49": 278084
+      },
+      "storage": {
+        "E27N48": 883251,
+        "E28N48": 946691,
+        "E29N47": 886511,
+        "E33N47": 924092,
+        "E34N47": 980735,
+        "E36N48": 881118,
+        "E36N49": 851782,
+        "E37N48": 930665,
+        "E38N47": 950316,
+        "E38N48": 930452,
+        "E39N49": 871031
+      }
+    },
+    "XZHO2": {
+      "total": 75801,
+      "terminal": {
+        "total": 17792,
+        "E27N48": 5100,
+        "E28N48": 1300,
+        "E29N47": 1500,
+        "E33N47": 1300,
+        "E34N47": 1100,
+        "E36N48": 1500,
+        "E37N48": 1500,
+        "E38N47": 2092,
+        "E38N48": 1300,
+        "E39N49": 1100
+      },
+      "storage": {
+        "total": 58009,
+        "E27N48": 5000,
+        "E28N48": 5169,
+        "E29N47": 5000,
+        "E33N47": 5002,
+        "E34N47": 5056,
+        "E36N48": 5000,
+        "E37N48": 5026,
+        "E38N47": 12468,
+        "E38N48": 5162,
+        "E39N49": 5126
+      }
+    },
+    "XKHO2": {
+      "total": 80820,
+      "terminal": {
+        "total": 18881,
+        "E27N48": 2940,
+        "E28N48": 1300,
+        "E29N47": 5100,
+        "E33N47": 1100,
+        "E34N47": 1100,
+        "E36N48": 1500,
+        "E37N48": 1984,
+        "E38N47": 1300,
+        "E38N48": 1500,
+        "E39N49": 1057
+      },
+      "storage": {
+        "total": 61939,
+        "E27N48": 5000,
+        "E28N48": 5173,
+        "E29N47": 5000,
+        "E33N47": 5188,
+        "E34N47": 5040,
+        "E36N48": 5000,
+        "E37N48": 16253,
+        "E38N47": 5124,
+        "E38N48": 5061,
+        "E39N49": 5100
+      }
+    },
+    "XUH2O": {
+      "total": 74965,
+      "terminal": {
+        "total": 18631,
+        "E27N48": 1300,
+        "E28N48": 1100,
+        "E29N47": 3060,
+        "E33N47": 5171,
+        "E34N47": 1300,
+        "E36N48": 1500,
+        "E37N48": 1100,
+        "E38N47": 1300,
+        "E38N48": 1300,
+        "E39N49": 1500
+      },
+      "storage": {
+        "total": 56334,
+        "E27N48": 5000,
+        "E28N48": 5111,
+        "E29N47": 5000,
+        "E33N47": 10696,
+        "E34N47": 5146,
+        "E36N48": 5000,
+        "E37N48": 5011,
+        "E38N47": 5146,
+        "E38N48": 5193,
+        "E39N49": 5031
+      }
+    },
+    "XGHO2": {
+      "total": 72220,
+      "terminal": {
+        "total": 22120,
+        "E27N48": 1300,
+        "E28N48": 1500,
+        "E29N47": 3080,
+        "E33N47": 2500,
+        "E34N47": 5140,
+        "E36N48": 3000,
+        "E37N48": 1300,
+        "E38N47": 1300,
+        "E38N48": 1500,
+        "E39N49": 1500
+      },
+      "storage": {
+        "total": 50100,
+        "E27N48": 5000,
+        "E28N48": 5000,
+        "E29N47": 5000,
+        "E33N47": 5000,
+        "E34N47": 5000,
+        "E36N48": 5000,
+        "E37N48": 5000,
+        "E38N47": 5100,
+        "E38N48": 5000,
+        "E39N49": 5000
+      }
+    },
+    "XLHO2": {
+      "total": 93410,
+      "terminal": {
+        "total": 31239,
+        "E27N48": 1500,
+        "E28N48": 7553,
+        "E29N47": 3950,
+        "E33N47": 1244,
+        "E34N47": 6794,
+        "E36N48": 5000,
+        "E37N48": 1196,
+        "E38N47": 1269,
+        "E38N48": 1279,
+        "E39N49": 1454
+      },
+      "storage": {
+        "total": 62171,
+        "E27N48": 5000,
+        "E28N48": 13140,
+        "E29N47": 5000,
+        "E33N47": 5167,
+        "E34N47": 8608,
+        "E36N48": 5000,
+        "E37N48": 5056,
+        "E38N47": 5100,
+        "E38N48": 5000,
+        "E39N49": 5100
+      }
+    },
+    "XKH2O": {
+      "total": 79715,
+      "terminal": {
+        "total": 17176,
+        "E27N48": 1500,
+        "E28N48": 1300,
+        "E29N47": 1100,
+        "E33N47": 1300,
+        "E34N47": 1300,
+        "E36N48": 1500,
+        "E37N48": 1500,
+        "E38N47": 1300,
+        "E38N48": 1300,
+        "E39N49": 5076
+      },
+      "storage": {
+        "total": 62539,
+        "E27N48": 5000,
+        "E28N48": 5099,
+        "E29N47": 5000,
+        "E33N47": 5184,
+        "E34N47": 5174,
+        "E36N48": 5000,
+        "E37N48": 5057,
+        "E38N47": 5185,
+        "E38N48": 5133,
+        "E39N49": 16707
+      }
+    }
+  },
+  "prev_storage_status_by_mineral": {
+    "energy": {
+      "total": 5372092,
+      "terminal": {
+        "total": 1890613,
+        "E27N48": 181410,
+        "E28N48": 170699,
+        "E29N47": 170243,
+        "E33N47": 173363,
+        "E34N47": 170009,
+        "E36N48": 170546,
+        "E36N49": 170429,
+        "E37N48": 170568,
+        "E38N47": 173172,
+        "E38N48": 170099,
+        "E39N49": 170075
+      },
+      "storage": {
+        "total": 3481479,
+        "E27N48": 401958,
+        "E28N48": 203397,
+        "E29N47": 391468,
+        "E33N47": 198646,
+        "E34N47": 200717,
+        "E36N48": 401033,
+        "E36N49": 400634,
+        "E37N48": 441295,
+        "E38N47": 19840,
+        "E38N48": 520491,
+        "E39N49": 302000
+      }
+    },
+    "defence": {
+      "rooms": {
+        "E27N48": 34008021,
+        "E28N48": 37177241,
+        "E29N47": 39475241,
+        "E33N47": 40557291,
+        "E34N47": 39307001,
+        "E36N48": 40311741,
+        "E36N49": 29258110,
+        "E37N48": 40615541,
+        "E38N47": 40583021,
+        "E38N48": 39519961,
+        "E39N49": 40012821
+      }
+    },
+    "store_status": {
+      "terminal": {
+        "E27N48": 290040,
+        "E28N48": 288015,
+        "E29N47": 288122,
+        "E33N47": 273388,
+        "E34N47": 262933,
+        "E36N48": 260196,
+        "E36N49": 250806,
+        "E37N48": 227526,
+        "E38N47": 281395,
+        "E38N48": 230305,
+        "E39N49": 278084
+      },
+      "storage": {
+        "E27N48": 883251,
+        "E28N48": 946691,
+        "E29N47": 886511,
+        "E33N47": 924092,
+        "E34N47": 980735,
+        "E36N48": 881118,
+        "E36N49": 851782,
+        "E37N48": 930665,
+        "E38N47": 950316,
+        "E38N48": 930452,
+        "E39N49": 871031
+      }
+    },
+    "XZHO2": {
+      "total": 75801,
+      "terminal": {
+        "total": 17792,
+        "E27N48": 5100,
+        "E28N48": 1300,
+        "E29N47": 1500,
+        "E33N47": 1300,
+        "E34N47": 1100,
+        "E36N48": 1500,
+        "E37N48": 1500,
+        "E38N47": 2092,
+        "E38N48": 1300,
+        "E39N49": 1100
+      },
+      "storage": {
+        "total": 58009,
+        "E27N48": 5000,
+        "E28N48": 5169,
+        "E29N47": 5000,
+        "E33N47": 5002,
+        "E34N47": 5056,
+        "E36N48": 5000,
+        "E37N48": 5026,
+        "E38N47": 12468,
+        "E38N48": 5162,
+        "E39N49": 5126
+      }
+    },
+    "XKHO2": {
+      "total": 80820,
+      "terminal": {
+        "total": 18881,
+        "E27N48": 2940,
+        "E28N48": 1300,
+        "E29N47": 5100,
+        "E33N47": 1100,
+        "E34N47": 1100,
+        "E36N48": 1500,
+        "E37N48": 1984,
+        "E38N47": 1300,
+        "E38N48": 1500,
+        "E39N49": 1057
+      },
+      "storage": {
+        "total": 61939,
+        "E27N48": 5000,
+        "E28N48": 5173,
+        "E29N47": 5000,
+        "E33N47": 5188,
+        "E34N47": 5040,
+        "E36N48": 5000,
+        "E37N48": 16253,
+        "E38N47": 5124,
+        "E38N48": 5061,
+        "E39N49": 5100
+      }
+    },
+    "XUH2O": {
+      "total": 74965,
+      "terminal": {
+        "total": 18631,
+        "E27N48": 1300,
+        "E28N48": 1100,
+        "E29N47": 3060,
+        "E33N47": 5171,
+        "E34N47": 1300,
+        "E36N48": 1500,
+        "E37N48": 1100,
+        "E38N47": 1300,
+        "E38N48": 1300,
+        "E39N49": 1500
+      },
+      "storage": {
+        "total": 56334,
+        "E27N48": 5000,
+        "E28N48": 5111,
+        "E29N47": 5000,
+        "E33N47": 10696,
+        "E34N47": 5146,
+        "E36N48": 5000,
+        "E37N48": 5011,
+        "E38N47": 5146,
+        "E38N48": 5193,
+        "E39N49": 5031
+      }
+    },
+    "XGHO2": {
+      "total": 72220,
+      "terminal": {
+        "total": 22120,
+        "E27N48": 1300,
+        "E28N48": 1500,
+        "E29N47": 3080,
+        "E33N47": 2500,
+        "E34N47": 5140,
+        "E36N48": 3000,
+        "E37N48": 1300,
+        "E38N47": 1300,
+        "E38N48": 1500,
+        "E39N49": 1500
+      },
+      "storage": {
+        "total": 50100,
+        "E27N48": 5000,
+        "E28N48": 5000,
+        "E29N47": 5000,
+        "E33N47": 5000,
+        "E34N47": 5000,
+        "E36N48": 5000,
+        "E37N48": 5000,
+        "E38N47": 5100,
+        "E38N48": 5000,
+        "E39N49": 5000
+      }
+    },
+    "XLHO2": {
+      "total": 93410,
+      "terminal": {
+        "total": 31239,
+        "E27N48": 1500,
+        "E28N48": 7553,
+        "E29N47": 3950,
+        "E33N47": 1244,
+        "E34N47": 6794,
+        "E36N48": 5000,
+        "E37N48": 1196,
+        "E38N47": 1269,
+        "E38N48": 1279,
+        "E39N49": 1454
+      },
+      "storage": {
+        "total": 62171,
+        "E27N48": 5000,
+        "E28N48": 13140,
+        "E29N47": 5000,
+        "E33N47": 5167,
+        "E34N47": 8608,
+        "E36N48": 5000,
+        "E37N48": 5056,
+        "E38N47": 5100,
+        "E38N48": 5000,
+        "E39N49": 5100
+      }
+    },
+    "XKH2O": {
+      "total": 79715,
+      "terminal": {
+        "total": 17176,
+        "E27N48": 1500,
+        "E28N48": 1300,
+        "E29N47": 1100,
+        "E33N47": 1300,
+        "E34N47": 1300,
+        "E36N48": 1500,
+        "E37N48": 1500,
+        "E38N47": 1300,
+        "E38N48": 1300,
+        "E39N49": 5076
+      },
+      "storage": {
+        "total": 62539,
+        "E27N48": 5000,
+        "E28N48": 5099,
+        "E29N47": 5000,
+        "E33N47": 5184,
+        "E34N47": 5174,
+        "E36N48": 5000,
+        "E37N48": 5057,
+        "E38N47": 5185,
+        "E38N48": 5133,
+        "E39N49": 16707
+      }
+    }
+  },
+  "disable_repearing_by_towers": true
+}

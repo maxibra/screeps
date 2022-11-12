@@ -28,3 +28,29 @@
 * Improve Transfers (choose a new target if remained energy. Currently choose spawn)
 * Transfers. possibility to change percent of transfers if not enought creeps for more then hour
 * Improve change role. currently if in the same ticket several creeps are needed to change role we have a wrong proportion
+
+
+
+
+
+
+
+
+5f22aa1daea82c080411ec60
+5f22a9ecf2af2e0f6019ee43
+5f22a9d8c44ebf0d7e3e1915
+5f22b8d58007e457dc68ab30
+5f22a4b708588edfb826c4a9
+5f22a4ca50756bbeedcd26c2
+5f22a51d5fd0c825c804a121
+5f22a52c80a97651fa657f11
+5f22a48280a9760149657ec8
+5f22a46f067c6fe6e5216880
+5f22a45d8007e401fc68a2d6
+5f22a413b77129ec2ea991e7
+5f22a400dd4d74866b0a2a5c
+5f229fcb3310ad659842a8e2
+5f229fb8fc578a09ba035ddb
+5f229fa69883e5cf81f2acda
+5f229e0a00c71810219143be
+5f229df850756b7abccd23d2
