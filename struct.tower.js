@@ -20,17 +20,18 @@ var StructTower = {
         let target2repair = false;
         let target2heal;
         let target2attack;
+        let room_log = "" // 'E27N49';
         // TODO: Optimize road target (save it)
-        
+
         //  console.log('[ERROR] (StructTower.run)[' + room_name +']  Tower?: ' + current_tower.structureType + ' ; ID: ' + current_tower.id);
 
-        // if (room_name === 'E28N48') console.log('[DEBUG] (StructTower.run)[' + room_name + '][ ' + current_tower.id + '] Creeps: ' + creeps_amount);
+        if (room_name === room_log) console.log('[DEBUG] (StructTower.run)[' + room_name + '][ ' + current_tower.id + '] Creeps: ' + creeps_amount + '; min energy: ' +(tower_energy_proc > Memory.rooms.global_vars.min_tower_enrg2repair));
 
 
         let tower_creep  = my_room.memory.towers.current[current_tower_id];
         if(!Game.creeps[tower_creep] || (Game.creeps[tower_creep] && Game.creeps[tower_creep].memory.target_id !== current_tower_id))
             my_room.memory.towers.current[current_tower_id] = false;
-        
+
         tower_energy_proc = current_tower.store[RESOURCE_ENERGY]/current_tower.store.getCapacity(RESOURCE_ENERGY);
         // console.log('[DEBUG] (StructTower.run) [' + room_name + '] ENERGY PROC: ' + tower_energy_proc)
 
@@ -41,7 +42,7 @@ var StructTower = {
                 if (hostile2attack && hostile2attack.room.name !== room_name) hostile2attack = false;
             }
             // console.log('[DEBUG] [structTower] Hostile2Attack by getObject:' + ((hostile2attack)?hostile2attack.id:'NA'))
-            
+
             if (!hostile2attack) {
                 // console.log('[DEBUG] (structTower)('+ room_name + ') Searching target to ATTACk')
                 all_hostile = my_room.find(FIND_HOSTILE_CREEPS);
@@ -68,19 +69,21 @@ var StructTower = {
                 my_room.memory.hostile2attack = (target2attack) ? target2attack.id : false;
                 // console.log('[INFO] (StructTower.run) [' + room_name + '] Target to Attack: ' + JSON.stringify(target2attack));
             } else {
-                target2attack = hostile2attack;    
+                target2attack = hostile2attack;
             }
 
-            
+
             if (tower_energy_proc > 0.7) target2repair = Game.getObjectById(my_room.memory.targets.repair_defence);
             console.log('[INFO] (StructTower.run) [' + room_name + '] it"s WAR: Repair DEFENCE: (' + (target2repair?target2repair.pos.x:'na') + ',' + (target2repair?target2repair.pos.y:'na') +')');
         } else if (tower_energy_proc > Memory.rooms.global_vars.min_tower_enrg2repair && !(Game.time % 3) && creeps_amount >= 1) {
-            let targets2repair = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7))});
-            if (my_room.memory.targets.repair_defence) targets2repair.push(Game.getObjectById(my_room.memory.targets.repair_defence));
-            if (targets2repair.length) target2repair = targets2repair[0];
-            
+            // let targets2repair = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD && (object.hits/object.hitsMax < 0.7))});
+
+            target2repair = (my_room.memory.targets.repair_civilian) ? Game.getObjectById(my_room.memory.targets.repair_civilian) : Game.getObjectById(my_room.memory.targets.repair_defence);
+            // target2repair = (my_room.memory.targets.repair_defence) ? Game.getObjectById(my_room.memory.targets.repair_defence) : Game.getObjectById(my_room.memory.targets.repair_civilian);
+
+            if (room_name === room_log) console.log('[DEBUG] (StructTower.run)[' + room_name +'][' + current_tower_id + '] Setting Target to Repair: ' + target2repair + '; Defence: ' + my_room.memory.targets.repair_defence + '; Civil: ' + my_room.memory.targets.repair_civilian)
             // target2repair = false;   // Uncomment to disable reparing
-            
+
             // let targets2heal = Game.rooms[room_name].find(FIND_MY_CREEPS, {filter: object => ()});
 
         }
@@ -95,7 +98,7 @@ var StructTower = {
             // current_creep_types.repair_civilian = 0.4;
             // current_creep_types.repair_defence = 0.1;
         } else if (target2repair) {
-            // console.log('[DEBUG] (StructTower.run)[' + room_name +'][' + current_tower_id + '] Target to Repair: ' + target2repair.id)
+            // console.log('[DEBUG] (StructTower.run)[' + room_name +'][' + current_tower_id + '] Target to Repair: ' + target2repair)
             current_tower.repair(target2repair);
             // current_creep_types.repair_civilian = 0;
             // current_creep_types.repair_defence = 0;

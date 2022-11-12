@@ -155,13 +155,90 @@ function find_hostile(room_name) {
     return [invader_core, millitary_hostile];
 }
 
+function local_is_inside_wall(room_name, target) {
+    // console.log('[ERROR](room.is_inside_wall)[' +  room_name +'] Target: ' + JSON.stringify(target)) // is undefined or empty')
+    // return false
+    let is_inside = true;
+    switch(room_name) {
+        // case 'E26N48':
+        //     if (target.pos.x < 35 || target.pos.x > 38 || target.pos.y > 36 || target.pos.y < 29) is_inside = false;
+        //     break;
+        case 'E27N41':
+            if (target.pos.x > 37 || target.pos.x < 8 || target.pos.y < 13 || target.pos.y > 44) is_inside = false;
+            break;
+        case 'E27N45':
+            if (target.pos.x < 2 || target.pos.x > 30 || target.pos.y > 36 || target.pos.y < 4) is_inside = false;
+            break;
+        case 'E27N47':
+            if (target.pos.x < 17 || target.pos.y > 47 || (target.pos.x < 36 && target.pos.y < 39)) is_inside = false;
+            break;
+        case 'E27N48':
+            if (target.pos.x < 37 || target.pos.y > 42) is_inside = false;
+            break;
+        case 'E27N49':
+            if (target.pos.x < 18 || target.pos.x > 33 || target.pos.y > 44 || target.pos.y < 3) is_inside = false;
+            break;
+        case 'E28N47':
+            if (target.pos.x < 19) is_inside = false;
+            break;
+        case 'E28N48':
+            if (target.pos.y > 37 || target.pos.x < 11 || target.pos.x > 46) is_inside = false;
+            break;
+        case 'E29N47':
+            if (target.pos.y > 36 || target.pos.x < 2 || target.pos.x > 38) is_inside = false;
+            break;
+        case 'E32N47':
+            if (target.pos.y < 2) is_inside = false;
+            break;
+        case 'E32N49':
+            if (target.pos.x < 2 || target.pos.x > 46) is_inside = false;
+            break;
+        case 'E32N53':
+            if (target.pos.x > 24 || target.pos.x < 2 || target.pos.y > 43 || target.pos.y < 20) is_inside = false;
+            break;
+        case 'E33N47':
+            if (target.pos.x < 8) is_inside = false;
+            break;
+        case 'E34N47':
+            if (target.pos.x < 11 || target.pos.y > 30) is_inside = false;
+            break;
+        case 'E36N48':
+            if (target.pos.x < 23 || target.pos.y < 11 || target.pos.y > 40) is_inside = false;
+            break;
+        case 'E36N49':
+            if (target.pos.x < 3 || target.pos.x > 18 || target.pos.y < 14 || target.pos.y > 42) is_inside = false;
+            break;
+        case 'E37N47':
+            if (target.pos.x < 22 || target.pos.y > 27) is_inside = false;
+            break;
+        case 'E37N48':
+            if (target.pos.x < 11 || target.pos.x > 39 || target.pos.y < 4) is_inside = false;
+            break;
+        case 'E38N47':
+            if (target.pos.x < 5 || target.pos.y > 27) is_inside = false;
+            break;
+        case 'E38N48':
+            if (target.pos.x < 13 || target.pos.y < 22) is_inside = false;
+            break;
+        case 'E38N49':
+            if (target.pos.x > 47 || target.pos.y > 47 ) is_inside = false;
+            break;
+        case 'E39N49':
+            if (target.pos.x > 42 || target.pos.x < 20 || target.pos.y < 20) is_inside = false;
+            break;
+        }
+    return is_inside;
+}
+
 
 var room_helpers = {
     define_extension_first: function(room_name) {
         let my_room = Game.rooms[room_name];
         // my_room.memory.energy_flow.extension_first = ((my_room.energyCapacityAvailable*0.5) > my_room.energyAvailable);
-        let ext_first = (my_room.energyCapacityAvailable > 0 && ((my_room.memory.global_vars.max_body_cost * 4) > my_room.energyAvailable))
-        // console.log('[DEBUG](room.define_extension_first)[' +  room_name + '] Extention first:' + ext_first + '; BODY_Cost:' + (my_room.memory.global_vars.max_body_cost * 3) + '; Energy Available: ' + my_room.energyAvailable)
+        let ext_first = (my_room.energyCapacityAvailable > 0 &&
+                         ((my_room.memory.global_vars.max_body_cost * 4) > my_room.energyAvailable) &&
+                         ((my_room.memory.global_vars.max_body_cost * 4) < my_room.energyCapacityAvailable))
+        // if (room_name == 'E38N47') console.log('[DEBUG](room.define_extension_first)[' +  room_name + '] Extention first:' + ext_first + '; BODY_Cost:' + (my_room.memory.global_vars.max_body_cost * 3) + '; Energy Available: ' + my_room.energyAvailable)
         my_room.memory.energy_flow.extension_first = ext_first;
     },
     find_terminal_min_energy: function() {
@@ -174,7 +251,7 @@ var room_helpers = {
             let destination_terminal = dest_room.terminal;
             if (!dest_room.controller.my || !destination_terminal) continue;
             // console.log('[DEBUG](room.find_terminal_min_energy)[' +  r + '] Terminal: ' + JSON.stringify(destination_terminal));
-            
+
             energy_sum += destination_terminal.store[RESOURCE_ENERGY]
             terminals_count++
             // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Amount of energy of terminal ' + destination_rooms[r] + ': ' + minimal_energy_terminal.store[RESOURCE_ENERGY]);
@@ -190,30 +267,46 @@ var room_helpers = {
     },
     transfer_energy: function(room_name) {
         let my_room = Game.rooms[room_name];
-        if (!Memory.rooms[room_name].energy_flow) return;
-        let cur_terminal_id = Memory.rooms[room_name].energy_flow.terminal;
-        let cur_terminal = (cur_terminal_id) ? Game.getObjectById(cur_terminal_id) : false;
+        let cur_terminal = my_room.terminal;
+        if (!Memory.rooms[room_name].energy_flow || !cur_terminal) return;
         let send_amount = 2000;
         let energy_delta = send_amount*4
 
         minimal_energy_terminal = {store: {energy: TERMINAL_CAPACITY}};
 
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Minimal energy terminal: ' + minimal_energy_terminal.room.name);
-        
+
         let min_terminal_obj = Memory.rooms.global_vars.minimal_energy_terminal
         let destination_room_name = min_terminal_obj["room_name"];
         let destination_room = Game.rooms[destination_room_name];
         let destination_terminal = Game.rooms[destination_room_name].terminal;
-        
+
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Destination Name: ' + destination_room_name + '; Destination Memory: ' + JSON.stringify(destination_room.memory.energy_flow.max_store));
 
-        let condition_to_transfer = ((destination_terminal.store[RESOURCE_ENERGY] < (Memory.rooms.global_vars.terminal_max_energy_storage - energy_delta)) &&
-                                     cur_terminal && cur_terminal.cooldown === 0 &&
+        // if (!destination_terminal) {
+        if (!destination_room.memory.energy_flow.max_store) {
+            console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] destination terminal is missing in ' + destination_room_name)
+            // return
+        }
+
+        let condition_to_transfer = ((destination_terminal.store[RESOURCE_ENERGY] < (destination_room.memory.energy_flow.max_store.terminal - energy_delta)) &&
+                                     cur_terminal.cooldown === 0 &&
                                      cur_terminal.store[RESOURCE_ENERGY] > min_terminal_obj["avrg_energy"] &&
                                      cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer &&
-                                     destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal &&
+                                     destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal_max_energy_storage &&
                                      cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + energy_delta));
+        // console.log('\t\tdestination_name: ' + destination_room_name);
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Transfer energy: ' + condition_to_transfer);
+        // console.log('\t\tcur_terminal.cooldown === 0: ' + (cur_terminal.cooldown === 0));
+        // console.log('\t\tdestination_terminal.store[RESOURCE_ENERGY]: ' + destination_terminal.store[RESOURCE_ENERGY]);
+        // console.log('\t\tdestination_room.memory.energy_flow.max_store.terminal_max_energy_storage: ' + (destination_room.memory.energy_flow.max_store.terminal_max_energy_storage));
+        // console.log('\t\t(destination_terminal.store[RESOURCE_ENERGY] < (Memory.rooms.global_vars.terminal_max_energy_storage - energy_delta)): ' + (destination_terminal.store[RESOURCE_ENERGY] < (destination_room.memory.energy_flow.max_store.terminal - energy_delta)) +' (' + (destination_room.memory.energy_flow.max_store.terminal - energy_delta));
+        // console.log('\t\tcur_terminal.store[RESOURCE_ENERGY] > min_terminal_obj["avrg_energy"]: ' + (cur_terminal.store[RESOURCE_ENERGY] > min_terminal_obj["avrg_energy"]))
+        // console.log('\t\tcur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer: ' + (cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer))
+        // console.log('\t\tdestination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal_max_energy_storage: ' + (destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal_max_energy_storage))
+        // console.log('\t\tcur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + energy_delta): ' + (cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + energy_delta)))
+
+
         // if (room_name === 'E37N48') console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Condition transfer energy: ' +
         //             (destination_terminal.room && cur_terminal && cur_terminal.cooldown === 0 &&
         //     destination_terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
@@ -231,60 +324,7 @@ var room_helpers = {
         }
     },
     is_inside_wall: function(room_name, target) {
-        let is_inside = true;
-        switch(room_name) {
-            // case 'E26N48':
-            //     if (target.pos.x < 35 || target.pos.x > 38 || target.pos.y > 36 || target.pos.y < 29) is_inside = false;
-            //     break; 
-            case 'E27N41':
-                if (target.pos.x > 37 || target.pos.x < 8 || target.pos.y < 13 || target.pos.y > 44) is_inside = false;
-                break;  
-            case 'E27N45':
-                if (target.pos.x < 2 || target.pos.x > 30 || target.pos.y > 36 || target.pos.y < 4) is_inside = false;
-                break;  
-            case 'E27N47':
-                if (target.pos.x < 36 && target.pos.y < 41) is_inside = false;
-                break;  
-            case 'E27N48':
-                if (target.pos.x < 10 || target.pos.y < 21) is_inside = false;
-                break;  
-            case 'E28N48':
-                if (target.pos.y < 8 || target.pos.y > 38 || target.pos.x < 21 || target.pos.x > 44) is_inside = false;
-                break;
-            case 'E32N47':
-                if (target.pos.y < 2) is_inside = false;
-                break;            case 'E32N49':
-                if (target.pos.x < 2 || target.pos.x > 46) is_inside = false;
-                break;
-            case 'E32N53':
-                if (target.pos.x > 24 || target.pos.x < 2 || target.pos.y > 43 || target.pos.y < 20) is_inside = false;
-                break;  
-            case 'E33N47':
-                if (target.pos.x < 2) is_inside = false;
-                break;
-            case 'E34N47':
-                if (target.pos.x < 28 || target.pos.y > 34) is_inside = false;
-                break;
-            case 'E36N48':
-                if (target.pos.x < 23 || target.pos.y < 11 || target.pos.y > 34) is_inside = false;
-                break;
-            case 'E36N49':
-                if (target.pos.x < 2 || target.pos.x > 18 || target.pos.y < 14 || target.pos.y > 42) is_inside = false;
-                break;
-            case 'E37N48':
-                if (target.pos.x < 12 || target.pos.y < 10) is_inside = false;
-                break;  
-            case 'E38N47':
-                if (target.pos.x < 5 || target.pos.y > 28) is_inside = false;
-                break;    
-            case 'E38N48':
-                if (target.pos.x < 15 || target.pos.y < 19) is_inside = false;
-                break;
-            case 'E39N49':
-                if (target.pos.x > 42 || target.pos.x < 20 || target.pos.y < 16) is_inside = false;
-                break;
-            }        
-        return is_inside;
+        return local_is_inside_wall(room_name, target);
     },
     transfer_mineral: function(room_name) {
         let all_my_rooms = ['E27N48', 'E28N48','E29N47', 'E33N47', 'E34N47', 'E36N48', 'E37N48', 'E38N47', 'E38N48', 'E39N49'];
@@ -384,15 +424,17 @@ var room_helpers = {
         my_spawn.memory.general['create_miner'] = create_miner;
     },
     verify_all_full: function(room_name) {
+        let my_room = Game.rooms[room_name];
         let all_full = true;
         let all_links_full = true;
         let all_towers_full = true;
-        let all_extensions_full = true;
-        let is_no_constructions = true;
-        let my_room = Game.rooms[room_name];
+        let terminal_full = (my_room.terminal && my_room.terminal.store[RESOURCE_ENERGY] >= my_room.memory.energy_flow.max_store.terminal) ? true : false;
+        let all_extensions_full = (my_room.energyAvailable < (my_room.energyCapacityAvailable - 2*700)) ? false : true;  // 650 is price of energy_miner
+        // let all_creep_repair_defence_full = (my_room.memory.targets.creep_repair_defence) ? false : true;
+        let is_no_constructions = (my_room.memory.targets.build && my_room.memory.targets.build.length > 0) ? false : true;
 
         if (!(my_room && my_room.memory.energy_flow)) return; // The room contains no controller
-        
+
         // let fill_terminal = (my_room.terminal &&
         //                      my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
         //                      my_room.memory.energy_flow.store_used.terminal < my_room.memory.energy_flow.max_store.terminal);
@@ -408,30 +450,22 @@ var room_helpers = {
         //             break;
         //         }
         //     }
-        // }   
+        // }
 
         // TOWERS
         let all_towers = Object.keys(my_room.memory.towers.current);
         for (let t in all_towers) {
-            let current_tower = Game.getObjectById(all_towers[t]);
+            tower_id = all_towers[t]
+            let current_tower = Game.getObjectById(tower_id);
             // console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] Tower: ' + current_tower.id + ' Energy: ' + current_tower.store[RESOURCE_ENERGY] + '; All towers: ' + JSON.stringify(all_towers));
-            if (current_tower && current_tower.store[RESOURCE_ENERGY] < 600) {
+            if (current_tower && current_tower.store[RESOURCE_ENERGY] < 650 && my_room.memory.towers.current[tower_id] == false) {
                 all_towers_full = false;
                 break;
-            }     
+            }
         }
-            
-        // Extensions
-        if (my_room.energyAvailable < my_room.energyCapacityAvailable) all_extensions_full = false;
 
-        // Build constaructions
-        if (my_room.memory.targets.build && my_room.memory.targets.build.length > 0) is_no_constructions = false;
-        if (room_name === 'E37N47') 
-            console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + ']: All Full: ' + !(!all_extensions_full || !all_links_full || !all_towers_full) + 
-                        '; Ext: ' + all_extensions_full + '; Links: ' + all_links_full + '; Towers: ' + all_towers_full + '; Construvtions: ' + is_no_constructions);
-       
-        my_room.memory.global_vars.all_full = (!(!all_extensions_full || // !all_links_full ||
-                                                 !all_towers_full || !is_no_constructions)) // &&
+        my_room.memory.global_vars.all_full = (all_extensions_full && all_towers_full && terminal_full && is_no_constructions) // ||
+                                                //  !all_creep_repair_defence_full)) //
                                                 // !my_room.memory.targets.repair_defence);
     },
     transfer_link2link: function(room_name) {
@@ -446,9 +480,9 @@ var room_helpers = {
             // if (!(source_link && (source_link.store[RESOURCE_ENERGY] > 100))) continue;
             let destination_links = (my_room.memory.energy_flow.links.near_controller) ? [my_room.memory.energy_flow.links.near_controller,] : [];    // First link to get energy is near controller
             destination_links = destination_links.concat(Object.keys(my_room.memory.energy_flow.links.destinations));
-            
+
             // if ( room_name === 'E32N49') console.log('[ERROR] (room_helpers.transfer_link2link)[' + room_name  +'] Destination Links: ' + JSON.stringify(destination_links));
-            
+
             for (let l_dst in destination_links) {
                 let dst_l = Game.getObjectById(destination_links[l_dst]);
                 if (source_link && dst_l)
@@ -460,7 +494,7 @@ var room_helpers = {
             if (current_link_sent) break;
         }
 
-        // let near_src_links = my_room.memory.energy_flow.links.near_sources;        
+        // let near_src_links = my_room.memory.energy_flow.links.near_sources;
         // for (let near_src in near_src_links) {    // link near source transfer to controller ONLY!!
         //     let near_source_link = Game.getObjectById(near_src_links[near_src]);
         //     // if (!(near_source_link && (near_source_link.store[RESOURCE_ENERGY] > 100))) continue;
@@ -473,8 +507,8 @@ var room_helpers = {
     update_labs_info: function(room_name, room_by_mineral) {
         // Containers
         let my_room = Game.rooms[room_name];
-        if (!my_room) return; 
-        
+        if (!my_room) return;
+
         let all_labs = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LAB)});
         let all_labs_ids = all_labs.map(x => x.id);
         let all_lab_flags = my_room.find(FIND_FLAGS, {filter: object => (object.name.startsWith('lab'))});
@@ -507,7 +541,7 @@ var room_helpers = {
                 lab_reagent_positions[flag_pos_str] = lab_mineral;
             else if (mineral_stage === 'produce') {
                 lab_produce_positions[flag_pos_str] = lab_mineral;
-                if ((lab_mineral.length == 5) // || lab_mineral === 'GH2O') 
+                if ((lab_mineral.length == 5) // || lab_mineral === 'GH2O')
                     && !room_by_mineral.final_produce.includes(lab_mineral))
                     room_by_mineral.final_produce.push(lab_mineral)
             } else if (mineral_stage === 'process')
@@ -515,7 +549,7 @@ var room_helpers = {
             else
                 console.log('[ERROR] (room_helpers.update_labs_info)[' + room_name  +']: ' + all_lab_flags[f].name + ' Doesnt have definition');
         }
-        
+
         for (let l in all_labs) {
             let lab_pos_str = all_labs[l].pos.x + '-' + all_labs[l].pos.y;
             if (Object.keys(lab_reagent_positions).indexOf(lab_pos_str) >= 0 ) {
@@ -543,22 +577,22 @@ var room_helpers = {
             } else
                 console.log('[ERROR] (room_helpers.update_labs_info)[' + room_name  +']: The lab ' + all_labs[l].id + ' (' + lab_pos_str + ') Doesnt have definition: ' + all_labs[l].pos.getRangeTo(my_room.storage));
         }
-        
+
         // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers.update_labs_info)[' + room_name  +'] LABS by mineral: ' + JSON.stringify(labs_id_by_mineral));
         // Define reagent for produce and process
         let prod_labs = Object.keys(labs_info.produce);
         for (let pl in prod_labs) {
             let mineral_reagents = get_mineral_reagents(labs_info.produce[prod_labs[pl]]['type']);
-            // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers.update_labs_info)[' + room_name  +']: LAB ' + prod_labs[pl] + '; Reargents: ' + mineral_reagents); 
+            // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers.update_labs_info)[' + room_name  +']: LAB ' + prod_labs[pl] + '; Reargents: ' + mineral_reagents);
             labs_info.produce[prod_labs[pl]]['reagents'] = [labs_id_by_mineral[mineral_reagents[0]], labs_id_by_mineral[mineral_reagents[1]]];
         }
         let process_labs = Object.keys(labs_info.process);
         for (let pl in process_labs) {
             let mineral_reagents = get_mineral_reagents(labs_info.process[process_labs[pl]]['type']);
-            // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers.update_labs_info)[' + room_name  +']: LAB ' + process_labs[pl] + '; Reargents: ' + mineral_reagents); 
+            // if (room_name === 'E39N49') console.log('[DEBUG] (room_helpers.update_labs_info)[' + room_name  +']: LAB ' + process_labs[pl] + '; Reargents: ' + mineral_reagents);
             labs_info.process[process_labs[pl]]['reagents'] = [labs_id_by_mineral[mineral_reagents[0]], labs_id_by_mineral[mineral_reagents[1]]];
         }
-        
+
         my_room.memory.labs = labs_info;
         my_room.memory.mineral_by_lab = mineral_by_lab;
         my_room.memory.lab_per_mineral = lab_per_mineral
@@ -579,7 +613,9 @@ var room_helpers = {
         let all_links = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_LINK)});
         let all_sources = Object.keys(my_room.memory.energy_flow.sources).reduce((a,b)=> (a[b]=[],a),{});
         let cur_mineral = (my_room.memory.energy_flow.mineral) ? my_room.memory.energy_flow.mineral : {};
-        
+
+        // if (room_name === 'E38N49' ) console.log('[DEBUG] (room_helpers.upgrade_energy_flow): Links: ' + JSON.stringify(all_links, null, 2))
+
         let local_energy_flow_obj = {
             long_harvest: my_room.memory.energy_flow.long_harvest,
             sources: all_sources,
@@ -589,10 +625,10 @@ var room_helpers = {
             },
             max_store: my_room.memory.energy_flow.max_store,
             mineral: cur_mineral,
-            containers: {source :{}, other: {}}, 
+            containers: {source :{}, other: {}},
             links: {near_sources: [], near_controller: false, destinations: {}, sources: []}
         };
-        
+
         // Sort containers
         // console.log('[DEBUG] (room_helpers.upgrade_energy_flow)[' + room_name +']')
         // if (room_name === 'E28N47' ) console.log('[DEBUG] (room_helpers.upgrade_energy_flow): All Containers: ' + JSON.stringify(all_containers.map(x => x.id)));
@@ -604,7 +640,7 @@ var room_helpers = {
             // } else {
             for (let s_id in all_sources) {
                 if (all_containers[i].pos.isNearTo(Game.getObjectById(s_id))) {
-                    
+
                     local_energy_flow_obj.containers.source[all_containers[i].id] = {
                         source_id: s_id,
                         creeps_moving2me: [],
@@ -630,15 +666,20 @@ var room_helpers = {
             if (all_flags[f].name.substring(0,8) === 'link_src') link_src_positions.push(all_flags[f].pos.x +'-' + all_flags[f].pos.y);
             else link_dst_positions.push(all_flags[f].pos.x +'-' + all_flags[f].pos.y);
 
+        // if (room_name === 'E38N49' ) console.log('[DEBUG] (room_helpers.upgrade_energy_flow): DST Flags: ' + JSON.stringify(link_dst_positions, null, 2))
+
         let range2near_source = 2;
-        if (room_name == 'E34N47') range2near_source = 3;
+        if (room_name == 'E34N47' || room_name == 'E38N47') range2near_source = 3;
+        if (room_name == 'E32N47') range2near_source = 4;
+        range2near_controller =  (room_name == 'E28N47' || room_name == 'E27N47') ? 1 : 6;
+
         for (let l in all_links) {
             // if (room_name == 'E39N49') console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: LINK: ' + all_links[l].id);
             let link_pos_str = all_links[l].pos.x + '-' + all_links[l].pos.y;
             if (link_src_positions.indexOf(link_pos_str) >= 0) {
                 let is_near_source = false;
                 for (let s in my_room.memory.energy_flow.sources) {
-                    if (all_links[l].pos.getRangeTo(Game.getObjectById(s)) <= range2near_source) { 
+                    if (all_links[l].pos.getRangeTo(Game.getObjectById(s)) <= range2near_source) {
                         // if (room_name == 'E39N49') console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: LINK: ' + all_links[l].id + ' is near ' + s + ': ' + JSON.stringify(local_energy_flow_obj.sources[s]));
                         local_energy_flow_obj.links.near_sources.push(all_links[l].id);
                         local_energy_flow_obj.sources[s].push(all_links[l].id);
@@ -647,40 +688,36 @@ var room_helpers = {
                     }
                 }
                 if (!is_near_source) local_energy_flow_obj.links.sources.push(all_links[l].id);
-            } else if (all_links[l].pos.getRangeTo(my_room.controller) < 6)
+            } else if (all_links[l].pos.getRangeTo(my_room.controller) < range2near_controller)
                 local_energy_flow_obj.links.near_controller = all_links[l].id;
             else
                 local_energy_flow_obj.links.destinations[all_links[l].id] = false;
         }
         // if (room_name == 'E38N48') console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: DST LINKS iD: ' + JSON.stringify(local_energy_flow_obj.links.destinations));
-            
+
          // check EXTRACTOR in the room
         let extractor_targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_EXTRACTOR)});
-        // console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: LOCAL FLOW: ' + JSON.stringify(local_energy_flow_obj)) 
+        // console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: LOCAL FLOW: ' + JSON.stringify(local_energy_flow_obj))
         local_energy_flow_obj.mineral.extractor = (extractor_targets.length > 0 && extractor_targets.length > 0) ? extractor_targets[0].id : false;
-        
+
         // check STORAGE in the room
         let storage_targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_STORAGE)});
         local_energy_flow_obj.storage = (storage_targets.length > 0  && storage_targets.length > 0) ? storage_targets[0].id : false;
-             
-        // check TERMINAL in the room
-        let terminal_targets = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TERMINAL)});
-        local_energy_flow_obj.terminal = (terminal_targets.length > 0) ? terminal_targets[0].id : false;
 
-        // if (room_name == 'E39N49') console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: Finish upgrade: ' + JSON.stringify( local_energy_flow_obj, null, 2))  
+        // if (room_name == 'E39N49') console.log('[DEBUG](room_helpers.upgrade_energy_flow)[' + room_name + ']: Finish upgrade: ' + JSON.stringify( local_energy_flow_obj, null, 2))
         my_room.memory.energy_flow = local_energy_flow_obj;
     },
     define_room_status: function(room_name) {
         let room_vars = Memory.rooms[room_name].global_vars;
         let global_vars = Memory.rooms.global_vars;
         let my_room = Game.rooms[room_name];
-        if (!my_room) return; 
+        if (!my_room) return;
 
         let enemy_creeps = find_hostile(room_name);
         let invader_core = enemy_creeps[0];
         let hostile_creeps = enemy_creeps[1];
-                
-        let avoid_hostiles = ['Invader', ]; //'rogersnape63', 'Kraetzin'];
+
+        let avoid_hostiles = ['Invader', 'Digital']; //'rogersnape63', 'Kraetzin'];
 
         // if (room_name === 'E27N48') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
         if (my_room.controller.level === 0 && invader_core && invader_core.length > 0) {
@@ -705,13 +742,13 @@ var room_helpers = {
         } else if (room_vars.finish_war && room_vars.finish_war < Game.time && room_vars.status === 'war') {
             room_vars.status = 'peace';
             room_vars.finish_war = false;
-            room_vars.invader = false; 
+            room_vars.invader = false;
             // Game.notify('[' + room_name + '] It"s time for PEACE');
-        } else if (room_vars.status === 'war' && (room_name === 'E32N47' || room_name === 'E32N48')) {
-            if(hostile_creeps.length > 0 && !room_vars.finish_war) {    // need the if here for logical flow
-                console.log('[DEBUG] (room_helpers-define_room_status): Hostiles: ' + hostile_creeps.length + '; FINISH WAR: ' +  (Game.time + hostile_creeps[0].ticksToLive) + '; Current time: ' + Game.time + '; Hostile life: ' + hostile_creeps[0].ticksToLive);
-                room_vars.finish_war = (hostile_creeps.length > 0) ? (Game.time + hostile_creeps[0].ticksToLive - 20) : room_vars.finish_war; 
-            }
+        // } else if (room_vars.status === 'war' && (room_name === 'E32N47' || room_name === 'E32N48')) {
+        //     if(hostile_creeps.length > 0 && !room_vars.finish_war) {    // need the if here for logical flow
+        //         console.log('[DEBUG] (room_helpers-define_room_status): Hostiles: ' + hostile_creeps.length + '; FINISH WAR: ' +  (Game.time + hostile_creeps[0].ticksToLive) + '; Current time: ' + Game.time + '; Hostile life: ' + hostile_creeps[0].ticksToLive);
+        //         room_vars.finish_war = (hostile_creeps.length > 0) ? (Game.time + hostile_creeps[0].ticksToLive - 20) : room_vars.finish_war;
+        //     }
         } else if (room_vars.status === 'war' && !room_vars.finish_war) {
             room_vars.finish_war = Game.time + global_vars.update_period.after_war;
             // console.log('[DEBUG] (define_room_status)[' + room_name + '] Define finish war to ' +  (Game.time + global_vars.update_period.after_war));
@@ -732,17 +769,25 @@ var room_helpers = {
         my_room.memory.targets.transfer = targets[0] ? targets[0].id : false;
         return targets[0].id
     },
+    get_tombstone: function(room_name) {
+        let my_room = Game.rooms[room_name];
+        let min_contined_energy = 100
+        targets = my_room.find(FIND_TOMBSTONES, {filter: object => (object.store[RESOURCE_ENERGY] > min_contined_energy)});
+
+        // console.log('[DEBUG] (room_helpers-get_tombstone)[' + my_room.name + ': Tombstones: ' + JSON.stringify(targets))
+        my_room.memory.targets.tombstone = targets.length >0 ? targets[0].id : false;
+    },
     get_repair_defence_target: function(room_name) {
         let my_room = Game.rooms[room_name];
         let targets = [];
-        
-        
+
+
         if (!my_room || my_room.controller.reservation) return; // The room contains no controller
 
         let min_hits = Memory.rooms.global_vars.defence_level;
 
         repair_only = {
-            'E38N49': ['5ae294df600f8573214e7d09', '5ae2f6c68416ac191f939153'], // containers
+            // 'E38N49': ['5ae294df600f8573214e7d09', '5ae2f6c68416ac191f939153'], // containers
         };
         // *** LOG
         // console.log('[DEBUG] (room.helpers.get_repair_defence_target)[' + room_name + '] Repair_only: ' +  repair_only[room_name]);
@@ -766,12 +811,12 @@ var room_helpers = {
             // E28N48_avoid = ['5d9dbbc016ace500018a2d1f', '5d9dbbb783e1630001168434', '5d9db60b385375000189d6fe', '5d9db60e40c65400014715f5',
             //                 '5d9db60b385375000189d6ff', '5d9db611a45dbe0001b5ad64', '5d9dbb901ece8c0001231c57', '5d9dbb86e0b4fb0001d04945',
             //                 '5d9dbb6f05273d00018b0b26', '5d9db62b085de300017d53f5', '5d9dbb62f5fb9800016f8184', '5d9db638bdcc2a0001291619'];
-          
+
             let avoid_stricts = E39N49_avoid.concat(E27N48_avoid) // E38N47_avoid); //, E28N48_avoid);
             // avoid_stricts = avoid_stricts.concat(E27N48_avoid);
-            
 
-            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
+
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) &&
                                                                         object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1)});
         }
         // if (room_name === 'E27N47') console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
@@ -779,31 +824,47 @@ var room_helpers = {
 //        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets))
         potential_target = targets[0] ? targets[0].id : false;
         if (!Memory.rooms.global_vars.disable_repearing_by_towers) {
-            my_room.memory.targets.repair_defence = potential_target
-        } else my_room.memory.targets.repair_defence = false;
+            my_room.memory.targets.repair_defence = potential_target;
+        } else
+            my_room.memory.targets.repair_defence = false;
+
+        // if ((my_room.controller.level < 3 || my_room.controller.level === 8) && potential_target) //) && local_is_inside_wall(room_name, targets[0]))
+        //     my_room.memory.targets.creep_repair_defence = potential_target;
+        // else
+        //     my_room.memory.targets.creep_repair_defence = false;
     },
     get_creep_repair_defence: function(room_name) {
         my_room = Game.rooms[room_name];
         let min_hits = Memory.rooms.global_vars.defence_level;
         // console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + ']: ' + (!my_room.controller || !my_room.controller.owner))
         if (!my_room.controller || !my_room.controller.owner) return;
-        if (my_room.controller.level < 3)
-            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) && 
-                                                                        object.hits < min_hits && object.hits < (object.hitsMax * 0.95))});            
+        if (my_room.controller.level < 3 || my_room.controller.level === 8)
+            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER || object.structureType == STRUCTURE_ROAD) &&
+                                                                        object.hitsMax > 20000 && object.hits < min_hits && object.hits < (object.hitsMax * 0.95) &&
+                                                                        local_is_inside_wall(room_name, object))});
         else
-            targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_RAMPART) && //  || object.structureType == STRUCTURE_CONTAINER) && 
-                                                                        object.hits < min_hits && object.hits < (object.hitsMax * 0.95))});
+            // targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_RAMPART) && //  || object.structureType == STRUCTURE_CONTAINER) &&
+            //                                                             object.hits < min_hits && object.hits < (object.hitsMax * 0.95))});
+            targets = []
         targets.sort((a,b) => a.hits - b.hits);
         // console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + '] First Target: ' + JSON.stringify(targets[0],null,2))
-        my_room.memory.targets.creep_repair_defence = targets[0] ? targets[0].id : false
+        my_room.memory.targets.creep_repair_defence = targets[0] ? targets.map(x => x.id) : []
     },
     get_repair_civilianl_target: function(room_name) {
+        // if (room_name == "E27N49") console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + ']')
         let my_room = Game.rooms[room_name];
-        if (my_room.find(FIND_CREEPS, {filter: object => (object.name.includes('attacker_const'))}).length > 0) {
+        // if (my_room.find(FIND_CREEPS, {filter: object => (object.name.includes('attacker_const'))}).length > 0) {
+        if (my_room.memory.global_vars.status == 'war') {
             my_room.memory.targets.repair_civilian = false
             return;
         }
-        let targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_CONTAINER) && object.hits/object.hitsMax < 0.65});
+        if (my_room.memory.targets.repair_civilian) {
+            c_target = Game.getObjectById(my_room.memory.targets.repair_civilian)
+            // console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + '] C Target: ' + JSON.stringify(c_target,null,2))
+            if (!c_target || c_target.hitsMax > c_target.hits) return;
+        }
+        let targets = my_room.find(FIND_STRUCTURES, {filter: object => !(object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_TOWER)  && object.hits/object.hitsMax < 0.65});  // || object.structureType == STRUCTURE_CONTAINER)
+        // if (room_name == "E27N49") console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + '] targets to repaire: ' + JSON.stringify(targets,null,2))
         targets.sort((a,b) => a.hits - b.hits);
         my_room.memory.targets.repair_civilian = targets[0] ? targets[0].id : false;
     },
@@ -1061,18 +1122,23 @@ var room_helpers = {
             }
             terminals_status[r]['total'] = current_room.memory.energy_flow.store_used.terminal;
 
-            for (store_part in current_room.storage.store) {
-                if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part) || store_part === 'energy') {
-                    storage_status_by_mineral[store_part].storage[r] = current_room.storage.store[store_part];
-                    storage_status_by_mineral[store_part].storage.total += current_room.storage.store[store_part];
-                    storage_status_by_mineral[store_part].total += current_room.storage.store[store_part]
+            if (current_room.storage) {
+                for (store_part in current_room.storage.store) {
+                    if (Memory.rooms.global_vars.room_by_mineral.final_produce.includes(store_part) || store_part === 'energy') {
+                        storage_status_by_mineral[store_part].storage[r] = current_room.storage.store[store_part];
+                        storage_status_by_mineral[store_part].storage.total += current_room.storage.store[store_part];
+                        storage_status_by_mineral[store_part].total += current_room.storage.store[store_part]
+                    }
                 }
             }
-            storage_status_by_mineral['defence']['rooms'][r] = current_room.find(FIND_STRUCTURES, {filter: object =>
-                                                                (object.structureType === STRUCTURE_RAMPART)})[0]['hits'];
+
+            any_rampart = current_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_RAMPART)})
+            if (any_rampart.length > 0)
+                storage_status_by_mineral['defence']['rooms'][r] = any_rampart[0]['hits'];
 
             for (store_type in store_types) {
                 // console.log('[DEBUG] (room_helpers-get_minerals_status): ' + store_type + ' : ' + JSON.stringify(current_room[store_type]))
+                if (!current_room[store_types[store_type]]) continue
                 storage_status_by_mineral['store_status'][store_types[store_type]][r] = _.sum(current_room[store_types[store_type]].store)
             }
         }
@@ -1097,9 +1163,9 @@ var room_helpers = {
         let all_my_creeps=Game.creeps;
         let max_ticks = 2000;
         let room_min_ticksToLive = max_ticks;
-        for (let key in all_my_creeps) { 
+        for (let key in all_my_creeps) {
             // console.log('[DEBUG] (room_helpers-update_room_min_ticksToLive)[' + room_name + ' room_min_ticksToLive: ' + room_min_ticksToLive + ' creep: ' + all_my_creeps[key].ticksToLive)
-            if (key.startsWith(room_name) && all_my_creeps[key].ticksToLive < room_min_ticksToLive) 
+            if (key.startsWith(room_name) && all_my_creeps[key].ticksToLive < room_min_ticksToLive)
                 room_min_ticksToLive = all_my_creeps[key].ticksToLive
         }
         Game.rooms[room_name].memory.global_vars.room_min_ticksToLive = (room_min_ticksToLive === max_ticks) ? 0 : room_min_ticksToLive;
@@ -1108,9 +1174,9 @@ var room_helpers = {
         let my_room = Game.rooms[room_name];
         let mem_global_vars = Memory.rooms.global_vars;
         let log_room = 'E28N48';
-        
+
         if (!my_room.terminal) return;
-        
+
         // LABS
         let labs_amount_missing_minerals = 0;
         let reagent_labs = my_room.memory.labs.reagent;
@@ -1130,7 +1196,7 @@ var room_helpers = {
             // labs_amount_missing_minerals = 9;
         // console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name +'] LABS' + JSON.stringify(all_labs, null,2))
 
-        
+
         // TERMINAL
         let terminal_stored_minerals = my_room.terminal.store;
         let terminal_amount_missing_minerals = 0;
@@ -1152,68 +1218,70 @@ var room_helpers = {
             if (missing_type_in_terminal > (0.2 * mem_global_vars.minerals.storage_final_produce) &&
                 missing_type_in_terminal < produce_labs_status[mineral_type]) terminal_amount_missing_minerals++
         }
-        
+
         // verify room mineral is enought in the terminal
         if (my_room.terminal.store.getUsedCapacity(my_room.memory.energy_flow.mineral.type) < mem_global_vars.minerals.send_room)
             terminal_amount_missing_minerals++;
-        
+
         //  STORAGE
-        let storage_stored_minerals = my_room.storage.store;
         let storage_amount_missing_minerals = 0;
-        for (let i in storage_stored_minerals) { 
-            if ( i.length < 5) continue;
-            if (storage_stored_minerals[i] < (mem_global_vars.minerals.storage_final_produce-400)) storage_amount_missing_minerals++       
+        if (my_room.storage) {
+            let storage_stored_minerals = my_room.storage.store;
+            for (let i in storage_stored_minerals) {
+                if ( i.length < 5) continue;
+                if (storage_stored_minerals[i] < (mem_global_vars.minerals.storage_final_produce-400)) storage_amount_missing_minerals++
+            }
         }
-        
+
         // NUKER
         nuker_missing_ghodium = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType === STRUCTURE_NUKER)
                                                                                     && (object.store.getFreeCapacity('G') > 0))})[0];
-        
+
         let is_needed = !!(labs_amount_missing_minerals > 0 || terminal_amount_missing_minerals > 0 ||
                             storage_amount_missing_minerals > 2 || nuker_missing_ghodium);
-        if (room_name === log_room) console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name + 
-                                                    '] Assistenst is NEEDED: ' + is_needed + 
-                                                    '; Missing Minerals. Labs: ' + labs_amount_missing_minerals + 
-                                                    '; Reagent labs are full: ' + reagent_labs_full + 
-                                                    '; Terminal: ' + terminal_amount_missing_minerals + 
+        if (room_name === log_room) console.log('[DEBUG] (room_helpers-verify_lab_assistent_is_needed)[' + room_name +
+                                                    '] Assistenst is NEEDED: ' + is_needed +
+                                                    '; Missing Minerals. Labs: ' + labs_amount_missing_minerals +
+                                                    '; Reagent labs are full: ' + reagent_labs_full +
+                                                    '; Terminal: ' + terminal_amount_missing_minerals +
                                                     '; STORAGE: ' + storage_amount_missing_minerals +
                                                     '; NUKE: ' + nuker_missing_ghodium);
         my_room.memory.global_vars.screeps_max_amount.lab_assistent_needed = is_needed
-        
+
     },
     verify_worker_is_needed: function(room_name) {
         let my_room = Game.rooms[source_room_name];
         // let units = Memory.rooms.global_vars.units;
         workers_obj = creep_helpers.get_workers(room_name)
         if (!workers_obj) return false;
-        
+
         for (let rmt_room in workers_obj) {
-            // if (workers_obj[rmt_room] > 0) 
+            // if (workers_obj[rmt_room] > 0)
         }
     },
     verify_energy_miner_is_needed: function(room_name) {
-        let miner_is_needed = true;
-        let total_source_counteiners_capacity = 0
-        let free_capacity = 1300;
-        my_room = Game.rooms[room_name];
-        if (room_name === 'E37N49') return;
+        let my_room = Game.rooms[room_name];
+        // let free_capacity = 650 * Object.keys(my_room.memory.energy_flow.containers.source).length;
+        // if (room_name === 'E37N49') return;
         // console.log('[DEBUG](room.verify_energy_miner_is_needed)[' +  room_name + ']')
-        for (let cc in my_room.memory.energy_flow.containers.source) {
-            // let miner_is_needed = true;
-            cc_object = Game.getObjectById(cc)
-            cc_capacity = cc_object.store.getFreeCapacity('energy')
-            if (cc_object) {
-                total_source_counteiners_capacity += cc_capacity
-                if (cc_object.store.getFreeCapacity('energy') <= free_capacity &&
-                    my_room.memory.energy_flow.containers.source[cc].creeps_moving2me.length === 0)
-                    miner_is_needed = false;
+        if ((Memory.rooms.global_vars.units.total > 42 && my_room.memory.global_vars.status === 'peace') ||
+            my_room.memory.global_vars.all_full) {
+                my_room.memory.energy_flow.containers.miner_is_needed = false;
+                // console.log('[DEBUG](room.verify_energy_miner_is_needed)[' +  room_name + '] FALSE-all full')
+                return;
             }
-            // my_room.memory.energy_flow.containers.source[cc].miner_is_needed = miner_is_needed   
+        for (let cc in my_room.memory.energy_flow.containers.source) {
+            let cc_object = Game.getObjectById(cc)
+            if (!my_room.memory.energy_flow.containers.source[cc].miner_id) {
+                // !(!my_room.memory.energy_flow.containers.source[cc].miner_id &&
+                // (cc_object &&  cc_object.store.getUsedCapacity('energy') <= Memory.rooms.global_vars.minimal_container_energy))) {
+                // console.log('[DEBUG](room.verify_energy_miner_is_needed)[' +  room_name + '] TRUE-containers' + ' ID: ' + cc + '; miner id: ' + (my_room.memory.energy_flow.containers.source[cc].miner_id))
+                my_room.memory.energy_flow.containers.miner_is_needed = true;
+                return;
+            }
         }
-        // console.log('[DEBUG](room.verify_energy_miner_is_needed)[' +  room_name + '] Total room: ' +  total_source_counteiners_capacity)
-        if (total_source_counteiners_capacity > 2300)
-            miner_is_needed = true;
-        my_room.memory.energy_flow.containers.miner_is_needed = miner_is_needed   
+        // console.log('[DEBUG](room.verify_energy_miner_is_needed)[' +  room_name + '] TRUE')
+        // my_room.memory.energy_flow.containers.miner_is_needed = true;
     },
     empty_terminal: function(source_room_name, destination_room_name, transfer_energy, transfer_room_mineral) {
         let my_room = Game.rooms[source_room_name]
@@ -1245,7 +1313,18 @@ var room_helpers = {
     find_mycreeps_to_heal: function(room_name) {
         let my_room = Game.rooms[room_name]
         let my2heal = my_room.find(FIND_MY_CREEPS, {filter: object => (object.hits < object.hitsMax)})
-        my_room.memory.targets['my2heal'] = (my2heal.length > 0) ? _.map(my2heal,'id') : []; 
+        my_room.memory.targets['my2heal'] = (my2heal.length > 0) ? _.map(my2heal,'id') : [];
+    },
+    check_roads_amount: function(room_name) {
+        let my_room = Game.rooms[room_name]
+        current_amount = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD)}).length
+        // if (room_name === 'E33N47' ) console.log('######### [INFO](room.transfer_energy)[' +  room_name + '] Roads. Prev: ' +  my_room.memory.global_vars.roads + '; Current: ' + current_amount)
+        if (my_room.memory.global_vars.roads && my_room.memory.global_vars.roads > current_amount) {
+            Game.notify(room_name + 'Roads amoint was decreased from ' + my_room.memory.global_vars.roads + ' to ' + current_amount);
+            // console.log('###########  [INFO](room.transfer_energy)[' +  room_name + '] Roads amoint was decreased from ' + my_room.memory.global_vars.roads + ' to ' + current_amount)
+        } else {
+            my_room.memory.global_vars.roads = current_amount;
+        }
     }
 };
 
