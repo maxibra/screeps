@@ -474,7 +474,6 @@ var creep_helpers = {
 
                 // if (creep_type === 'energy_miner' && spawn_name == "max-E37N47-1") {
                 //     console.log('[DEBUG] (create_creep) [' + room_name + '] First condition: ' + (!my_room.memory.energy_flow.containers.miner_is_needed && (Memory.rooms.global_vars.units.total + current_obj.amount) > 42 && current_room_status === 'peace'))
-                //     console.log('[DEBUG] (create_creep) [' + room_name + '] Second condition: ' + (my_room.memory.global_vars.all_full && (my_room.terminal.store[RESOURCE_ENERGY] > my_room.memory.energy_flow.max_store.terminal_max_energy_storage)))
                 // }
 
                 if (creep_type === 'energy_miner') {

@@ -293,7 +293,7 @@ var room_helpers = {
                                      cur_terminal.cooldown === 0 &&
                                      cur_terminal.store[RESOURCE_ENERGY] > min_terminal_obj["avrg_energy"] &&
                                      cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer &&
-                                     destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal_max_energy_storage &&
+                                     destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal &&
                                      cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + energy_delta));
         // console.log('\t\tdestination_name: ' + destination_room_name);
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Transfer energy: ' + condition_to_transfer);
