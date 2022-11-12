@@ -272,7 +272,7 @@ var room_helpers = {
         let send_amount = 2000;
         let energy_delta = send_amount*4
 
-        minimal_energy_terminal = {store: {energy: TERMINAL_CAPACITY}};
+        let minimal_energy_terminal = {store: {energy: TERMINAL_CAPACITY}};
 
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Minimal energy terminal: ' + minimal_energy_terminal.room.name);
 
@@ -299,11 +299,10 @@ var room_helpers = {
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Transfer energy: ' + condition_to_transfer);
         // console.log('\t\tcur_terminal.cooldown === 0: ' + (cur_terminal.cooldown === 0));
         // console.log('\t\tdestination_terminal.store[RESOURCE_ENERGY]: ' + destination_terminal.store[RESOURCE_ENERGY]);
-        // console.log('\t\tdestination_room.memory.energy_flow.max_store.terminal_max_energy_storage: ' + (destination_room.memory.energy_flow.max_store.terminal_max_energy_storage));
         // console.log('\t\t(destination_terminal.store[RESOURCE_ENERGY] < (Memory.rooms.global_vars.terminal_max_energy_storage - energy_delta)): ' + (destination_terminal.store[RESOURCE_ENERGY] < (destination_room.memory.energy_flow.max_store.terminal - energy_delta)) +' (' + (destination_room.memory.energy_flow.max_store.terminal - energy_delta));
         // console.log('\t\tcur_terminal.store[RESOURCE_ENERGY] > min_terminal_obj["avrg_energy"]: ' + (cur_terminal.store[RESOURCE_ENERGY] > min_terminal_obj["avrg_energy"]))
         // console.log('\t\tcur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer: ' + (cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer))
-        // console.log('\t\tdestination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal_max_energy_storage: ' + (destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal_max_energy_storage))
+        // console.log('\t\tdestination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal: ' + (destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal))
         // console.log('\t\tcur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + energy_delta): ' + (cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + energy_delta)))
 
 
@@ -328,7 +327,7 @@ var room_helpers = {
     },
     transfer_mineral: function(room_name) {
         let all_my_rooms = ['E27N48', 'E28N48','E29N47', 'E33N47', 'E34N47', 'E36N48', 'E37N48', 'E38N47', 'E38N48', 'E39N49'];
-        let my_rooms_wo_src_room = _.remove(all_my_rooms, function(n) {return n != room_name});
+        let my_rooms_wo_src_room = _.remove(all_my_rooms, function(n) {return n !== room_name});
 
         // if (room_name === 'E33N47') console.log('My Rooms: "' + all_my_rooms + '"')
         let my_room = Game.rooms[room_name];
@@ -356,17 +355,17 @@ var room_helpers = {
                 continue;
             reagent_rooms = (global_vars.room_by_mineral.reagent[room_mineral]) ? global_vars.room_by_mineral.reagent[room_mineral] : [];
             // if (room_name === 'E38N48') console.log('WO source: ' + my_rooms_wo_src_room)
-            potential_dst_rooms = (room_mineral.length == 5 || room_mineral === 'G') ? my_rooms_wo_src_room : reagent_rooms;
+            potential_dst_rooms = (room_mineral.length === 5 || room_mineral === 'G') ? my_rooms_wo_src_room : reagent_rooms;
             // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers.transfer_mineral): Current room: ' + room_name + '; Mineral: ' + room_mineral + '; Poten Rooms' + JSON.stringify(potential_dst_rooms)) // + '; Index: ' + dst_room_index)
             for (let dst_room_index in potential_dst_rooms) {
                 let dst_room_name = potential_dst_rooms[dst_room_index];
                 let dst_room_terminal = Game.rooms[dst_room_name].terminal;
-                if (((room_name === 'E34N47' && room_mineral === 'G') || room_mineral.length == 5 || room_mineral == 'GH2O') &&
+                if (((room_name === 'E34N47' && room_mineral === 'G') || room_mineral.length === 5 || room_mineral === 'GH2O') &&
                     cur_room_terminal.store[room_mineral] > (dst_room_terminal.store[room_mineral] + global_vars.minerals.send_amount) &&
                     (!dst_room_terminal.store[room_mineral] ||
                         dst_room_terminal.store[room_mineral] <= global_vars.minerals.received_room)) {}
                 else if (room_name === dst_room_name || !my_room.controller.my ||
-                        (my_room.memory.energy_flow.mineral.type != room_mineral && potential_dst_rooms.includes(room_name) &&
+                        (my_room.memory.energy_flow.mineral.type !== room_mineral && potential_dst_rooms.includes(room_name) &&
                                                                                     potential_dst_rooms.includes(dst_room_name)) ||
                         // Memory.rooms[dst_room_name].energy_flow.mineral.type === room_mineral ||
                         dst_room_terminal.store[room_mineral] > global_vars.minerals.received_room ||
@@ -374,14 +373,14 @@ var room_helpers = {
                         cur_room_terminal.cooldown > 0)
                             continue;
                 // if(room_name === 'E38N48') console.log('[DEBUG] (room_helpers.transfer_mineral) Mineral [' + room_mineral + ']: ' + cur_room_terminal.store[room_mineral] +'/' + global_vars.minerals.send_amount + ' ; DST [' + dst_room_name + ']: ' + dst_room_terminal.store[room_mineral] + '; Min[' + min_amount[0] + ']: ' +min_amount[1])
-                    if (!dst_room_terminal.store[room_mineral] || dst_room_terminal.store[room_mineral] < min_amount[1] || min_amount[0] == '')
+                    if (!dst_room_terminal.store[room_mineral] || dst_room_terminal.store[room_mineral] < min_amount[1] || min_amount[0] === '')
                     min_amount = [dst_room_name, dst_room_terminal.store[room_mineral], room_mineral]
                 // if (!dst_room_terminal.store[room_mineral] || dst_room_terminal.store[room_mineral] < min_amount[1] || min_amount[0] == '')
                 //     min_amount = [dst_room_name, dst_room_terminal.store[room_mineral]]
             }
         }
         // console.log('[DEBUG] (room_helpers.transfer_mineral) Minimum Mineral: ' + JSON.stringify(min_amount))
-        if (min_amount[0] != '') {
+        if (min_amount[0] !== '') {
             we_have_minreal2transfer = true;
             let send_out = cur_room_terminal.send(min_amount[2], global_vars.minerals.send_amount, min_amount[0]);
             if (send_out === OK) console.log('[INFO] (room_helpers.transfer_mineral): Sent ' + global_vars.minerals.send_amount +
@@ -398,7 +397,7 @@ var room_helpers = {
         let exist_miners = {};
         let create_miner = false;   // ID of container that need a new creep
         for (let creep_name in cur_creeps) {
-            if (units[room_name][cur_creeps[creep_name].memory.role] == 'miner')
+            if (units[room_name][cur_creeps[creep_name].memory.role] === 'miner')
                 if (typeof exist_miners[cur_creeps[creep_name].memory.container] === 'undefined')
                     if (cur_creeps[creep_name].ticksToLive < my_room.memory.global_vars.age_to_recreate_miner) {
                         create_miner = cur_creeps[creep_name].memory.container_id;
@@ -428,10 +427,10 @@ var room_helpers = {
         let all_full = true;
         let all_links_full = true;
         let all_towers_full = true;
-        let terminal_full = (my_room.terminal && my_room.terminal.store[RESOURCE_ENERGY] >= my_room.memory.energy_flow.max_store.terminal) ? true : false;
-        let all_extensions_full = (my_room.energyAvailable < (my_room.energyCapacityAvailable - 2*700)) ? false : true;  // 650 is price of energy_miner
+        let terminal_full = !!(my_room.terminal && my_room.terminal.store[RESOURCE_ENERGY] >= my_room.memory.energy_flow.max_store.terminal);
+        let all_extensions_full = (my_room.energyAvailable >= (my_room.energyCapacityAvailable - 2 * 700));  // 650 is price of energy_miner
         // let all_creep_repair_defence_full = (my_room.memory.targets.creep_repair_defence) ? false : true;
-        let is_no_constructions = (my_room.memory.targets.build && my_room.memory.targets.build.length > 0) ? false : true;
+        let is_no_constructions = (!(my_room.memory.targets.build && my_room.memory.targets.build.length > 0));
 
         if (!(my_room && my_room.memory.energy_flow)) return; // The room contains no controller
 
@@ -467,6 +466,7 @@ var room_helpers = {
         my_room.memory.global_vars.all_full = (all_extensions_full && all_towers_full && terminal_full && is_no_constructions) // ||
                                                 //  !all_creep_repair_defence_full)) //
                                                 // !my_room.memory.targets.repair_defence);
+        if (!my_room.memory.global_vars.all_full) console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] Ext: ' +  all_extensions_full + '; Towers: ' + all_towers_full + '; Terminal: ' + terminal_full + ' (my_room.terminal.store[RESOURCE_ENERGY])' + '/' + my_room.memory.energy_flow.max_store.terminal + '; No Build: ' + is_no_constructions);
     },
     transfer_link2link: function(room_name) {
         let my_room = Game.rooms[room_name];
@@ -1252,7 +1252,7 @@ var room_helpers = {
     verify_worker_is_needed: function(room_name) {
         let my_room = Game.rooms[source_room_name];
         // let units = Memory.rooms.global_vars.units;
-        workers_obj = creep_helpers.get_workers(room_name)
+        let workers_obj = creep_helpers.get_workers(room_name)
         if (!workers_obj) return false;
 
         for (let rmt_room in workers_obj) {
@@ -1288,7 +1288,7 @@ var room_helpers = {
         let source_terminal = my_room.terminal
         let source_terminal_store = []
         let max_amount = 10000;
-        source_terminal_elements = Object.keys(source_terminal.store)
+        let source_terminal_elements = Object.keys(source_terminal.store)
         for (let store_element_index in source_terminal_elements) {
             if (!transfer_energy && source_terminal_elements[store_element_index] === 'energy') continue
             if (!transfer_room_mineral && source_terminal_elements[store_element_index] === my_room.memory.energy_flow.mineral.type) continue
@@ -1298,10 +1298,10 @@ var room_helpers = {
             console.log('[INFO](room.transfer_energy)[' +  source_room_name + '] EMPTY')
             return;
         }
-        element_to_transfer = source_terminal_store[0]
+        let element_to_transfer = source_terminal_store[0]
         console.log('[ERROR](room.transfer_energy)[' +  source_room_name + '] Send out: ' + element_to_transfer)
         let transfer_amount = (source_terminal.store[element_to_transfer] < max_amount) ? source_terminal.store[element_to_transfer] : max_amount
-        if (element_to_transfer == 'energy') transfer_amount -= 3000
+        if (element_to_transfer === 'energy') transfer_amount -= 3000
         let send_out = source_terminal.send(element_to_transfer, transfer_amount, destination_room_name);
         // console.log('[ERROR](room.transfer_energy)[' +  room_name + '] Send out: ' + send_out)
         if (send_out === OK) {
@@ -1317,11 +1317,11 @@ var room_helpers = {
     },
     check_roads_amount: function(room_name) {
         let my_room = Game.rooms[room_name]
-        current_amount = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD)}).length
+        let current_amount = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_ROAD)}).length
         // if (room_name === 'E33N47' ) console.log('######### [INFO](room.transfer_energy)[' +  room_name + '] Roads. Prev: ' +  my_room.memory.global_vars.roads + '; Current: ' + current_amount)
         if (my_room.memory.global_vars.roads && my_room.memory.global_vars.roads > current_amount) {
-            Game.notify(room_name + 'Roads amoint was decreased from ' + my_room.memory.global_vars.roads + ' to ' + current_amount);
-            // console.log('###########  [INFO](room.transfer_energy)[' +  room_name + '] Roads amoint was decreased from ' + my_room.memory.global_vars.roads + ' to ' + current_amount)
+            Game.notify(room_name + 'Roads amount was decreased from ' + my_room.memory.global_vars.roads + ' to ' + current_amount);
+            // console.log('###########  [INFO](room.transfer_energy)[' +  room_name + '] Roads amount was decreased from ' + my_room.memory.global_vars.roads + ' to ' + current_amount)
         } else {
             my_room.memory.global_vars.roads = current_amount;
         }
