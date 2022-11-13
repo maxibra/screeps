@@ -1,14 +1,14 @@
 var creep_helpers = require('creep_helpers');
 
 function get_direction_name(dx, dy) {
-    if (dx == 0 && dy < 0) return TOP;
+    if (dx === 0 && dy < 0) return TOP;
     else if (dx > 0 && dy < 0) return TOP_RIGHT;
     else if (dx < 0 && dy < 0) return TOP_LEFT;
-    else if (dx == 0 && dy > 0) return BOTTOM;
+    else if (dx === 0 && dy > 0) return BOTTOM;
     else if (dx > 0 && dy > 0) return BOTTOM_RIGHT;
     else if (dx < 0 && dy > 0) return BOTTOM_LEFT;
-    else if (dx > 0 && dy == 0) return RIGHT;
-    else if (dx < 0 && dy == 0) return LEFT;
+    else if (dx > 0 && dy === 0) return RIGHT;
+    else if (dx < 0 && dy === 0) return LEFT;
     else return -1;
 }
 
@@ -262,7 +262,7 @@ var room_helpers = {
         Memory.rooms.global_vars['minimal_energy_terminal'] = {
             'room_name': minimal_energy_terminal.room.name,
             'energy': minimal_energy_terminal.store.energy,
-            'avrg_energy': energy_sum / terminals_count
+            'avrg_energy': (energy_sum / terminals_count).toFixed(0)
         }
     },
     transfer_energy: function(room_name) {
@@ -290,6 +290,7 @@ var room_helpers = {
         }
 
         let condition_to_transfer = ((destination_terminal.store[RESOURCE_ENERGY] < (destination_room.memory.energy_flow.max_store.terminal - energy_delta)) &&
+                                     destination_terminal.store.getFreeCapacity() > 10000 &&
                                      cur_terminal.cooldown === 0 &&
                                      cur_terminal.store[RESOURCE_ENERGY] > min_terminal_obj["avrg_energy"] &&
                                      cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer &&
@@ -1263,7 +1264,6 @@ var room_helpers = {
         let my_room = Game.rooms[room_name];
         // let free_capacity = 650 * Object.keys(my_room.memory.energy_flow.containers.source).length;
         // if (room_name === 'E37N49') return;
-        // console.log('[DEBUG](room.verify_energy_miner_is_needed)[' +  room_name + ']')
         if ((Memory.rooms.global_vars.units.total > 42 && my_room.memory.global_vars.status === 'peace') ||
             my_room.memory.global_vars.all_full) {
                 my_room.memory.energy_flow.containers.miner_is_needed = false;
