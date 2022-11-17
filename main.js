@@ -362,9 +362,19 @@ module.exports.loop = function () {
         // if (current_room_name === 'E27N48') Memory.rooms[current_room_name].towers.current = {}
         // Memory.rooms[current_room_name].global_vars.max_body_cost = 2000
 
+        // if(my_room.memory.energy_flow && my_room.memory.energy_flow.max_store) my_room.memory.energy_flow.max_store.terminal_energy = 175000
+        // if (Memory.rooms[current_room_name].energy_flow && Memory.rooms[current_room_name].energy_flow.max_store && Memory.rooms[current_room_name].energy_flow.max_store.terminal_max_energy_storage) delete Memory.rooms[current_room_name].energy_flow.max_store.terminal_max_energy_storage
         // if (current_room_name === 'E29N47') Memory.rooms[current_room_name].energy_flow.containers.other = {};
         // delete Memory.rooms[current_room_name].energy_flow.max_used;
         // if (current_room_name === 'E27N48') Memory.rooms[current_room_name].energy_flow.max_store = {storage: 800000, terminal: 270000}
+
+        // room_containers = (my_room.memory.energy_flow && my_room.memory.energy_flow.containers) ? Object.keys(my_room.memory.energy_flow.containers.source) : [];
+        // console.log('[DEBUG] (main)[' + current_room_name + '] Containers: ' + room_containers)
+        // for (let c of room_containers) {
+        //     console.log('[DEBUG] (main)[' + current_room_name + '] Container: ' + c)
+        //     my_room.memory.energy_flow.containers.source[c].miner_id = false
+        // }
+
 
         // console.log('[DEBUG] ROOM: ' + current_room_name)
         // if (current_room_name === 'E28N48') {
@@ -377,7 +387,6 @@ module.exports.loop = function () {
         // delete Memory.rooms[current_room_name].targets.tombstones
         // Memory.rooms[current_room_name].targets.creep_repair_defence = false
         // console.log('[DEBUG] ROOM: ' + current_room_name)
-        // Memory.rooms[current_room_name].energy_flow.max_store.terminal_max_energy_storage = 170000
 
         // Memory.rooms[current_room_name].targets.creep_repair_defence = [];
 
