@@ -356,7 +356,8 @@ var structCreep = {
                     console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFER to terminal: ' + transfer_target);
                 } else if (
                            my_room.memory.energy_flow.storage &&
-                           my_room.memory.energy_flow.store_used.storage < my_room.memory.energy_flow.max_store.storage) {
+                           my_room.memory.energy_flow.store_used.storage < my_room.memory.energy_flow.max_store.storage &&
+                           my_room.storage.store['energy'] < my_room.memory.energy_flow.max_store.storage_energy) {
                     creep.say('to_storage');
                     creep_role = 'transfer';
                     transfer_target = Game.getObjectById(my_room.memory.energy_flow.storage);
