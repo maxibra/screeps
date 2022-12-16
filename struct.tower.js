@@ -13,7 +13,7 @@ var StructTower = {
             console.log('[ERROR] (StructTower.run) Tower: ' + current_tower_id + ' doesnt exist');
             return;
         }
-        
+
         let room_name = current_tower.room.name;
         let my_room = Game.rooms[room_name];
         let room_vars = my_room.memory.global_vars;
@@ -57,7 +57,7 @@ var StructTower = {
                 for (let h in all_hostile) {
                     for(let b in all_hostile[h].body) {
                         // console.log('[INFO] (StructTower.run) [' + room_name + ']Search fr Healer. Type: ' + all_hostile[h].body[b].type);
-                        if (all_hostile[h].body[b].type === 'heal' && current_tower.pos.getRangeTo(all_hostile[0]) < 38) {
+                        if (all_hostile[h].body[b].type === 'heal' && current_tower.pos.getRangeTo(all_hostile[0]) < 20) {
                             target2attack = all_hostile[h];
                             heal_is_found = true;
                             // console.log('[INFO] (StructTower.run) [' + room_name + '] Enemy healer is found');
@@ -112,8 +112,8 @@ var StructTower = {
     create_towers_list: function (room_name) {
         let towers_list = [];
         let my_room = Game.rooms[room_name];
-        if (!my_room) return; 
-        
+        if (!my_room) return;
+
         let room_vars = my_room.memory.global_vars;
         let all_towers = my_room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         for (let i=0;i<all_towers.length;i++) {

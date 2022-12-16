@@ -1,14 +1,14 @@
 var creep_helpers = require('creep_helpers');
 
 function get_direction_name(dx, dy) {
-    if (dx === 0 && dy < 0) return TOP;
+    if (dx == 0 && dy < 0) return TOP;
     else if (dx > 0 && dy < 0) return TOP_RIGHT;
     else if (dx < 0 && dy < 0) return TOP_LEFT;
-    else if (dx === 0 && dy > 0) return BOTTOM;
+    else if (dx == 0 && dy > 0) return BOTTOM;
     else if (dx > 0 && dy > 0) return BOTTOM_RIGHT;
     else if (dx < 0 && dy > 0) return BOTTOM_LEFT;
-    else if (dx > 0 && dy === 0) return RIGHT;
-    else if (dx < 0 && dy === 0) return LEFT;
+    else if (dx > 0 && dy == 0) return RIGHT;
+    else if (dx < 0 && dy == 0) return LEFT;
     else return -1;
 }
 
@@ -50,9 +50,9 @@ function link_transfer(source_link, destination_link) {
     // console.log('[DEBUG](room.helpers-link_transfer): Destination link: ' + destination_link)
     let energy_sent = false;
     let dst_free_capacity = destination_link.store.getFreeCapacity(RESOURCE_ENERGY);
-    
+
     // if (source_link.id === '5dad7368328c8405870fa2ec') console.log('[DEBUG](room.helpers-dst_free_capacity): Destination (' + destination_link.id + ') missing energy: ' +  dst_free_capacity + '; Source (' + source_link.id + '): ' + source_link.store[RESOURCE_ENERGY]);
-    
+
     src_used_capacity = source_link.store.getUsedCapacity(RESOURCE_ENERGY);
     if (source_link.cooldown === 0 && src_used_capacity > 0 && destination_link && dst_free_capacity >= src_used_capacity) {
             source_link.transferEnergy(destination_link, source_link.store.getUsedCapacity(RESOURCE_ENERGY));
@@ -64,7 +64,7 @@ function link_transfer(source_link, destination_link) {
 function get_mineral_reagents(mineral) {
     let reagents = false;
     let splitted;
-    
+
     if ( mineral === 'G' ) {
         reagents = ['ZK', 'UL'];
     } else if ( mineral.length === 2 ) {
@@ -80,10 +80,10 @@ function get_mineral_reagents(mineral) {
         if ( splitted[1].length === 4 )
             reagents = [splitted[1], 'X'];
     }
-    
+
     if ( !reagents )
         console.log('[ERROR](room.helpers-get_mineral_reagents): "' + mineral + '" Is unknown mineral; Reagents: ' + reagents);
-    
+
     return reagents;
 }
 
@@ -118,7 +118,7 @@ function find_hostile(room_name) {
                                                 // , {filter: object => (object.owner.username !== 'Sergeev' || (object.owner.username === 'Sergeev' && is_millitary(object)))})
     let invader_core = my_room.find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_INVADER_CORE)})
     let millitary_hostile = [];
-    
+
     let hostile_types = {
         'heal': [],
         'attack': [],
@@ -215,7 +215,7 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 11 || target.pos.x > 39 || target.pos.y < 4) is_inside = false;
             break;
         case 'E38N47':
-            if (target.pos.x < 5 || target.pos.y > 27) is_inside = false;
+            if (target.pos.x < 5 || target.pos.y > 28) is_inside = false;
             break;
         case 'E38N48':
             if (target.pos.x < 13 || target.pos.y < 22) is_inside = false;
@@ -234,11 +234,15 @@ function local_is_inside_wall(room_name, target) {
 var room_helpers = {
     define_extension_first: function(room_name) {
         let my_room = Game.rooms[room_name];
+        let body_cost_amount = my_room.memory.global_vars.max_body_cost * 3
         // my_room.memory.energy_flow.extension_first = ((my_room.energyCapacityAvailable*0.5) > my_room.energyAvailable);
         let ext_first = (my_room.energyCapacityAvailable > 0 &&
-                         ((my_room.memory.global_vars.max_body_cost * 4) > my_room.energyAvailable) &&
-                         ((my_room.memory.global_vars.max_body_cost * 4) < my_room.energyCapacityAvailable))
-        // if (room_name == 'E38N47') console.log('[DEBUG](room.define_extension_first)[' +  room_name + '] Extention first:' + ext_first + '; BODY_Cost:' + (my_room.memory.global_vars.max_body_cost * 3) + '; Energy Available: ' + my_room.energyAvailable)
+                         (body_cost_amount > my_room.energyAvailable && my_room.energyCapacityAvailable >= body_cost_amount ) ||
+                         my_room.energyAvailable < my_room.energyCapacityAvailable * 0.7)
+
+                        //  ((my_room.memory.global_vars.max_body_cost * 4) > my_room.energyAvailable) &&
+                        //  ((my_room.memory.global_vars.max_body_cost * 4) < my_room.energyCapacityAvailable))
+        if (room_name == 'E28N47') console.log('[DEBUG](room.define_extension_first)[' +  room_name + '] ===========  Extention first:' + ext_first + '; BODY_Cost: ' + body_cost_amount + '; Energy Available: ' + my_room.energyAvailable + '; Energy energyCapacityAvailable: ' + my_room.energyCapacityAvailable)
         my_room.memory.energy_flow.extension_first = ext_first;
     },
     find_terminal_min_energy: function() {
@@ -807,8 +811,7 @@ var room_helpers = {
                             '5a45672a7039475e533bf817', '5a45675893df715e3f1e313c', '5c33bd55a3d0015137fdfcec'];
             E38N47_avoid = []; // '5bf10cb261ef99031f97d884', '5bf10cc8166f13033947d85e', '5bf10cec9be909030411c9f3', '5bf10d03b1f81602f362b550'];
             E28N48_avoid = [];
-            E27N48_avoid = ['5e3a63be35d19eb16d83ba85', '5e3a6af5b39ae580a5537f34', '5e8d88533a405e6a2cc3c0f8', '5e8d8a1158081d88eeb2f056',
-                            '5e3a6374f7a6dcc9f3fc9d1b', '5e3a5631f4624b981941b585', '5e3a5626a4a1134b8dfa191e'];
+            E27N48_avoid = ['5f609031c5dc1131c8f4e996', '5e3a621384cf317c22f15dde', '5e3a61ef3cfb4e7ae6e72d43'];
             // E28N48_avoid = ['5d9dbbc016ace500018a2d1f', '5d9dbbb783e1630001168434', '5d9db60b385375000189d6fe', '5d9db60e40c65400014715f5',
             //                 '5d9db60b385375000189d6ff', '5d9db611a45dbe0001b5ad64', '5d9dbb901ece8c0001231c57', '5d9dbb86e0b4fb0001d04945',
             //                 '5d9dbb6f05273d00018b0b26', '5d9db62b085de300017d53f5', '5d9dbb62f5fb9800016f8184', '5d9db638bdcc2a0001291619'];

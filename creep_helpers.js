@@ -1,4 +1,4 @@
-1//var global_vars = Memory.rooms.global_vars;
+//var global_vars = Memory.rooms.global_vars;
 
 var creep_body = {
     general: {
@@ -110,6 +110,9 @@ function remote_target(room_name) {
             break;
         case 'E33N47':
             target = []; // ['E32N47', 'E32N49'; 'E32N48', 'E31N48',  'E33N48'];
+            break;
+        case 'E37N47':
+            target = ['E37N47']; //, 'E36N48']; // 'E34N46'];
             break;
         case 'E37N48':
             target = ['E37N49']; //, 'E36N48']; // 'E34N46'];
@@ -328,14 +331,14 @@ var creep_helpers = {
             guard: {
                 body: [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL, HEAL],
                 name_prefix: 'quard_' + room_name,
-                memory: { post: [11, 13, 'E37N48'] },
+                memory: { post: [32, 46, 'E37N47'] },
                 amount: 0,
-                avoid: !(room_name === 'E38N48')
+                avoid: !(room_name === 'E37N47')
             },
             attacker: {
                 // body:  [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.660K
                 // body: [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST: 3.090K
-                amount: 2,
+                amount: 0,
                 name_prefix: 'attacker_' + room_name,
                 rmt_targets: remote_target(room_name)
             },

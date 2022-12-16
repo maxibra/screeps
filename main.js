@@ -456,6 +456,7 @@ module.exports.loop = function () {
         }
 
         if (Game.time % 30 === 0 && Game.cpu.bucket > 6000) {
+            // console.log('[INFO] (main) [' + current_room_name + '] ================= MOD 30 ==================')
             room_helpers.transfer_energy(current_room_name);
             // room_helpers.transfer_mineral(current_room_name);
             // Count storage capacity of terminal and storage
@@ -534,7 +535,7 @@ module.exports.loop = function () {
 
     console.log('[INFO] (main)[End of Cycle ---] CPU Used: ' + Game.cpu.getUsed().toFixed(2) + '; Ticket Limit: ' + Game.cpu.tickLimit)
     console.log('----------------------------------------------------');
-    
+
     // Create first roads
     // if (typeof my_room.memory.roads == "undefined") {
     //     my_room.memory.roads = [];
