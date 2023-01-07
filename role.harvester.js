@@ -85,7 +85,7 @@ var RoleHarvester = {
                 // case 'E36N49':
                 // case 'E37N47':
                 case 'E38N48':
-                    range2link = 10;
+                    range2link = 9;
                     break;
                 case 'E32N47':
                     range2link = 20;
@@ -222,6 +222,10 @@ var RoleHarvester = {
                  // && !(room_name === 'E38N47' && my_room.memory.global_vars.status === 'war')) { //  && room_name !== 'E38N47') {
                     harvester_type = 'tombstone';
                     // my_room.memory.energy_flow.dropped[target.id] = creep.name
+                } else if (my_room.memory.global_vars.all_full_wo_storage && Memory.rooms.global_vars.units[room_name].energy_miner === 0) {
+                    target = (creep.memory.target_id) ? creep.memory.target_id : creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE,{filter: object => (object.energy > 60)});
+                    harvester_type = 'source';
+                    creep.say('Source');
                 } else {
                     target = false
                     // target = creep.pos.findClosestByRange(FIND_TOMBSTONES,{filter: object => ((object.store[RESOURCE_ENERGY] > 0 && creep.pos.getRangeTo(object) < 15) ||
@@ -340,6 +344,7 @@ var RoleHarvester = {
                 break;
             case 'source':
                 action_out = creep.harvest(target);
+                if (Game.time % 15 === 0) action_out === ERR_FULL;
                 break;
             case 'dropped':
                 action_out = creep.pickup(target);

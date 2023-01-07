@@ -235,7 +235,8 @@ var structCreep = {
             if (creep.name === 'worker_E29N47_E28N47-1') console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS target: ' + transfer_target + '; extensions_first: ' + extensions_first);
             if (!transfer_target && !extensions_first) {
                 transfer_target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: object => (object.structureType === STRUCTURE_TOWER &&
-                                                                                                      object.store[RESOURCE_ENERGY]/object.store.getCapacity(RESOURCE_ENERGY) < (Memory.rooms.global_vars.min_tower_enrg2repair+0.1))});
+                                                                                                      object.store[RESOURCE_ENERGY]/object.store.getCapacity(RESOURCE_ENERGY) < (Memory.rooms.global_vars.min_tower_enrg2repair+0.1) &&
+                                                                                                      !my_room.memory.towers.current[object.id])});
                 if (creep.name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + ']: TRANSFERS target TOWER: ' + transfer_target);
             }
 
@@ -334,7 +335,7 @@ var structCreep = {
                            controller_is_critical_level) { //  && creep.body.map(x=>x.type).indexOf('work') > -1) {
                     creep.say('low_controller');
                     creep_role = 'upgrade';
-                } else if (fill_terminal && creep.memory.energy_source != "terminal") {
+                } else if (fill_terminal && creep.memory.energy_source != "terminal" && creep.memory.energy_source != "storage") {
                     creep.say('to_terminal');
                     creep_role = 'transfer';
                     transfer_target = my_room.terminal;
@@ -342,7 +343,8 @@ var structCreep = {
                 } else if (
                            my_room.memory.energy_flow.storage &&
                            my_room.memory.energy_flow.store_used.storage < my_room.memory.energy_flow.max_store.storage &&
-                           my_room.storage.store['energy'] < my_room.memory.energy_flow.max_store.storage_energy) {
+                           my_room.storage.store['energy'] < my_room.memory.energy_flow.max_store.storage_energy &&
+                           creep.memory.energy_source != "terminal" && creep.memory.energy_source != "storage") {
                     creep.say('to_storage');
                     creep_role = 'transfer';
                     transfer_target = Game.getObjectById(my_room.memory.energy_flow.storage);
@@ -920,10 +922,12 @@ var structCreep = {
                                     }
                                 }
                             } else {
+                                // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] TARGET: ' + current_target);
                                 current_target = Game.getObjectById(transfer_targets[0]);
                             }
                         }
-                        creep.memory.target_id = current_target.id;
+                       console.log('[DEBUG] (structCreep.run)[' + creep.name + '] TARGET: ' + current_target);
+                       creep.memory.target_id = current_target.id;
                         if (creep.transfer(current_target, RESOURCE_ENERGY) !== OK) creep.moveTo(current_target, global_vars.moveTo_ops);
                         else {
                            // if (creep.name === log_name) console.log('[DEBUG] (struct_Creep)[' + creep.name +'] (Transfer) target_id is Changed to false');

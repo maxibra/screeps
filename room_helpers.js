@@ -215,7 +215,7 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 11 || target.pos.x > 39 || target.pos.y < 4) is_inside = false;
             break;
         case 'E38N47':
-            if (target.pos.x < 5 || target.pos.y > 28) is_inside = false;
+            if (target.pos.x < 8 || target.pos.x > 45 || target.pos.y > 28) is_inside = false;
             break;
         case 'E38N48':
             if (target.pos.x < 13 || target.pos.y < 22) is_inside = false;
@@ -436,6 +436,7 @@ var room_helpers = {
         let all_extensions_full = (my_room.energyAvailable >= (my_room.energyCapacityAvailable - 2 * 700));  // 650 is price of energy_miner
         // let all_creep_repair_defence_full = (my_room.memory.targets.creep_repair_defence) ? false : true;
         let is_no_constructions = (!(my_room.memory.targets.build && my_room.memory.targets.build.length > 0));
+        let is_no_repair = (!(my_room.memory.targets.creep_repair_defence && my_room.memory.targets.creep_repair_defence.length > 10));
 
         if (!(my_room && my_room.memory.energy_flow)) return; // The room contains no controller
 
@@ -468,7 +469,8 @@ var room_helpers = {
             }
         }
 
-        my_room.memory.global_vars.all_full = (all_extensions_full && all_towers_full && terminal_full && is_no_constructions) // ||
+        my_room.memory.global_vars.all_full_wo_storage = (all_extensions_full && all_towers_full && is_no_constructions && is_no_repair)
+        my_room.memory.global_vars.all_full = (all_extensions_full && all_towers_full && terminal_full && is_no_constructions && is_no_repair) // ||
                                                 //  !all_creep_repair_defence_full)) //
                                                 // !my_room.memory.targets.repair_defence);
         if (!my_room.memory.global_vars.all_full && my_room.terminal) console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] Ext: ' +  all_extensions_full + '; Towers: ' + all_towers_full + '; Terminal: ' + terminal_full + ' (' + my_room.terminal.store[RESOURCE_ENERGY] + ' / ' + my_room.memory.energy_flow.max_store.terminal_energy + '); No Build: ' + is_no_constructions);
