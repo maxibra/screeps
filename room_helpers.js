@@ -15,7 +15,7 @@ function get_direction_name(dx, dy) {
 function get_stright_path(FromPos, ToPos) {
     /* Return path left-right or top-bottom
      FromPos, ToPos - RoomPositlinion (new RoomPosition(spawn_pos.x+1,spawn_pos.y-1,my_room.name))
-     Return:
+     Return:_wall
      Path: [{"x":18,"y":24,"dx":1,"dy":-1,"direction":2},
      {"x":18,"y":23,"dx":0,"dy":-1,"direction":1}]
      Empty path if any error has occurred}
@@ -170,25 +170,25 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 2 || target.pos.x > 30 || target.pos.y > 36 || target.pos.y < 4) is_inside = false;
             break;
         case 'E27N47':
-            if (target.pos.x < 17 || target.pos.y > 47 || (target.pos.x < 36 && target.pos.y < 39)) is_inside = false;
+            if (target.pos.x < 16) is_inside = false;
             break;
         case 'E27N48':
-            if (target.pos.x < 37 || target.pos.y > 42) is_inside = false;
+            if (target.pos.x < 38 || target.pos.y < 5 || target.pos.y > 38) is_inside = false;
             break;
         case 'E27N49':
-            if (target.pos.x < 18 || target.pos.x > 33 || target.pos.y > 44 || target.pos.y < 3) is_inside = false;
+            if (target.pos.x < 15 || target.pos.x > 41 || target.pos.y > 44 || target.pos.y < 3 || (target.pos.x < 17 && target.pos.y < 30)) is_inside = false;
             break;
         case 'E28N47':
-            if (target.pos.x < 19) is_inside = false;
+            if (target.pos.x < 12 || target.pos.y > 45 || (target.pos.x > 38 && target.pos.y < 17)) is_inside = false;
             break;
         case 'E28N48':
-            if (target.pos.y > 37 || target.pos.x < 11 || target.pos.x > 46) is_inside = false;
+            if (target.pos.x < 15 || target.pos.x > 44 || target.pos.y > 36) is_inside = false;
             break;
         case 'E29N47':
-            if (target.pos.y > 36 || target.pos.x < 2 || target.pos.x > 38) is_inside = false;
+            if (target.pos.x < 9 || target.pos.x > 38 || target.pos.y > 36) is_inside = false;
             break;
         case 'E32N47':
-            if (target.pos.y < 2) is_inside = false;
+            if (target.pos.y < 6 || (target.pos.x < 36 && target.pos.y > 11) || (target.pos.y > 36)) is_inside = false;
             break;
         case 'E32N49':
             if (target.pos.x < 2 || target.pos.x > 46) is_inside = false;
@@ -200,31 +200,31 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 8) is_inside = false;
             break;
         case 'E34N47':
-            if (target.pos.x < 11 || target.pos.y > 30) is_inside = false;
+            if (target.pos.x < 8 || target.pos.x > 45 || target.pos.y > 27) is_inside = false;
             break;
         case 'E36N48':
             if (target.pos.x < 23 || target.pos.y < 11 || target.pos.y > 40) is_inside = false;
             break;
         case 'E36N49':
-            if (target.pos.x < 3 || target.pos.x > 18 || target.pos.y < 14 || target.pos.y > 42) is_inside = false;
+            if (target.pos.x < 3 || target.pos.x > 17 || target.pos.y < 15 || target.pos.y > 42) is_inside = false;
             break;
         case 'E37N47':
-            if (target.pos.x < 22 || target.pos.y > 27) is_inside = false;
+            if (target.pos.x < 8 || target.pos.x > 45 || target.pos.y > 16) is_inside = false;
             break;
         case 'E37N48':
-            if (target.pos.x < 11 || target.pos.x > 39 || target.pos.y < 4) is_inside = false;
+            if (target.pos.x < 10 || target.pos.x > 44 || target.pos.y < 4) is_inside = false;
             break;
         case 'E38N47':
-            if (target.pos.x < 8 || target.pos.x > 45 || target.pos.y > 28) is_inside = false;
+            if (target.pos.x < 3 || target.pos.y > 28 || (target.pos.x < 35 && target.pos.y >14)) is_inside = false;
             break;
         case 'E38N48':
-            if (target.pos.x < 13 || target.pos.y < 22) is_inside = false;
+            if (target.pos.x < 13 || target.pos.y < 20) is_inside = false;
             break;
         case 'E38N49':
-            if (target.pos.x > 47 || target.pos.y > 47 ) is_inside = false;
+            if (target.pos.x > 29 || target.pos.y > 34 ) is_inside = false;
             break;
         case 'E39N49':
-            if (target.pos.x > 42 || target.pos.x < 20 || target.pos.y < 20) is_inside = false;
+            if (target.pos.y < 19 || (target.pos.x < 20 && target.pos.y < 35) || (target.pos.x > 35 && target.pos.y < 27) ) is_inside = false;
             break;
         }
     return is_inside;
@@ -249,7 +249,8 @@ var room_helpers = {
         let destination_rooms = Object.keys(Game.rooms);
         let energy_sum = 0;
         let terminals_count = 0;
-        minimal_energy_terminal = {store: {energy: TERMINAL_CAPACITY}};
+        let minimal_energy_terminal = {store: {energy: TERMINAL_CAPACITY}};
+        let max_energy_to_full_terminal = {missing_energy: 0, room_name: ""};
         for (let r of destination_rooms) {
             let dest_room = Game.rooms[r]
             let destination_terminal = dest_room.terminal;
@@ -261,27 +262,38 @@ var room_helpers = {
             // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Amount of energy of terminal ' + destination_rooms[r] + ': ' + minimal_energy_terminal.store[RESOURCE_ENERGY]);
             if (destination_terminal && minimal_energy_terminal.store[RESOURCE_ENERGY] > destination_terminal.store[RESOURCE_ENERGY])
                 minimal_energy_terminal = destination_terminal
+            let missing_energy = (dest_room.memory.energy_flow.max_store.terminal_energy - destination_terminal.store[RESOURCE_ENERGY])
+            if (destination_terminal && max_energy_to_full_terminal.missing_energy < missing_energy)
+                max_energy_to_full_terminal = {missing_energy: missing_energy, room_name: dest_room.name};
         }
         // console.log('[DEBUG](room.find_terminal_min_energy) Minimal energy terminal: ' + minimal_energy_terminal.room.name + '; Energy: ' + minimal_energy_terminal.store.energy + '; Avrg: ' + (energy_sum / terminals_count));
         Memory.rooms.global_vars['minimal_energy_terminal'] = {
             'room_name': minimal_energy_terminal.room.name,
             'energy': minimal_energy_terminal.store.energy,
             'avrg_energy': (energy_sum / terminals_count).toFixed(0)
-        }
+        };
+        Memory.rooms.global_vars['max_energy_to_full_terminal'] = max_energy_to_full_terminal;
     },
     transfer_energy: function(room_name) {
         let my_room = Game.rooms[room_name];
         let cur_terminal = my_room.terminal;
         if (!Memory.rooms[room_name].energy_flow || !cur_terminal) return;
         let send_amount = 2000;
-        let energy_delta = send_amount*4
+        let energy_delta = send_amount*4;
+        let donation_room = "E37N48"
 
         let minimal_energy_terminal = {store: {energy: TERMINAL_CAPACITY}};
 
-        // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Minimal energy terminal: ' + minimal_energy_terminal.room.name);
+        // console.log('[DEBUG](room.transfer_energy)[' +  room_name + ']');
 
         let min_terminal_obj = Memory.rooms.global_vars.minimal_energy_terminal
-        let destination_room_name = min_terminal_obj["room_name"];
+        let destination_missing_energy = Memory.rooms.global_vars.max_energy_to_full_terminal;
+        let largest_missing_energy_condition = (room_name == donation_room && destination_missing_energy.room_name != donation_room &&
+                                                destination_missing_energy.missing_energy >= send_amount &&
+                                                (Object.keys(Memory.rooms[destination_missing_energy.room_name].energy_flow.sources).length > 1 ||
+                                                 destination_missing_energy.missing_energy > (my_room.memory.energy_flow.max_store.terminal_energy - cur_terminal.store['energy'])))
+        if (room_name == "E37N48") console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] destination_missing_energy: ' + destination_missing_energy.missing_energy)
+        let destination_room_name = largest_missing_energy_condition ? destination_missing_energy.room_name :  min_terminal_obj["room_name"];
         let destination_room = Game.rooms[destination_room_name];
         let destination_terminal = Game.rooms[destination_room_name].terminal;
 
@@ -293,13 +305,13 @@ var room_helpers = {
             // return
         }
 
-        let condition_to_transfer = ((destination_terminal.store[RESOURCE_ENERGY] < (destination_room.memory.energy_flow.max_store.terminal - energy_delta)) &&
-                                     destination_terminal.store.getFreeCapacity() > 10000 &&
+        let condition_to_transfer = (cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer &&
                                      cur_terminal.cooldown === 0 &&
-                                     cur_terminal.store[RESOURCE_ENERGY] > min_terminal_obj["avrg_energy"] &&
-                                     cur_terminal.store[RESOURCE_ENERGY] > Memory.rooms.global_vars.terminal_min2transfer &&
-                                     destination_terminal.store[RESOURCE_ENERGY] < destination_room.memory.energy_flow.max_store.terminal &&
-                                     cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + energy_delta));
+                                     (cur_terminal.store[RESOURCE_ENERGY] > min_terminal_obj["avrg_energy"] &&
+                                      cur_terminal.store[RESOURCE_ENERGY] > (destination_terminal.store[RESOURCE_ENERGY] + energy_delta) &&
+                                      destination_terminal.store[RESOURCE_ENERGY] < (destination_room.memory.energy_flow.max_store.terminal_energy - energy_delta) &&
+                                      destination_terminal.store.getFreeCapacity() > 10000 ||
+                                      largest_missing_energy_condition));
         // console.log('\t\tdestination_name: ' + destination_room_name);
         // console.log('[DEBUG](room.transfer_energy)[' +  room_name + '] Transfer energy: ' + condition_to_transfer);
         // console.log('\t\tcur_terminal.cooldown === 0: ' + (cur_terminal.cooldown === 0));
@@ -365,10 +377,13 @@ var room_helpers = {
             for (let dst_room_index in potential_dst_rooms) {
                 let dst_room_name = potential_dst_rooms[dst_room_index];
                 let dst_room_terminal = Game.rooms[dst_room_name].terminal;
-                if (((room_name === 'E34N47' && room_mineral === 'G') || room_mineral.length === 5 || room_mineral === 'GH2O') &&
+                if ((room_mineral.length === 5 || room_mineral === 'GH2O') &&
                     cur_room_terminal.store[room_mineral] > (dst_room_terminal.store[room_mineral] + global_vars.minerals.send_amount) &&
                     (!dst_room_terminal.store[room_mineral] ||
-                        dst_room_terminal.store[room_mineral] <= global_vars.minerals.received_room)) {}
+                        (dst_room_terminal.store[room_mineral] <= global_vars.minerals.received_room &&
+                         !Game.rooms[dst_room_name].memory.labs.minerals.produce.includes(room_mineral) ||
+                        (room_mineral === 'G' && dst_room_terminal.store[room_mineral] <= global_vars.minerals.received_room_g))
+                    )) {}
                 else if (room_name === dst_room_name || !my_room.controller.my ||
                         (my_room.memory.energy_flow.mineral.type !== room_mineral && potential_dst_rooms.includes(room_name) &&
                                                                                     potential_dst_rooms.includes(dst_room_name)) ||
@@ -632,7 +647,7 @@ var room_helpers = {
             },
             max_store: my_room.memory.energy_flow.max_store,
             mineral: cur_mineral,
-            containers: {source :{}, other: {}},
+            containers: {source :{}, other: {}, miner_is_needed: true},
             links: {near_sources: [], near_controller: false, destinations: {}, sources: []}
         };
 
@@ -724,15 +739,15 @@ var room_helpers = {
         let invader_core = enemy_creeps[0];
         let hostile_creeps = enemy_creeps[1];
 
-        let avoid_hostiles = ['Invader', 'Digital']; //'rogersnape63', 'Kraetzin'];
+        let avoid_hostiles = []; //'Invader']; //, 'Digital', 'rogersnape63', 'Kraetzin'];
 
         // if (room_name === 'E27N48') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
         if (my_room.controller.level === 0 && invader_core && invader_core.length > 0) {
             room_vars.status = 'war';
             Game.notify(room_name + ' is attacked by INVADER_CORE')
         }
-        if (room_vars.status === 'peace' && hostile_creeps && hostile_creeps.length > 0 ) { //&&
-            // avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0) {
+        if (room_vars.status === 'peace' && hostile_creeps && hostile_creeps.length > 0 &&
+            avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0) {
             room_vars.status = 'war';
             room_vars.invader = true;
             let hostile_boosts = {};
@@ -744,8 +759,10 @@ var room_helpers = {
             }
 
             let millitary_body = creep_helpers.is_millitary(hostile_creeps[0]);
-            if (avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0 && millitary_body) Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y +
-                                                                                                            '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(millitary_body));
+            if (avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0 && millitary_body && hostile_creeps[0].owner.username != 'Invader') {
+                Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y +
+                            '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(millitary_body));
+            }
         } else if (room_vars.finish_war && room_vars.finish_war < Game.time && room_vars.status === 'war') {
             room_vars.status = 'peace';
             room_vars.finish_war = false;
@@ -806,24 +823,25 @@ var room_helpers = {
                 if (cur_target && cur_target.hits < min_hits && cur_target.hits < cur_target.hitsMax) targets.push(cur_target)
             }
         } else {
-            E39N49_avoid = ['5ac90779c5bb62037cc4b33e', '5ae6095fa200d042b65a8d1a', '5ae609542e007b09769bff27', '5ae6094e663c3431216646d5',
-                            '5ba8b26e40377255d2054dd4', '5ba8b26718572047884cdaa9', '5ac907834c201c13acaab4ad', '5ac9078608e0a2508b2fff71',
-                            '5ac90776a248b85083647f9c', '5ac90773f866b113e0024902', '5ae6094571f07c3170377bc9', '5ae609488a126e099a691e45',
-                            '5a47f1ff6673566b55112cc4', '5a47f213d4b012351f84169a', '5a47f419269aa0511bdf24d5', '5b032ddc6d41df6fee77775c',
-                            '5a45672a7039475e533bf817', '5a45675893df715e3f1e313c', '5c33bd55a3d0015137fdfcec'];
+            E39N49_avoid = [];
+                            // '5ac90779c5bb62037cc4b33e', '5ae6095fa200d042b65a8d1a', '5ae609542e007b09769bff27', '5ae6094e663c3431216646d5',
+                            // '5ba8b26e40377255d2054dd4', '5ba8b26718572047884cdaa9', '5ac907834c201c13acaab4ad', '5ac9078608e0a2508b2fff71',
+                            // '5ac90776a248b85083647f9c', '5ac90773f866b113e0024902', '5ae6094571f07c3170377bc9', '5ae609488a126e099a691e45',
+                            // '5a47f1ff6673566b55112cc4', '5a47f213d4b012351f84169a', '5a47f419269aa0511bdf24d5', '5b032ddc6d41df6fee77775c',
+                            // '5a45672a7039475e533bf817', '5a45675893df715e3f1e313c', '5c33bd55a3d0015137fdfcec'];
             E38N47_avoid = []; // '5bf10cb261ef99031f97d884', '5bf10cc8166f13033947d85e', '5bf10cec9be909030411c9f3', '5bf10d03b1f81602f362b550'];
             E28N48_avoid = [];
-            E27N48_avoid = ['5f609031c5dc1131c8f4e996', '5e3a621384cf317c22f15dde', '5e3a61ef3cfb4e7ae6e72d43'];
+            E27N48_avoid = []; // '5f609031c5dc1131c8f4e996', '5e3a621384cf317c22f15dde', '5e3a61ef3cfb4e7ae6e72d43'];
             // E28N48_avoid = ['5d9dbbc016ace500018a2d1f', '5d9dbbb783e1630001168434', '5d9db60b385375000189d6fe', '5d9db60e40c65400014715f5',
             //                 '5d9db60b385375000189d6ff', '5d9db611a45dbe0001b5ad64', '5d9dbb901ece8c0001231c57', '5d9dbb86e0b4fb0001d04945',
             //                 '5d9dbb6f05273d00018b0b26', '5d9db62b085de300017d53f5', '5d9dbb62f5fb9800016f8184', '5d9db638bdcc2a0001291619'];
+            E27N49_avoid = []; // '5ae6095fa200d042b65a8d1a']
 
-            let avoid_stricts = E39N49_avoid.concat(E27N48_avoid) // E38N47_avoid); //, E28N48_avoid);
-            // avoid_stricts = avoid_stricts.concat(E27N48_avoid);
-
+            let avoid_stricts = [] // E39N49_avoid.concat(E27N48_avoid, E27N49_avoid) // E38N47_avoid); //, E28N48_avoid);
 
             targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) &&
-                                                                        object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1)});
+                                                                        object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1 &&
+                                                                        !local_is_inside_wall(room_name, object))});
         }
         // if (room_name === 'E27N47') console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
@@ -833,21 +851,20 @@ var room_helpers = {
             my_room.memory.targets.repair_defence = potential_target;
         } else
             my_room.memory.targets.repair_defence = false;
-
-        // if ((my_room.controller.level < 3 || my_room.controller.level === 8) && potential_target) //) && local_is_inside_wall(room_name, targets[0]))
-        //     my_room.memory.targets.creep_repair_defence = potential_target;
-        // else
-        //     my_room.memory.targets.creep_repair_defence = false;
     },
     get_creep_repair_defence: function(room_name) {
         my_room = Game.rooms[room_name];
-        let min_hits = Memory.rooms.global_vars.defence_level;
+        let min_hits = Memory.rooms.global_vars.screeps_defence_level;
         // console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + ']: ' + (!my_room.controller || !my_room.controller.owner))
         if (!my_room.controller || !my_room.controller.owner) return;
+
+        let exclude_structure = ["635ba6a15dd6d7579f70f524"]
+
         if (my_room.controller.level < 3 || my_room.controller.level === 8)
+
             targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER || object.structureType == STRUCTURE_ROAD) &&
                                                                         object.hitsMax > 20000 && object.hits < min_hits && object.hits < (object.hitsMax * 0.95) &&
-                                                                        local_is_inside_wall(room_name, object))});
+                                                                        local_is_inside_wall(room_name, object) && exclude_structure.indexOf(object.id) === -1)});
         else
             // targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_RAMPART) && //  || object.structureType == STRUCTURE_CONTAINER) &&
             //                                                             object.hits < min_hits && object.hits < (object.hitsMax * 0.95))});
@@ -1012,19 +1029,21 @@ var room_helpers = {
         // If the amount of greates lab is less than greatest_mineral_amount, then EMPTY string will be returned
         // [ID, mineral]
         let my_room = Game.rooms[room_name];
-        greatest_mineral_amount = ['', ''];
-        greatest_amount = 250;
-        lab_stages = ['produce']; //, 'process']
+        let greatest_mineral_amount = ['', ''];
+        let greatest_amount = 250;
+        let lab_stages = ['produce']; //, 'process']
         for (current_stage in lab_stages) {
             l_ids = Object.keys(my_room.memory.labs[lab_stages[current_stage]]);
             for (l in l_ids){
-                current_lab = Game.getObjectById(l_ids[l]);
-                lab_amount = current_lab.store[current_lab.mineralType];
+                let current_lab = Game.getObjectById(l_ids[l]);
+                let lab_amount = current_lab.store[current_lab.mineralType];
+                let storage_final_produce = (current_lab.mineralType === 'G') ? 2 * Memory.rooms.global_vars.minerals.storage_final_produce : Memory.rooms.global_vars.minerals.storage_final_produce;
+
                 // if (room_name === 'E38N48') console.log('[DEBUG] (room_helpers-get_lab2withdraw) Lab Type: ' + current_lab.mineralType + '; Amount: ' + lab_amount + '; Greates amount: ' + greatest_amount)
                 if (lab_amount > greatest_amount &&
-                    ((my_room.terminal.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.storage_final_produce) ||
+                    ((my_room.terminal.store[current_lab.mineralType] < storage_final_produce) ||
                         !my_room.terminal.store[current_lab.mineralType])
-                     // my_room.storage.store[current_lab.mineralType] < Memory.rooms.global_vars.minerals.storage_final_produce)
+                     // my_room.storage.store[current_lab.mineralType] < storage_final_produce)
                     ) {
                         greatest_mineral_amount = [l_ids[l], current_lab.mineralType];
                         greatest_amount = lab_amount
@@ -1040,7 +1059,7 @@ var room_helpers = {
         // {<id>: <mineral>, ...}
         let my_room = Game.rooms[room_name];
         array2withdraw = {};
-        sources = ['terminal']; // , 'storage']
+        sources = ['terminal'] //, 'storage']
         for (src in sources) {
             minerals = my_room.memory.labs.minerals.reagent;
             minerals = shuffle(minerals);    // Randomize an order of the minerals
@@ -1077,8 +1096,8 @@ var room_helpers = {
             for (lab_id in lab_ids_of_stage){
                 current_lab = Game.getObjectById(lab_id);
                 current_lab_mineralType = (current_lab.mineralType) ? current_lab.mineralType : lab_ids_of_stage[lab_id].type;
-                if (room_name === log_room) console.log('[DEBUG] (room_helpers-run_lab_reactions)[' + room_name + ']: LAB [' + reactions_labs[lab_stage] + '] ID: ' + lab_id + '; Store [' + current_lab_mineralType +']: ' + current_lab.store[current_lab_mineralType] + ' / ' + current_lab.store.getCapacity(current_lab_mineralType));
                 if (current_lab.cooldown === 0 && current_lab.store[current_lab_mineralType] <= (current_lab.store.getCapacity(current_lab_mineralType) - 5)) {
+                    console.log('[DEBUG] (room_helpers-run_lab_reactions)[' + room_name + ']: LAB [' + reactions_labs[lab_stage] + '] ID: ' + lab_id + '; Store [' + current_lab_mineralType +']: ' + current_lab.store[current_lab_mineralType] + ' / ' + current_lab.store.getCapacity(current_lab_mineralType));
                     src_lab1 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[0]);
                     src_lab2 = Game.getObjectById(lab_ids_of_stage[lab_id].reagents[1]);
                     reaction_out = current_lab.runReaction(src_lab1, src_lab2);
@@ -1329,6 +1348,13 @@ var room_helpers = {
             // console.log('###########  [INFO](room.transfer_energy)[' +  room_name + '] Roads amount was decreased from ' + my_room.memory.global_vars.roads + ' to ' + current_amount)
         } else {
             my_room.memory.global_vars.roads = current_amount;
+        }
+    },
+    find_nukes: function(room_name) {
+        let my_room = Game.rooms[room_name]
+        let nukes = my_room.find(FIND_NUKES).length
+        if (nukes > 0) {
+             Game.notify(room_name + ' is attacked by NUKE')
         }
     }
 };

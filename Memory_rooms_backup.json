@@ -1,7 +1,6 @@
 // JSON.stringify(Memory.rooms.global_vars,null,2)
 {
   "spawns_list": [
-    "max_E27N48-3",
     "max_E36N49-1",
     "max_E36N49-2",
     "max_E36N49-3",
@@ -17,12 +16,15 @@
     "max-E27N47-2",
     "max-E27N47-3",
     "max_E27N49-1",
-    "max_E34N47-1"
+    "max_E34N47-1",
+    "max_E32N47-2",
+    "max_E27N49-2"
   ],
   "critical_controller_percent": 0.5,
   "min_tower_enrg2repair": 0.6,
   "defence_level_remote": 1300000,
-  "defence_level": 40554000,
+  "defence_level": 43100000,
+  "screeps_defence_level": 44100000,
   "terminal_max_energy_storage": 170000,
   "terminal_min2transfer": 70000,
   "terminal_emergency_ration": 70000,
@@ -86,9 +88,6 @@
         "E28N48",
         "E29N47",
         "E39N49"
-      ],
-      "UL": [
-        "E28N48"
       ],
       "KO": [
         "E29N47"
@@ -164,13 +163,14 @@
   },
   "minerals": {
     "send_room": 40000,
+    "received_room_g": 5000,
     "received_room": 1000,
     "storage_final_produce": 5000,
     "send_amount": 500,
     "transfer_batch": 300
   },
   "units": {
-    "total": 45,
+    "total": 38,
     "E27N47": {
       "total": 2,
       "transfer": 0,
@@ -188,20 +188,20 @@
       "sp_total": 1
     },
     "E27N48": {
-      "total": 1,
-      "transfer": 0,
+      "total": 2,
+      "transfer": 1,
       "build": 0,
       "upgrade": 0,
       "upgrader": 0,
       "repair_defence": 0,
       "repair_civilian": 0,
-      "harvest": 1,
+      "harvest": 0,
       "undefined": 0,
       "long_harvest": 0,
       "claimer": 0,
       "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+      "energy_miner": 1,
+      "sp_total": 1
     },
     "E27N49": {
       "total": 3,
@@ -221,13 +221,13 @@
     },
     "E28N47": {
       "total": 2,
-      "transfer": 1,
+      "transfer": 0,
       "build": 0,
       "upgrade": 0,
       "upgrader": 0,
       "repair_defence": 0,
       "repair_civilian": 0,
-      "harvest": 0,
+      "harvest": 1,
       "undefined": 0,
       "long_harvest": 0,
       "claimer": 0,
@@ -268,21 +268,20 @@
       "sp_total": 2
     },
     "E29N47": {
-      "total": 3,
+      "total": 2,
       "transfer": 0,
       "build": 0,
       "upgrade": 0,
       "upgrader": 0,
-      "repair_defence": 0,
+      "repair_defence": 1,
       "repair_civilian": 0,
       "harvest": 0,
       "undefined": 0,
       "long_harvest": 0,
       "claimer": 0,
       "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2,
-      "false": null
+      "energy_miner": 1,
+      "sp_total": 1
     },
     "E29N49": {
       "total": 0,
@@ -301,39 +300,7 @@
       "sp_total": 0
     },
     "E32N47": {
-      "total": 3,
-      "transfer": 1,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 1,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 1,
-      "sp_total": 1
-    },
-    "E33N47": {
-      "total": 3,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 1,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
-    },
-    "E34N47": {
-      "total": 3,
+      "total": 2,
       "transfer": 1,
       "build": 0,
       "upgrade": 0,
@@ -345,6 +312,38 @@
       "long_harvest": 0,
       "claimer": 0,
       "mineral_miner": 0,
+      "energy_miner": 1,
+      "sp_total": 1
+    },
+    "E33N47": {
+      "total": 1,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 1,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
+    "E34N47": {
+      "total": 3,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 1,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
       "energy_miner": 2,
       "sp_total": 2
     },
@@ -352,9 +351,9 @@
       "total": 1,
       "transfer": 0,
       "build": 0,
-      "upgrade": 0,
+      "upgrade": 1,
       "upgrader": 0,
-      "repair_defence": 1,
+      "repair_defence": 0,
       "repair_civilian": 0,
       "harvest": 0,
       "undefined": 0,
@@ -381,22 +380,6 @@
       "sp_total": 0
     },
     "E37N47": {
-      "total": 4,
-      "transfer": 1,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 1,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
-    },
-    "E37N48": {
       "total": 3,
       "transfer": 1,
       "build": 0,
@@ -411,6 +394,23 @@
       "mineral_miner": 0,
       "energy_miner": 2,
       "sp_total": 2
+    },
+    "E37N48": {
+      "total": 4,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 0,
+      "upgrader": 0,
+      "repair_defence": 1,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 2,
+      "sp_total": 3,
+      "remote_harvest": null
     },
     "E37N49": {
       "total": 2,
@@ -428,7 +428,7 @@
       "energy_miner": 0,
       "sp_total": 2,
       "remote_energy_miner": null,
-      "remote_harvest": null
+      "remote_claimer": null
     },
     "E38N47": {
       "total": 2,
@@ -447,6 +447,22 @@
       "sp_total": 1
     },
     "E38N48": {
+      "total": 1,
+      "transfer": 0,
+      "build": 0,
+      "upgrade": 1,
+      "upgrader": 0,
+      "repair_defence": 0,
+      "repair_civilian": 0,
+      "harvest": 0,
+      "undefined": 0,
+      "long_harvest": 0,
+      "claimer": 0,
+      "mineral_miner": 0,
+      "energy_miner": 0,
+      "sp_total": 0
+    },
+    "E38N49": {
       "total": 3,
       "transfer": 0,
       "build": 0,
@@ -462,37 +478,21 @@
       "energy_miner": 2,
       "sp_total": 2
     },
-    "E38N49": {
-      "total": 3,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 1,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
-    },
     "E39N49": {
-      "total": 3,
-      "transfer": 1,
+      "total": 1,
+      "transfer": 0,
       "build": 0,
       "upgrade": 0,
       "upgrader": 0,
-      "repair_defence": 0,
+      "repair_defence": 1,
       "repair_civilian": 0,
       "harvest": 0,
       "undefined": 0,
       "long_harvest": 0,
       "claimer": 0,
       "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
+      "energy_miner": 0,
+      "sp_total": 0
     }
   },
   "towers": {
@@ -1240,8 +1240,12 @@
   "disable_repearing_by_towers": false,
   "minimal_container_energy": 1300,
   "minimal_energy_terminal": {
-    "room_name": "E38N47",
-    "energy": 200177,
-    "avrg_energy": "207478"
+    "room_name": "E32N47",
+    "energy": 198397,
+    "avrg_energy": "213844"
+  },
+  "max_energy_to_full_terminal": {
+    "missing_energy": 7134,
+    "room_name": "E37N48"
   }
 }

@@ -30,10 +30,10 @@ var RoleHarvester = {
         // if (creep.name === creep_name4log) console.log('[DEBUG] (RoleHarvester) [' + creep_name4log +'] Memory:  ' + JSON.stringify(creep.memory, null, 2));
 
         // Here with zero energy. If no enough time to work then die
-        // if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
-        //     creep.say('Going2die');
-        //     creep.suicide();     // Go to die to Cemetery (a far place)
-        // }
+        if (creep.ticksToLive < global_vars.age_to_drop_and_die) {
+            creep.say('Going2die');
+            creep.suicide();     // Go to die to Cemetery (a far place)
+        }
 
         if (creep_role !== 'harvest') creep.say('harvesting');
 
@@ -75,20 +75,19 @@ var RoleHarvester = {
             target = false;
             let range2link;
             switch (room_name) {
+                case 'E27N49':
+                case 'E37N47':
                 case 'E38N49':
                     range2link = 7;
                     break;
                 case 'E27N48':
                 case 'E28N47':
-                // case 'E32N47':
+                case 'E32N47':
                 case 'E33N47':
                 // case 'E36N49':
                 // case 'E37N47':
                 case 'E38N48':
                     range2link = 9;
-                    break;
-                case 'E32N47':
-                    range2link = 20;
                     break;
                 // case 'E27N47':
                 case 'E34N47':
@@ -98,12 +97,12 @@ var RoleHarvester = {
                     range2link = 5;
             }
 
-            range2container = (room_name == 'E37N47') ? 7 : 3;
+            range2container = (room_name == 'E37N47' || room_name == 'E27N47') ? 7 : 3;
             source_containers = (my_room.memory.energy_flow) ? Object.keys(my_room.memory.energy_flow.containers.source) : [];
             let source_container_near_me = ''
             for (let c in source_containers) {
                 let current_container = Game.getObjectById(source_containers[c]);
-                if (creep.pos.getRangeTo(current_container) < range2container && current_container.store[RESOURCE_ENERGY] > 50) {
+                if (creep.pos.getRangeTo(current_container) <= range2container && current_container.store[RESOURCE_ENERGY] > 50) {
                     target = current_container
                     break;
                 }

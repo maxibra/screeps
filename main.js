@@ -4,6 +4,19 @@ var room_helpers = require('room_helpers');
 var roleTower = require('struct.tower');
 var screepsplus = require('screepsplus');
 
+// rms = Object.keys(Game.rooms); rms.forEach((r) => {console.log(r + " " + (JSON.stringify(Game.rooms[r].terminal) && JSON.stringify(Game.rooms[r].terminal.store.getFreeCapacity())) + "; " + (JSON.stringify(Game.rooms[r].terminal) && JSON.stringify(Game.rooms[r].terminal.store['G'])))})
+// Game.rooms['E28N48'].terminal.send('G', 10000, 'E38N49')
+// Game.rooms['E33N47'].terminal.send('U', 5000, 'E28N48')
+// Game.rooms['E38N47'].terminal.send('Z', 5000, 'E28N48')
+// Game.rooms['E39N49'].terminal.send('K', 5000, 'E28N48')
+
+// Game.rooms['E37N48'].nuker.launchNuke(new RoomPosition(20,31, 'E39N48'));
+// Game.rooms['E36N48'].nuker.launchNuke(new RoomPosition(20,31, 'E39N48'));
+// Game.rooms['E36N49'].nuker.launchNuke(new RoomPosition(20,31, 'E39N48'));
+// Game.rooms['E34N47'].nuker.launchNuke(new RoomPosition(20,31, 'E39N48'));
+// Game.rooms['E33N47'].nuker.launchNuke(new RoomPosition(22,33, 'E39N48'));
+// Game.rooms['E29N47'].nuker.launchNuke(new RoomPosition(22,33, 'E39N48'));
+
 // VER 1.29
 
 // for (r of ['E27N47', 'E27N49', 'E28N47', 'E32N47']) { console.log(r + ': ' + _.map(Game.rooms[r].find(FIND_STRUCTURES, {filter: object => object.structureType === STRUCTURE_WALL}), 'hits').sort(function(a, b){return a - b;}))}
@@ -247,7 +260,6 @@ module.exports.loop = function () {
             }
             // Clean dirty memory
             // Memory.rooms[current_room_name].energy_flow.containers.source = {}
-
         }
         let creeps_amount = 0
         for (let creep_name in cur_creeps) {
@@ -390,6 +402,12 @@ module.exports.loop = function () {
 
         // Memory.rooms[current_room_name].targets.creep_repair_defence = [];
 
+        // Update max body cost
+        // Memory.rooms[current_room_name].global_vars.max_body_cost = 1700
+
+        // Update ALL lab_assistent_needed
+        // Memory.rooms[current_room_name].global_vars.screeps_max_amount.lab_assistent_needed = false
+
         // Towers
         if (!Memory.rooms[current_room_name].global_vars) {
             console.log('[WARN][' + current_room_name +']: global_vars doesnt defined for the room. Skip the room');
@@ -414,10 +432,10 @@ module.exports.loop = function () {
             room_helpers.transfer_link2link(current_room_name);
         }
 
-        // if (Game.time % 5 === 0 && Game.cpu.bucket > 8000) {
-        //     if (current_room_name === 'E39N49') console.log('[INFO] (main)[' +current_room_name + ']: Starting Lab reaction');
-        //     room_helpers.run_lab_reactions(current_room_name);
-        // }
+        if (Game.time % 5 === 0 && Game.cpu.bucket > 8000) {
+            // if (current_room_name === 'E39N49') console.log('[INFO] (main)[' +current_room_name + ']: Starting Lab reaction');
+            room_helpers.run_lab_reactions(current_room_name);
+        }
 
         // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
         let current_mod = 0;
@@ -491,12 +509,13 @@ module.exports.loop = function () {
             // room_helpers.verify_gn_age_difference_and_kill(current_room_name)
             // room_helpers.get_minerals_status()
             // If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
-            // room_helpers.update_labs_info(current_room_name, room_by_mineral);
+            room_helpers.update_labs_info(current_room_name, room_by_mineral);
             // roleTower.create_towers_list(current_room_name);
         }
 
         if (Game.time % 1000 === 2 ) {
             room_helpers.check_roads_amount(current_room_name)
+            room_helpers.find_nukes(current_room_name)
         }
     }
 
@@ -524,10 +543,10 @@ module.exports.loop = function () {
     // }
 
     // // Before uncomment check uncomment room_helpers.update_labs_info above
-    // if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
-    //     room_by_mineral['reagent']['G'] = ['E27N48', 'E28N48', 'E29N47', 'E33N47', 'E34N47', 'E36N48', 'E37N48', 'E38N48', 'E38N47', 'E39N49']
-    //     Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
-    // }
+    if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
+        room_by_mineral['reagent']['G'] = ['E27N48', 'E28N48', 'E29N47', 'E33N47', 'E34N47', 'E36N48', 'E37N48', 'E38N48', 'E38N47', 'E39N49']
+        Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
+    }
 
     if (Game.time % 1000 === 1) {
         room_helpers.clean_memory();
