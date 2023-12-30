@@ -885,6 +885,7 @@ var structCreep = {
                         //         if (cur_target && creep.pos.getRangeTo(cur_target) < 4)
                         //             transfer_target = cur_target;
                         //     }
+                        // }
 
                         // current_target = (creep.memory.target_id) ? Game.getObjectById(creep.memory.target_id) : false;
                         // console.log('[DEBUG][' + creep.name + '] : ' +current_target)
@@ -1256,6 +1257,8 @@ var structCreep = {
             case 'worker':
                 let worker_room = creep.name.substring(14, 20);
                 // let worker_location = new RoomPosition(25, 25, worker_room);
+                // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] WORKER room: ' + worker_room + '; ' + creep.id);
+                // if (worker_room == 'E28N49') break;
                 let worker_location = Game.rooms[worker_room].controller;
                 if (creep.name === 'worker_E37N48_E36N48-2') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Location: ' + worker_location + '; Range: ' + (creep.pos.getRangeTo(worker_location) > 3));
                 if (creep.name === 'worker_E37N48_E36N48-2') console.log('[DEBUG] (structCreep.run)[' + creep.name + '] MoveTo output: ' +  creep.moveTo(worker_location, global_vars.moveTo_ops));

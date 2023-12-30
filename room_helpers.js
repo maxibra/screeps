@@ -170,25 +170,25 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 2 || target.pos.x > 30 || target.pos.y > 36 || target.pos.y < 4) is_inside = false;
             break;
         case 'E27N47':
-            if (target.pos.x < 16) is_inside = false;
+            if (target.pos.x < 17  || (target.pos.x < 37 && target.pos.y < 39) || (target.pos.x < 44 && target.pos.y < 9)) is_inside = false;
             break;
         case 'E27N48':
-            if (target.pos.x < 38 || target.pos.y < 5 || target.pos.y > 38) is_inside = false;
+            if (target.pos.x < 38 || target.pos.y < 3 || target.pos.y > 41) is_inside = false;
             break;
         case 'E27N49':
             if (target.pos.x < 15 || target.pos.x > 41 || target.pos.y > 44 || target.pos.y < 3 || (target.pos.x < 17 && target.pos.y < 30)) is_inside = false;
             break;
         case 'E28N47':
-            if (target.pos.x < 12 || target.pos.y > 45 || (target.pos.x > 38 && target.pos.y < 17)) is_inside = false;
+            if (target.pos.x < 12 || target.pos.y < 5 || target.pos.y > 44 || (target.pos.x > 38 && target.pos.y < 21)) is_inside = false;
             break;
         case 'E28N48':
             if (target.pos.x < 15 || target.pos.x > 44 || target.pos.y > 36) is_inside = false;
             break;
         case 'E29N47':
-            if (target.pos.x < 9 || target.pos.x > 38 || target.pos.y > 36) is_inside = false;
+            if (target.pos.x < 8 || target.pos.x > 38 || target.pos.y > 36 || (target.pos.x < 9 && target.pos.y > 31)) is_inside = false;
             break;
         case 'E32N47':
-            if (target.pos.y < 6 || (target.pos.x < 36 && target.pos.y > 11) || (target.pos.y > 36)) is_inside = false;
+            if (target.pos.y < 2 || target.pos.x < 6 || (target.pos.x < 36 && target.pos.y > 11) || (target.pos.y > 35)) is_inside = false;
             break;
         case 'E32N49':
             if (target.pos.x < 2 || target.pos.x > 46) is_inside = false;
@@ -200,28 +200,28 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 8) is_inside = false;
             break;
         case 'E34N47':
-            if (target.pos.x < 8 || target.pos.x > 45 || target.pos.y > 27) is_inside = false;
+            if (target.pos.x < 3 || target.pos.y > 34) is_inside = false;
             break;
         case 'E36N48':
-            if (target.pos.x < 23 || target.pos.y < 11 || target.pos.y > 40) is_inside = false;
+            if (target.pos.x < 23 || target.pos.y < 12 || target.pos.y > 40) is_inside = false;
             break;
         case 'E36N49':
-            if (target.pos.x < 3 || target.pos.x > 17 || target.pos.y < 15 || target.pos.y > 42) is_inside = false;
+            if (target.pos.x < 3 || target.pos.x > 18 || target.pos.y < 15 || target.pos.y > 43) is_inside = false;
             break;
         case 'E37N47':
-            if (target.pos.x < 8 || target.pos.x > 45 || target.pos.y > 16) is_inside = false;
+            if (target.pos.x < 8 || target.pos.x > 45 || target.pos.y > 27 || (target.pos.x < 22 && target.pos.y > 21)) is_inside = false;
             break;
         case 'E37N48':
-            if (target.pos.x < 10 || target.pos.x > 44 || target.pos.y < 4) is_inside = false;
+            if (target.pos.x < 10 || target.pos.x > 44 || target.pos.y < 4 || target.pos.y > 42) is_inside = false;
             break;
         case 'E38N47':
-            if (target.pos.x < 3 || target.pos.y > 28 || (target.pos.x < 35 && target.pos.y >14)) is_inside = false;
+            if (target.pos.x < 3 || target.pos.y > 28 || target.pos.y < 3 || (target.pos.x < 35 && target.pos.y > 14)) is_inside = false;
             break;
         case 'E38N48':
-            if (target.pos.x < 13 || target.pos.y < 20) is_inside = false;
+            if (target.pos.x < 10 || target.pos.y < 20) is_inside = false;
             break;
         case 'E38N49':
-            if (target.pos.x > 29 || target.pos.y > 34 ) is_inside = false;
+            if (target.pos.x > 34 || target.pos.x < 3 || target.pos.y > 47 ) is_inside = false;
             break;
         case 'E39N49':
             if (target.pos.y < 19 || (target.pos.x < 20 && target.pos.y < 35) || (target.pos.x > 35 && target.pos.y < 27) ) is_inside = false;
