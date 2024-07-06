@@ -922,10 +922,15 @@ var room_helpers = {
                 console.log('[INFO] Clean memory: non-existing creep', name);
             }
         }
-        // Clean missing targets IDs
+        // Clean missing targets IDs or empty room
         for(var room_name in Memory.rooms) {
-            if (room_name == "global_vars" || Object.keys(Memory.rooms[room_name]).length === 0) continue
-            console.log('[INFO] [' + room_name + ']')
+
+            if (room_name == "global_vars") continue
+            if (Object.keys(Memory.rooms[room_name]).length === 0) {
+                console.log('[INFO] Deleting Empty Room: ' + room_name)
+                delete Memory.rooms[room_name];
+                continue;
+            }
             if ( Memory.rooms[room_name].targets.repair_defence && !Game.getObjectById(Memory.rooms[room_name].targets.repair_defence)) {
                 console.log('[INFO] [' + room_name + '] Clean missing targets.repair_defence: ' + Memory.rooms[room_name].targets.repair_defence);
                 Memory.rooms[room_name].targets.repair_defence = false
