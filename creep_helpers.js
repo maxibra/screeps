@@ -109,7 +109,7 @@ function remote_target(room_name) {
             target = []; //['E28N47'];
             break;
         case 'E28N48':
-            target = ['E28N49', 'E29N49']; //, 'E27N47', 'E27N48', 'E29N48', 'E29N49', 'E28N49'];
+            target = []; //, 'E27N47', 'E27N48'];
             break;
         case 'E33N47':
             target = []; // ['E32N47', 'E32N49'; 'E32N48', 'E31N48',  'E33N48'];
@@ -126,7 +126,9 @@ function remote_target(room_name) {
         case 'E38N48':
             target = []; //['E38N49',]; // 'E34N46'];
             break;
-    }
+        case 'E39N49':
+            target = ['E39N49',]; // 'E34N46'];
+            break;    }
     // if (room_name == 'E28N48') console.log('[DEBUG] (creep.helpers.remote_target)[' + room_name + ' Remote Room: ' + target);
     return target;
 }
@@ -348,7 +350,7 @@ var creep_helpers = {
             },
             attacker: {
                 // body:  [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST:1.660K
-                // body: [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST: 3.090K
+                body: [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,HEAL], // COST: 3.090K
                 amount: 0,
                 name_prefix: 'attacker_' + room_name,
                 rmt_targets: remote_target(room_name)
@@ -432,13 +434,13 @@ var creep_helpers = {
                 // body: [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
                 body: [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY],   // CARRY: 500
                 amount: 0,
-                avoid: !(room_name === 'E38N49') // || room_name === 'E27N45' || room_name === 'E38N48' || room_name === 'E37N48')
+                avoid: !(room_name === 'E38N47') // || room_name === 'E27N45' || room_name === 'E38N48' || room_name === 'E37N48')
             },
             energy_shuttle: {
                 // body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
                 body: [MOVE, MOVE, CARRY, CARRY, CARRY, CARRY], // carry: 200
                 amount: 0,
-                avoid: !(room_name === 'E38N47')
+                avoid: !(room_name === 'E27N47')
             }
             // mineral_shuttle: {
             //     body: [MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // carry: 400
@@ -525,9 +527,10 @@ var creep_helpers = {
                             homeland: room_name
                         }
                     } else if (creep_type === 'attacker') {
-                        if (typeof remote_rooms_in_war[remote_room] === "undefined" || (remote_room_obj && Object.keys(remote_room_obj.memory.towers.current).length > 0)) continue;
-                        // if (room_name == log_room_name) console.log('[DEBUG] (create_creep)[' + room_name + '] ATTACKER. Remote: ' + remote_room + '; Towers: ' + Object.keys(remote_room_obj.memory.towers.current).length + '; Remote in War: ' + (typeof remote_rooms_in_war[remote_room]));
-                        // console.log('(create_creep)[' + room_name + '][' + remote_room + '] War: ' + remote_rooms_in_war[remote_room] + '; Amount: ' + current_obj.amount);
+                        // if (typeof remote_rooms_in_war[remote_room] === "undefined" || (remote_room_obj && Object.keys(remote_room_obj.memory.towers.current).length > 0)) continue;
+                        if (typeof remote_rooms_in_war[remote_room] === "undefined") continue;
+                        if (room_name == log_room_name) console.log('[DEBUG] (create_creep)[' + room_name + '] ATTACKER. Remote: ' + remote_room + '; Towers: ' + Object.keys(remote_room_obj.memory.towers.current).length + '; Remote in War: ' + (typeof remote_rooms_in_war[remote_room]));
+                        console.log('(create_creep)[' + room_name + '][' + remote_room + '] War: ' + remote_rooms_in_war[remote_room] + '; Amount: ' + current_obj.amount);
 
                         current_creep_memory = { room_in_war: remote_room };
                         creeps_amount = current_obj.amount;

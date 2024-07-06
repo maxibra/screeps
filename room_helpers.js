@@ -173,13 +173,13 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 17  || (target.pos.x < 37 && target.pos.y < 39) || (target.pos.x < 44 && target.pos.y < 9)) is_inside = false;
             break;
         case 'E27N48':
-            if (target.pos.x < 38 || target.pos.y < 3 || target.pos.y > 41) is_inside = false;
+            if (target.pos.x < 38 || target.pos.y > 41) is_inside = false;
             break;
         case 'E27N49':
-            if (target.pos.x < 15 || target.pos.x > 41 || target.pos.y > 44 || target.pos.y < 3 || (target.pos.x < 17 && target.pos.y < 30)) is_inside = false;
+            if (target.pos.x < 15 || target.pos.x > 31 || target.pos.y > 44 || target.pos.y < 3 || (target.pos.x < 17 && target.pos.y < 30)) is_inside = false;
             break;
         case 'E28N47':
-            if (target.pos.x < 12 || target.pos.y < 5 || target.pos.y > 44 || (target.pos.x > 38 && target.pos.y < 21)) is_inside = false;
+            if (target.pos.x < 24 || target.pos.y < 17 || target.pos.y > 44 || (target.pos.x > 38 && target.pos.x < 43 && target.pos.y < 21)) is_inside = false;
             break;
         case 'E28N48':
             if (target.pos.x < 15 || target.pos.x > 44 || target.pos.y > 36) is_inside = false;
@@ -197,10 +197,10 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x > 24 || target.pos.x < 2 || target.pos.y > 43 || target.pos.y < 20) is_inside = false;
             break;
         case 'E33N47':
-            if (target.pos.x < 8) is_inside = false;
+            if (target.pos.x < 8 || target.pos.x > 47) is_inside = false;
             break;
         case 'E34N47':
-            if (target.pos.x < 3 || target.pos.y > 34) is_inside = false;
+            if (target.pos.x < 13 || target.pos.y > 34) is_inside = false;
             break;
         case 'E36N48':
             if (target.pos.x < 23 || target.pos.y < 12 || target.pos.y > 40) is_inside = false;
@@ -215,13 +215,13 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 10 || target.pos.x > 44 || target.pos.y < 4 || target.pos.y > 42) is_inside = false;
             break;
         case 'E38N47':
-            if (target.pos.x < 3 || target.pos.y > 28 || target.pos.y < 3 || (target.pos.x < 35 && target.pos.y > 14)) is_inside = false;
+            if (target.pos.x < 15 || target.pos.y > 28 || (target.pos.x < 35 && target.pos.y > 14)) is_inside = false;
             break;
         case 'E38N48':
-            if (target.pos.x < 10 || target.pos.y < 20) is_inside = false;
+            if (target.pos.x < 4 || target.pos.y < 20) is_inside = false;
             break;
         case 'E38N49':
-            if (target.pos.x > 34 || target.pos.x < 3 || target.pos.y > 47 ) is_inside = false;
+            if (target.pos.x > 29 || (target.pos.x < 30 && target.pos.y > 34)) is_inside = false;
             break;
         case 'E39N49':
             if (target.pos.y < 19 || (target.pos.x < 20 && target.pos.y < 35) || (target.pos.x > 35 && target.pos.y < 27) ) is_inside = false;
@@ -242,7 +242,7 @@ var room_helpers = {
 
                         //  ((my_room.memory.global_vars.max_body_cost * 4) > my_room.energyAvailable) &&
                         //  ((my_room.memory.global_vars.max_body_cost * 4) < my_room.energyCapacityAvailable))
-        if (room_name == 'E28N47') console.log('[DEBUG](room.define_extension_first)[' +  room_name + '] ===========  Extention first:' + ext_first + '; BODY_Cost: ' + body_cost_amount + '; Energy Available: ' + my_room.energyAvailable + '; Energy energyCapacityAvailable: ' + my_room.energyCapacityAvailable)
+        // if (room_name == 'E28N47') console.log('[DEBUG](room.define_extension_first)[' +  room_name + '] ===========  Extention first:' + ext_first + '; BODY_Cost: ' + body_cost_amount + '; Energy Available: ' + my_room.energyAvailable + '; Energy energyCapacityAvailable: ' + my_room.energyCapacityAvailable)
         my_room.memory.energy_flow.extension_first = ext_first;
     },
     find_terminal_min_energy: function() {
@@ -823,13 +823,14 @@ var room_helpers = {
                 if (cur_target && cur_target.hits < min_hits && cur_target.hits < cur_target.hitsMax) targets.push(cur_target)
             }
         } else {
-            E39N49_avoid = [];
+            E39N49_avoid = ['5ae6095fa200d042b65a8d1a', '5ae609542e007b09769bff27', '5ae6094e663c3431216646d5', '5ae6094571f07c3170377bc9', '5ae609488a126e099a691e45'];
                             // '5ac90779c5bb62037cc4b33e', '5ae6095fa200d042b65a8d1a', '5ae609542e007b09769bff27', '5ae6094e663c3431216646d5',
                             // '5ba8b26e40377255d2054dd4', '5ba8b26718572047884cdaa9', '5ac907834c201c13acaab4ad', '5ac9078608e0a2508b2fff71',
                             // '5ac90776a248b85083647f9c', '5ac90773f866b113e0024902', '5ae6094571f07c3170377bc9', '5ae609488a126e099a691e45',
                             // '5a47f1ff6673566b55112cc4', '5a47f213d4b012351f84169a', '5a47f419269aa0511bdf24d5', '5b032ddc6d41df6fee77775c',
                             // '5a45672a7039475e533bf817', '5a45675893df715e3f1e313c', '5c33bd55a3d0015137fdfcec'];
             E38N47_avoid = []; // '5bf10cb261ef99031f97d884', '5bf10cc8166f13033947d85e', '5bf10cec9be909030411c9f3', '5bf10d03b1f81602f362b550'];
+            E37N47_avoid = ['65c8fd8f482c0be8e8f535a8', '65c9096704a0713ab0f670b3', '65c9009f61961b33c2994f6d', '65c8fd7b9be22561fac93da1'];
             E28N48_avoid = [];
             E27N48_avoid = []; // '5f609031c5dc1131c8f4e996', '5e3a621384cf317c22f15dde', '5e3a61ef3cfb4e7ae6e72d43'];
             // E28N48_avoid = ['5d9dbbc016ace500018a2d1f', '5d9dbbb783e1630001168434', '5d9db60b385375000189d6fe', '5d9db60e40c65400014715f5',
@@ -837,7 +838,7 @@ var room_helpers = {
             //                 '5d9dbb6f05273d00018b0b26', '5d9db62b085de300017d53f5', '5d9dbb62f5fb9800016f8184', '5d9db638bdcc2a0001291619'];
             E27N49_avoid = []; // '5ae6095fa200d042b65a8d1a']
 
-            let avoid_stricts = [] // E39N49_avoid.concat(E27N48_avoid, E27N49_avoid) // E38N47_avoid); //, E28N48_avoid);
+            let avoid_stricts = E39N49_avoid // E39N49_avoid.concat(E27N48_avoid, E27N49_avoid) // E38N47_avoid); //, E28N48_avoid);
 
             targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) &&
                                                                         object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1 &&
@@ -1095,6 +1096,7 @@ var room_helpers = {
             lab_ids_of_stage = my_room.memory.labs[reactions_labs[lab_stage]];
             for (lab_id in lab_ids_of_stage){
                 current_lab = Game.getObjectById(lab_id);
+                // console.log('[' + room_name + '] Lab: ' + lab_id +'; CurrentLab: ' + JSON.stringify(current_lab))
                 current_lab_mineralType = (current_lab.mineralType) ? current_lab.mineralType : lab_ids_of_stage[lab_id].type;
                 if (current_lab.cooldown === 0 && current_lab.store[current_lab_mineralType] <= (current_lab.store.getCapacity(current_lab_mineralType) - 5)) {
                     console.log('[DEBUG] (room_helpers-run_lab_reactions)[' + room_name + ']: LAB [' + reactions_labs[lab_stage] + '] ID: ' + lab_id + '; Store [' + current_lab_mineralType +']: ' + current_lab.store[current_lab_mineralType] + ' / ' + current_lab.store.getCapacity(current_lab_mineralType));

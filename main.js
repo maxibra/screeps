@@ -387,6 +387,19 @@ module.exports.loop = function () {
         //     my_room.memory.energy_flow.containers.source[c].miner_id = false
         // }
 
+        // if (current_room_name === 'E38N49') Memory.rooms[current_room_name].energy_flow.containers.source = {
+        //     "6688e75274915f566f1fd210": {
+        //       "source_id": "59f1a59182100e1594f3eb83",
+        //       "creeps_moving2me": [],
+        //       "miner_id": false
+        //     },
+        //     "6688f5e5808c277189f6b0e3": {
+        //       "source_id": "59f1a59182100e1594f3eb84",
+        //       "creeps_moving2me": [],
+        //       "miner_id": false
+        //     }
+        //   }
+
 
         // console.log('[DEBUG] ROOM: ' + current_room_name)
         // if (current_room_name === 'E28N48') {
@@ -434,7 +447,7 @@ module.exports.loop = function () {
 
         if (Game.time % 5 === 0 && Game.cpu.bucket > 8000) {
             // if (current_room_name === 'E39N49') console.log('[INFO] (main)[' +current_room_name + ']: Starting Lab reaction');
-            room_helpers.run_lab_reactions(current_room_name);
+            if (Memory.rooms.global_vars.minerals.is_lab_active) room_helpers.run_lab_reactions(current_room_name);
         }
 
         // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')

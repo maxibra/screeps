@@ -653,15 +653,16 @@ var structCreep = {
 
                 break;
             case 're_transfer':
-                let transfer_type = 'O';
+                let transfer_type = 'H';
+                let min_source = 0;
                 // let memory_reagents = Game.rooms['E39N49'].memory.labs.reagent;
                 // let lab = Game.getObjectById((Object.keys(memory_reagents).find(key => memory_reagents[key].type === transfer_type)))
                 // let src_target = my_room.terminal;
                 // let dst_target = (lab.store[lab.mineralType] < 0.8 * lab.store.getCapacity(lab.mineralType)) ? lab : my_room.storage;
                 // let dst_target = (lab.store[lab.mineralType] < 0.8 * lab.store.getCapacity(lab.mineralType)) ? lab : my_room.storage;
 
-                let src_target = my_room.terminal;
-                let dst_target = my_room.storage;
+                let src_target = Game.getObjectById('5be3cc1f55f8e07c1a91244d');
+                let dst_target = Game.getObjectById('662d45d04008126a5b31472f');
                 // let src_target = my_room.storage;
                 // let dst_target = my_room.terminal;
 
@@ -669,8 +670,9 @@ var structCreep = {
                 let creep_carries = Object.keys(creep.store);
                 if (carry_total === 0) {
                     let current_resource = transfer_type;
+                    if (creep.ticksToLive < 25) crepp.suicide();
                     // if (dst_target.store[current_resource] > 34000) break;
-                    if (src_target.store[current_resource] < 40500) break;
+                    if (src_target.store[current_resource] < min_source) break;
                     // if (src_target.store[current_resource] <= 0) break;
                     // let current_resource = transfer_type;
 
