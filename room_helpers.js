@@ -922,6 +922,28 @@ var room_helpers = {
                 console.log('[INFO] Clean memory: non-existing creep', name);
             }
         }
+        // Clean missing targets IDs
+        for(var room_name in Memory.rooms) {
+            if (room_name == "global_vars" || Object.keys(Memory.rooms[room_name]).length === 0) continue
+            console.log('[INFO] [' + room_name + ']')
+            if ( Memory.rooms[room_name].targets.repair_defence && !Game.getObjectById(Memory.rooms[room_name].targets.repair_defence)) {
+                console.log('[INFO] [' + room_name + '] Clean missing targets.repair_defence: ' + Memory.rooms[room_name].targets.repair_defence);
+                Memory.rooms[room_name].targets.repair_defence = false
+            }
+            if ( Memory.rooms[room_name].targets.repair_civilian && !Game.getObjectById(Memory.rooms[room_name].targets.repair_civilian)) {
+                console.log('[INFO] [' + room_name + '] Clean missing targets.repair_civilian: ' + Memory.rooms[room_name].targets.repair_civilian);
+                Memory.rooms[room_name].targets.repair_civilian = false
+            }
+            creep_repair_defence = Memory.rooms[room_name].targets.creep_repair_defence
+            for(var t_indx in creep_repair_defence) {
+                if (!Game.getObjectById(creep_repair_defence[t_indx])) {
+                    console.log('[INFO] [' + room_name + '] Clean missing targets.creep_repair_defence: ' + creep_repair_defence[t_indx]);
+                    creep_repair_defence.splice(t_indx, 1);
+                }
+            }
+            Memory.rooms[room_name].targets.creep_repair_defence = creep_repair_defence
+        }
+
     },
     create_extensions: function() {
         var extensions_available = CONTROLLER_STRUCTURES.extension[my_room.controller.level];
