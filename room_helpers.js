@@ -221,7 +221,7 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 4 || target.pos.y < 20) is_inside = false;
             break;
         case 'E38N49':
-            if (target.pos.x > 29 || (target.pos.x < 30 && target.pos.y > 34)) is_inside = false;
+            if (target.pos.x > 47 || target.pos.y > 47) is_inside = false;
             break;
         case 'E39N49':
             if (target.pos.y < 19 || (target.pos.x < 20 && target.pos.y < 35) || (target.pos.x > 35 && target.pos.y < 27) ) is_inside = false;

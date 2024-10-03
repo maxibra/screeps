@@ -130,7 +130,7 @@ function initiate_room_memory(current_room_name) {
             },
             dropped: {},
             tombstone: {},
-           BUCKET: {near_sources: [], near_controller: [], sources: [], destinations: []},
+          BUCKET: {near_sources: [], near_controller: [], sources: [], destinations: []},
             containers: {
                 source: {},
                 other: {}
@@ -198,6 +198,7 @@ function get_struct_obj(x, y) {
     console.log('XY: ' + x + '-' +y + '; STRUCT: ' + JSON.stringify(stuctures));
     for (var s in stuctures) console.log(stuctures[s]);
 }
+
 
 module.exports.loop = function () {
     // act_out = Game.rooms['E38N47'].controller.activateSafeMode()

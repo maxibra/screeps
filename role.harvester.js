@@ -102,6 +102,7 @@ var RoleHarvester = {
             let source_container_near_me = ''
             for (let c in source_containers) {
                 let current_container = Game.getObjectById(source_containers[c]);
+                if (creep.name == "E38N49-1-gn") console.log('[DEBUG] (RoleHarvester)[' + creep.name +'] Source ENERGY store: ' + current_container.store[RESOURCE_ENERGY])
                 if (creep.pos.getRangeTo(current_container) <= range2container && current_container.store[RESOURCE_ENERGY] > 50) {
                     target = current_container
                     break;
