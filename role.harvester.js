@@ -76,7 +76,7 @@ var RoleHarvester = {
             let range2link;
             switch (room_name) {
                 case 'E27N49':
-                case 'E37N47':
+                // case 'E37N47':
                 case 'E38N49':
                     range2link = 7;
                     break;
@@ -85,7 +85,6 @@ var RoleHarvester = {
                 case 'E32N47':
                 case 'E33N47':
                 // case 'E36N49':
-                // case 'E37N47':
                 case 'E38N48':
                     range2link = 9;
                     break;
@@ -97,7 +96,9 @@ var RoleHarvester = {
                     range2link = 5;
             }
 
-            range2container = (room_name == 'E37N47' || room_name == 'E27N47') ? 7 : 3;
+            // range2container = (room_name == 'E37N47' || room_name == 'E27N47') ? 7 : 3;
+            range2container = (room_name == 'E27N47') ? 7 : 3;
+
             source_containers = (my_room.memory.energy_flow) ? Object.keys(my_room.memory.energy_flow.containers.source) : [];
             let source_container_near_me = ''
             for (let c in source_containers) {

@@ -521,7 +521,7 @@ module.exports.loop = function () {
 
         if (Game.time % rare_time_range === 0 && Game.cpu.bucket > 9000) {
             // room_helpers.verify_gn_age_difference_and_kill(current_room_name)
-            // room_helpers.get_minerals_status()
+            room_helpers.get_minerals_status()
             // If you coment update_labs_info you must comment next Memory.rooms.global_vars.room_by_mineral = room_by_mineral;
             room_helpers.update_labs_info(current_room_name, room_by_mineral);
             // roleTower.create_towers_list(current_room_name);

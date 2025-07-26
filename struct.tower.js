@@ -21,6 +21,10 @@ var StructTower = {
         let target2heal;
         let target2attack;
         let room_log = "" // 'E27N49';
+        let long_distance = 15
+        let min_capacity_for_long_distance = 0.5
+        let free_capacity_percent = (current_tower.store.getFreeCapacity(RESOURCE_ENERGY) / current_tower.store.getCapacity(RESOURCE_ENERGY))
+
         // TODO: Optimize road target (save it)
 
         //  console.log('[ERROR] (StructTower.run)[' + room_name +']  Tower?: ' + current_tower.structureType + ' ; ID: ' + current_tower.id);
@@ -69,7 +73,7 @@ var StructTower = {
                 my_room.memory.hostile2attack = (target2attack) ? target2attack.id : false;
                 // console.log('[INFO] (StructTower.run) [' + room_name + '] Target to Attack: ' + JSON.stringify(target2attack));
             } else {
-                target2attack = hostile2attack;
+                target2attack = (free_capacity_percent < min_capacity_for_long_distance && current_tower.pos.getRangeTo(hostile2attack) > long_distance) ? hostile2attack : false;
             }
 
 
