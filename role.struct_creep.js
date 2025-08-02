@@ -223,7 +223,7 @@ var structCreep = {
                 if (room_name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Upgrds: ' + Memory.rooms.global_vars.units[room_name].upgrader);
                 if (cur_transfer_target &&
                     Memory.rooms[room_name].global_vars.status === 'peace' && !extensions_first &&
-                    ((cur_transfer_target.store[RESOURCE_ENERGY]/cur_transfer_target.store.getCapacity(RESOURCE_ENERGY) < 0.7) && (creep.pos.getRangeTo(cur_transfer_target) < range2link) ||
+                    ((cur_transfer_target.store[RESOURCE_ENERGY]/cur_transfer_target.store.getCapacity(RESOURCE_ENERGY) < 0.7) && (creep.pos.getRangeTo(cur_transfer_target) <= range2link) ||
                     (creep.pos.isNearTo(cur_transfer_target) && cur_transfer_target.store[RESOURCE_ENERGY] < cur_transfer_target.store.getCapacity(RESOURCE_ENERGY)))) {
                     if (room_name === log_name) console.log('[DEBUG] (structCreep.run)[' + creep.name + '] Transfer to Link: ' + cur_transfer_target)
                     transfer_target =  cur_transfer_target;
@@ -389,11 +389,7 @@ var structCreep = {
         switch(creep_role) {
             case 'guard':
                 let target2attack = false;
-                let hostile2attack = false;
-                if (my_room.memory.hostile2attack) {
-                    hostile2attack = Game.getObjectById(my_room.memory.hostile2attack);
-                    // console.log('[DEBUG] (structCreep-guard)('+ creep.name + ') Hostile2Attack by getObject:' + ((hostile2attack)?hostile2attack.id:'NA'))
-                }
+                let hostile2attack = room_helpers.get_existing_hostile_ids(my_room.name);
 
                 let my_post = new RoomPosition(creep.memory.post[0], creep.memory.post[1], creep.memory.post[2]);
                 if (!(room_name === my_post.roomName && creep.pos.x < 47) ) {
@@ -427,7 +423,6 @@ var structCreep = {
                 // console.log('[DEBUG] (structCreep-guard)('+ creep.name + ') target to attack : ' + target2attack);
 
                 if (target2attack) {
-                    my_room.memory.hostile2attack = target2attack.id;
                     let range2attack = creep.pos.getRangeTo(target2attack);
                     // console.log('[DEBUG] (structCreep.run)[' + creep.name + '] range to: ' + range2attack + '; X: ' + target2attack.pos.x)
 
@@ -436,7 +431,6 @@ var structCreep = {
                     else
                     (creep.attack(target2attack) || creep.rangedAttack(target2attack));
                 } else {
-                    my_room.memory.hostile2attack = false;
                     // console.log('[DEBUG] (structCreep-guard)('+ creep.name + ') Hostile2Attack to false becase of target2attack: ' + JSON.stringify(target2attack))
                     if (creep.hits < creep.hitsMax) creep.heal(creep);
                     if (!creep.pos.isNearTo(my_post)) creep.moveTo(my_post);

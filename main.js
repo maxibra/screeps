@@ -427,6 +427,17 @@ module.exports.loop = function () {
             console.log('[WARN][' + current_room_name +']: global_vars doesnt defined for the room. Skip the room');
             continue;
         }
+        // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
+        let current_mod = 0;
+        if (Game.time % 8 === current_mod) {
+            // console.log('[INFO] (main): RUN 8 tickets functions + ' + current_mod + '. Time: ' + Game.time);
+            //        room_helpers.get_transfer_target(current_room_name);
+            room_helpers.define_room_status(current_room_name);
+
+            // dropped_resources = Memory.rooms[current_room_name].find(FIND_DROPPED_RESOURCES)
+            // if (dropped_resources.length > 0) Game.notify('We Have Dropped Resources in our area: ' + dropped_resources.length);
+        }
+        
         let towers_list = (Memory.rooms[current_room_name].towers) ? Object.keys(Memory.rooms[current_room_name].towers.current) : {};
         let towers_energy_full = true;
         // if(current_room_name == 'E27N47') console.log('[DEBUG] (main)[' + current_room_name + ']: TOWERS: ' + JSON.stringify(towers_list) + '; Units: ' + units[current_room_name].total);
@@ -451,17 +462,6 @@ module.exports.loop = function () {
             if (Memory.rooms.global_vars.minerals.is_lab_active) room_helpers.run_lab_reactions(current_room_name);
         }
 
-        // console.log('[DEBUG] (main)[' + current_room_name + '] DEFINE ROOM')
-        let current_mod = 0;
-        if (Game.time % 8 === current_mod) {
-            // console.log('[INFO] (main): RUN 8 tickets functions + ' + current_mod + '. Time: ' + Game.time);
-            //        room_helpers.get_transfer_target(current_room_name);
-            room_helpers.define_room_status(current_room_name);
-
-            // dropped_resources = Memory.rooms[current_room_name].find(FIND_DROPPED_RESOURCES)
-            // if (dropped_resources.length > 0) Game.notify('We Have Dropped Resources in our area: ' + dropped_resources.length);
-        }
-
         current_mod = current_mod + tick_between_hard_actions;
         // console.log('[DEBUG] (main)[' + current_room_name + '] current mod: ' + current_mod + '; run: ' + (Game.time % 20) )
         if (Game.time % 20 === current_mod) {
@@ -473,7 +473,7 @@ module.exports.loop = function () {
         if (Game.time % 30 === 0 ) {//&& (Memory.rooms[current_room_name].global_vars.status === 'war' ||
                                      //Memory.rooms.global_vars.disable_repearing_by_towers === false)) {
                                      // !(Memory.rooms.global_vars.disable_repearing_by_towers === true && my_room.controller.level === 8))) {
-            room_helpers.get_repair_defence_target(current_room_name);
+            if (!Memory.rooms.global_vars.disable_repearing_by_towers) room_helpers.get_repair_defence_target(current_room_name);
         }
 
 

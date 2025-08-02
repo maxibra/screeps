@@ -131,29 +131,50 @@ function find_hostile(room_name) {
     if (h.length > 0) {
         for (let h_creep of h) {
             hostile_amount += 1;
-            let body_map = h_creep.body.map(x => x.type);
-            for (let body_part of body_map) {
+            const body_map = {}; 
+            h_creep.body.map(x => x.type).forEach(function (x) { body_map[x] = (body_map[x] || 0) + 1; });
+            for (let body_part in body_map) {
+                if (room_name === 'E39N49') console.log('[ERROR](room.find_hostile)[' +  room_name +'] ID: ' + h_creep.id + '; body_part: ' + body_part);
                 if (body_part === 'attack' || body_part === 'ranged_attack') {
                     hostile_types['attack'].push(h_creep.id);
                     millitary_hostile.push(h_creep);
-                    break;  // Very important to prevent duplication of creeps in the list
                 } else if (body_part === 'heal') {
                     hostile_types['heal'].push(h_creep.id);
                     millitary_hostile.push(h_creep);
-                    break;  // Very important to prevent duplication of creeps in the list
-                } else if ((body_part === 'claim') && h_creep.pos.getRangeTo(my_room.controller) < 15) {
+                } else if (body_part === 'claim') { // && h_creep.pos.getRangeTo(my_room.controller) < 15) {
                     hostile_types['claim'].push(h_creep.id);
-                    break;  // Very important to prevent duplication of creeps in the list
+                    millitary_hostile.push(h_creep);
                 } else if (body_part === 'work' || body_part === 'carry') {
                     hostile_types['other'].push(h_creep.id);
-                    break;  // Very important to prevent duplication of creeps in the list
+                    if (body_map[body_part] >= 10) {
+                        millitary_hostile.push(h_creep);
+                    }
                 }
             }
         }
     }
+    if (millitary_hostile.length > 0) {
+        my_room.memory.hostile_ids_2attack = millitary_hostile.map(s_obj => s_obj.id);
+    }
     my_room.memory.targets['hostile'] = hostile_types;
     my_room.memory.targets['hostile_amount'] = hostile_amount;
     return [invader_core, millitary_hostile];
+}
+
+function get_existing_hostile_id(room_name) {
+    let hostiles_2_attack = my_room.memory.hostile_ids_2attack;
+    console.log('[ERROR](room.get_existing_hostile_id)[' +  room_name +'] START get_existing_hostile_id');
+    hostile2attack = (hostiles_2_attack.length > 0) ? Game.getObjectById(hostiles_2_attack[0]) : null;
+    console.log('[ERROR](room.get_existing_hostile_id)[' +  room_name +'] Target: ' + JSON.stringify(hostiles_2_attack)) // is undefined or empty')
+    while (hostile2attack == null && hostiles_2_attack.length > 0) {
+        hostiles_2_attack.shift();
+        hostile2attack = Game.getObjectById(hostiles_2_attack[0]);
+    }
+    my_room.memory.hostile_ids_2attack = hostiles_2_attack
+    if (hostile2attack != null && hostile2attack.room.name !== room_name) {
+        return hostile2attack;
+    }
+    return false;
 }
 
 function local_is_inside_wall(room_name, target) {
@@ -174,7 +195,7 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 17  || (target.pos.x < 37 && target.pos.y < 39) || (target.pos.x < 44 && target.pos.y < 9)) is_inside = false;
             break;
         case 'E27N48':
-            if (target.pos.x < 38 || target.pos.y > 41) is_inside = false;
+            if (target.pos.x < 36 || target.pos.y > 41) is_inside = false;
             break;
         case 'E27N49':
             if (target.pos.x < 15 || target.pos.x > 31 || target.pos.y > 44 || target.pos.y < 3 || (target.pos.x < 17 && target.pos.y < 30)) is_inside = false;
@@ -738,31 +759,31 @@ var room_helpers = {
 
         let enemy_creeps = find_hostile(room_name);
         let invader_core = enemy_creeps[0];
-        let hostile_creeps = enemy_creeps[1];
+        let hostile_military_creeps = enemy_creeps[1];
 
         let avoid_hostiles = []; //'Invader']; //, 'Digital', 'rogersnape63', 'Kraetzin'];
 
-        // if (room_name === 'E27N48') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
+        // if (room_name === 'E27N48') console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostiles: ' + hostile_military_creeps.length + ' CRNT status: ' + room_vars.status + '; FINISH War/Current time: ' + room_vars.finish_war + ' / ' + Game.time);
         if (my_room.controller.level === 0 && invader_core && invader_core.length > 0) {
             room_vars.status = 'war';
             Game.notify(room_name + ' is attacked by INVADER_CORE')
         }
-        if (room_vars.status === 'peace' && hostile_creeps && hostile_creeps.length > 0 &&
-            avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0) {
+        if (room_vars.status === 'peace' && hostile_military_creeps && hostile_military_creeps.length > 0 &&
+            avoid_hostiles.indexOf(hostile_military_creeps[0].owner.username) < 0) {
             room_vars.status = 'war';
             room_vars.invader = true;
             let hostile_boosts = {};
-            console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostil[0]: ' + hostile_creeps.length);
-            for(let b in hostile_creeps[0].body) {
-                let cur_boost = hostile_creeps[0].body[b].boost;
+            console.log('[DEBUG] (room_helpers-define_room_status)[' + room_name + '] Hostil[0]: ' + hostile_military_creeps.length);
+            for(let b in hostile_military_creeps[0].body) {
+                let cur_boost = hostile_military_creeps[0].body[b].boost;
                 if(!hostile_boosts[cur_boost]) hostile_boosts[cur_boost] = 1;
                 else hostile_boosts[cur_boost]++;
             }
 
-            let millitary_body = creep_helpers.is_millitary(hostile_creeps[0]);
-            if (avoid_hostiles.indexOf(hostile_creeps[0].owner.username) < 0 && millitary_body && hostile_creeps[0].owner.username != 'Invader') {
-                Game.notify(room_name + ' is attacked from (' + hostile_creeps[0].pos.x + ',' + hostile_creeps[0].pos.y +
-                            '); by ' + hostile_creeps[0].owner.username + '; Body: ' + JSON.stringify(millitary_body));
+            let millitary_body = creep_helpers.is_millitary(hostile_military_creeps[0]);
+            if (avoid_hostiles.indexOf(hostile_military_creeps[0].owner.username) < 0 && millitary_body && hostile_military_creeps[0].owner.username != 'Invader') {
+                Game.notify(room_name + ' is attacked from (' + hostile_military_creeps[0].pos.x + ',' + hostile_military_creeps[0].pos.y +
+                            '); by ' + hostile_military_creeps[0].owner.username + '; Body: ' + JSON.stringify(millitary_body));
             }
         } else if (room_vars.finish_war && room_vars.finish_war < Game.time && room_vars.status === 'war') {
             room_vars.status = 'peace';
@@ -770,14 +791,28 @@ var room_helpers = {
             room_vars.invader = false;
             // Game.notify('[' + room_name + '] It"s time for PEACE');
         // } else if (room_vars.status === 'war' && (room_name === 'E32N47' || room_name === 'E32N48')) {
-        //     if(hostile_creeps.length > 0 && !room_vars.finish_war) {    // need the if here for logical flow
-        //         console.log('[DEBUG] (room_helpers-define_room_status): Hostiles: ' + hostile_creeps.length + '; FINISH WAR: ' +  (Game.time + hostile_creeps[0].ticksToLive) + '; Current time: ' + Game.time + '; Hostile life: ' + hostile_creeps[0].ticksToLive);
-        //         room_vars.finish_war = (hostile_creeps.length > 0) ? (Game.time + hostile_creeps[0].ticksToLive - 20) : room_vars.finish_war;
+        //     if(hostile_military_creeps.length > 0 && !room_vars.finish_war) {    // need the if here for logical flow
+        //         console.log('[DEBUG] (room_helpers-define_room_status): Hostiles: ' + hostile_military_creeps.length + '; FINISH WAR: ' +  (Game.time + hostile_military_creeps[0].ticksToLive) + '; Current time: ' + Game.time + '; Hostile life: ' + hostile_military_creeps[0].ticksToLive);
+        //         room_vars.finish_war = (hostile_military_creeps.length > 0) ? (Game.time + hostile_military_creeps[0].ticksToLive - 20) : room_vars.finish_war;
         //     }
         } else if (room_vars.status === 'war' && !room_vars.finish_war) {
             room_vars.finish_war = Game.time + global_vars.update_period.after_war;
             // console.log('[DEBUG] (define_room_status)[' + room_name + '] Define finish war to ' +  (Game.time + global_vars.update_period.after_war));
         }
+    },
+    get_existing_hostile_id: function(room_name) {
+        let my_room = Game.rooms[room_name];
+        let hostiles_2_attack = my_room.memory.hostile_ids_2attack;
+        hostile2attack = (hostiles_2_attack.length > 0) ? Game.getObjectById(hostiles_2_attack[0]) : null;
+        while (hostile2attack == null && hostiles_2_attack.length > 0) {
+            hostiles_2_attack.shift();
+            hostile2attack = Game.getObjectById(hostiles_2_attack[0]);
+        }
+        my_room.memory.hostile_ids_2attack = hostiles_2_attack
+        if (hostile2attack != null && hostile2attack.room.name !== room_name) {
+            return hostile2attack;
+        }
+        return false;
     },
     get_energy_source_target: function(room_name) {
         let targets = Game.rooms[room_name].find(FIND_STRUCTURES, {filter: object => (object.structureType == STRUCTURE_CONTAINER && (object.store[RESOURCE_ENERGY]/object.store.getCapacity(RESOURCE_ENERGY)) > 0.3)});
@@ -846,14 +881,10 @@ var room_helpers = {
                                                                         object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1 &&
                                                                         !local_is_inside_wall(room_name, object))});
         }
-        // if (room_name === 'E27N47') console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: targets: ' + JSON.stringify(targets));
         targets.sort((a,b) => a.hits - b.hits);
-//        console.log('[DEBUG] (get_repair_defence_target): targets: ' + JSON.stringify(targets))
-        potential_target = targets[0] ? targets[0].id : false;
-        if (!Memory.rooms.global_vars.disable_repearing_by_towers) {
-            my_room.memory.targets.repair_defence = potential_target;
-        } else
-            my_room.memory.targets.repair_defence = false;
+        potential_target = targets.length > 0 && !Memory.rooms.global_vars.disable_repearing_by_towers ? targets[0].id : false;
+        if (room_name === 'E39N49') console.log('[DEBUG] (get_repair_defence_target)[' + room_name +']: potential_target: ' + potential_target + '; NOT(disable_repearing_by_towers): ' + !Memory.rooms.global_vars.disable_repearing_by_towers + '; Targets: ' + JSON.stringify(targets));
+        my_room.memory.targets.repair_defence = potential_target;
     },
     get_creep_repair_defence: function(room_name) {
         my_room = Game.rooms[room_name];

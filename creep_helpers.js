@@ -198,6 +198,7 @@ function get_workers(room_name) {
             'E38N49': 0
         },
         'E39N49': {
+            'E38N49': 0,
             'E39N49': 0
         }
     }
