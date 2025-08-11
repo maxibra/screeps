@@ -1,240 +1,2186 @@
-// JSON.stringify(Memory.rooms.global_vars,null,2)
+// JSON.stringify(Memory.rooms,null,2)
+// 11-Aug-2025
 {
-  "spawns_list": [
-    "max_E28N48-1",
-    "max_E38N49-2",
-    "max-E37N48-2",
-    "max-E37N48-3",
-    "max-E37N47-1",
-    "max-E27N47-1",
-    "max_E32N47-1",
-    "max_E28N47-1",
-    "max-E27N47-2",
-    "max-E27N47-3",
-    "max_E27N49-1",
-    "max_E34N47-1",
-    "max_E32N47-2",
-    "max_E27N49-2",
-    "max_E27N49-3"
-  ],
-  "critical_controller_percent": 0.5,
-  "min_tower_enrg2repair": 0.6,
-  "defence_level_remote": 1300000,
-  "defence_level": 50100000,
-  "screeps_defence_level": 50100000,
-  "terminal_max_energy_storage": 170000,
-  "terminal_min2transfer": 70000,
-  "terminal_emergency_ration": 70000,
-  "storage_max_energy": 400000,
-  "storage_emergency_ration": 150000,
-  "update_period": {
-    "towers": 1000,
-    "after_war": 20
-  },
-  "age_to_drop_and_die": 20,
-  "moveTo_ops": {
-    "visualizePathStyle": {
-      "stroke": "#fff",
-      "lineStyle": "dashed",
-      "opacity": 0.1,
-      "strokeWidth": 0.15,
-      "fill": "transparent"
+  "global_vars": {
+    "spawns_list": [
+      "max_E33N47",
+      "max_E38N48-2",
+      "max_E33N47-2",
+      "max_E28N48",
+      "max_E28N48-2",
+      "max-E38N47",
+      "max_E37N48-1",
+      "max-E33N47-3",
+      "max-E38N48-3",
+      "max-E39N49-3",
+      "max-E38N47-3",
+      "max_E34N47-3",
+      "max_E29N47",
+      "max-E39N49-2",
+      "max_E29N47-2",
+      "max_E29N47-3",
+      "max_E36N48-1",
+      "max_E27N48-2",
+      "max_E36N48-2",
+      "Spawn1",
+      "max_E27N48-3",
+      "max_E36N49-1",
+      "max_E36N49-2",
+      "max_E36N49-3",
+      "max_E36N48-3",
+      "max_E28N48-1",
+      "max_E38N49-2",
+      "max-E37N48-2",
+      "max-E37N48-3",
+      "max-E37N47-1",
+      "max-E27N47-1",
+      "max_E32N47-1",
+      "max_E28N47-1",
+      "max-E27N47-2",
+      "max-E27N47-3",
+      "max_E27N49-1",
+      "max_E34N47-1",
+      "max_E32N47-2",
+      "max_E27N49-2",
+      "max_E27N49-3",
+      "max_E28N47-2",
+      "max-E37N47-2",
+      "max_E38N49-3",
+      "max-E38N47-1",
+      "max-E37N47-3"
+    ],
+    "critical_controller_percent": 0.5,
+    "min_tower_enrg2repair": 0.6,
+    "defence_level_remote": 1300000,
+    "defence_level": 50100000,
+    "screeps_defence_level": 50100000,
+    "terminal_max_energy_storage": 170000,
+    "terminal_min2transfer": 70000,
+    "terminal_emergency_ration": 70000,
+    "storage_max_energy": 400000,
+    "storage_emergency_ration": 150000,
+    "update_period": {
+      "towers": 1000,
+      "after_war": 20
     },
-    "reusePath": 15
-  },
-  "room_by_mineral": {
-    "reagent": {
-      "OH": [
-        "E27N48",
-        "E29N47",
-        "E33N47",
-        "E34N47",
-        "E36N48",
-        "E39N49"
-      ],
-      "X": [
-        "E27N48",
-        "E29N47",
-        "E33N47",
-        "E34N47",
-        "E36N48",
-        "E39N49"
-      ],
-      "O": [
-        "E27N48",
-        "E28N48",
-        "E29N47",
-        "E36N48",
-        "E37N48",
-        "E38N47",
-        "E38N48"
-      ],
-      "Z": [
-        "E27N48",
-        "E28N48"
-      ],
-      "U": [
-        "E28N48",
-        "E33N47"
-      ],
-      "L": [
-        "E28N48",
-        "E36N48"
-      ],
-      "K": [
-        "E28N48",
-        "E29N47",
-        "E39N49"
-      ],
-      "KO": [
-        "E29N47"
-      ],
-      "H": [
-        "E33N47",
-        "E37N48",
-        "E38N47",
-        "E38N48",
-        "E39N49"
-      ],
-      "GO": [
-        "E34N47"
-      ],
-      "LHO2": [
-        "E36N48"
-      ],
-      "LO": [
-        "E36N48"
-      ],
-      "G": [
-        "E27N48",
-        "E28N48",
-        "E29N47",
-        "E33N47",
-        "E34N47",
-        "E36N48",
-        "E37N48",
-        "E38N48",
-        "E38N47",
-        "E39N49"
+    "age_to_drop_and_die": 20,
+    "moveTo_ops": {
+      "visualizePathStyle": {
+        "stroke": "#fff",
+        "lineStyle": "dashed",
+        "opacity": 0.1,
+        "strokeWidth": 0.15,
+        "fill": "transparent"
+      },
+      "reusePath": 15
+    },
+    "room_by_mineral": {
+      "reagent": {
+        "OH": [
+          "E27N48",
+          "E29N47",
+          "E33N47",
+          "E34N47",
+          "E36N48",
+          "E39N49"
+        ],
+        "X": [
+          "E27N48",
+          "E29N47",
+          "E33N47",
+          "E34N47",
+          "E36N48",
+          "E39N49"
+        ],
+        "O": [
+          "E27N48",
+          "E28N48",
+          "E29N47",
+          "E36N48",
+          "E37N48",
+          "E38N47",
+          "E38N48"
+        ],
+        "Z": [
+          "E27N48",
+          "E28N48"
+        ],
+        "U": [
+          "E28N48",
+          "E33N47"
+        ],
+        "L": [
+          "E28N48",
+          "E36N48"
+        ],
+        "K": [
+          "E28N48",
+          "E29N47",
+          "E39N49"
+        ],
+        "KO": [
+          "E29N47"
+        ],
+        "H": [
+          "E33N47",
+          "E37N48",
+          "E38N47",
+          "E38N48",
+          "E39N49"
+        ],
+        "GO": [
+          "E34N47"
+        ],
+        "LHO2": [
+          "E36N48"
+        ],
+        "LO": [
+          "E36N48"
+        ],
+        "G": [
+          "E27N48",
+          "E28N48",
+          "E29N47",
+          "E33N47",
+          "E34N47",
+          "E36N48",
+          "E37N48",
+          "E38N48",
+          "E38N47",
+          "E39N49"
+        ]
+      },
+      "produce": {
+        "XZHO2": [
+          "E27N48"
+        ],
+        "GO": [
+          "E28N48"
+        ],
+        "G": [
+          "E28N48"
+        ],
+        "XKHO2": [
+          "E29N47"
+        ],
+        "XUH2O": [
+          "E33N47"
+        ],
+        "XGHO2": [
+          "E34N47"
+        ],
+        "XLHO2": [
+          "E36N48"
+        ],
+        "OH": [
+          "E37N48",
+          "E38N47",
+          "E38N48"
+        ],
+        "XKH2O": [
+          "E39N49"
+        ]
+      },
+      "final_produce": [
+        "XZHO2",
+        "XKHO2",
+        "XUH2O",
+        "XGHO2",
+        "XLHO2",
+        "XKH2O"
       ]
     },
-    "produce": {
-      "XZHO2": [
-        "E27N48"
-      ],
-      "GO": [
-        "E28N48"
-      ],
-      "G": [
-        "E28N48"
-      ],
-      "XKHO2": [
-        "E29N47"
-      ],
-      "XUH2O": [
-        "E33N47"
-      ],
-      "XGHO2": [
-        "E34N47"
-      ],
-      "XLHO2": [
-        "E36N48"
-      ],
-      "OH": [
-        "E37N48",
-        "E38N47",
-        "E38N48"
-      ],
-      "XKH2O": [
-        "E39N49"
-      ]
+    "minerals": {
+      "is_lab_active": false,
+      "send_room": 40000,
+      "received_room_g": 5000,
+      "received_room": 1000,
+      "storage_final_produce": 5000,
+      "send_amount": 500,
+      "transfer_batch": 300
     },
-    "final_produce": [
-      "XZHO2",
-      "XKHO2",
-      "XUH2O",
-      "XGHO2",
-      "XLHO2",
-      "XKH2O"
-    ]
+    "units": {
+      "total": 39,
+      "E27N47": {
+        "total": 2,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 1,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 1,
+        "sp_total": 1
+      },
+      "E27N48": {
+        "total": 2,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 1,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 1,
+        "sp_total": 1
+      },
+      "E27N49": {
+        "total": 1,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 1,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 0
+      },
+      "E28N47": {
+        "total": 2,
+        "transfer": 1,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 1,
+        "sp_total": 1
+      },
+      "E28N49": {
+        "total": 0,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 0
+      },
+      "E28N48": {
+        "total": 1,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 1,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 0
+      },
+      "E29N47": {
+        "total": 3,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 1,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 2,
+        "sp_total": 2
+      },
+      "E29N49": {
+        "total": 0,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 0
+      },
+      "E32N47": {
+        "total": 2,
+        "transfer": 1,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 1,
+        "sp_total": 1
+      },
+      "E33N47": {
+        "total": 1,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 1,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 0
+      },
+      "E34N47": {
+        "total": 1,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 0,
+        "false": null
+      },
+      "E36N48": {
+        "total": 4,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 2,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 2,
+        "sp_total": 2
+      },
+      "E36N49": {
+        "total": 1,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 1,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 0
+      },
+      "E37N47": {
+        "total": 3,
+        "transfer": 1,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 2,
+        "sp_total": 2
+      },
+      "E37N48": {
+        "total": 3,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 1,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 2,
+        "sp_total": 2
+      },
+      "E37N49": {
+        "total": 3,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 3,
+        "remote_harvest": null,
+        "remote_energy_miner": null,
+        "remote_claimer": null
+      },
+      "E38N47": {
+        "total": 2,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 1,
+        "sp_total": 1,
+        "false": null
+      },
+      "E38N48": {
+        "total": 1,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 1,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 0,
+        "sp_total": 0
+      },
+      "E38N49": {
+        "total": 3,
+        "transfer": 0,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 1,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 2,
+        "sp_total": 2
+      },
+      "E39N49": {
+        "total": 4,
+        "transfer": 2,
+        "build": 0,
+        "upgrade": 0,
+        "upgrader": 0,
+        "repair_defence": 0,
+        "repair_civilian": 0,
+        "harvest": 0,
+        "undefined": 0,
+        "long_harvest": 0,
+        "claimer": 0,
+        "mineral_miner": 0,
+        "energy_miner": 2,
+        "sp_total": 2
+      }
+    },
+    "towers": {
+      "current": {},
+      "next_update": 10332455
+    },
+    "targets": {},
+    "terminal_status": {
+      "E27N47": {
+        "energy": 230093,
+        "KO": 4000,
+        "UL": 15000,
+        "G": 20014,
+        "total": 269107
+      },
+      "E27N48": {
+        "energy": 225524,
+        "XGHO2": 1300,
+        "XZHO2": 5100,
+        "XUH2O": 1300,
+        "Z": 3600,
+        "XKH2O": 1500,
+        "XKHO2": 2940,
+        "XLHO2": 1500,
+        "G": 18000,
+        "X": 1460,
+        "OH": 1930,
+        "O": 1005,
+        "K": 8000,
+        "L": 8000,
+        "total": 281159
+      },
+      "E27N49": {
+        "energy": 230216,
+        "H": 39052,
+        "G": 10000,
+        "total": 279268
+      },
+      "E28N47": {
+        "energy": 138714,
+        "Z": 45000,
+        "XLHO2": 4753,
+        "UL": 11000,
+        "G": 10000,
+        "XGHO2": 4000,
+        "total": 213467
+      },
+      "E28N48": {
+        "energy": 220557,
+        "O": 1083,
+        "U": 4200,
+        "L": 40191,
+        "G": 10000,
+        "UL": 5134,
+        "XUH2O": 1100,
+        "XKH2O": 1300,
+        "XKHO2": 1300,
+        "XZHO2": 1300,
+        "K": 1639,
+        "Z": 5000,
+        "total": 292804
+      },
+      "E29N47": {
+        "energy": 147439,
+        "XGHO2": 3080,
+        "XZHO2": 1500,
+        "XLHO2": 3950,
+        "XKHO2": 5100,
+        "XKH2O": 1100,
+        "XUH2O": 3060,
+        "G": 10000,
+        "Z": 29100,
+        "X": 1153,
+        "O": 1300,
+        "OH": 1242,
+        "KO": 5594,
+        "total": 213618
+      },
+      "E32N47": {
+        "energy": 136945,
+        "Z": 42000,
+        "G": 10000,
+        "GO": 25000,
+        "total": 213945
+      },
+      "E33N47": {
+        "energy": 215463,
+        "H": 1119,
+        "U": 25153,
+        "X": 1479,
+        "G": 10000,
+        "OH": 1843,
+        "UL": 20708,
+        "XUH2O": 5171,
+        "XKH2O": 1300,
+        "XKHO2": 1100,
+        "XLHO2": 1244,
+        "XZHO2": 1300,
+        "UH": 47,
+        "total": 285927
+      },
+      "E34N47": {
+        "energy": 220211,
+        "X": 40193,
+        "G": 3001,
+        "GO": 4456,
+        "XUH2O": 1300,
+        "XKH2O": 1300,
+        "XKHO2": 1100,
+        "XLHO2": 6794,
+        "XZHO2": 1100,
+        "XGHO2": 5140,
+        "OH": 3300,
+        "total": 287895
+      },
+      "E36N48": {
+        "energy": 219949,
+        "L": 43523,
+        "XKH2O": 1500,
+        "XKHO2": 1500,
+        "XLHO2": 5000,
+        "G": 2079,
+        "O": 1500,
+        "LHO2": 2184,
+        "LO": 6070,
+        "X": 1073,
+        "total": 284378
+      },
+      "E36N49": {
+        "energy": 240388,
+        "G": 10000,
+        "Z": 32427,
+        "total": 282815
+      },
+      "E37N47": {
+        "energy": 128772,
+        "U": 2500,
+        "G": 7000,
+        "total": 138272
+      },
+      "E37N48": {
+        "energy": 152220,
+        "H": 39657,
+        "O": 1094,
+        "G": 10000,
+        "OH": 4127,
+        "XUH2O": 1100,
+        "XKH2O": 1500,
+        "XKHO2": 1984,
+        "XLHO2": 1196,
+        "XZHO2": 1500,
+        "XGHO2": 1300,
+        "total": 215678
+      },
+      "E38N47": {
+        "energy": 140726,
+        "O": 151,
+        "Z": 16200,
+        "X": 1250,
+        "G": 10000,
+        "OH": 13042,
+        "XUH2O": 2800,
+        "XKH2O": 1300,
+        "XKHO2": 1300,
+        "XLHO2": 1269,
+        "XZHO2": 3592,
+        "XGHO2": 4300,
+        "H": 25,
+        "total": 195955
+      },
+      "E38N48": {
+        "energy": 225142,
+        "H": 1780,
+        "O": 40008,
+        "G": 10039,
+        "XUH2O": 1300,
+        "XKH2O": 1300,
+        "XKHO2": 1500,
+        "XLHO2": 1279,
+        "XZHO2": 1300,
+        "XGHO2": 1500,
+        "total": 285148
+      },
+      "E38N49": {
+        "energy": 225650,
+        "O": 40000,
+        "G": 10007,
+        "L": 10000,
+        "total": 285657
+      },
+      "E39N49": {
+        "energy": 154985,
+        "H": 1435,
+        "K": 24500,
+        "X": 1374,
+        "G": 10006,
+        "XUH2O": 1500,
+        "XKH2O": 5076,
+        "XKHO2": 1057,
+        "XLHO2": 1454,
+        "XZHO2": 1100,
+        "XGHO2": 1500,
+        "OH": 2425,
+        "total": 206412
+      }
+    },
+    "storage_status_by_mineral": {
+      "energy": {
+        "total": 6175934,
+        "terminal": {
+          "total": 3252994,
+          "E27N47": 230093,
+          "E27N48": 225524,
+          "E27N49": 230216,
+          "E28N47": 138714,
+          "E28N48": 220557,
+          "E29N47": 147439,
+          "E32N47": 136945,
+          "E33N47": 215463,
+          "E34N47": 220211,
+          "E36N48": 219949,
+          "E36N49": 240388,
+          "E37N47": 128772,
+          "E37N48": 152220,
+          "E38N47": 140726,
+          "E38N48": 225142,
+          "E38N49": 225650,
+          "E39N49": 154985
+        },
+        "storage": {
+          "total": 2922940,
+          "E27N48": 200517,
+          "E27N49": 200487,
+          "E28N47": 150000,
+          "E28N48": 150000,
+          "E29N47": 294545,
+          "E32N47": 149986,
+          "E33N47": 149422,
+          "E34N47": 100501,
+          "E36N48": 149359,
+          "E36N49": 300595,
+          "E37N47": 155760,
+          "E37N48": 253370,
+          "E38N47": 69417,
+          "E38N48": 300135,
+          "E38N49": 150000,
+          "E39N49": 148846
+        }
+      },
+      "defence": {
+        "rooms": {
+          "E27N47": 49395301,
+          "E27N48": 50112001,
+          "E27N49": 50100410,
+          "E28N47": 49496700,
+          "E28N48": 50106281,
+          "E29N47": 49505041,
+          "E32N47": 49938621,
+          "E33N47": 50104771,
+          "E34N47": 50101501,
+          "E36N48": 50107551,
+          "E36N49": 50135790,
+          "E37N47": 49442700,
+          "E37N48": 50111901,
+          "E38N47": 49825421,
+          "E38N48": 50125821,
+          "E38N49": 50110181,
+          "E39N49": 49453441
+        }
+      },
+      "store_status": {
+        "terminal": {
+          "E27N47": 269107,
+          "E27N48": 281159,
+          "E27N49": 279268,
+          "E28N47": 213467,
+          "E28N48": 292804,
+          "E29N47": 213618,
+          "E32N47": 213945,
+          "E33N47": 285927,
+          "E34N47": 287895,
+          "E36N48": 284378,
+          "E36N49": 282815,
+          "E37N47": 138272,
+          "E37N48": 215678,
+          "E38N47": 195955,
+          "E38N48": 285148,
+          "E38N49": 285657,
+          "E39N49": 206412
+        },
+        "storage": {
+          "E27N47": 75188,
+          "E27N48": 681810,
+          "E27N49": 651163,
+          "E28N47": 603628,
+          "E28N48": 713205,
+          "E29N47": 789188,
+          "E32N47": 600586,
+          "E33N47": 812668,
+          "E34N47": 880691,
+          "E36N48": 629444,
+          "E36N49": 751743,
+          "E37N47": 621492,
+          "E37N48": 745540,
+          "E38N47": 934693,
+          "E38N48": 780862,
+          "E38N49": 600525,
+          "E39N49": 717883
+        }
+      },
+      "XZHO2": {
+        "total": 75801,
+        "terminal": {
+          "total": 17792,
+          "E27N48": 5100,
+          "E28N48": 1300,
+          "E29N47": 1500,
+          "E33N47": 1300,
+          "E34N47": 1100,
+          "E37N48": 1500,
+          "E38N47": 3592,
+          "E38N48": 1300,
+          "E39N49": 1100
+        },
+        "storage": {
+          "total": 58009,
+          "E27N48": 5000,
+          "E28N48": 5169,
+          "E29N47": 5000,
+          "E33N47": 5002,
+          "E34N47": 5056,
+          "E36N48": 5000,
+          "E37N48": 5026,
+          "E38N47": 12468,
+          "E38N48": 5162,
+          "E39N49": 5126
+        }
+      },
+      "XKHO2": {
+        "total": 80820,
+        "terminal": {
+          "total": 18881,
+          "E27N48": 2940,
+          "E28N48": 1300,
+          "E29N47": 5100,
+          "E33N47": 1100,
+          "E34N47": 1100,
+          "E36N48": 1500,
+          "E37N48": 1984,
+          "E38N47": 1300,
+          "E38N48": 1500,
+          "E39N49": 1057
+        },
+        "storage": {
+          "total": 61939,
+          "E27N48": 5000,
+          "E28N48": 5173,
+          "E29N47": 5000,
+          "E33N47": 5188,
+          "E34N47": 5040,
+          "E36N48": 5000,
+          "E37N48": 16253,
+          "E38N47": 5124,
+          "E38N48": 5061,
+          "E39N49": 5100
+        }
+      },
+      "XUH2O": {
+        "total": 74965,
+        "terminal": {
+          "total": 18631,
+          "E27N48": 1300,
+          "E28N48": 1100,
+          "E29N47": 3060,
+          "E33N47": 5171,
+          "E34N47": 1300,
+          "E37N48": 1100,
+          "E38N47": 2800,
+          "E38N48": 1300,
+          "E39N49": 1500
+        },
+        "storage": {
+          "total": 56334,
+          "E27N48": 5000,
+          "E28N48": 5111,
+          "E29N47": 5000,
+          "E33N47": 10696,
+          "E34N47": 5146,
+          "E36N48": 5000,
+          "E37N48": 5011,
+          "E38N47": 5146,
+          "E38N48": 5193,
+          "E39N49": 5031
+        }
+      },
+      "XGHO2": {
+        "total": 72220,
+        "terminal": {
+          "total": 22120,
+          "E27N48": 1300,
+          "E28N47": 4000,
+          "E29N47": 3080,
+          "E34N47": 5140,
+          "E37N48": 1300,
+          "E38N47": 4300,
+          "E38N48": 1500,
+          "E39N49": 1500
+        },
+        "storage": {
+          "total": 50100,
+          "E27N48": 5000,
+          "E28N48": 5000,
+          "E29N47": 5000,
+          "E33N47": 5000,
+          "E34N47": 5000,
+          "E36N48": 5000,
+          "E37N48": 5000,
+          "E38N47": 5100,
+          "E38N48": 5000,
+          "E39N49": 5000
+        }
+      },
+      "XLHO2": {
+        "total": 93410,
+        "terminal": {
+          "total": 28439,
+          "E27N48": 1500,
+          "E28N47": 4753,
+          "E29N47": 3950,
+          "E33N47": 1244,
+          "E34N47": 6794,
+          "E36N48": 5000,
+          "E37N48": 1196,
+          "E38N47": 1269,
+          "E38N48": 1279,
+          "E39N49": 1454
+        },
+        "storage": {
+          "total": 64971,
+          "E27N48": 5000,
+          "E28N47": 2800,
+          "E28N48": 13140,
+          "E29N47": 5000,
+          "E33N47": 5167,
+          "E34N47": 8608,
+          "E36N48": 5000,
+          "E37N48": 5056,
+          "E38N47": 5100,
+          "E38N48": 5000,
+          "E39N49": 5100
+        }
+      },
+      "XKH2O": {
+        "total": 79715,
+        "terminal": {
+          "total": 17176,
+          "E27N48": 1500,
+          "E28N48": 1300,
+          "E29N47": 1100,
+          "E33N47": 1300,
+          "E34N47": 1300,
+          "E36N48": 1500,
+          "E37N48": 1500,
+          "E38N47": 1300,
+          "E38N48": 1300,
+          "E39N49": 5076
+        },
+        "storage": {
+          "total": 62539,
+          "E27N48": 5000,
+          "E28N48": 5099,
+          "E29N47": 5000,
+          "E33N47": 5184,
+          "E34N47": 5174,
+          "E36N48": 5000,
+          "E37N48": 5057,
+          "E38N47": 5185,
+          "E38N48": 5133,
+          "E39N49": 16707
+        }
+      }
+    },
+    "prev_storage_status_by_mineral": {
+      "energy": {
+        "total": 6537466,
+        "terminal": {
+          "total": 3602312,
+          "E27N47": 280256,
+          "E27N48": 174270,
+          "E27N49": 270062,
+          "E28N47": 250645,
+          "E28N48": 181084,
+          "E29N47": 174121,
+          "E32N47": 224394,
+          "E33N47": 180458,
+          "E34N47": 189523,
+          "E36N48": 175951,
+          "E36N49": 201880,
+          "E37N47": 240609,
+          "E37N48": 242026,
+          "E38N47": 177212,
+          "E38N48": 220776,
+          "E38N49": 239517,
+          "E39N49": 179528
+        },
+        "storage": {
+          "total": 2935154,
+          "E27N48": 518707,
+          "E28N48": 199997,
+          "E29N47": 299468,
+          "E33N47": 198646,
+          "E34N47": 199917,
+          "E36N48": 299433,
+          "E36N49": 299834,
+          "E37N48": 299695,
+          "E38N47": 19840,
+          "E38N48": 299691,
+          "E38N49": 326,
+          "E39N49": 299600
+        }
+      },
+      "defence": {
+        "rooms": {
+          "E27N47": 30288361,
+          "E27N48": 27986601,
+          "E27N49": 29009790,
+          "E28N47": 33442700,
+          "E28N48": 32987981,
+          "E29N47": 40312661,
+          "E32N47": 35433561,
+          "E33N47": 39832831,
+          "E34N47": 39621701,
+          "E36N48": 39886401,
+          "E36N49": 33821170,
+          "E37N47": 24549100,
+          "E37N48": 32727661,
+          "E38N47": 33443161,
+          "E38N48": 39857081,
+          "E38N49": 4165241,
+          "E39N49": 39792561
+        }
+      },
+      "store_status": {
+        "terminal": {
+          "E27N47": 280256,
+          "E27N48": 282900,
+          "E27N49": 270062,
+          "E28N47": 250645,
+          "E28N48": 298400,
+          "E29N47": 292000,
+          "E32N47": 264644,
+          "E33N47": 280483,
+          "E34N47": 282447,
+          "E36N48": 265601,
+          "E36N49": 282257,
+          "E37N47": 280693,
+          "E37N48": 298984,
+          "E38N47": 285435,
+          "E38N48": 280982,
+          "E38N49": 279517,
+          "E39N49": 287537
+        },
+        "storage": {
+          "E27N48": 1000000,
+          "E28N48": 943291,
+          "E29N47": 794511,
+          "E32N47": 450600,
+          "E33N47": 924092,
+          "E34N47": 979935,
+          "E36N48": 779518,
+          "E36N49": 750982,
+          "E37N47": 451232,
+          "E37N48": 791865,
+          "E38N47": 950316,
+          "E38N48": 781618,
+          "E38N49": 450851,
+          "E39N49": 868631
+        }
+      },
+      "XZHO2": {
+        "total": 75801,
+        "terminal": {
+          "total": 17792,
+          "E27N48": 5100,
+          "E28N48": 1300,
+          "E29N47": 1500,
+          "E33N47": 1300,
+          "E34N47": 1100,
+          "E36N48": 1500,
+          "E37N48": 1500,
+          "E38N47": 2092,
+          "E38N48": 1300,
+          "E39N49": 1100
+        },
+        "storage": {
+          "total": 58009,
+          "E27N48": 5000,
+          "E28N48": 5169,
+          "E29N47": 5000,
+          "E33N47": 5002,
+          "E34N47": 5056,
+          "E36N48": 5000,
+          "E37N48": 5026,
+          "E38N47": 12468,
+          "E38N48": 5162,
+          "E39N49": 5126
+        }
+      },
+      "XKHO2": {
+        "total": 80820,
+        "terminal": {
+          "total": 18881,
+          "E27N48": 2940,
+          "E28N48": 1300,
+          "E29N47": 5100,
+          "E33N47": 1100,
+          "E34N47": 1100,
+          "E36N48": 1500,
+          "E37N48": 1984,
+          "E38N47": 1300,
+          "E38N48": 1500,
+          "E39N49": 1057
+        },
+        "storage": {
+          "total": 61939,
+          "E27N48": 5000,
+          "E28N48": 5173,
+          "E29N47": 5000,
+          "E33N47": 5188,
+          "E34N47": 5040,
+          "E36N48": 5000,
+          "E37N48": 16253,
+          "E38N47": 5124,
+          "E38N48": 5061,
+          "E39N49": 5100
+        }
+      },
+      "XUH2O": {
+        "total": 74965,
+        "terminal": {
+          "total": 18631,
+          "E27N48": 1300,
+          "E28N48": 1100,
+          "E29N47": 3060,
+          "E33N47": 5171,
+          "E34N47": 1300,
+          "E36N48": 1500,
+          "E37N48": 1100,
+          "E38N47": 1300,
+          "E38N48": 1300,
+          "E39N49": 1500
+        },
+        "storage": {
+          "total": 56334,
+          "E27N48": 5000,
+          "E28N48": 5111,
+          "E29N47": 5000,
+          "E33N47": 10696,
+          "E34N47": 5146,
+          "E36N48": 5000,
+          "E37N48": 5011,
+          "E38N47": 5146,
+          "E38N48": 5193,
+          "E39N49": 5031
+        }
+      },
+      "XGHO2": {
+        "total": 72220,
+        "terminal": {
+          "total": 22120,
+          "E27N48": 1300,
+          "E28N48": 1500,
+          "E29N47": 3080,
+          "E33N47": 2500,
+          "E34N47": 5140,
+          "E36N48": 3000,
+          "E37N48": 1300,
+          "E38N47": 1300,
+          "E38N48": 1500,
+          "E39N49": 1500
+        },
+        "storage": {
+          "total": 50100,
+          "E27N48": 5000,
+          "E28N48": 5000,
+          "E29N47": 5000,
+          "E33N47": 5000,
+          "E34N47": 5000,
+          "E36N48": 5000,
+          "E37N48": 5000,
+          "E38N47": 5100,
+          "E38N48": 5000,
+          "E39N49": 5000
+        }
+      },
+      "XLHO2": {
+        "total": 93410,
+        "terminal": {
+          "total": 31239,
+          "E27N48": 1500,
+          "E28N48": 7553,
+          "E29N47": 3950,
+          "E33N47": 1244,
+          "E34N47": 6794,
+          "E36N48": 5000,
+          "E37N48": 1196,
+          "E38N47": 1269,
+          "E38N48": 1279,
+          "E39N49": 1454
+        },
+        "storage": {
+          "total": 62171,
+          "E27N48": 5000,
+          "E28N48": 13140,
+          "E29N47": 5000,
+          "E33N47": 5167,
+          "E34N47": 8608,
+          "E36N48": 5000,
+          "E37N48": 5056,
+          "E38N47": 5100,
+          "E38N48": 5000,
+          "E39N49": 5100
+        }
+      },
+      "XKH2O": {
+        "total": 79715,
+        "terminal": {
+          "total": 17176,
+          "E27N48": 1500,
+          "E28N48": 1300,
+          "E29N47": 1100,
+          "E33N47": 1300,
+          "E34N47": 1300,
+          "E36N48": 1500,
+          "E37N48": 1500,
+          "E38N47": 1300,
+          "E38N48": 1300,
+          "E39N49": 5076
+        },
+        "storage": {
+          "total": 62539,
+          "E27N48": 5000,
+          "E28N48": 5099,
+          "E29N47": 5000,
+          "E33N47": 5184,
+          "E34N47": 5174,
+          "E36N48": 5000,
+          "E37N48": 5057,
+          "E38N47": 5185,
+          "E38N48": 5133,
+          "E39N49": 16707
+        }
+      }
+    },
+    "disable_repearing_by_towers": false,
+    "minimal_container_energy": 1300,
+    "minimal_energy_terminal": {
+      "room_name": "E37N47",
+      "energy": 128772,
+      "avrg_energy": "191044"
+    },
+    "max_energy_to_full_terminal": {
+      "missing_energy": 80580,
+      "room_name": "E37N48"
+    }
   },
-  "minerals": {
-    "is_lab_active": false,
-    "send_room": 40000,
-    "received_room_g": 5000,
-    "received_room": 1000,
-    "storage_final_produce": 5000,
-    "send_amount": 500,
-    "transfer_batch": 300
+  "E27N47": {
+    "towers": {
+      "current": {
+        "603789fa76e4584f68e60526": false,
+        "607165a4d328b5b6bf584fec": false,
+        "61711cd7eb90e110cd269189": false,
+        "6191938d02ce6ae8fcf98c0f": false,
+        "61919c5b82b2c4de48f21fec": false,
+        "6191a2e421473b9323cc224b": false,
+        "688e42b3d9fd74ae89e9c46b": false
+      },
+      "next_update": 21149976
+    },
+    "targets": {
+      "build": [],
+      "repair_defence": false,
+      "creep_repair_defence": [
+        "688e38d0db5f13152ca80e41",
+        "688e38c9c698bf0198f83279",
+        "688e3904e1ddbb78aa56086e",
+        "688e37e25fc1a96af76c66e9",
+        "688e38fd030d9b632bb2c2e4",
+        "688e38c22f1ea24ed23021e8",
+        "688e390e7928d91f3cf533b6",
+        "688e37c755ed0b765d8e855c",
+        "688e37b57788a5a0bf781f17",
+        "688cba7e92ae5c383101bf38",
+        "688cb7d6c698bf3222f797e6",
+        "688cb8b43cb44aafb70a9eba",
+        "688cb78b3cb44a0d0c0a9e2b",
+        "688cb791c86e4b6980e8860a",
+        "688cb7e01e88b6d3dfb26943",
+        "688cb7a9d7ef64ccf688617f",
+        "688cba66d3d59fa876b91afa",
+        "688cb7b04caac54678ab7ba7",
+        "688cb9bace5c4f11fdd53209",
+        "688cb94d7788a53ea477835c",
+        "688e37bc9292d96caaf8b201",
+        "646200763139f9e07b4106f2",
+        "644b6b956bf2731f3aa49cc8",
+        "61e71c6f99d9a931e2764db5",
+        "644b6b6992f52a8ce5c4095e",
+        "644b6b83df1b3e521cdc37e8",
+        "646200178a52272006b3b127",
+        "644a863b39cc9b0f55d47f95",
+        "64799852c4337e5ffef3e3f8",
+        "670299834a05a7d9e527ab9f",
+        "65c8dbc98637380fbf9ee9d4",
+        "65c9dbb98aa4ffcc6c72b290",
+        "66a5f843f268eed120ec3201"
+      ],
+      "repair_civilian": false,
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a4d382100e1594f3d992": [
+          "6048cb28b99ab11da752315c"
+        ]
+      },
+      "store_used": {
+        "storage": 75188,
+        "terminal": 269107
+      },
+      "max_store": {
+        "terminal": 285000,
+        "storage": 700000,
+        "terminal_energy": 230000
+      },
+      "mineral": {
+        "id": "59f1c0e07d0b3d79de5f1b48",
+        "type": "H",
+        "extractor": false
+      },
+      "containers": {
+        "source": {
+          "6122a77cca959ab04371f0b7": {
+            "source_id": "59f1a4d382100e1594f3d992",
+            "creeps_moving2me": [],
+            "miner_id": "6899a3634039f577cd1f4d11"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "6048cb28b99ab11da752315c"
+        ],
+        "near_controller": false,
+        "destinations": {
+          "6048de967746b91d76c1bc88": false,
+          "639c46568fa1697b0f7d3880": false,
+          "63baeae2876f3876f44626c7": false,
+          "false": false
+        },
+        "sources": [
+          "617259a380324911f0147e3d"
+        ]
+      },
+      "storage": "65aa49c1d4c70174a3ed7acd",
+      "extension_first": false
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 3,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "worker": {
+            "E27N47": 0,
+            "E27N49": 0,
+            "E28N48": 0
+          },
+          "transfer": 0.4,
+          "build": 1,
+          "repair_defence": 1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 144,
+      "invader": false,
+      "extentions_amount": 0,
+      "roads": 108,
+      "all_full_wo_storage": false
+    },
+    "endReservation": 31206177,
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [],
+        "produce": [],
+        "process": []
+      },
+      "reagent": {},
+      "produce": {},
+      "process": {},
+      "booster": {
+        "65aa635079acc401bec1acda": {}
+      }
+    },
+    "mineral_by_lab": {},
+    "lab_per_mineral": {},
+    "hostile2attack": false,
+    "repair_civilian": false,
+    "repair_defence": false
   },
-  "units": {
-    "total": 24,
-    "E27N47": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 1,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+  "E27N48": {
+    "towers": {
+      "current": {
+        "5e69cb8a583df4d86c99d25f": false,
+        "5e69cf4646a0be09680d7add": false,
+        "5e69d26fab47dd9b8ec2c166": false,
+        "5e69e52debaa1254c9c42e4f": false,
+        "5eeb901a86b9ed2899fd53b1": false,
+        "5f9bd0636b37d5c248b892e0": false
+      },
+      "next_update": 21149976
     },
-    "E27N48": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 1,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "targets": {
+      "build": [],
+      "repair_defence": false,
+      "creep_repair_defence": [
+        "688cb0ba3ab7c7454c0e2eef",
+        "688caed32efe7cb802fe6e67",
+        "688ca85603fe71151e0390a3",
+        "688c945312751dd3614dabbb",
+        "688caaacb62378ce47b7955d",
+        "688c9f8bd9fd743f1be92064",
+        "688ca5d21bbad879270c06d7",
+        "648050d634ad054d3256fd6a",
+        "65eac650e5478b05325acbaa"
+      ],
+      "repair_civilian": false,
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "remote_force_attack": true,
+      "tombstonese": false,
+      "tombstone": false
     },
-    "E27N49": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 1,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "energy_flow": {
+      "sources": {
+        "59f1a4d282100e1594f3d990": [
+          "639cb5892cfd782f6a0dee98"
+        ]
+      },
+      "store_used": {
+        "storage": 681810,
+        "terminal": 279559
+      },
+      "max_store": {
+        "storage": 800000,
+        "terminal": 290000,
+        "terminal_energy": 225000,
+        "storage_energy": 200000
+      },
+      "mineral": {
+        "id": "59f1c0e07d0b3d79de5f1b47",
+        "type": "Z",
+        "extractor": "5e8cae38d067713b30343afc"
+      },
+      "containers": {
+        "source": {
+          "61047cc5ea43f049a817c0a2": {
+            "source_id": "59f1a4d282100e1594f3d990",
+            "creeps_moving2me": [],
+            "miner_id": "6899ad0fdce2edc80e055399"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "639cb5892cfd782f6a0dee98"
+        ],
+        "near_controller": false,
+        "destinations": {
+          "5e6cb62ada9431389a0b0389": false,
+          "5eeb95a35907f7b02ddbff83": false,
+          "5eebaf5b0d38aba4c91c843b": false,
+          "false": false
+        },
+        "sources": []
+      },
+      "storage": "5e6d7646a77e036e5803a02f",
+      "extension_first": false
     },
-    "E28N47": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 1,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 3,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.6,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 0.3,
+          "repair_defence": 0.6,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 1258,
+      "invader": false,
+      "extentions_amount": 60,
+      "roads": 119,
+      "all_full_wo_storage": true
     },
-    "E28N49": {
-      "total": 0,
+    "endReservation": 22416017,
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "OH",
+          "X",
+          "O",
+          "Z"
+        ],
+        "produce": [
+          "XZHO2",
+          "XZHO2",
+          "XZHO2"
+        ],
+        "process": [
+          "ZHO2",
+          "ZO"
+        ]
+      },
+      "reagent": {
+        "5e8e181f588b374c60e0b33b": {
+          "type": "OH"
+        },
+        "5e8efe1a1178a4ff1e38d80b": {
+          "type": "X"
+        },
+        "5e906d378798ef13b0768809": {
+          "type": "O"
+        },
+        "5e90c96ff67172cd00f3e431": {
+          "type": "Z"
+        }
+      },
+      "produce": {
+        "5e8e8e0be9bc8d1a532b66fc": {
+          "type": "XZHO2",
+          "reagents": [
+            "5e8d3657842e6ba5fdcf2e82",
+            "5e8efe1a1178a4ff1e38d80b"
+          ]
+        },
+        "5e8f63120d45cc572d96d144": {
+          "type": "XZHO2",
+          "reagents": [
+            "5e8d3657842e6ba5fdcf2e82",
+            "5e8efe1a1178a4ff1e38d80b"
+          ]
+        },
+        "5e8ff713f481e3d3b83e7720": {
+          "type": "XZHO2",
+          "reagents": [
+            "5e8d3657842e6ba5fdcf2e82",
+            "5e8efe1a1178a4ff1e38d80b"
+          ]
+        }
+      },
+      "process": {
+        "5e8d3657842e6ba5fdcf2e82": {
+          "type": "ZHO2",
+          "reagents": [
+            "5e8db26253eaf004c758ada8",
+            "5e8e181f588b374c60e0b33b"
+          ]
+        },
+        "5e8db26253eaf004c758ada8": {
+          "type": "ZO",
+          "reagents": [
+            "5e90c96ff67172cd00f3e431",
+            "5e906d378798ef13b0768809"
+          ]
+        }
+      },
+      "booster": {
+        "5e6dc6ea92122d7f28cec796": {}
+      }
+    },
+    "mineral_by_lab": {
+      "5e8d3657842e6ba5fdcf2e82": "ZHO2",
+      "5e8db26253eaf004c758ada8": "ZO",
+      "5e8e181f588b374c60e0b33b": "OH",
+      "5e8e8e0be9bc8d1a532b66fc": "XZHO2",
+      "5e8efe1a1178a4ff1e38d80b": "X",
+      "5e8f63120d45cc572d96d144": "XZHO2",
+      "5e8ff713f481e3d3b83e7720": "XZHO2",
+      "5e906d378798ef13b0768809": "O",
+      "5e90c96ff67172cd00f3e431": "Z"
+    },
+    "lab_per_mineral": {
+      "ZHO2": "5e8d3657842e6ba5fdcf2e82",
+      "ZO": "5e8db26253eaf004c758ada8",
+      "OH": "5e8e181f588b374c60e0b33b",
+      "XZHO2": "5e8ff713f481e3d3b83e7720",
+      "X": "5e8efe1a1178a4ff1e38d80b",
+      "O": "5e906d378798ef13b0768809",
+      "Z": "5e90c96ff67172cd00f3e431"
+    },
+    "hostile2attack": false,
+    "repair_civilian": false,
+    "repair_defence": false,
+    "hostile_ids_2attack": []
+  },
+  "E39N49": {
+    "roads": [],
+    "global_vars": {
+      "finish_war": false,
+      "status": "peace",
+      "spawn_name": "max",
+      "max_body_cost": 1700,
+      "room_name": "E39N49",
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 2,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 1,
+          "build": 1,
+          "repair_defence": 0,
+          "repair_civilian": 0
+        },
+        "peace": {
+          "worker": {
+            "E39N49": 0
+          },
+          "transfer": 1,
+          "build": 1,
+          "repair_defence": 0.2,
+          "repair_civilian": 0
+        },
+        "harvest": {
+          "energy": 0.7,
+          "mineral": 0.3
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 453,
+      "invader": false,
+      "extentions_amount": 60,
+      "roads": 182,
+      "all_full_wo_storage": false
+    },
+    "targets": {
+      "repair_defence": "688e71c5587713c2348d7a31",
+      "build": [],
+      "creep_repair_defence": [
+        "610be106e20be1ef3f7c132f",
+        "6179ae80ff5d64e374ef5065",
+        "610a7ce1d9acc43d5e64fe0b",
+        "610a7b0e3245b4d17050cb65",
+        "610bf97ce20be107ca7c1b87",
+        "5ffb391905fddd3a6c3bc032",
+        "65c8eea19eee0f7bb28cce51",
+        "65901967fd8741350d8cf6dd",
+        "5eec78483284e611684e6f93",
+        "5ba8b23101e44363bb965618",
+        "5ffb3894f4745b231f9f1c42",
+        "65c8ee8c3637a576acf0d7ff",
+        "5eec74c45fee140a0ac90886",
+        "5ba8b22ea9eebb69c52ae3b6",
+        "65eacbfa15d1804e4987bda2",
+        "5eec89b06be8b429d0759c33",
+        "6590182141d9da15b29831c1",
+        "5eec732ac797fa8112f4c24e",
+        "5ffb3908907fbe26cac786fa",
+        "65e1c6679eee0f8d6c93ee0b",
+        "5f560672e76d9b4c763d9669",
+        "65e1c720b12ec57b83505a02",
+        "5eec73753170c67b8bce1c9e",
+        "5f64417cd271cf3f97480e69",
+        "5eecac40f62778e60b9d258e",
+        "5eec72ea2426b0c48944146b",
+        "5eec89805fee14b83bc910ca",
+        "5eec7496bcadcb96f8034f12",
+        "5eec83dc7042fce898d264f0",
+        "65e03c719945eaf139a19743",
+        "5eec89fc1ee2a2669668da43"
+      ],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "repair_civilian": false,
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "towers": {
+      "current": {
+        "5bcb3442d86193395bdda24f": false,
+        "5be5ed0ac94dca55c37ebeb0": false,
+        "5c18e07a4fb25b374d75cc9a": false,
+        "5c33b9e99e28b81feb9f8be7": false,
+        "5f6371444a6f6a108ab524cb": false,
+        "65ead85f3d7a8876555ffb00": false
+      },
+      "target2repair": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a5a182100e1594f3ed10": [
+          "5ee9cf9aa26316527cb2df38"
+        ],
+        "59f1a5a182100e1594f3ed11": [
+          "5eea05a0be7cd66302d7f1ea"
+        ]
+      },
+      "store_used": {
+        "storage": 717883,
+        "terminal": 205612
+      },
+      "max_store": {
+        "storage": 930000,
+        "terminal": 280000,
+        "terminal_energy": 228000,
+        "storage_energy": 295000
+      },
+      "mineral": {
+        "id": "59f1c0e37d0b3d79de5f1f7e",
+        "extractor": "5a5c005ff732f52e141496f7",
+        "type": "K"
+      },
+      "containers": {
+        "source": {
+          "610a7b0e3245b4d17050cb65": {
+            "source_id": "59f1a5a182100e1594f3ed10",
+            "creeps_moving2me": [],
+            "miner_id": "6899a46a9fbbe230e77f207b"
+          },
+          "610a7ce1d9acc43d5e64fe0b": {
+            "source_id": "59f1a5a182100e1594f3ed11",
+            "creeps_moving2me": [],
+            "miner_id": "6899a77c471b58271f453ce7"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "5ee9cf9aa26316527cb2df38",
+          "5eea05a0be7cd66302d7f1ea"
+        ],
+        "near_controller": "5bcb5dec5535cd2a3b5d93bf",
+        "destinations": {
+          "5e77a5fa37f8bbaee3275751": false,
+          "5e77a6612dbd07a42234d48e": false,
+          "636fddd95b1ad720f167c303": false,
+          "5bcb5dec5535cd2a3b5d93bf": false
+        },
+        "sources": []
+      },
+      "storage": "5afff958ff9d380d22e3634a",
+      "extension_first": false
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "K",
+          "X",
+          "H",
+          "OH"
+        ],
+        "produce": [
+          "XKH2O",
+          "XKH2O",
+          "XKH2O"
+        ],
+        "process": [
+          "KH2O",
+          "KH"
+        ]
+      },
+      "reagent": {
+        "5afd6e3e17ef266afcaf8a41": {
+          "type": "K"
+        },
+        "5afe7e3aef539f79b783a71c": {
+          "type": "X"
+        },
+        "5afe7e3f7d58336918d464a1": {
+          "type": "H"
+        },
+        "5b010c9dc389360cec953c6b": {
+          "type": "OH"
+        }
+      },
+      "produce": {
+        "5affad40f31bc37e0463fa8b": {
+          "type": "XKH2O",
+          "reagents": [
+            "5afda22783f3d06931a505fc",
+            "5afe7e3aef539f79b783a71c"
+          ]
+        },
+        "5affc230ff9d380d22e34aba": {
+          "type": "XKH2O",
+          "reagents": [
+            "5afda22783f3d06931a505fc",
+            "5afe7e3aef539f79b783a71c"
+          ]
+        },
+        "5b003a3ad872c30a98ccea96": {
+          "type": "XKH2O",
+          "reagents": [
+            "5afda22783f3d06931a505fc",
+            "5afe7e3aef539f79b783a71c"
+          ]
+        }
+      },
+      "process": {
+        "5afda22783f3d06931a505fc": {
+          "type": "KH2O",
+          "reagents": [
+            "5afeca3baf0be56cf3a58739",
+            "5b010c9dc389360cec953c6b"
+          ]
+        },
+        "5afeca3baf0be56cf3a58739": {
+          "type": "KH",
+          "reagents": [
+            "5afd6e3e17ef266afcaf8a41",
+            "5afe7e3f7d58336918d464a1"
+          ]
+        }
+      },
+      "booster": {
+        "5b0158170b6fb5549b79899f": {}
+      }
+    },
+    "hostile2attack": false,
+    "mineral_by_lab": {
+      "5afd6e3e17ef266afcaf8a41": "K",
+      "5afda22783f3d06931a505fc": "KH2O",
+      "5afe7e3aef539f79b783a71c": "X",
+      "5afe7e3f7d58336918d464a1": "H",
+      "5afeca3baf0be56cf3a58739": "KH",
+      "5affad40f31bc37e0463fa8b": "XKH2O",
+      "5affc230ff9d380d22e34aba": "XKH2O",
+      "5b003a3ad872c30a98ccea96": "XKH2O",
+      "5b010c9dc389360cec953c6b": "OH"
+    },
+    "lab_per_mineral": {
+      "K": "5afd6e3e17ef266afcaf8a41",
+      "KH2O": "5afda22783f3d06931a505fc",
+      "X": "5afe7e3aef539f79b783a71c",
+      "H": "5afe7e3f7d58336918d464a1",
+      "KH": "5afeca3baf0be56cf3a58739",
+      "XKH2O": "5b003a3ad872c30a98ccea96",
+      "OH": "5b010c9dc389360cec953c6b"
+    },
+    "repair_civilian": false,
+    "repair_defence": false,
+    "hostile_ids_2attack": []
+  },
+  "E38N48": {
+    "towers": {
+      "current": {
+        "5ac5e977644e0317aa0d7604": false,
+        "5ac5f089f70edd11fa2ada3f": false,
+        "5ad238662c075c4b7968d2ee": false,
+        "5afd2405a62eb5695a148d85": false,
+        "5afd26b300e130692ad0bf72": false,
+        "5b9d1202530c9f43ac6282f1": false
+      },
+      "target2repair": false
+    },
+    "targets": {
+      "build": [],
+      "repair_defence": false,
+      "creep_repair_defence": [
+        "617920071237fe5848dcfb9f"
+      ],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "remote_force_attack": false,
+      "repair_civilian": false,
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a59182100e1594f3eb88": [
+          "5ee7ba24b6c466c4479e5f2c"
+        ],
+        "59f1a59182100e1594f3eb89": [
+          "63074e3b5dd6d79f34569727"
+        ]
+      },
+      "store_used": {
+        "storage": 780862,
+        "terminal": 285148
+      },
+      "max_store": {
+        "storage": 900000,
+        "terminal": 280000,
+        "terminal_energy": 225000,
+        "storage_energy": 300000
+      },
+      "mineral": {
+        "id": "59f1c0e27d0b3d79de5f1f13",
+        "extractor": "5ad1db56ff17735239ba0ad2",
+        "type": "O"
+      },
+      "containers": {
+        "source": {
+          "617909aaece58b4e21e2d013": {
+            "source_id": "59f1a59182100e1594f3eb89",
+            "creeps_moving2me": [],
+            "miner_id": false
+          },
+          "617920071237fe5848dcfb9f": {
+            "source_id": "59f1a59182100e1594f3eb88",
+            "creeps_moving2me": [],
+            "miner_id": false
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "5ee7ba24b6c466c4479e5f2c",
+          "63074e3b5dd6d79f34569727"
+        ],
+        "near_controller": false,
+        "destinations": {
+          "5affb61b6c0015346e4f3517": false,
+          "5ee7b491483e9a209e1f60bf": false,
+          "63c14ad67545601c9fd35ee2": false,
+          "643f97e4356dff0026faf28c": false,
+          "false": false
+        },
+        "sources": []
+      },
+      "storage": "5afd6ab8f686ff54854efc5a",
+      "extension_first": false
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 2,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 1,
+          "build": 1,
+          "repair_defence": 0.1,
+          "repair_civilian": 0,
+          "special_carry": 0
+        },
+        "peace": {
+          "worker": {
+            "E37N48": 0,
+            "E38N47": 0,
+            "E39N49": 0
+          },
+          "transfer": 1,
+          "build": 0.5,
+          "repair_defence": 0.6,
+          "repair_civilian": 0,
+          "special_carry": 0
+        },
+        "harvest": {
+          "energy": 0.7,
+          "mineral": 0.3
+        }
+      },
+      "all_full": true,
+      "room_min_ticksToLive": 428,
+      "extentions_amount": 60,
+      "roads": 160,
+      "all_full_wo_storage": true
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "H",
+          "O"
+        ],
+        "produce": [
+          "OH",
+          "OH",
+          "OH",
+          "OH",
+          "OH",
+          "OH",
+          "OH"
+        ],
+        "process": []
+      },
+      "reagent": {
+        "5aff2939a5997579cf2b0db2": {
+          "type": "H"
+        },
+        "5affa68a7ba0dc342c7afd71": {
+          "type": "O"
+        }
+      },
+      "produce": {
+        "5afda95899ddef6af035e6cc": {
+          "type": "OH",
+          "reagents": [
+            "5affa68a7ba0dc342c7afd71",
+            "5aff2939a5997579cf2b0db2"
+          ]
+        },
+        "5afe0dcc12e8d50cf8ec448a": {
+          "type": "OH",
+          "reagents": [
+            "5affa68a7ba0dc342c7afd71",
+            "5aff2939a5997579cf2b0db2"
+          ]
+        },
+        "5afe40ba186e950cf1d282ee": {
+          "type": "OH",
+          "reagents": [
+            "5affa68a7ba0dc342c7afd71",
+            "5aff2939a5997579cf2b0db2"
+          ]
+        },
+        "5afe93920b6fb5549b7868c3": {
+          "type": "OH",
+          "reagents": [
+            "5affa68a7ba0dc342c7afd71",
+            "5aff2939a5997579cf2b0db2"
+          ]
+        },
+        "5afec93256ab405468fa98e7": {
+          "type": "OH",
+          "reagents": [
+            "5affa68a7ba0dc342c7afd71",
+            "5aff2939a5997579cf2b0db2"
+          ]
+        },
+        "5afef39684625f6d05480f87": {
+          "type": "OH",
+          "reagents": [
+            "5affa68a7ba0dc342c7afd71",
+            "5aff2939a5997579cf2b0db2"
+          ]
+        },
+        "5aff6dca0ee4197e1e0ef498": {
+          "type": "OH",
+          "reagents": [
+            "5affa68a7ba0dc342c7afd71",
+            "5aff2939a5997579cf2b0db2"
+          ]
+        }
+      },
+      "process": {},
+      "booster": {}
+    },
+    "units": {
+      "total": 1,
       "transfer": 0,
       "build": 0,
       "upgrade": 0,
@@ -242,16 +2188,1210 @@
       "repair_defence": 0,
       "repair_civilian": 0,
       "harvest": 0,
-      "undefined": 0,
+      "undefined": 1,
       "long_harvest": 0,
       "claimer": 0,
       "mineral_miner": 0,
       "energy_miner": 0,
       "sp_total": 0
     },
-    "E28N48": {
-      "total": 1,
-      "transfer": 0,
+    "hostile2attack": false,
+    "mineral_by_lab": {
+      "5afda95899ddef6af035e6cc": "OH",
+      "5afe0dcc12e8d50cf8ec448a": "OH",
+      "5afe40ba186e950cf1d282ee": "OH",
+      "5afe93920b6fb5549b7868c3": "OH",
+      "5afec93256ab405468fa98e7": "OH",
+      "5afef39684625f6d05480f87": "OH",
+      "5aff2939a5997579cf2b0db2": "H",
+      "5aff6dca0ee4197e1e0ef498": "OH",
+      "5affa68a7ba0dc342c7afd71": "O"
+    },
+    "lab_per_mineral": {
+      "OH": "5aff6dca0ee4197e1e0ef498",
+      "H": "5aff2939a5997579cf2b0db2",
+      "O": "5affa68a7ba0dc342c7afd71"
+    },
+    "repair_civilian": false,
+    "repair_defence": false
+  },
+  "E37N48": {
+    "global_vars": {
+      "status": "peace",
+      "creep_types": {
+        "peace": {
+          "worker": {
+            "E36N48": 0
+          },
+          "transfer": 1,
+          "special_carry": 0,
+          "repair_civilian": 0,
+          "repair_defence": 0,
+          "build": 1
+        },
+        "war": {
+          "repair_defence": 0,
+          "transfer": 1,
+          "build": 1
+        },
+        "harvest": {
+          "energy": 0.7,
+          "mineral": 0.3
+        }
+      },
+      "screeps_max_amount": {
+        "war": 3,
+        "peace": 1,
+        "lab_assistent_needed": false
+      },
+      "max_body_cost": 1700,
+      "finish_war": false,
+      "all_full": false,
+      "room_min_ticksToLive": 604,
+      "extentions_amount": 60,
+      "invader": false,
+      "roads": 164,
+      "all_full_wo_storage": true
+    },
+    "towers": {
+      "current": {
+        "5ba24c4804313b172f0114c6": false,
+        "5bdf7fb334b58514bdb59ef2": false,
+        "5bdf869f854ce12680bd92ff": false,
+        "5bdf8a26c42ad1266b15015f": false,
+        "62a412adf9452aae16a38e2d": false,
+        "63e3737673c4045499a87bc8": false
+      },
+      "next_update": 4667920
+    },
+    "targets": {
+      "build": [],
+      "repair_defence": false,
+      "repair_civilian": false,
+      "creep_repair_defence": [
+        "610a7679ea43f00e2e19d1ed",
+        "62949dd7434607783fc47de5",
+        "636b66551f8ac81f56959f94",
+        "61b8c054d4b43e27a31e575f",
+        "5f4f4b7508c3d0fe58202acc"
+      ],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "remote_force_attack": false,
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "long_harvest": [
+        {
+          "x": 21,
+          "y": 27,
+          "roomName": "E37N49"
+        }
+      ],
+      "sources": {
+        "59f1a58082100e1594f3e9fd": [
+          "63b943b379845423486e41cc"
+        ],
+        "59f1a58082100e1594f3e9ff": [
+          "618506ac48f956443fa12c57"
+        ]
+      },
+      "store_used": {
+        "storage": 744740,
+        "terminal": 214878
+      },
+      "max_store": {
+        "storage": 900000,
+        "terminal": 296000,
+        "terminal_energy": 232000,
+        "storage_energy": 300000
+      },
+      "mineral": {
+        "id": "59f1c0e27d0b3d79de5f1ea7",
+        "extractor": "5bc6c8f5acc1356035a8674a",
+        "type": "H"
+      },
+      "containers": {
+        "source": {
+          "610a7679ea43f00e2e19d1ed": {
+            "source_id": "59f1a58082100e1594f3e9fd",
+            "creeps_moving2me": [],
+            "miner_id": "6899a211d3d59f0f4fbded56"
+          },
+          "610a86253f151110afb794ed": {
+            "source_id": "59f1a58082100e1594f3e9ff",
+            "creeps_moving2me": [],
+            "miner_id": "6899a082d3d59fd343bdecb0"
+          }
+        },
+        "other": {
+          "62949dd7434607783fc47de5": {
+            "creeps_moving2me": [
+              "6899a2baec15f223c2726cfe",
+              "6899a2baec15f223c2726cfe"
+            ]
+          }
+        },
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "618506ac48f956443fa12c57",
+          "63b943b379845423486e41cc"
+        ],
+        "near_controller": false,
+        "destinations": {
+          "5eeb90b721d4b3cc67336802": false,
+          "61a37dd5dfb9880e0ae82a9e": false,
+          "636fb2e3abeccefd7274f1ad": false,
+          "false": false
+        },
+        "sources": [
+          "5be05ab1519c604bf419fcf6"
+        ]
+      },
+      "storage": "5afd3bd34337e90a8c6d9253",
+      "extension_first": false
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "H",
+          "O"
+        ],
+        "produce": [
+          "OH",
+          "OH",
+          "OH",
+          "OH",
+          "OH",
+          "OH",
+          "OH"
+        ],
+        "process": []
+      },
+      "reagent": {
+        "5bc65a4942e15739553b5888": {
+          "type": "H"
+        },
+        "5bdff471d35e7370a71b305b": {
+          "type": "O"
+        }
+      },
+      "produce": {
+        "5bc5fc8eb81d922a2fd9b432": {
+          "type": "OH",
+          "reagents": [
+            "5bdff471d35e7370a71b305b",
+            "5bc65a4942e15739553b5888"
+          ]
+        },
+        "5bc67da58b74e5265b8b8cb8": {
+          "type": "OH",
+          "reagents": [
+            "5bdff471d35e7370a71b305b",
+            "5bc65a4942e15739553b5888"
+          ]
+        },
+        "5bc686a5b081522ff48e1e57": {
+          "type": "OH",
+          "reagents": [
+            "5bdff471d35e7370a71b305b",
+            "5bc65a4942e15739553b5888"
+          ]
+        },
+        "5bc6c0695535cd2a3b5bf20f": {
+          "type": "OH",
+          "reagents": [
+            "5bdff471d35e7370a71b305b",
+            "5bc65a4942e15739553b5888"
+          ]
+        },
+        "5be0159dee3c94643a56717b": {
+          "type": "OH",
+          "reagents": [
+            "5bdff471d35e7370a71b305b",
+            "5bc65a4942e15739553b5888"
+          ]
+        },
+        "5be04350e78e2b0537a7d81b": {
+          "type": "OH",
+          "reagents": [
+            "5bdff471d35e7370a71b305b",
+            "5bc65a4942e15739553b5888"
+          ]
+        },
+        "5be056031c8c3171f709ae99": {
+          "type": "OH",
+          "reagents": [
+            "5bdff471d35e7370a71b305b",
+            "5bc65a4942e15739553b5888"
+          ]
+        }
+      },
+      "process": {},
+      "booster": {
+        "5bc626d292844e4c7961f42a": {}
+      }
+    },
+    "hostile2attack": false,
+    "mineral_by_lab": {
+      "5bc5fc8eb81d922a2fd9b432": "OH",
+      "5bc65a4942e15739553b5888": "H",
+      "5bc67da58b74e5265b8b8cb8": "OH",
+      "5bc686a5b081522ff48e1e57": "OH",
+      "5bc6c0695535cd2a3b5bf20f": "OH",
+      "5bdff471d35e7370a71b305b": "O",
+      "5be0159dee3c94643a56717b": "OH",
+      "5be04350e78e2b0537a7d81b": "OH",
+      "5be056031c8c3171f709ae99": "OH"
+    },
+    "lab_per_mineral": {
+      "OH": "5be056031c8c3171f709ae99",
+      "H": "5bc65a4942e15739553b5888",
+      "O": "5bdff471d35e7370a71b305b"
+    },
+    "repair_civilian": false,
+    "repair_defence": false
+  },
+  "E34N47": {
+    "towers": {
+      "current": {
+        "5acc9a90de98dd18662abb5f": false,
+        "5ae60042a2505b11b19dfb9b": false,
+        "5bc83d9cfad385267047775d": false,
+        "5eeb5736f079057fc6f8e511": false,
+        "5eeb5917d466d8bc4e9185f6": false,
+        "5eeb8048665b6d50f3ee94e1": false
+      },
+      "next_update": 5054483
+    },
+    "targets": {
+      "build": [],
+      "repair_defence": false,
+      "creep_repair_defence": [
+        "628693aff8d4c92290a42a59",
+        "6286af78f221911902b2f471",
+        "628a2e81edd4015903baa4e0",
+        "6288718eab7c2c28c9a6b905",
+        "648abbc52dba05242c335fc4"
+      ],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "repair_civilian": false,
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a54882100e1594f3e356": [
+          "5eeb602221d4b33201335517"
+        ],
+        "59f1a54882100e1594f3e357": [
+          "5bc28d08af3f2b5972003d5e",
+          "5f64bb55bdc40c9af8f28cdc"
+        ]
+      },
+      "store_used": {
+        "storage": 880691,
+        "terminal": 287895
+      },
+      "max_store": {
+        "storage": 930000,
+        "terminal": 296000,
+        "terminal_energy": 220000,
+        "storage_energy": 100000
+      },
+      "mineral": {
+        "id": "59f1c0e27d0b3d79de5f1dcd",
+        "extractor": "5ae2cc91f599ed3377eb942f",
+        "type": "X"
+      },
+      "containers": {
+        "source": {
+          "628693aff8d4c92290a42a59": {
+            "source_id": "59f1a54882100e1594f3e356",
+            "creeps_moving2me": [],
+            "miner_id": false
+          },
+          "6286af78f221911902b2f471": {
+            "source_id": "59f1a54882100e1594f3e357",
+            "creeps_moving2me": [],
+            "miner_id": false
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "5bc28d08af3f2b5972003d5e",
+          "5eeb602221d4b33201335517",
+          "5f64bb55bdc40c9af8f28cdc"
+        ],
+        "near_controller": "5eeb5c46714ecc51b5d89883",
+        "destinations": {
+          "5eeb626672bf9b9f07cd8f7d": false,
+          "5eeb63c2f079057080f8ea98": false,
+          "5eeb5c46714ecc51b5d89883": false
+        },
+        "sources": []
+      },
+      "storage": "5afd5ccf837d9a0a7a7ba8e9",
+      "extension_first": false
+    },
+    "global_vars": {
+      "storage_max_energy": 200000,
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 3,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0,
+          "build": 0,
+          "repair_defence": 0,
+          "repair_civilian": 0,
+          "special_carry": 0.3
+        },
+        "peace": {
+          "worker": {
+            "E33N47": 0,
+            "E34N47": 0
+          },
+          "transfer": 0.4,
+          "build": 0.5,
+          "repair_defence": 0,
+          "repair_civilian": 0,
+          "special_carry": 0.4
+        },
+        "harvest": {
+          "energy": 0.7,
+          "mineral": 0.3
+        }
+      },
+      "all_full": true,
+      "room_min_ticksToLive": 625,
+      "invader": false,
+      "extentions_amount": 60,
+      "roads": 147,
+      "all_full_wo_storage": true
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "X",
+          "OH",
+          "GO"
+        ],
+        "produce": [
+          "XGHO2",
+          "XGHO2",
+          "XGHO2",
+          "XGHO2",
+          "XGHO2"
+        ],
+        "process": [
+          "GHO2"
+        ]
+      },
+      "reagent": {
+        "661116f8fd267bb6a7c1d3a3": {
+          "type": "X"
+        },
+        "66167d04fcc3f38250ef6c99": {
+          "type": "OH"
+        },
+        "6617c1252119cca509334529": {
+          "type": "GO"
+        }
+      },
+      "produce": {
+        "6618578daf673ea44bf745ef": {
+          "type": "XGHO2",
+          "reagents": [
+            "661cce70ad0ace0e0127c668",
+            "661116f8fd267bb6a7c1d3a3"
+          ]
+        },
+        "66190f7d92e417a3a06c5732": {
+          "type": "XGHO2",
+          "reagents": [
+            "661cce70ad0ace0e0127c668",
+            "661116f8fd267bb6a7c1d3a3"
+          ]
+        },
+        "661a37eba15d412c1748ac86": {
+          "type": "XGHO2",
+          "reagents": [
+            "661cce70ad0ace0e0127c668",
+            "661116f8fd267bb6a7c1d3a3"
+          ]
+        },
+        "661babd4acf0d08df8b5ed95": {
+          "type": "XGHO2",
+          "reagents": [
+            "661cce70ad0ace0e0127c668",
+            "661116f8fd267bb6a7c1d3a3"
+          ]
+        },
+        "661c29339d408955ffdd1f40": {
+          "type": "XGHO2",
+          "reagents": [
+            "661cce70ad0ace0e0127c668",
+            "661116f8fd267bb6a7c1d3a3"
+          ]
+        }
+      },
+      "process": {
+        "661cce70ad0ace0e0127c668": {
+          "type": "GHO2",
+          "reagents": [
+            "6617c1252119cca509334529",
+            "66167d04fcc3f38250ef6c99"
+          ]
+        }
+      },
+      "booster": {
+        "661d15263a03146b1afc4e46": {}
+      }
+    },
+    "hostile2attack": false,
+    "mineral_by_lab": {
+      "661116f8fd267bb6a7c1d3a3": "X",
+      "66167d04fcc3f38250ef6c99": "OH",
+      "6617c1252119cca509334529": "GO",
+      "6618578daf673ea44bf745ef": "XGHO2",
+      "66190f7d92e417a3a06c5732": "XGHO2",
+      "661a37eba15d412c1748ac86": "XGHO2",
+      "661babd4acf0d08df8b5ed95": "XGHO2",
+      "661c29339d408955ffdd1f40": "XGHO2",
+      "661cce70ad0ace0e0127c668": "GHO2"
+    },
+    "lab_per_mineral": {
+      "X": "661116f8fd267bb6a7c1d3a3",
+      "OH": "66167d04fcc3f38250ef6c99",
+      "GO": "6617c1252119cca509334529",
+      "XGHO2": "661c29339d408955ffdd1f40",
+      "GHO2": "661cce70ad0ace0e0127c668"
+    },
+    "repair_civilian": false,
+    "repair_defence": false,
+    "hostile_ids_2attack": []
+  },
+  "E38N47": {
+    "global_vars": {
+      "creep_types": {
+        "peace": {
+          "transfer": 1,
+          "repair_defence": 0,
+          "build": 1,
+          "repair_civilian": 0
+        },
+        "war": {
+          "repair_defence": 0,
+          "repair_civilian": 0,
+          "build": 1,
+          "transfer": 1
+        }
+      },
+      "screeps_max_amount": {
+        "war": 2,
+        "peace": 1,
+        "lab_assistent_needed": false
+      },
+      "status": "peace",
+      "max_body_cost": 1700,
+      "finish_war": false,
+      "all_full": false,
+      "room_min_ticksToLive": 206,
+      "invader": false,
+      "extentions_amount": 60,
+      "roads": 84,
+      "all_full_wo_storage": false
+    },
+    "towers": {
+      "current": {
+        "5bb360459c2b2407c82f8795": false,
+        "5be348c47a307e778b86da95": false,
+        "610f1f833d9e56b4b4cf4491": false,
+        "63a85b4a08a0b4fd6744f19b": false,
+        "63a86230705dbbfc759736e8": false,
+        "662e0e7c67c06c2b9eae9617": false,
+        "688e7f9972713945f8da8e31": false
+      }
+    },
+    "targets": {
+      "build": [],
+      "repair_defence": "68937061d3d59f6b2cbba03d",
+      "repair_civilian": false,
+      "creep_repair_defence": [
+        "611401af75306e087b6542ba",
+        "6113fc22813f1c2ecf434b1a",
+        "6113fca2d7ff2402867052b5",
+        "643ea82a32a8bc8d75d2e829",
+        "611407f53657b76e8c0b1a08",
+        "6114090380a088fc03ebe3e5",
+        "643ea5e538078141287223ae",
+        "6113fb78ac529bda83117475",
+        "611408226d50dd33c7597e37",
+        "610a8331a26bb106ddec0af5",
+        "61238344090cb03775aedc08",
+        "643ec76c46040082a9c0fbaa",
+        "5bac86524bdbc00781ed01d9",
+        "670293b376c2afc16495973a",
+        "5e9ade1af8f2ec31cfea017d",
+        "5eec69489df2d7f4664607ee",
+        "670293ba3b77314df1aa2f0b",
+        "5ba8b1c30afb40321839e0d8",
+        "5e9aadac537d2ace5a2949a9",
+        "5eec6923fe52c62c741eed11",
+        "67837bde9a00fca1159d1c86",
+        "65eac9e24fe058d9a813cd3b",
+        "610e56eb39dee90aeff3e454",
+        "63a85e492613fad86172b7cf",
+        "5eec691bac32c093ad4a3f05",
+        "61a8a1071177b2b25b14d184",
+        "65f2b073072a6f36a441847f",
+        "63a8628e1da4d75e4b8851da",
+        "5ba8b1bc09192e637605b253",
+        "5e9aad39de3f9a328251d2bf",
+        "5e9aae2945013d7c316d707f",
+        "65c8ecc6dea32bac56a313ac",
+        "65c8ecce2e50caf4c4be8d23"
+      ],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a59182100e1594f3eb8b": [
+          "63ab19188767b08613e175fc"
+        ]
+      },
+      "store_used": {
+        "storage": 934693,
+        "terminal": 195155
+      },
+      "max_store": {
+        "storage": 900000,
+        "terminal": 290000,
+        "terminal_energy": 220000,
+        "storage_energy": 0
+      },
+      "mineral": {
+        "id": "59f1c0e27d0b3d79de5f1f14",
+        "extractor": "5bbd23efb059a86490d59e09",
+        "type": "Z"
+      },
+      "containers": {
+        "source": {
+          "610a8331a26bb106ddec0af5": {
+            "source_id": "59f1a59182100e1594f3eb8b",
+            "creeps_moving2me": [],
+            "miner_id": "68999c75207937f5fbc9ff9f"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "63ab19188767b08613e175fc"
+        ],
+        "near_controller": "5bccbd2fee05a611ba36922e",
+        "destinations": {
+          "6397a7562cfd78b3cd0c48db": false,
+          "67adb186a1cb70235d64adbe": false,
+          "5bccbd2fee05a611ba36922e": false
+        },
+        "sources": []
+      },
+      "storage": "5b11bf4882c1ef67174cd56e",
+      "extension_first": false
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "O",
+          "H"
+        ],
+        "produce": [
+          "OH",
+          "OH",
+          "OH",
+          "OH",
+          "OH",
+          "OH",
+          "OH"
+        ],
+        "process": []
+      },
+      "reagent": {
+        "6629467c56cf941059ba0ea5": {
+          "type": "O"
+        },
+        "662d45d04008126a5b31472f": {
+          "type": "H"
+        }
+      },
+      "produce": {
+        "662690607d279a25c5b9927c": {
+          "type": "OH",
+          "reagents": [
+            "6629467c56cf941059ba0ea5",
+            "662d45d04008126a5b31472f"
+          ]
+        },
+        "6627ab28caeef135cea675d7": {
+          "type": "OH",
+          "reagents": [
+            "6629467c56cf941059ba0ea5",
+            "662d45d04008126a5b31472f"
+          ]
+        },
+        "662a2b249cb7c92f7a6a7226": {
+          "type": "OH",
+          "reagents": [
+            "6629467c56cf941059ba0ea5",
+            "662d45d04008126a5b31472f"
+          ]
+        },
+        "662a9bf503d548f7c0609fac": {
+          "type": "OH",
+          "reagents": [
+            "6629467c56cf941059ba0ea5",
+            "662d45d04008126a5b31472f"
+          ]
+        },
+        "662b7cdaf0bc151badfba1b0": {
+          "type": "OH",
+          "reagents": [
+            "6629467c56cf941059ba0ea5",
+            "662d45d04008126a5b31472f"
+          ]
+        },
+        "662be31bcaeef14d99a7cc3f": {
+          "type": "OH",
+          "reagents": [
+            "6629467c56cf941059ba0ea5",
+            "662d45d04008126a5b31472f"
+          ]
+        },
+        "662cf26c03d548d387616ec1": {
+          "type": "OH",
+          "reagents": [
+            "6629467c56cf941059ba0ea5",
+            "662d45d04008126a5b31472f"
+          ]
+        }
+      },
+      "process": {},
+      "booster": {
+        "662e376809e6c5afca9de1e6": {}
+      }
+    },
+    "hostile2attack": false,
+    "mineral_by_lab": {
+      "662690607d279a25c5b9927c": "OH",
+      "6627ab28caeef135cea675d7": "OH",
+      "6629467c56cf941059ba0ea5": "O",
+      "662a2b249cb7c92f7a6a7226": "OH",
+      "662a9bf503d548f7c0609fac": "OH",
+      "662b7cdaf0bc151badfba1b0": "OH",
+      "662be31bcaeef14d99a7cc3f": "OH",
+      "662cf26c03d548d387616ec1": "OH",
+      "662d45d04008126a5b31472f": "H"
+    },
+    "lab_per_mineral": {
+      "OH": "662cf26c03d548d387616ec1",
+      "O": "6629467c56cf941059ba0ea5",
+      "H": "662d45d04008126a5b31472f"
+    },
+    "repair_civilian": false,
+    "repair_defence": false,
+    "hostile_ids_2attack": []
+  },
+  "E33N47": {
+    "towers": {
+      "current": {
+        "5af90671cf5dd44c70900c65": false,
+        "5b9d0e5c4b74e64627983890": false,
+        "5b9d3c5f73710c463378a90c": false,
+        "5b9e77569e2ec20a31c1988a": false,
+        "6390a20847eb438ed7e50c7d": false,
+        "6390af9340828e6a46a734bd": false
+      },
+      "next_update": 5535187
+    },
+    "targets": {
+      "build": [],
+      "repair_defence": false,
+      "creep_repair_defence": [
+        "6387c0028b4a13c758bf801b",
+        "610c22088ee5b281a0a1e477",
+        "610a8049d1c72d09986fd4aa",
+        "688e57a24caac52d07ac2a32",
+        "688e558d2f1ea2b4c8302d78",
+        "688e559746c73a0915c391f1",
+        "688e57b4e1ddbbcb155613a7",
+        "688e5797a1b9704b814af9d9",
+        "688e557f1932eb3f3ee1af44",
+        "6892197791301f183199c95a",
+        "5e4e43e851145f19ae8ddb9b"
+      ],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "remote_force_attack": false,
+      "repair_civilian": false,
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a53082100e1594f3e1be": [
+          "5eeb616e0b70dabd366eecdb"
+        ],
+        "59f1a53082100e1594f3e1c0": [
+          "63b929c82cfd784608165c86"
+        ]
+      },
+      "store_used": {
+        "storage": 812668,
+        "terminal": 285927
+      },
+      "max_store": {
+        "storage": 900000,
+        "terminal": 296000,
+        "terminal_energy": 215000,
+        "storage_energy": 100000
+      },
+      "mineral": {
+        "id": "59f1c0e17d0b3d79de5f1d64",
+        "type": "U",
+        "extractor": "5afe1f99c2eb2d6cedd9d0bf"
+      },
+      "containers": {
+        "source": {
+          "610a8049d1c72d09986fd4aa": {
+            "source_id": "59f1a53082100e1594f3e1c0",
+            "creeps_moving2me": [],
+            "miner_id": false
+          },
+          "610c22088ee5b281a0a1e477": {
+            "source_id": "59f1a53082100e1594f3e1be",
+            "creeps_moving2me": [],
+            "miner_id": false
+          }
+        },
+        "other": {},
+        "miner_is_needed": true
+      },
+      "links": {
+        "near_sources": [
+          "5eeb616e0b70dabd366eecdb",
+          "63b929c82cfd784608165c86"
+        ],
+        "near_controller": "5be4e75e7fdfda6d345a8680",
+        "destinations": {
+          "5eeb5c3e897e2c6fe6748d0a": false,
+          "5eeb5ecf0eace6850955185a": false,
+          "6390be6a14aa5c744569e77a": false,
+          "5be4e75e7fdfda6d345a8680": false
+        },
+        "sources": []
+      },
+      "storage": "5afd5c94f1eabb6ce7a18052",
+      "extension_first": false
+    },
+    "global_vars": {
+      "storage_max_energy": 200000,
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 3,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 1,
+          "build": 1
+        },
+        "peace": {
+          "worker": {
+            "E34N47": 0,
+            "E32N47": 0
+          },
+          "transfer": 1,
+          "build": 1
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 898,
+      "invader": false,
+      "extentions_amount": 57,
+      "roads": 153,
+      "all_full_wo_storage": false
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "U",
+          "H",
+          "OH",
+          "X"
+        ],
+        "produce": [
+          "XUH2O",
+          "XUH2O",
+          "XUH2O"
+        ],
+        "process": [
+          "UH",
+          "UH2O"
+        ]
+      },
+      "reagent": {
+        "5b019a9ace12397e17bdefe3": {
+          "type": "U"
+        },
+        "5b01f4e4907d7b6fdbb6e178": {
+          "type": "H"
+        },
+        "5b116d6ee943b95c500dd28b": {
+          "type": "OH"
+        },
+        "5b5d551b003c125892163ad7": {
+          "type": "X"
+        }
+      },
+      "produce": {
+        "5b10b2b294e6d7171e9a7620": {
+          "type": "XUH2O",
+          "reagents": [
+            "5b58679afc1691393a596290",
+            "5b5d551b003c125892163ad7"
+          ]
+        },
+        "5b11309f6a629f74b7be1c48": {
+          "type": "XUH2O",
+          "reagents": [
+            "5b58679afc1691393a596290",
+            "5b5d551b003c125892163ad7"
+          ]
+        },
+        "5b5c11a9fdad936db535ed84": {
+          "type": "XUH2O",
+          "reagents": [
+            "5b58679afc1691393a596290",
+            "5b5d551b003c125892163ad7"
+          ]
+        }
+      },
+      "process": {
+        "5b56385377b75a4b835f1cde": {
+          "type": "UH",
+          "reagents": [
+            "5b019a9ace12397e17bdefe3",
+            "5b01f4e4907d7b6fdbb6e178"
+          ]
+        },
+        "5b58679afc1691393a596290": {
+          "type": "UH2O",
+          "reagents": [
+            "5b56385377b75a4b835f1cde",
+            "5b116d6ee943b95c500dd28b"
+          ]
+        }
+      },
+      "booster": {
+        "5aff5f5d7ba0dc342c7ade4a": {}
+      }
+    },
+    "hostile2attack": false,
+    "mineral_by_lab": {
+      "5b019a9ace12397e17bdefe3": "U",
+      "5b01f4e4907d7b6fdbb6e178": "H",
+      "5b10b2b294e6d7171e9a7620": "XUH2O",
+      "5b11309f6a629f74b7be1c48": "XUH2O",
+      "5b116d6ee943b95c500dd28b": "OH",
+      "5b56385377b75a4b835f1cde": "UH",
+      "5b58679afc1691393a596290": "UH2O",
+      "5b5c11a9fdad936db535ed84": "XUH2O",
+      "5b5d551b003c125892163ad7": "X"
+    },
+    "lab_per_mineral": {
+      "U": "5b019a9ace12397e17bdefe3",
+      "H": "5b01f4e4907d7b6fdbb6e178",
+      "XUH2O": "5b5c11a9fdad936db535ed84",
+      "OH": "5b116d6ee943b95c500dd28b",
+      "UH": "5b56385377b75a4b835f1cde",
+      "UH2O": "5b58679afc1691393a596290",
+      "X": "5b5d551b003c125892163ad7"
+    },
+    "repair_civilian": false,
+    "repair_defence": false
+  },
+  "E28N48": {
+    "towers": {
+      "current": {
+        "5b2bf4dbf797931b65f49b01": false,
+        "5b3e2b7d22271c6c0697ca06": false,
+        "5baa24395152df1a55ac02f9": false,
+        "610a68c4ba383e69c4ce435e": false,
+        "610a703ed4407b8d7e9bb673": false,
+        "63b998ea3d24d32679f10769": false
+      },
+      "next_update": 7242720
+    },
+    "targets": {
+      "build": [],
+      "repair_defence": false,
+      "creep_repair_defence": [
+        "6104557e802c811a2d76e410"
+      ],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "repair_civilian": "61153c09ef8f380d121d4d3a",
+      "tombstonese": false,
+      "tombstone": "6899afc9c86e4b1511edb068"
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a4e382100e1594f3db19": [
+          "63b956da79845421ed6e476b"
+        ],
+        "59f1a4e382100e1594f3db1b": [
+          "63b920f08c2ecbbafeb3bcef"
+        ]
+      },
+      "store_used": {
+        "storage": 713205,
+        "terminal": 292804
+      },
+      "max_store": {
+        "storage": 950000,
+        "terminal": 294000,
+        "terminal_energy": 220000,
+        "storage_energy": 150000
+      },
+      "mineral": {
+        "id": "59f1c0e07d0b3d79de5f1bb3",
+        "type": "L",
+        "extractor": "5b35380287eeba7ce2c032d8"
+      },
+      "containers": {
+        "source": {
+          "6104557e802c811a2d76e410": {
+            "source_id": "59f1a4e382100e1594f3db19",
+            "creeps_moving2me": [],
+            "miner_id": false
+          },
+          "610455d8914f011caeae1063": {
+            "source_id": "59f1a4e382100e1594f3db1b",
+            "creeps_moving2me": [],
+            "miner_id": false
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "63b920f08c2ecbbafeb3bcef",
+          "63b956da79845421ed6e476b"
+        ],
+        "near_controller": false,
+        "destinations": {
+          "5b65872da30f486dd750c051": false,
+          "5eebe782c1d629346d79c8d7": false,
+          "6378d286bbe3270ecc9ddd52": false,
+          "false": false
+        },
+        "sources": []
+      },
+      "storage": "5b2cc739f727462af9e9828a",
+      "extension_first": false
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 3,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 1,
+          "build": 1,
+          "repair_defence": 0.5,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "worker": {
+            "E27N48": 0,
+            "E28N48": 0,
+            "E28N49": 1,
+            "E29N47": 0,
+            "E29N49": 1
+          },
+          "transfer": 1,
+          "build": 1,
+          "repair_defence": 0.5,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": true,
+      "room_min_ticksToLive": 41,
+      "invader": false,
+      "extentions_amount": 60,
+      "roads": 138,
+      "all_full_wo_storage": true
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "U",
+          "O",
+          "L",
+          "Z",
+          "K"
+        ],
+        "produce": [
+          "GO",
+          "G"
+        ],
+        "process": [
+          "ZK",
+          "UL"
+        ]
+      },
+      "reagent": {
+        "5b608bf606da9776c6eb366e": {
+          "type": "U"
+        },
+        "5b60b7a864e2cc6dfbb55631": {
+          "type": "O"
+        },
+        "5b60cf6c3bc2816df5464c0a": {
+          "type": "L"
+        },
+        "5b60fbc32de69576c061a752": {
+          "type": "Z"
+        },
+        "5b6110276e16ef6dd1ffb644": {
+          "type": "K"
+        }
+      },
+      "produce": {
+        "5b60381f5abaee4cd13c0362": {
+          "type": "GO",
+          "reagents": [
+            "5b60a300bb69253f6b65f688",
+            "5b60b7a864e2cc6dfbb55631"
+          ]
+        },
+        "5b60a300bb69253f6b65f688": {
+          "type": "G",
+          "reagents": [
+            "5b60e098525dc476ccc34cb5",
+            "5b612512529e6f26f0cb0a07"
+          ]
+        }
+      },
+      "process": {
+        "5b60e098525dc476ccc34cb5": {
+          "type": "ZK",
+          "reagents": [
+            "5b60fbc32de69576c061a752",
+            "5b6110276e16ef6dd1ffb644"
+          ]
+        },
+        "5b612512529e6f26f0cb0a07": {
+          "type": "UL",
+          "reagents": [
+            "5b608bf606da9776c6eb366e",
+            "5b60cf6c3bc2816df5464c0a"
+          ]
+        }
+      },
+      "booster": {
+        "5b60082fba9ff75ce2a62a96": {}
+      }
+    },
+    "units": {
+      "total": 3,
+      "transfer": 2,
       "build": 0,
       "upgrade": 0,
       "upgrader": 0,
@@ -265,986 +3405,1894 @@
       "energy_miner": 0,
       "sp_total": 0
     },
-    "E29N47": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 1,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "hostile2attack": false,
+    "mineral_by_lab": {
+      "5b60381f5abaee4cd13c0362": "GO",
+      "5b608bf606da9776c6eb366e": "U",
+      "5b60a300bb69253f6b65f688": "G",
+      "5b60b7a864e2cc6dfbb55631": "O",
+      "5b60cf6c3bc2816df5464c0a": "L",
+      "5b60e098525dc476ccc34cb5": "ZK",
+      "5b60fbc32de69576c061a752": "Z",
+      "5b6110276e16ef6dd1ffb644": "K",
+      "5b612512529e6f26f0cb0a07": "UL"
     },
-    "E29N49": {
-      "total": 0,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "lab_per_mineral": {
+      "GO": "5b60381f5abaee4cd13c0362",
+      "U": "5b608bf606da9776c6eb366e",
+      "G": "5b60a300bb69253f6b65f688",
+      "O": "5b60b7a864e2cc6dfbb55631",
+      "L": "5b60cf6c3bc2816df5464c0a",
+      "ZK": "5b60e098525dc476ccc34cb5",
+      "Z": "5b60fbc32de69576c061a752",
+      "K": "5b6110276e16ef6dd1ffb644",
+      "UL": "5b612512529e6f26f0cb0a07"
     },
-    "E32N47": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 1,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "repair_civilian": false,
+    "repair_defence": false
+  },
+  "E38N49": {
+    "endReservation": 35274043,
+    "towers": {
+      "current": {
+        "5ab18ecd6be778261d3de1cc": false,
+        "617ce83edefbd46547c22670": false,
+        "61c6fa8f94b95d0bab4b2b9f": false,
+        "61d6f0cfe330c32aa17031e6": false,
+        "61d801d3b1cddc82c14ff88f": false,
+        "61d80430ce15a4f79b5df065": false
+      },
+      "next_update": 21001994
     },
-    "E33N47": {
-      "total": 3,
-      "transfer": 1,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
+    "targets": {
+      "build": [],
+      "repair_defence": false,
+      "creep_repair_defence": [
+        "688e47f14ccc560f50f97112",
+        "688e47241b0e73b35a0ee1b1",
+        "688e4ac392ae5cf8dd025726",
+        "688e49dad9fd743ceee9c703",
+        "688e46e16362dcd67c4e4fb6",
+        "688e437457cb1198a015999d",
+        "688e47ae4ccc565791f970f5",
+        "688e47717271399751da7877",
+        "688e469e9aecf7d7fcf96d01",
+        "688e48ce207937f8f3c559bd",
+        "688e490259e98a4a9658681b",
+        "688e46121e88b65130b2fdac",
+        "688e45d091301f295f984c2b",
+        "688e465f774bee486cd144c9",
+        "688e43f791301fdb7c984b7b",
+        "6688e75274915f566f1fd210",
+        "6688f5e5808c277189f6b0e3",
+        "688e458e1bbad8412f0ca99d",
+        "688e4484c205a9e328e755b7",
+        "688e4557410098478f6be8de",
+        "688e44c091301f41da984bd2",
+        "688e435959e98a41115865df",
+        "688e443edb5f137102a8128d",
+        "647af6736cd4c533e9c52a6e",
+        "61af478b8781a6f5b858db0c",
+        "671df8981e9c67f474441879",
+        "647af58e822a095a5e6c7154",
+        "61d92a9f0d46481d74fd7319",
+        "647af85c3dad317c6843ab10"
+      ],
+      "repair_civilian": false,
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "tombstonese": false,
+      "tombstone": false
     },
-    "E34N47": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 1,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "energy_flow": {
+      "sources": {
+        "59f1a59182100e1594f3eb83": [
+          "61c83852b8a4ab382322f46a"
+        ],
+        "59f1a59182100e1594f3eb84": [
+          "5ab2d13048f4eb1988118089"
+        ]
+      },
+      "store_used": {
+        "storage": 600525,
+        "terminal": 285657
+      },
+      "max_store": {
+        "terminal": 280000,
+        "storage": 900000,
+        "terminal_energy": 225000,
+        "storage_energy": 150000
+      },
+      "mineral": {
+        "id": "59f1c0e27d0b3d79de5f1f12",
+        "type": "O",
+        "extractor": "5ab4b68f4cad596a26dacd10"
+      },
+      "containers": {
+        "source": {
+          "6688e75274915f566f1fd210": {
+            "source_id": "59f1a59182100e1594f3eb83",
+            "creeps_moving2me": [],
+            "miner_id": "6899a77192ae5cba2b068b07"
+          },
+          "6688f5e5808c277189f6b0e3": {
+            "source_id": "59f1a59182100e1594f3eb84",
+            "creeps_moving2me": [],
+            "miner_id": "6899ad67c982a48104a68cf8"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "5ab2d13048f4eb1988118089",
+          "61c83852b8a4ab382322f46a"
+        ],
+        "near_controller": "61c7ddec987cebe0316547ab",
+        "destinations": {
+          "61af5510df3c417c1fc756d0": false,
+          "61d909196486b682d44513e0": false,
+          "636b723e826886159f6089c1": false,
+          "61c7ddec987cebe0316547ab": false
+        },
+        "sources": []
+      },
+      "storage": "61d6fdf6df93dec45c2080b1",
+      "extension_first": false
     },
-    "E36N48": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0,
-      "false": null
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 2,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 0.3,
+          "repair_defence": 0.1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 993,
+      "extentions_amount": 50,
+      "roads": 100,
+      "all_full_wo_storage": false
     },
-    "E36N49": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 1,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [],
+        "produce": [],
+        "process": []
+      },
+      "reagent": {},
+      "produce": {},
+      "process": {},
+      "booster": {
+        "66874a891e54a0530a102214": {}
+      }
     },
-    "E37N47": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 1,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "mineral_by_lab": {},
+    "lab_per_mineral": {}
+  },
+  "E37N49": {
+    "endReservation": 67621605,
+    "towers": {
+      "current": {},
+      "next_update": 21126784
     },
-    "E37N48": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 1,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "targets": {
+      "build": [],
+      "repair_defence": false,
+      "creep_repair_defence": [],
+      "repair_civilian": "64441dfc39cc9bd5e6d2ae18",
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "tombstonese": false,
+      "tombstone": false
     },
-    "E37N49": {
-      "total": 3,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 3,
-      "remote_energy_miner": null,
-      "remote_harvest": null,
-      "remote_claimer": null
+    "energy_flow": {
+      "sources": {
+        "59f1a58082100e1594f3e9fb": []
+      },
+      "store_used": {
+        "storage": 0,
+        "terminal": 0
+      },
+      "mineral": {
+        "id": "59f1c0e27d0b3d79de5f1ea6",
+        "type": "H",
+        "extractor": false
+      },
+      "containers": {
+        "source": {
+          "64441dfc39cc9bd5e6d2ae18": {
+            "source_id": "59f1a58082100e1594f3e9fb",
+            "creeps_moving2me": [],
+            "miner_id": false
+          }
+        },
+        "other": {},
+        "miner_is_needed": true
+      },
+      "links": {
+        "near_sources": [],
+        "near_controller": false,
+        "destinations": {},
+        "sources": []
+      },
+      "storage": false,
+      "extension_first": false
     },
-    "E38N47": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 1,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 10,
+        "war": 30,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 0.3,
+          "repair_defence": 0.1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 0,
+      "extentions_amount": 0,
+      "roads": 22,
+      "all_full_wo_storage": true
     },
-    "E38N48": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 1,
-      "upgrader": 0,
-      "repair_defence": 0,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [],
+        "produce": [],
+        "process": []
+      },
+      "reagent": {},
+      "produce": {},
+      "process": {},
+      "booster": {}
     },
-    "E38N49": {
-      "total": 1,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 1,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 0,
-      "sp_total": 0
+    "mineral_by_lab": {},
+    "lab_per_mineral": {}
+  },
+  "E28N47": {
+    "endReservation": 29202961,
+    "towers": {
+      "current": {
+        "601a0e52c3225962269cd3bf": false,
+        "601a0f72c0285f7443eba79f": false,
+        "606c420d598d9140db8cdf15": false,
+        "610191aa3245b462c94dafdf": false,
+        "61019cbd156b8a4511f2a80e": "worker_E29N47_E28N47-1",
+        "6300f1af8b4a13e436991d6f": false
+      },
+      "next_update": 21149194
     },
-    "E39N49": {
-      "total": 3,
-      "transfer": 0,
-      "build": 0,
-      "upgrade": 0,
-      "upgrader": 0,
-      "repair_defence": 1,
-      "repair_civilian": 0,
-      "harvest": 0,
-      "undefined": 0,
-      "long_harvest": 0,
-      "claimer": 0,
-      "mineral_miner": 0,
-      "energy_miner": 2,
-      "sp_total": 2
+    "targets": {
+      "build": [],
+      "repair_defence": "6897708a46c73a396ac74add",
+      "creep_repair_defence": [
+        "68976d8904e7d49c4945bfee",
+        "68976fa4afe39a5d72723994",
+        "68976e83d7ef646e628cc5be",
+        "6897698b1bbad84bde10292a",
+        "61e43386e3df12e73696154e",
+        "61227a243a04267b3af3ec4e",
+        "625a75ef110582fb3ac09a6c",
+        "617d56a3671b81519f337960",
+        "617b9ca3852d89392952d8cc",
+        "65c9d9c1f625b0597f0a7a81",
+        "6484a90659eaae2860a9045e",
+        "674aee30abe63f9736bd45be",
+        "647994076360a15e4112c36a",
+        "6025918679c8615ee05f5d1c",
+        "6479949dba68f1f98e4bbbd3",
+        "5fcde18090510576d0e78ef8",
+        "6479918fe480036484b36af3",
+        "660f8d7c7dc9931176729135",
+        "65c9da329be2256486c97949",
+        "674aed49f1ad8224b58b7018",
+        "647995ac8b5f922588923f5a"
+      ],
+      "repair_civilian": false,
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a4e382100e1594f3db1e": [
+          "601fe83e300da521726a64cd"
+        ]
+      },
+      "store_used": {
+        "storage": 603628,
+        "terminal": 212667
+      },
+      "max_store": {
+        "terminal": 285000,
+        "storage": 900000,
+        "terminal_energy": 215000,
+        "storage_energy": 150000
+      },
+      "mineral": {
+        "id": "59f1c0e07d0b3d79de5f1bb4",
+        "type": "U",
+        "extractor": "625d329e865f140699ab5ff1"
+      },
+      "containers": {
+        "source": {
+          "617b9ca3852d89392952d8cc": {
+            "source_id": "59f1a4e382100e1594f3db1e",
+            "creeps_moving2me": [],
+            "miner_id": "6899a18050f0cc25024d60af"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "601fe83e300da521726a64cd"
+        ],
+        "near_controller": false,
+        "destinations": {
+          "6036238d7ccac550034dc30b": false,
+          "61727335922d6a0e65cc33f3": false,
+          "6300fac076bbfd99cf5f95f9": false,
+          "63b84c01648e765ac32fd3fd": false,
+          "false": false
+        },
+        "sources": []
+      },
+      "storage": "625ab69e2597015d62c4f778",
+      "extension_first": false
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 0,
+        "war": 3,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 1,
+          "repair_defence": 0.1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 0,
+      "invader": false,
+      "extentions_amount": 0,
+      "roads": 107,
+      "all_full_wo_storage": false
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [],
+        "produce": [],
+        "process": []
+      },
+      "reagent": {},
+      "produce": {},
+      "process": {},
+      "booster": {
+        "6750332ef90268277a6f61fc": {}
+      }
+    },
+    "mineral_by_lab": {},
+    "lab_per_mineral": {},
+    "hostile2attack": false,
+    "repair_civilian": false,
+    "repair_defence": false
+  },
+  "E32N47": {
+    "towers": {
+      "current": {
+        "5fcf342928524de8878f72cd": "E32N47-1-gn",
+        "6019e4b50bdda7b9b7ad6ede": false,
+        "60c4b62297c07407d08c46f7": false,
+        "61e045ee0725f78061e30f44": false,
+        "63974e850672604524a0ebaf": false,
+        "6629e346e088d9524868a744": false
+      },
+      "next_update": 21149976
+    },
+    "targets": {
+      "build": [],
+      "repair_defence": "6899651aec15f226c872534d",
+      "creep_repair_defence": [
+        "6898756aec44507c47b34f82",
+        "68996c2fe1ddbb3fda5a23ae",
+        "68996c5d7f862435a6199586",
+        "68996997b4608e9e4f5ebccc",
+        "68996990e1ddbbe2365a22a7",
+        "6898757155ed0b1963926f6a",
+        "6898756337a0a31a32ed8704",
+        "68996c6409d86616fa7b5234",
+        "6899698959e98a41065ca179",
+        "6311cdc4aa0e543c7613da7d",
+        "68996c3d59e98a2cda5ca27d",
+        "65a066153b5abd5ad786c42f",
+        "6311d03034aaabeb98af405e",
+        "659fa8577f8a2492987d325f",
+        "65a02861b124c77102061dcd",
+        "6440dc351a10286b97e9611a",
+        "659fd26561471e38032fc4e1",
+        "65a01e5339465c3a5a50de11",
+        "68996c36db5f1313f9ac2ac2",
+        "62568ca0fe4f74d70fd15645",
+        "66373a45d603ba33725d5dca",
+        "6629e49ace955da827f4e8ae",
+        "66ab592c81e27a1a05f31935",
+        "672f7ac038b5fe557d24fb9b",
+        "647aeca8f76cc0804d6d6849",
+        "647af51623152e61405fc992",
+        "647af79497c30b2e9352730c",
+        "61f6e1f540a7ea012fef8b8e",
+        "647af6e13ee27fa61818b333",
+        "647af753e38bfb07dbf502c4",
+        "65b8c6a2188aec5834bbbc63"
+      ],
+      "repair_civilian": false,
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a52082100e1594f3e033": [
+          "601feb4a2785599a93c98af8",
+          "60294cf2e95fa06df838ccf0",
+          "6209572ab4bb09664f2bee78"
+        ]
+      },
+      "store_used": {
+        "storage": 600586,
+        "terminal": 212345
+      },
+      "max_store": {
+        "terminal": 296000,
+        "storage": 900000,
+        "terminal_energy": 215000,
+        "storage_energy": 200000
+      },
+      "mineral": {
+        "id": "59f1c0e17d0b3d79de5f1cf8",
+        "type": "K",
+        "extractor": "6212a8d413f6731e11e7b5a3"
+      },
+      "containers": {
+        "source": {
+          "62568ca0fe4f74d70fd15645": {
+            "source_id": "59f1a52082100e1594f3e033",
+            "creeps_moving2me": [],
+            "miner_id": "6899a366c86e4b9e60edab9e"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "601feb4a2785599a93c98af8",
+          "60294cf2e95fa06df838ccf0",
+          "6209572ab4bb09664f2bee78"
+        ],
+        "near_controller": false,
+        "destinations": {
+          "601ff9e5b8d28af6798e45a4": false,
+          "60c4d96bcb48ddf5a0e1db22": false,
+          "false": false
+        },
+        "sources": []
+      },
+      "storage": "621294002ed5a78038962f41",
+      "extension_first": false
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 2,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 1,
+          "repair_defence": 0.1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 1419,
+      "invader": false,
+      "extentions_amount": 0,
+      "roads": 90,
+      "all_full_wo_storage": false
+    },
+    "endReservation": 29440753,
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [],
+        "produce": [],
+        "process": []
+      },
+      "reagent": {},
+      "produce": {},
+      "process": {},
+      "booster": {
+        "65a17c57354c13af38006ac8": {}
+      }
+    },
+    "mineral_by_lab": {},
+    "lab_per_mineral": {},
+    "hostile2attack": false,
+    "repair_civilian": false,
+    "repair_defence": false,
+    "hostile_ids_2attack": []
+  },
+  "E29N47": {
+    "towers": {
+      "current": {
+        "5df55577fdb263f629a05c57": false,
+        "5e0aed1a38bb2c9b6358e0f5": false,
+        "5e1b5731f60c67fbd47b81c7": false,
+        "5e9056ed57e2a623e81cfc41": false,
+        "5e909a2f56b553782810b614": false,
+        "5f9d36420993b007082d66e5": false
+      },
+      "next_update": 21154500
+    },
+    "targets": {
+      "build": [],
+      "repair_defence": "688e5046030d9b9d2cb2cc56",
+      "creep_repair_defence": [
+        "5f6246f9ee893519f3735924",
+        "5df5eac86ba4d750f1b071d8",
+        "5f65b3edc5d628a30ada72bd",
+        "61225fecece58b4e2cc3bd1a",
+        "5df77bf7ca4cb769c6e9cc1e",
+        "6106c10b1adea382eb4e512c",
+        "61068f8b62beafa9413a0c02",
+        "5f6245988bbee097be22b9e4",
+        "5f5e79f87b32d2052a8313fa",
+        "5e774c32dcf4ee264a663041",
+        "5f9d243c74b341e079482ae3",
+        "65daf6fb176b80f1255dd6f0",
+        "5ee78ce96b752aaeca9cce27",
+        "5eecd32b7431e84c239fbd6e",
+        "65c9dce0628edb4a8a20ed73",
+        "5f4621d22a58c30ec79dccfe",
+        "5ee78b67c483720cf1fca542",
+        "649470e8ccc10581054614b5",
+        "5eecd349590a4a7b17f66612",
+        "649d3019bc275f7c34a23e74",
+        "5e774c79ddab9bf9e155d28c",
+        "5f5e7aff169b2208432da704",
+        "65c9dd370ca4e164dbde56c4",
+        "65e1cfcd8666384bb238088c",
+        "63b8456904c47e88211fc680",
+        "5f904b07cd71284d810ad03b",
+        "5f904cdf280d0a03745d1b00",
+        "5ee78b9af55a5f73da3e0e24",
+        "5df55763bc68f236c0ff0529",
+        "5e774b4ee85e8b7dda8c7d8b",
+        "5e909354f63eedbf7178d66d",
+        "5e774c847e5dd2203bf0d8f1",
+        "65daf58f3bbeba19dbf7f644",
+        "65a15c66c9e422bbc6466c14"
+      ],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "remote_force_attack": false,
+      "repair_civilian": false,
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a4f282100e1594f3dca7": [
+          "63b9431462c77c796ab0daf5"
+        ],
+        "59f1a4f282100e1594f3dca8": [
+          "63c7c92a8b0dcb3f9be74417"
+        ]
+      },
+      "store_used": {
+        "storage": 789188,
+        "terminal": 213618
+      },
+      "max_store": {
+        "storage": 900000,
+        "terminal": 290000,
+        "terminal_energy": 225000,
+        "storage_energy": 300000
+      },
+      "mineral": {
+        "id": "59f1c0e07d0b3d79de5f1c20",
+        "type": "Z",
+        "extractor": "5dff02d434596a06379b39e8"
+      },
+      "containers": {
+        "source": {
+          "61068f8b62beafa9413a0c02": {
+            "source_id": "59f1a4f282100e1594f3dca7",
+            "creeps_moving2me": [],
+            "miner_id": "68999cb512751dbeb052d351"
+          },
+          "6106c10b1adea382eb4e512c": {
+            "source_id": "59f1a4f282100e1594f3dca8",
+            "creeps_moving2me": [],
+            "miner_id": "6899a51e0511f833ce806b0b"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "63b9431462c77c796ab0daf5",
+          "63c7c92a8b0dcb3f9be74417"
+        ],
+        "near_controller": "643522c13dcfe421d3b66778",
+        "destinations": {
+          "5eeb5f4cdabf3bb0c943abb9": false,
+          "5f9057662242555db185d971": false,
+          "63b9be9b21cbe6f3aef6400b": false,
+          "643522c13dcfe421d3b66778": false
+        },
+        "sources": []
+      },
+      "storage": "5df779199310177754b90e5f",
+      "extension_first": false
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 3,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "worker": {
+            "E28N47": 0,
+            "E28N48": 0,
+            "E29N47": 0
+          },
+          "transfer": 0.4,
+          "build": 0.3,
+          "repair_defence": 0.8,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 77,
+      "invader": false,
+      "extentions_amount": 60,
+      "roads": 196,
+      "all_full_wo_storage": false
+    },
+    "hostile2attack": false,
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "K",
+          "O",
+          "X",
+          "KO",
+          "OH"
+        ],
+        "produce": [
+          "XKHO2",
+          "XKHO2",
+          "XKHO2"
+        ],
+        "process": [
+          "KHO2"
+        ]
+      },
+      "reagent": {
+        "5e1e4515f7a6dc3965f179a1": {
+          "type": "K"
+        },
+        "5e1ea92b2d8bffb68f12d1f6": {
+          "type": "O"
+        },
+        "5e1f67173cfb4ec251dcd4da": {
+          "type": "X"
+        },
+        "5e2031033cfb4ef19cdd23e1": {
+          "type": "KO"
+        },
+        "5e20813a0bcc9ec383498d2f": {
+          "type": "OH"
+        }
+      },
+      "produce": {
+        "5e1f0b736e80dec47e4df4af": {
+          "type": "XKHO2",
+          "reagents": [
+            "5e20037cf7a6dc48b0f235fe",
+            "5e1f67173cfb4ec251dcd4da"
+          ]
+        },
+        "5e1f6e112f947b2584b9f461": {
+          "type": "XKHO2",
+          "reagents": [
+            "5e20037cf7a6dc48b0f235fe",
+            "5e1f67173cfb4ec251dcd4da"
+          ]
+        },
+        "5e1fc75438bb2c6ed76165ec": {
+          "type": "XKHO2",
+          "reagents": [
+            "5e20037cf7a6dc48b0f235fe",
+            "5e1f67173cfb4ec251dcd4da"
+          ]
+        }
+      },
+      "process": {
+        "5e20037cf7a6dc48b0f235fe": {
+          "type": "KHO2",
+          "reagents": [
+            "5e2031033cfb4ef19cdd23e1",
+            "5e20813a0bcc9ec383498d2f"
+          ]
+        }
+      },
+      "booster": {
+        "5ecfa1d483f56e235106b139": {}
+      }
+    },
+    "mineral_by_lab": {
+      "5e1e4515f7a6dc3965f179a1": "K",
+      "5e1ea92b2d8bffb68f12d1f6": "O",
+      "5e1f0b736e80dec47e4df4af": "XKHO2",
+      "5e1f67173cfb4ec251dcd4da": "X",
+      "5e1f6e112f947b2584b9f461": "XKHO2",
+      "5e1fc75438bb2c6ed76165ec": "XKHO2",
+      "5e20037cf7a6dc48b0f235fe": "KHO2",
+      "5e2031033cfb4ef19cdd23e1": "KO",
+      "5e20813a0bcc9ec383498d2f": "OH"
+    },
+    "lab_per_mineral": {
+      "K": "5e1e4515f7a6dc3965f179a1",
+      "O": "5e1ea92b2d8bffb68f12d1f6",
+      "XKHO2": "5e1fc75438bb2c6ed76165ec",
+      "X": "5e1f67173cfb4ec251dcd4da",
+      "KHO2": "5e20037cf7a6dc48b0f235fe",
+      "KO": "5e2031033cfb4ef19cdd23e1",
+      "OH": "5e20813a0bcc9ec383498d2f"
+    },
+    "repair_civilian": false,
+    "repair_defence": false
+  },
+  "E36N48": {
+    "towers": {
+      "current": {
+        "5eb6fb04639d3c74826c2917": false,
+        "68637c1d1795b60a951f92fb": false,
+        "686387b749237c6b0e49c1c7": false,
+        "686388e31795b620411f984c": false,
+        "6870a00b58771383468159b5": false,
+        "6870a563774bee7407c4c519": false
+      },
+      "next_update": 22651260
+    },
+    "targets": {
+      "build": [],
+      "repair_civilian": false,
+      "repair_defence": false,
+      "creep_repair_defence": [
+        "6896e0322efe7c479b02800f",
+        "643268a71babfe6e6183e4f9",
+        "64326c7b6b7e878514f2dbfe",
+        "6896e0287953a7553a0d090a",
+        "6883c9b64caac50762a7ba00",
+        "6883c9bc50f0ccc79f449996",
+        "688e5ae537a0a34568e99cf2",
+        "688e5a8152c0256eca7667a5",
+        "688e5aae6b8ad51ea6ac130f",
+        "6883c973471b5890183c7123",
+        "68716e071136a474df871882",
+        "6896df74e13d1f08f2464a9b",
+        "688e5aa859e98a7a98586e90",
+        "6863717d87807eb74f699e76",
+        "61b863d7410ede6256c1ec0c",
+        "5e8729aa588b372ed0de0ddc",
+        "68716dda4a23e741b957910d"
+      ],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a56b82100e1594f3e7c3": [
+          "5e5cb3ddd0dba2e72af14386"
+        ],
+        "59f1a56b82100e1594f3e7c4": [
+          "5f9e89b7c550c724380cfe50"
+        ]
+      },
+      "store_used": {
+        "storage": 630234,
+        "terminal": 285154
+      },
+      "max_store": {
+        "storage": 930000,
+        "terminal": 290000,
+        "terminal_energy": 220000,
+        "storage_energy": 150000
+      },
+      "mineral": {
+        "id": "59f1c0e27d0b3d79de5f1e5c",
+        "type": "L",
+        "extractor": "5e877304a86020da0081b62e"
+      },
+      "containers": {
+        "source": {
+          "6106e70c802c81292a77c6c8": {
+            "source_id": "59f1a56b82100e1594f3e7c4",
+            "creeps_moving2me": [],
+            "miner_id": "6899a1ed1e88b6b27cb7289b"
+          },
+          "6106ed30d9acc47bc963bed7": {
+            "source_id": "59f1a56b82100e1594f3e7c3",
+            "creeps_moving2me": [],
+            "miner_id": "6899ab12587713525c91ed4b"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "5e5cb3ddd0dba2e72af14386",
+          "5f9e89b7c550c724380cfe50"
+        ],
+        "near_controller": false,
+        "destinations": {
+          "5e793e2719c82cfad1761fbf": false,
+          "5eebb4f5e76494f35255f307": false,
+          "5f9e8b5aa4d5352db5858b2c": false,
+          "6870b84ac140811fe00cfae9": false,
+          "false": false
+        },
+        "sources": []
+      },
+      "storage": "5e47e1931f54ab0af5ef33f0",
+      "extension_first": false
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 2,
+        "war": 2,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "worker": {
+            "E36N49": 0
+          },
+          "transfer": 0.1,
+          "build": 0.9,
+          "repair_defence": 0.1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 228,
+      "invader": false,
+      "extentions_amount": 60,
+      "roads": 135,
+      "all_full_wo_storage": false
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [
+          "LHO2",
+          "LO",
+          "OH",
+          "X",
+          "L",
+          "O"
+        ],
+        "produce": [
+          "XLHO2",
+          "XLHO2",
+          "XLHO2"
+        ],
+        "process": []
+      },
+      "reagent": {
+        "5e8d27e4d1ba7941706885a8": {
+          "type": "LHO2"
+        },
+        "5e8da98ca86020cd1f841487": {
+          "type": "LO"
+        },
+        "5e8e397c57e2a6a4c31c3642": {
+          "type": "OH"
+        },
+        "5e8ef689559f2f6fdcff6ee9": {
+          "type": "X"
+        },
+        "5e90106257e2a676a01ce3d3": {
+          "type": "L"
+        },
+        "5e90de7bf671720306f3ebe5": {
+          "type": "O"
+        }
+      },
+      "produce": {
+        "5e8e6950f481e36be13de609": {
+          "type": "XLHO2",
+          "reagents": [
+            "5e8d27e4d1ba7941706885a8",
+            "5e8ef689559f2f6fdcff6ee9"
+          ]
+        },
+        "5e8fb9d2294e211ec6e77efc": {
+          "type": "XLHO2",
+          "reagents": [
+            "5e8d27e4d1ba7941706885a8",
+            "5e8ef689559f2f6fdcff6ee9"
+          ]
+        },
+        "5e9088e33587e55955b1d06d": {
+          "type": "XLHO2",
+          "reagents": [
+            "5e8d27e4d1ba7941706885a8",
+            "5e8ef689559f2f6fdcff6ee9"
+          ]
+        }
+      },
+      "process": {},
+      "booster": {
+        "5e52fa2c819dda590af0a078": {}
+      }
+    },
+    "mineral_by_lab": {
+      "5e8d27e4d1ba7941706885a8": "LHO2",
+      "5e8da98ca86020cd1f841487": "LO",
+      "5e8e397c57e2a6a4c31c3642": "OH",
+      "5e8e6950f481e36be13de609": "XLHO2",
+      "5e8ef689559f2f6fdcff6ee9": "X",
+      "5e8fb9d2294e211ec6e77efc": "XLHO2",
+      "5e90106257e2a676a01ce3d3": "L",
+      "5e9088e33587e55955b1d06d": "XLHO2",
+      "5e90de7bf671720306f3ebe5": "O"
+    },
+    "lab_per_mineral": {
+      "LHO2": "5e8d27e4d1ba7941706885a8",
+      "LO": "5e8da98ca86020cd1f841487",
+      "OH": "5e8e397c57e2a6a4c31c3642",
+      "XLHO2": "5e9088e33587e55955b1d06d",
+      "X": "5e8ef689559f2f6fdcff6ee9",
+      "L": "5e90106257e2a676a01ce3d3",
+      "O": "5e90de7bf671720306f3ebe5"
+    },
+    "hostile2attack": false,
+    "repair_civilian": false,
+    "repair_defence": false,
+    "hostile_ids_2attack": []
+  },
+  "E29N48": {
+    "towers": {
+      "current": {},
+      "next_update": 28665450
+    },
+    "targets": {
+      "build": [],
+      "repair_civilian": false,
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": []
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a4f282100e1594f3dca4": []
+      },
+      "store_used": {
+        "storage": 0,
+        "terminal": 0
+      },
+      "max_store": {
+        "storage": 1000,
+        "terminal": 1000
+      },
+      "mineral": {
+        "id": "59f1c0e07d0b3d79de5f1c1f",
+        "type": "U",
+        "extractor": false
+      },
+      "containers": {
+        "source": {},
+        "other": {},
+        "miner_is_needed": true
+      },
+      "links": {
+        "near_sources": [],
+        "near_controller": false,
+        "destinations": {},
+        "sources": []
+      },
+      "storage": false,
+      "terminal": false,
+      "extension_first": true
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1800,
+      "screeps_max_amount": {
+        "peace": 10,
+        "war": 30,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 0.3,
+          "repair_defence": 0.1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "room_min_ticksToLive": 0,
+      "all_full": false
     }
   },
-  "towers": {
-    "current": {},
-    "next_update": 10332455
+  "E37N47": {
+    "towers": {
+      "current": {
+        "5fdc897c8f100a922dce65a6": "E37N47-1-gn",
+        "601a5934ca01d04f2a3907f0": false,
+        "63976eaa8980b22f4e5204b7": false,
+        "63978aa4f245374d634d6254": false,
+        "6663e57954a022e45a3c15b3": false,
+        "677c195fc9dba42196d0cddb": false
+      },
+      "next_update": 29047200
+    },
+    "targets": {
+      "build": [],
+      "repair_civilian": false,
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "repair_defence": "689008cbc140815bdb19b80d",
+      "creep_repair_defence": [
+        "688ff7206362dc47684efb1d",
+        "689105fb1e88b665b5b3ff6f",
+        "689107ec4ccc565234fa928a",
+        "688e9e1ab20477699c5914f2",
+        "688ea506d9fd746d9be9e9ed",
+        "688f39fad3d59fee69ba0cc1",
+        "688fb4c81924a02d376325f3",
+        "689108204caac564a0ad4637",
+        "689085f53cb44ad8cd0c24b1",
+        "689103cfd9fd74f5beead5e2",
+        "689104dc2efe7cc288002d9a",
+        "6891050cf960a882794e48b1",
+        "68910648cba52356dffca23a",
+        "688e87fae13d1f88db42f7c5",
+        "625980de94b39dbc98578ae0",
+        "625989fc4fcdfdb3024e3589",
+        "639ce7d61babfe723356a8cd",
+        "639d2fb8754560b6c8c89712",
+        "5fb8142088c2f62b114ad0ec",
+        "639c57bf21cbe60e5eecdae2",
+        "677a97ea7fd1bf0380872aea",
+        "6480822d41f7683476457b6a",
+        "648082646f158ade2dff11fa",
+        "672c75f4dac3656dec77112d",
+        "6767d07150f7222e22d194d9",
+        "672f8845c3e0f92001e4233c",
+        "658534c25116455960385ab6",
+        "6480811512554124f039f405",
+        "677f5ad1bb5c24223f866988",
+        "65c719a9098c9a650b59fa94",
+        "66f50b17dfca0818a5050187",
+        "5fc359f0ed413570dbcb2241",
+        "6663e63267c06cb9a3c0a151",
+        "65c717ad2088ee8941cf0bdd",
+        "658d27a9cd0c849383d4791c",
+        "67500296adacc7250ec85024",
+        "648081392c2308af5b8fbd1c",
+        "6750016b6fd36249f86e1a10",
+        "677ad77db51bd9735020d304",
+        "679e18bab7f6da76b14324af",
+        "677cc8488418cfe968640514",
+        "677d2fb3629022bdc40678d3",
+        "65e2ca598e38a528b7168608",
+        "64807f0897c30bb05a5433b2"
+      ],
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a58082100e1594f3ea01": [
+          "677f66ed1cc2c5019ff8fb44"
+        ],
+        "59f1a58082100e1594f3ea03": [
+          "63b949258124c770499401ab"
+        ]
+      },
+      "store_used": {
+        "storage": 621492,
+        "terminal": 138272
+      },
+      "max_store": {
+        "storage": 900000,
+        "terminal": 285000,
+        "terminal_energy": 130000,
+        "storage_energy": 210000
+      },
+      "mineral": {
+        "id": "59f1c0e27d0b3d79de5f1ea8",
+        "type": "U",
+        "extractor": "61dd5c9f6ca2f751337a5f4a"
+      },
+      "containers": {
+        "source": {
+          "625980de94b39dbc98578ae0": {
+            "source_id": "59f1a58082100e1594f3ea01",
+            "creeps_moving2me": [],
+            "miner_id": "6899a055b7c1a1588900eef3"
+          },
+          "625989fc4fcdfdb3024e3589": {
+            "source_id": "59f1a58082100e1594f3ea03",
+            "creeps_moving2me": [],
+            "miner_id": "6899ac1591301f2d119cb6f2"
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "63b949258124c770499401ab",
+          "677f66ed1cc2c5019ff8fb44"
+        ],
+        "near_controller": false,
+        "destinations": {
+          "61de9c360725f76f2fe27445": false,
+          "63b981f1fe56fd5ba612dd5d": false,
+          "679e2c11637008f2c1add8aa": false,
+          "false": false
+        },
+        "sources": [
+          "677ee0941ea6d22afe48c646"
+        ]
+      },
+      "storage": "61ddabac6486b6cdaa46bfc2",
+      "extension_first": false
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 3,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 0.3,
+          "repair_defence": 0.1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": false,
+      "room_min_ticksToLive": 829,
+      "invader": false,
+      "extentions_amount": 0,
+      "roads": 126,
+      "all_full_wo_storage": false
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [],
+        "produce": [],
+        "process": []
+      },
+      "reagent": {},
+      "produce": {},
+      "process": {},
+      "booster": {
+        "65ab3e53fbbcd24bc17c3628": {}
+      }
+    },
+    "mineral_by_lab": {},
+    "lab_per_mineral": {},
+    "endReservation": 29048089,
+    "hostile2attack": false,
+    "repair_civilian": false,
+    "repair_defence": false,
+    "hostile_ids_2attack": []
   },
-  "targets": {},
-  "terminal_status": {
-    "E27N47": {
-      "energy": 279756,
-      "total": 279756
+  "E36N49": {
+    "towers": {
+      "current": {
+        "5ea7f95dc71a5c033244d9d4": false,
+        "5ea9de155be63261142d02e9": false,
+        "5ebbfe815210c01212b886ea": false,
+        "5ecca44ab1b52e768440ff98": false,
+        "5ecca5101de73e164ec2d59c": false,
+        "5ecca7ec86f95321fd7ada14": false
+      },
+      "next_update": 24326630
     },
-    "E27N48": {
-      "energy": 174270,
-      "XGHO2": 1300,
-      "XZHO2": 5100,
-      "XUH2O": 1300,
-      "Z": 88595,
-      "XKH2O": 1500,
-      "XKHO2": 2940,
-      "XLHO2": 1500,
-      "G": 2000,
-      "X": 1460,
-      "OH": 1930,
-      "O": 1005,
-      "total": 282900
+    "targets": {
+      "build": [],
+      "repair_civilian": false,
+      "creep_repair_defence": [
+        "6890e7b0c86e4b64e0ea3471",
+        "6890e6fb030d9b24ddb3dd6b",
+        "6890e7911136a4d479930ef3",
+        "6890e7f89aecf7f0bbfa5fce",
+        "5ee4a36a4bc3913ce42ecda8"
+      ],
+      "repair_defence": false,
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "my2heal": [],
+      "tombstonese": false,
+      "tombstone": false
     },
-    "E27N49": {
-      "energy": 270062,
-      "total": 270062
+    "energy_flow": {
+      "sources": {
+        "59f1a56b82100e1594f3e7be": [
+          "5eb1a5790d2480a4bc910657"
+        ],
+        "59f1a56b82100e1594f3e7bf": [
+          "5ebc3dc883178b65356ec150"
+        ]
+      },
+      "store_used": {
+        "storage": 751743,
+        "terminal": 282815
+      },
+      "max_store": {
+        "storage": 900000,
+        "terminal": 280000,
+        "terminal_energy": 240000,
+        "storage_energy": 300000
+      },
+      "mineral": {
+        "id": "59f1c0e27d0b3d79de5f1e5b",
+        "type": "U",
+        "extractor": "5eb2a18348c1a0adb39ec898"
+      },
+      "containers": {
+        "source": {
+          "610a87083245b4668050cf9c": {
+            "source_id": "59f1a56b82100e1594f3e7be",
+            "creeps_moving2me": [],
+            "miner_id": false
+          },
+          "610a8f1a558ec65d38ef2efc": {
+            "source_id": "59f1a56b82100e1594f3e7bf",
+            "creeps_moving2me": [],
+            "miner_id": false
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "5eb1a5790d2480a4bc910657",
+          "5ebc3dc883178b65356ec150"
+        ],
+        "near_controller": "5ea9ea7e1e24e253d8df100d",
+        "destinations": {
+          "5eeb93e4dffcef326d0d4a3e": false,
+          "5ea9ea7e1e24e253d8df100d": false
+        },
+        "sources": []
+      },
+      "storage": "5eac3e55ce25003f99604688",
+      "extension_first": false
     },
-    "E28N47": {
-      "energy": 250506,
-      "total": 250506
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 3,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 0.3,
+          "repair_defence": 0.8,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": true,
+      "room_min_ticksToLive": 919,
+      "invader": false,
+      "extentions_amount": 60,
+      "roads": 111,
+      "all_full_wo_storage": true
     },
-    "E28N48": {
-      "energy": 181084,
-      "O": 1083,
-      "U": 4855,
-      "L": 43591,
-      "G": 5000,
-      "UL": 11534,
-      "XUH2O": 1100,
-      "XKH2O": 1300,
-      "XKHO2": 1300,
-      "XLHO2": 7553,
-      "XZHO2": 1300,
-      "XGHO2": 1500,
-      "K": 1100,
-      "Z": 31100,
-      "GO": 5000,
-      "total": 298400
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [],
+        "produce": [],
+        "process": []
+      },
+      "reagent": {},
+      "produce": {},
+      "process": {},
+      "booster": {
+        "5ecd21d7f8217f6cca416f1a": {}
+      }
     },
-    "E29N47": {
-      "energy": 171721,
-      "XGHO2": 3080,
-      "XZHO2": 1500,
-      "XLHO2": 3950,
-      "XKHO2": 5100,
-      "XKH2O": 1100,
-      "XUH2O": 3060,
-      "G": 1300,
-      "Z": 82200,
-      "X": 1353,
-      "K": 3100,
-      "O": 1300,
-      "OH": 1242,
-      "KO": 9594,
-      "total": 289600
-    },
-    "E32N47": {
-      "energy": 225931,
-      "K": 40250,
-      "total": 266181
-    },
-    "E33N47": {
-      "energy": 180458,
-      "H": 1119,
-      "U": 40114,
-      "X": 1479,
-      "G": 1100,
-      "OH": 1843,
-      "UL": 41708,
-      "XUH2O": 5171,
-      "XKH2O": 1300,
-      "XKHO2": 1100,
-      "XLHO2": 1244,
-      "XZHO2": 1300,
-      "XGHO2": 2500,
-      "UH": 47,
-      "total": 280483
-    },
-    "E34N47": {
-      "energy": 190623,
-      "X": 40193,
-      "G": 8241,
-      "GO": 24456,
-      "XUH2O": 1300,
-      "XKH2O": 1300,
-      "XKHO2": 1100,
-      "XLHO2": 6794,
-      "XZHO2": 1100,
-      "XGHO2": 5140,
-      "OH": 3300,
-      "total": 283547
-    },
-    "E36N48": {
-      "energy": 175951,
-      "L": 61523,
-      "XGHO2": 3000,
-      "XZHO2": 1500,
-      "XUH2O": 1500,
-      "XKH2O": 1500,
-      "XKHO2": 1500,
-      "XLHO2": 5000,
-      "G": 3300,
-      "O": 1500,
-      "LHO2": 2184,
-      "LO": 6070,
-      "X": 1073,
-      "total": 265601
-    },
-    "E36N49": {
-      "energy": 201880,
-      "U": 40250,
-      "Z": 40127,
-      "total": 282257
-    },
-    "E37N47": {
-      "energy": 240609,
-      "U": 40084,
-      "total": 280693
-    },
-    "E37N48": {
-      "energy": 243042,
-      "H": 40157,
-      "O": 1094,
-      "G": 2000,
-      "OH": 5127,
-      "XUH2O": 1100,
-      "XKH2O": 1500,
-      "XKHO2": 1984,
-      "XLHO2": 1196,
-      "XZHO2": 1500,
-      "XGHO2": 1300,
-      "total": 300000
-    },
-    "E38N47": {
-      "energy": 177212,
-      "O": 1151,
-      "K": 1402,
-      "Z": 88672,
-      "X": 1250,
-      "G": 1500,
-      "OH": 4662,
-      "XUH2O": 1300,
-      "XKH2O": 1300,
-      "XKHO2": 1300,
-      "XLHO2": 1269,
-      "XZHO2": 2092,
-      "XGHO2": 1300,
-      "H": 1025,
-      "total": 285435
-    },
-    "E38N48": {
-      "energy": 220776,
-      "H": 1480,
-      "O": 40208,
-      "G": 5239,
-      "XUH2O": 1300,
-      "XKH2O": 1300,
-      "XKHO2": 1500,
-      "XLHO2": 1279,
-      "XZHO2": 1300,
-      "XGHO2": 1500,
-      "OH": 5100,
-      "total": 280982
-    },
-    "E38N49": {
-      "energy": 240317,
-      "O": 40000,
-      "total": 280317
-    },
-    "E39N49": {
-      "energy": 178728,
-      "H": 1435,
-      "K": 40122,
-      "Z": 49500,
-      "X": 1374,
-      "G": 1466,
-      "XUH2O": 1500,
-      "XKH2O": 5076,
-      "XKHO2": 1057,
-      "XLHO2": 1454,
-      "XZHO2": 1100,
-      "XGHO2": 1500,
-      "OH": 2425,
-      "total": 286737
-    }
+    "mineral_by_lab": {},
+    "lab_per_mineral": {},
+    "hostile2attack": false,
+    "repair_civilian": false,
+    "repair_defence": false,
+    "hostile_ids_2attack": []
   },
-  "storage_status_by_mineral": {
-    "energy": {
-      "total": 6538080,
-      "terminal": {
-        "total": 3602926,
-        "E27N47": 279756,
-        "E27N48": 174270,
-        "E27N49": 270062,
-        "E28N47": 250506,
-        "E28N48": 181084,
-        "E29N47": 171721,
-        "E32N47": 225931,
-        "E33N47": 180458,
-        "E34N47": 190623,
-        "E36N48": 175951,
-        "E36N49": 201880,
-        "E37N47": 240609,
-        "E37N48": 243042,
-        "E38N47": 177212,
-        "E38N48": 220776,
-        "E38N49": 240317,
-        "E39N49": 178728
+  "E27N49": {
+    "towers": {
+      "current": {
+        "61d88e6a6845f047f8b753b0": false,
+        "61d8965bb2be2ab720a61be1": false,
+        "61ec15b9e1b097dc4617df78": false,
+        "635bac8eb7b859077aa23a6d": false,
+        "635baf1b318e180ad4cf391c": false,
+        "674ae16202e61d0681dd4ced": false
       },
-      "storage": {
-        "total": 2935154,
-        "E27N48": 518707,
-        "E28N48": 199997,
-        "E29N47": 299468,
-        "E33N47": 198646,
-        "E34N47": 199917,
-        "E36N48": 299433,
-        "E36N49": 299834,
-        "E37N48": 299695,
-        "E38N47": 19840,
-        "E38N48": 299691,
-        "E38N49": 326,
-        "E39N49": 299600
+      "next_update": 26260690
+    },
+    "targets": {
+      "build": [],
+      "repair_civilian": false,
+      "repair_defence": "658bf07047cc0f3d41f304c2",
+      "my2heal": [],
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
+      },
+      "hostile_amount": 0,
+      "creep_repair_defence": [
+        "660f9407e4a1bd636227b828",
+        "6894a2b937a0a34694ec0ccd",
+        "6894a2c8ec44504eb3b1d641",
+        "6894a2c112751d51a650db6a",
+        "6894a2cf9b99ae1a8321610a",
+        "672f6c3eab102659487eab40"
+      ],
+      "tombstonese": false,
+      "tombstone": false
+    },
+    "energy_flow": {
+      "sources": {
+        "59f1a4d282100e1594f3d98b": [
+          "635bb64bc9cde07b1c0687d0"
+        ],
+        "59f1a4d282100e1594f3d98c": [
+          "63234b47b5287b5e80024e87"
+        ]
+      },
+      "store_used": {
+        "storage": 651163,
+        "terminal": 279268
+      },
+      "max_store": {
+        "storage": 900000,
+        "terminal": 290000,
+        "terminal_energy": 230000,
+        "storage_energy": 200000
+      },
+      "mineral": {
+        "id": "59f1c0e07d0b3d79de5f1b46",
+        "type": "H",
+        "extractor": "627592a9d1209f44d58a0d14"
+      },
+      "containers": {
+        "source": {
+          "658bf07047cc0f3d41f304c2": {
+            "source_id": "59f1a4d282100e1594f3d98c",
+            "creeps_moving2me": [],
+            "miner_id": false
+          },
+          "658c027adba15317820b5468": {
+            "source_id": "59f1a4d282100e1594f3d98b",
+            "creeps_moving2me": [],
+            "miner_id": false
+          }
+        },
+        "other": {},
+        "miner_is_needed": false
+      },
+      "links": {
+        "near_sources": [
+          "63234b47b5287b5e80024e87",
+          "635bb64bc9cde07b1c0687d0"
+        ],
+        "near_controller": "635efbf7af1f64400bcb0b3a",
+        "destinations": {
+          "61ec440259f52905131077ec": false,
+          "628655f0e70e043ff83b49d7": false,
+          "628675970a75de6d5f20f371": false,
+          "635efbf7af1f64400bcb0b3a": false
+        },
+        "sources": []
+      },
+      "storage": "625ab4aef281180d19bd896e",
+      "extension_first": false
+    },
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 1,
+        "war": 2,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15,
+        "lab_assistent_needed": false
+      },
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 1,
+          "repair_defence": 1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": true,
+      "room_min_ticksToLive": 835,
+      "invader": false,
+      "extentions_amount": 0,
+      "roads": 102,
+      "all_full_wo_storage": true
+    },
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [],
+        "produce": [],
+        "process": []
+      },
+      "reagent": {},
+      "produce": {},
+      "process": {},
+      "booster": {
+        "661158a76265e5b5a5a56f8d": {}
       }
     },
-    "defence": {
-      "rooms": {
-        "E27N47": 30287461,
-        "E27N48": 27985701,
-        "E27N49": 29008890,
-        "E28N47": 33441800,
-        "E28N48": 32987081,
-        "E29N47": 40311761,
-        "E32N47": 35432661,
-        "E33N47": 39831931,
-        "E34N47": 39620801,
-        "E36N48": 39885501,
-        "E36N49": 33820270,
-        "E37N47": 24548200,
-        "E37N48": 32726761,
-        "E38N47": 33442261,
-        "E38N48": 39856181,
-        "E38N49": 4164341,
-        "E39N49": 39791661
-      }
-    },
-    "store_status": {
-      "terminal": {
-        "E27N47": 279756,
-        "E27N48": 282900,
-        "E27N49": 270062,
-        "E28N47": 250506,
-        "E28N48": 298400,
-        "E29N47": 289600,
-        "E32N47": 266181,
-        "E33N47": 280483,
-        "E34N47": 283547,
-        "E36N48": 265601,
-        "E36N49": 282257,
-        "E37N47": 280693,
-        "E37N48": 300000,
-        "E38N47": 285435,
-        "E38N48": 280982,
-        "E38N49": 280317,
-        "E39N49": 286737
-      },
-      "storage": {
-        "E27N48": 1000000,
-        "E28N48": 943291,
-        "E29N47": 794511,
-        "E32N47": 450600,
-        "E33N47": 924092,
-        "E34N47": 979935,
-        "E36N48": 779518,
-        "E36N49": 750982,
-        "E37N47": 451232,
-        "E37N48": 791865,
-        "E38N47": 950316,
-        "E38N48": 781618,
-        "E38N49": 450851,
-        "E39N49": 868631
-      }
-    },
-    "XZHO2": {
-      "total": 75801,
-      "terminal": {
-        "total": 17792,
-        "E27N48": 5100,
-        "E28N48": 1300,
-        "E29N47": 1500,
-        "E33N47": 1300,
-        "E34N47": 1100,
-        "E36N48": 1500,
-        "E37N48": 1500,
-        "E38N47": 2092,
-        "E38N48": 1300,
-        "E39N49": 1100
-      },
-      "storage": {
-        "total": 58009,
-        "E27N48": 5000,
-        "E28N48": 5169,
-        "E29N47": 5000,
-        "E33N47": 5002,
-        "E34N47": 5056,
-        "E36N48": 5000,
-        "E37N48": 5026,
-        "E38N47": 12468,
-        "E38N48": 5162,
-        "E39N49": 5126
-      }
-    },
-    "XKHO2": {
-      "total": 80820,
-      "terminal": {
-        "total": 18881,
-        "E27N48": 2940,
-        "E28N48": 1300,
-        "E29N47": 5100,
-        "E33N47": 1100,
-        "E34N47": 1100,
-        "E36N48": 1500,
-        "E37N48": 1984,
-        "E38N47": 1300,
-        "E38N48": 1500,
-        "E39N49": 1057
-      },
-      "storage": {
-        "total": 61939,
-        "E27N48": 5000,
-        "E28N48": 5173,
-        "E29N47": 5000,
-        "E33N47": 5188,
-        "E34N47": 5040,
-        "E36N48": 5000,
-        "E37N48": 16253,
-        "E38N47": 5124,
-        "E38N48": 5061,
-        "E39N49": 5100
-      }
-    },
-    "XUH2O": {
-      "total": 74965,
-      "terminal": {
-        "total": 18631,
-        "E27N48": 1300,
-        "E28N48": 1100,
-        "E29N47": 3060,
-        "E33N47": 5171,
-        "E34N47": 1300,
-        "E36N48": 1500,
-        "E37N48": 1100,
-        "E38N47": 1300,
-        "E38N48": 1300,
-        "E39N49": 1500
-      },
-      "storage": {
-        "total": 56334,
-        "E27N48": 5000,
-        "E28N48": 5111,
-        "E29N47": 5000,
-        "E33N47": 10696,
-        "E34N47": 5146,
-        "E36N48": 5000,
-        "E37N48": 5011,
-        "E38N47": 5146,
-        "E38N48": 5193,
-        "E39N49": 5031
-      }
-    },
-    "XGHO2": {
-      "total": 72220,
-      "terminal": {
-        "total": 22120,
-        "E27N48": 1300,
-        "E28N48": 1500,
-        "E29N47": 3080,
-        "E33N47": 2500,
-        "E34N47": 5140,
-        "E36N48": 3000,
-        "E37N48": 1300,
-        "E38N47": 1300,
-        "E38N48": 1500,
-        "E39N49": 1500
-      },
-      "storage": {
-        "total": 50100,
-        "E27N48": 5000,
-        "E28N48": 5000,
-        "E29N47": 5000,
-        "E33N47": 5000,
-        "E34N47": 5000,
-        "E36N48": 5000,
-        "E37N48": 5000,
-        "E38N47": 5100,
-        "E38N48": 5000,
-        "E39N49": 5000
-      }
-    },
-    "XLHO2": {
-      "total": 93410,
-      "terminal": {
-        "total": 31239,
-        "E27N48": 1500,
-        "E28N48": 7553,
-        "E29N47": 3950,
-        "E33N47": 1244,
-        "E34N47": 6794,
-        "E36N48": 5000,
-        "E37N48": 1196,
-        "E38N47": 1269,
-        "E38N48": 1279,
-        "E39N49": 1454
-      },
-      "storage": {
-        "total": 62171,
-        "E27N48": 5000,
-        "E28N48": 13140,
-        "E29N47": 5000,
-        "E33N47": 5167,
-        "E34N47": 8608,
-        "E36N48": 5000,
-        "E37N48": 5056,
-        "E38N47": 5100,
-        "E38N48": 5000,
-        "E39N49": 5100
-      }
-    },
-    "XKH2O": {
-      "total": 79715,
-      "terminal": {
-        "total": 17176,
-        "E27N48": 1500,
-        "E28N48": 1300,
-        "E29N47": 1100,
-        "E33N47": 1300,
-        "E34N47": 1300,
-        "E36N48": 1500,
-        "E37N48": 1500,
-        "E38N47": 1300,
-        "E38N48": 1300,
-        "E39N49": 5076
-      },
-      "storage": {
-        "total": 62539,
-        "E27N48": 5000,
-        "E28N48": 5099,
-        "E29N47": 5000,
-        "E33N47": 5184,
-        "E34N47": 5174,
-        "E36N48": 5000,
-        "E37N48": 5057,
-        "E38N47": 5185,
-        "E38N48": 5133,
-        "E39N49": 16707
-      }
-    }
+    "mineral_by_lab": {},
+    "lab_per_mineral": {},
+    "endReservation": 29904463,
+    "hostile2attack": false,
+    "repair_civilian": false,
+    "repair_defence": false,
+    "hostile_ids_2attack": []
   },
-  "prev_storage_status_by_mineral": {
-    "energy": {
-      "total": 6537466,
-      "terminal": {
-        "total": 3602312,
-        "E27N47": 280256,
-        "E27N48": 174270,
-        "E27N49": 270062,
-        "E28N47": 250645,
-        "E28N48": 181084,
-        "E29N47": 174121,
-        "E32N47": 224394,
-        "E33N47": 180458,
-        "E34N47": 189523,
-        "E36N48": 175951,
-        "E36N49": 201880,
-        "E37N47": 240609,
-        "E37N48": 242026,
-        "E38N47": 177212,
-        "E38N48": 220776,
-        "E38N49": 239517,
-        "E39N49": 179528
-      },
-      "storage": {
-        "total": 2935154,
-        "E27N48": 518707,
-        "E28N48": 199997,
-        "E29N47": 299468,
-        "E33N47": 198646,
-        "E34N47": 199917,
-        "E36N48": 299433,
-        "E36N49": 299834,
-        "E37N48": 299695,
-        "E38N47": 19840,
-        "E38N48": 299691,
-        "E38N49": 326,
-        "E39N49": 299600
-      }
+  "E28N49": {
+    "towers": {
+      "current": {},
+      "next_update": 28666830
     },
-    "defence": {
-      "rooms": {
-        "E27N47": 30288361,
-        "E27N48": 27986601,
-        "E27N49": 29009790,
-        "E28N47": 33442700,
-        "E28N48": 32987981,
-        "E29N47": 40312661,
-        "E32N47": 35433561,
-        "E33N47": 39832831,
-        "E34N47": 39621701,
-        "E36N48": 39886401,
-        "E36N49": 33821170,
-        "E37N47": 24549100,
-        "E37N48": 32727661,
-        "E38N47": 33443161,
-        "E38N48": 39857081,
-        "E38N49": 4165241,
-        "E39N49": 39792561
-      }
-    },
-    "store_status": {
-      "terminal": {
-        "E27N47": 280256,
-        "E27N48": 282900,
-        "E27N49": 270062,
-        "E28N47": 250645,
-        "E28N48": 298400,
-        "E29N47": 292000,
-        "E32N47": 264644,
-        "E33N47": 280483,
-        "E34N47": 282447,
-        "E36N48": 265601,
-        "E36N49": 282257,
-        "E37N47": 280693,
-        "E37N48": 298984,
-        "E38N47": 285435,
-        "E38N48": 280982,
-        "E38N49": 279517,
-        "E39N49": 287537
+    "targets": {
+      "my2heal": [],
+      "creep_repair_defence": false,
+      "hostile": {
+        "heal": [],
+        "attack": [],
+        "claim": [],
+        "other": [],
+        "invader_core": []
       },
-      "storage": {
-        "E27N48": 1000000,
-        "E28N48": 943291,
-        "E29N47": 794511,
-        "E32N47": 450600,
-        "E33N47": 924092,
-        "E34N47": 979935,
-        "E36N48": 779518,
-        "E36N49": 750982,
-        "E37N47": 451232,
-        "E37N48": 791865,
-        "E38N47": 950316,
-        "E38N48": 781618,
-        "E38N49": 450851,
-        "E39N49": 868631
-      }
+      "hostile_amount": 0,
+      "build": [],
+      "repair_civilian": false,
+      "repair_defence": false
     },
-    "XZHO2": {
-      "total": 75801,
-      "terminal": {
-        "total": 17792,
-        "E27N48": 5100,
-        "E28N48": 1300,
-        "E29N47": 1500,
-        "E33N47": 1300,
-        "E34N47": 1100,
-        "E36N48": 1500,
-        "E37N48": 1500,
-        "E38N47": 2092,
-        "E38N48": 1300,
-        "E39N49": 1100
+    "energy_flow": {
+      "sources": {
+        "59f1a4e382100e1594f3db17": []
       },
-      "storage": {
-        "total": 58009,
-        "E27N48": 5000,
-        "E28N48": 5169,
-        "E29N47": 5000,
-        "E33N47": 5002,
-        "E34N47": 5056,
-        "E36N48": 5000,
-        "E37N48": 5026,
-        "E38N47": 12468,
-        "E38N48": 5162,
-        "E39N49": 5126
-      }
+      "store_used": {
+        "storage": 0,
+        "terminal": 0
+      },
+      "max_store": {
+        "storage": 1000,
+        "terminal": 1000
+      },
+      "mineral": {
+        "id": "59f1c0e07d0b3d79de5f1bb2",
+        "type": "O",
+        "extractor": false
+      },
+      "containers": {
+        "source": {},
+        "other": {},
+        "miner_is_needed": true
+      },
+      "links": {
+        "near_sources": [],
+        "near_controller": false,
+        "destinations": {},
+        "sources": []
+      },
+      "storage": false,
+      "terminal": false,
+      "extension_first": false
     },
-    "XKHO2": {
-      "total": 80820,
-      "terminal": {
-        "total": 18881,
-        "E27N48": 2940,
-        "E28N48": 1300,
-        "E29N47": 5100,
-        "E33N47": 1100,
-        "E34N47": 1100,
-        "E36N48": 1500,
-        "E37N48": 1984,
-        "E38N47": 1300,
-        "E38N48": 1500,
-        "E39N49": 1057
+    "global_vars": {
+      "status": "peace",
+      "finish_war": false,
+      "age_to_drop_and_die": 20,
+      "age_to_recreate_miner": 70,
+      "max_body_cost": 1700,
+      "screeps_max_amount": {
+        "peace": 10,
+        "war": 30,
+        "repair_defence": 30,
+        "build": 15,
+        "nominal": 15
       },
-      "storage": {
-        "total": 61939,
-        "E27N48": 5000,
-        "E28N48": 5173,
-        "E29N47": 5000,
-        "E33N47": 5188,
-        "E34N47": 5040,
-        "E36N48": 5000,
-        "E37N48": 16253,
-        "E38N47": 5124,
-        "E38N48": 5061,
-        "E39N49": 5100
-      }
+      "creep_types": {
+        "war": {
+          "transfer": 0.3,
+          "build": 0.6,
+          "repair_defence": 0.4,
+          "repair_civilian": 0.2,
+          "special_carry": 0.3,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        },
+        "peace": {
+          "transfer": 0.4,
+          "build": 0.3,
+          "repair_defence": 0.1,
+          "repair_civilian": 0.1,
+          "special_carry": 0.4,
+          "harvest": {
+            "energy": 0.7,
+            "mineral": 0.3
+          }
+        }
+      },
+      "all_full": true,
+      "room_min_ticksToLive": 0,
+      "invader": false
     },
-    "XUH2O": {
-      "total": 74965,
-      "terminal": {
-        "total": 18631,
-        "E27N48": 1300,
-        "E28N48": 1100,
-        "E29N47": 3060,
-        "E33N47": 5171,
-        "E34N47": 1300,
-        "E36N48": 1500,
-        "E37N48": 1100,
-        "E38N47": 1300,
-        "E38N48": 1300,
-        "E39N49": 1500
+    "labs": {
+      "lab_per_mineral": {},
+      "minerals": {
+        "reagent": [],
+        "produce": [],
+        "process": []
       },
-      "storage": {
-        "total": 56334,
-        "E27N48": 5000,
-        "E28N48": 5111,
-        "E29N47": 5000,
-        "E33N47": 10696,
-        "E34N47": 5146,
-        "E36N48": 5000,
-        "E37N48": 5011,
-        "E38N47": 5146,
-        "E38N48": 5193,
-        "E39N49": 5031
-      }
+      "reagent": {},
+      "produce": {},
+      "process": {},
+      "booster": {}
     },
-    "XGHO2": {
-      "total": 72220,
-      "terminal": {
-        "total": 22120,
-        "E27N48": 1300,
-        "E28N48": 1500,
-        "E29N47": 3080,
-        "E33N47": 2500,
-        "E34N47": 5140,
-        "E36N48": 3000,
-        "E37N48": 1300,
-        "E38N47": 1300,
-        "E38N48": 1500,
-        "E39N49": 1500
-      },
-      "storage": {
-        "total": 50100,
-        "E27N48": 5000,
-        "E28N48": 5000,
-        "E29N47": 5000,
-        "E33N47": 5000,
-        "E34N47": 5000,
-        "E36N48": 5000,
-        "E37N48": 5000,
-        "E38N47": 5100,
-        "E38N48": 5000,
-        "E39N49": 5000
-      }
-    },
-    "XLHO2": {
-      "total": 93410,
-      "terminal": {
-        "total": 31239,
-        "E27N48": 1500,
-        "E28N48": 7553,
-        "E29N47": 3950,
-        "E33N47": 1244,
-        "E34N47": 6794,
-        "E36N48": 5000,
-        "E37N48": 1196,
-        "E38N47": 1269,
-        "E38N48": 1279,
-        "E39N49": 1454
-      },
-      "storage": {
-        "total": 62171,
-        "E27N48": 5000,
-        "E28N48": 13140,
-        "E29N47": 5000,
-        "E33N47": 5167,
-        "E34N47": 8608,
-        "E36N48": 5000,
-        "E37N48": 5056,
-        "E38N47": 5100,
-        "E38N48": 5000,
-        "E39N49": 5100
-      }
-    },
-    "XKH2O": {
-      "total": 79715,
-      "terminal": {
-        "total": 17176,
-        "E27N48": 1500,
-        "E28N48": 1300,
-        "E29N47": 1100,
-        "E33N47": 1300,
-        "E34N47": 1300,
-        "E36N48": 1500,
-        "E37N48": 1500,
-        "E38N47": 1300,
-        "E38N48": 1300,
-        "E39N49": 5076
-      },
-      "storage": {
-        "total": 62539,
-        "E27N48": 5000,
-        "E28N48": 5099,
-        "E29N47": 5000,
-        "E33N47": 5184,
-        "E34N47": 5174,
-        "E36N48": 5000,
-        "E37N48": 5057,
-        "E38N47": 5185,
-        "E38N48": 5133,
-        "E39N49": 16707
-      }
-    }
-  },
-  "disable_repearing_by_towers": false,
-  "minimal_container_energy": 1300,
-  "minimal_energy_terminal": {
-    "room_name": "E33N47",
-    "energy": 214655,
-    "avrg_energy": "225008"
-  },
-  "max_energy_to_full_terminal": {
-    "missing_energy": 345,
-    "room_name": "E33N47"
+    "mineral_by_lab": {},
+    "lab_per_mineral": {}
   }
 }

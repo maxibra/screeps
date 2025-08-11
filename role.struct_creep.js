@@ -94,11 +94,15 @@ var structCreep = {
         // console.log('[DEBUG] (structCreep.run)[' + room_name + ']');
         let controller_is_critical_level;
         if (!my_room.controller) controller_is_critical_level = false;
-        else
+        else {
+            //Temporal DEBUG 
+            if (!("global_vars" in Memory.rooms[room_name])) Game.notify('[structCreep.run]: ' + room_name + ' is missing "global_vars"')
+            
             controller_is_critical_level = (Memory.rooms[room_name].global_vars.status === 'peace') ?
                 (my_room.controller.ticksToDowngrade < CONTROLLER_DOWNGRADE[my_room.controller.level]*0.95) :
                 (my_room.controller.ticksToDowngrade < CONTROLLER_DOWNGRADE[my_room.controller.level]*0.25);
-
+        }
+        
         let fill_terminal = (my_room.terminal &&
                              my_room.terminal.store.getFreeCapacity() > 5000 &&
                               my_room.terminal.store[RESOURCE_ENERGY] < my_room.memory.energy_flow.max_store.terminal_energy);

@@ -210,7 +210,7 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 8 || target.pos.x > 38 || target.pos.y > 36 || (target.pos.x < 9 && target.pos.y > 31)) is_inside = false;
             break;
         case 'E32N47':
-            if (target.pos.y < 2 || target.pos.x < 6 || (target.pos.x < 36 && target.pos.y > 11) || (target.pos.y > 35)) is_inside = false;
+            if (target.pos.y < 2 || target.pos.x < 34 || (target.pos.x < 36 && target.pos.y > 11) || (target.pos.y > 35)) is_inside = false;
             break;
         case 'E32N49':
             if (target.pos.x < 2 || target.pos.x > 46) is_inside = false;
@@ -228,10 +228,10 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 23 || target.pos.y < 12 || (target.pos.y > 40 && target.pos.x < 33)) is_inside = false;
             break;
         case 'E36N49':
-            if (target.pos.x < 3 || target.pos.x > 18 || target.pos.y < 15 || target.pos.y > 43) is_inside = false;
+            if (target.pos.x < 3 || target.pos.x > 22 || target.pos.y < 15 || target.pos.y > 43) is_inside = false;
             break;
         case 'E37N47':
-            if (target.pos.x < 8 || target.pos.x > 45 || target.pos.y > 27 || (target.pos.x < 22 && target.pos.y > 21)) is_inside = false;
+            if (target.pos.x < 8 || target.pos.x > 45 || target.pos.y > 28 || (target.pos.x < 22 && target.pos.y > 21)) is_inside = false;
             break;
         case 'E37N48':
             if (target.pos.x < 10 || target.pos.x > 44 || target.pos.y < 4 || target.pos.y > 42) is_inside = false;
@@ -276,6 +276,10 @@ var room_helpers = {
         for (let r of destination_rooms) {
             let dest_room = Game.rooms[r]
             let destination_terminal = dest_room.terminal;
+                       
+            //Temporal DEBUG 
+            if (!("my" in dest_room.controller)) Game.notify('[find_terminal_min_energy]:' + r + ' is missing "global_vars"')
+
             if (!dest_room.controller.my || !destination_terminal) continue;
             // console.log('[DEBUG](room.find_terminal_min_energy)[' +  r + '] Terminal: ' + JSON.stringify(destination_terminal));
 
