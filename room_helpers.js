@@ -55,7 +55,7 @@ function link_transfer(source_link, destination_link) {
     // if (source_link.id === '5dad7368328c8405870fa2ec') console.log('[DEBUG](room.helpers-dst_free_capacity): Destination (' + destination_link.id + ') missing energy: ' +  dst_free_capacity + '; Source (' + source_link.id + '): ' + source_link.store[RESOURCE_ENERGY]);
 
     src_used_capacity = source_link.store.getUsedCapacity(RESOURCE_ENERGY);
-    if (source_link.cooldown === 0 && src_used_capacity > 0 && destination_link && dst_free_capacity > minium_sent_energy ) { // >= src_used_capacity) {
+    if (source_link.cooldown === 0 && src_used_capacity > 0 && destination_link && dst_free_capacity >= minium_sent_energy ) { // >= src_used_capacity) {
             source_link.transferEnergy(destination_link, Math.min(dst_free_capacity, src_used_capacity));
             energy_sent = true;
     }
@@ -131,7 +131,7 @@ function find_hostile(room_name) {
     if (h.length > 0) {
         for (let h_creep of h) {
             hostile_amount += 1;
-            const body_map = {}; 
+            const body_map = {};
             h_creep.body.map(x => x.type).forEach(function (x) { body_map[x] = (body_map[x] || 0) + 1; });
             for (let body_part in body_map) {
                 if (room_name === 'E39N49') console.log('[ERROR](room.find_hostile)[' +  room_name +'] ID: ' + h_creep.id + '; body_part: ' + body_part);
@@ -222,7 +222,7 @@ function local_is_inside_wall(room_name, target) {
             if (target.pos.x < 8 || target.pos.x > 47) is_inside = false;
             break;
         case 'E34N47':
-            if (target.pos.x < 13 || target.pos.y > 34) is_inside = false;
+            if (target.pos.x < 4 || target.pos.y > 41) is_inside = false;
             break;
         case 'E36N48':
             if (target.pos.x < 23 || target.pos.y < 12 || (target.pos.y > 40 && target.pos.x < 33)) is_inside = false;
@@ -276,9 +276,9 @@ var room_helpers = {
         for (let r of destination_rooms) {
             let dest_room = Game.rooms[r]
             let destination_terminal = dest_room.terminal;
-                       
-            //Temporal DEBUG 
-            if (!("my" in dest_room.controller)) Game.notify('[find_terminal_min_energy]:' + r + ' is missing "global_vars"')
+
+            //Temporal DEBUG
+            if (!(dest_room.controller && "my" in dest_room.controller)) Game.notify('[find_terminal_min_energy]:' + r + ' is missing "global_vars"')
 
             if (!dest_room.controller.my || !destination_terminal) continue;
             // console.log('[DEBUG](room.find_terminal_min_energy)[' +  r + '] Terminal: ' + JSON.stringify(destination_terminal));
@@ -475,11 +475,17 @@ var room_helpers = {
         let all_towers_full = true;
         let terminal_full = !!(my_room.terminal && my_room.terminal.store[RESOURCE_ENERGY] >= my_room.memory.energy_flow.max_store.terminal_energy);
         let all_extensions_full = (my_room.energyAvailable >= (my_room.energyCapacityAvailable - 2 * 700));  // 650 is price of energy_miner
-        // let all_creep_repair_defence_full = (my_room.memory.targets.creep_repair_defence) ? false : true;
+        let all_creep_repair_defence_full = true;
         let is_no_constructions = (!(my_room.memory.targets.build && my_room.memory.targets.build.length > 0));
         let is_no_repair = (!(my_room.memory.targets.creep_repair_defence && my_room.memory.targets.creep_repair_defence.length > 10));
 
         if (!(my_room && my_room.memory.energy_flow)) return; // The room contains no controller
+
+        if (my_room.memory.targets.creep_repair_defence.length > 0) {
+            let first_target = Game.getObjectById(my_room.memory.targets.creep_repair_defence[0])
+            // if (room_name == 'E36N49') console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] Hits [ ' + first_target.hits +'/'+ first_target.hitsMax + ': ' + (first_target.hits / first_target.hitsMax));
+            if ((first_target.hits / first_target.hitsMax) < 0.9 || my_room.memory.targets.creep_repair_defence.length > 2) all_creep_repair_defence_full = false
+        }
 
         // let fill_terminal = (my_room.terminal &&
         //                      my_room.terminal.store[RESOURCE_ENERGY] < Memory.rooms.global_vars.terminal_max_energy_storage &&
@@ -510,10 +516,12 @@ var room_helpers = {
             }
         }
 
+        // if (room_name == 'E36N49') console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] all_creep_repair_defence_full: ' + all_creep_repair_defence_full)
         my_room.memory.global_vars.all_full_wo_storage = (all_extensions_full && all_towers_full && is_no_constructions && is_no_repair)
-        my_room.memory.global_vars.all_full = (all_extensions_full && all_towers_full && terminal_full && is_no_constructions && is_no_repair) // ||
-                                                //  !all_creep_repair_defence_full)) //
+        all_full = (all_extensions_full && all_towers_full && terminal_full && is_no_constructions && is_no_repair && all_creep_repair_defence_full) //
                                                 // !my_room.memory.targets.repair_defence);
+        // if (room_name == 'E36N49') console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] all_full: ' + all_full)
+        my_room.memory.global_vars.all_full = all_full
         if (!my_room.memory.global_vars.all_full && my_room.terminal) console.log('[DEBUG] (room_helpers.verify_all_full)[' + room_name + '] Ext: ' +  all_extensions_full + '; Towers: ' + all_towers_full + '; Terminal: ' + terminal_full + ' (' + my_room.terminal.store[RESOURCE_ENERGY] + ' / ' + my_room.memory.energy_flow.max_store.terminal_energy + '); No Build: ' + is_no_constructions);
     },
     transfer_link2link: function(room_name) {
@@ -525,7 +533,7 @@ var room_helpers = {
         for (let l_src in source_links) {
             let current_link_sent = false;
             let source_link = Game.getObjectById(source_links[l_src]);
-            // if (!(source_link && (source_link.store[RESOURCE_ENERGY] > 100))) continue;
+            if (source_link && (source_link.store[RESOURCE_ENERGY] < 400)) continue;
             let destination_links = (my_room.memory.energy_flow.links.near_controller) ? [my_room.memory.energy_flow.links.near_controller,] : [];    // First link to get energy is near controller
             destination_links = destination_links.concat(Object.keys(my_room.memory.energy_flow.links.destinations));
 
@@ -872,6 +880,7 @@ var room_helpers = {
             E38N47_avoid = []; // '5bf10cb261ef99031f97d884', '5bf10cc8166f13033947d85e', '5bf10cec9be909030411c9f3', '5bf10d03b1f81602f362b550'];
             E37N47_avoid = ['65c8fd8f482c0be8e8f535a8', '65c9096704a0713ab0f670b3', '65c9009f61961b33c2994f6d', '65c8fd7b9be22561fac93da1'];
             E37N48_avoid = ['5ba47ab73626e519f17ae072'];
+            E29N47_avoid = ['688e61f01924a0491b629a26', '688e57c637a0a31509e99bbe']
             E28N48_avoid = [];
             E27N48_avoid = []; // '5f609031c5dc1131c8f4e996', '5e3a621384cf317c22f15dde', '5e3a61ef3cfb4e7ae6e72d43'];
             // E28N48_avoid = ['5d9dbbc016ace500018a2d1f', '5d9dbbb783e1630001168434', '5d9db60b385375000189d6fe', '5d9db60e40c65400014715f5',
@@ -879,7 +888,7 @@ var room_helpers = {
             //                 '5d9dbb6f05273d00018b0b26', '5d9db62b085de300017d53f5', '5d9dbb62f5fb9800016f8184', '5d9db638bdcc2a0001291619'];
             E27N49_avoid = []; // '5ae6095fa200d042b65a8d1a']
 
-            let avoid_stricts = E39N49_avoid.concat(E37N48_avoid) // E39N49_avoid.concat(E27N48_avoid, E27N49_avoid) // E38N47_avoid); //, E28N48_avoid);
+            let avoid_stricts = E39N49_avoid.concat(E37N48_avoid, E29N47_avoid) // E39N49_avoid.concat(E27N48_avoid, E27N49_avoid) // E38N47_avoid); //, E28N48_avoid);
 
             targets = my_room.find(FIND_STRUCTURES, {filter: object => ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER) &&
                                                                         object.hits < min_hits && object.hits < (object.hitsMax * 0.95) && avoid_stricts.indexOf(object.id) === -1 &&
@@ -896,7 +905,7 @@ var room_helpers = {
         // console.log('[DEBUG] (get_creep_repair_defence)[' + room_name + ']: ' + (!my_room.controller || !my_room.controller.owner))
         if (!my_room.controller || !my_room.controller.owner) return;
 
-        let exclude_structure = ["635ba6a15dd6d7579f70f524", '5ba47ab73626e519f17ae072']
+        let exclude_structure = ["635ba6a15dd6d7579f70f524", '5ba47ab73626e519f17ae072', '688e61f01924a0491b629a26', '688e57c637a0a31509e99bbe']
 
         if (my_room.controller.level < 3 || my_room.controller.level === 8)
 

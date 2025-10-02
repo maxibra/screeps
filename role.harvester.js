@@ -50,7 +50,7 @@ var RoleHarvester = {
 
         if (creep_target_id) {
             target = Game.getObjectById(creep_target_id);
-            harvester_type = target_id_param ? 'container' : creep.memory.harvester_type;
+            harvester_type = target_id_param ? 'link' : creep.memory.harvester_type;
             // if (creep.name === creep_name4log)
                 // console.log('[DEBUG] (RoleHarvester) [' + creep.name +']: Target ID Exist: ' + target.id + '; harvester_type: ' + harvester_type);
             if (Game.time % 10 == 0 && creep.ticksToLive <= global_vars.age_to_drop_and_die) {  // Clean booking container or link
@@ -456,4 +456,3 @@ var RoleHarvester = {
 }
 
 module.exports = RoleHarvester;
-
