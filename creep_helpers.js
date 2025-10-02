@@ -235,7 +235,7 @@ function remote_harvester_info(room_name) {
             break;
         case 'E37N49':
             info_object = {
-                homeland_destinations: ['5be05ab1519c604bf419fcf6', '5acc524f6bec176d808adb71', '62949dd7434607783fc47de5', '62949670aefbbce246f92dad', '610a7679ea43f00e2e19d1ed'],
+                homeland_destinations: ['5be05ab1519c604bf419fcf6', '5acc524f6bec176d808adb71', '62949dd7434607783fc47de5', '62949670aefbbce246f92dad', '610a7679ea43f00e2e19d1ed', '5acc524f6bec176d808adb71'],
                 amount: 1
             }
             break;
@@ -357,7 +357,7 @@ var creep_helpers = {
                 rmt_targets: remote_target(room_name)
             },
             energy_miner: {
-                body: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK],
+                body: [CARRY, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK],
                 name_prefix: 'nrg_mnr_' + room_name,
                 amount: Object.keys(my_room.memory.energy_flow.containers.source).length
                 // amount: (Memory.rooms.global_vars.units.total > 42 && current_room_status === 'peace') ? 0 : my_room.memory.energy_flow.containers.miner_is_needed
@@ -734,12 +734,6 @@ var creep_helpers = {
                 }
                 if (my_room.memory.towers.current[target.id] === creep.id) my_room.memory.towers.current[target.id] = false;
             default:
-                //                console.log('[WARN] (most_creep_action_results)[' + creep.name + ']: ' + creep_role + ': NO action for result ' + action_res)
-                //                 if (creep.memory.role == 'transfer' && creep.memory.target_id != my_spawn.id && my_spawn.store[RESOURCE_ENERGY] < my_spawn.store.getCapacity(RESOURCE_ENERGY)) {
-                //                     targets = my_room.find(FIND_STRUCTURES, {filter: object => object.store[RESOURCE_ENERGY] < object.store.getCapacity(RESOURCE_ENERGY)});
-                // //                    console.log('[DEBUG] (most_creep_action_results)[' + creep.name + ']: ' + 'Target is changed');
-                //                     if (targets[0]) creep.memory.target_id = targets[0].id;
-                //                 } else {
                 if (creep.name === creep_name4log) console.log('[DEBUG] (creepHelpers)[' + creep.name + '] (Default) target_id is Changed to false because of ACTION_RES: ' + action_res);
                 creep.memory.target_id = false;
                 creep.memory.role = false;
